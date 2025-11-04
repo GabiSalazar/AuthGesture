@@ -1098,13 +1098,19 @@ class BiometricDatabase:
                     self._save_template(complete_template)
                     print(f"Template guardado en disco")
                 except Exception as e:
-                    print(f"Error guardando template: {e}")
-                    
+                    print(f"❌ ERROR CRÍTICO guardando template: {e}")
+                    import traceback
+                    print(traceback.format_exc())
+                    return False
+                                    
                 try:
                     self._save_user(user_profile)
-                    print(f"Perfil actualizado")
+                    print(f"Usuario actualizado")
                 except Exception as e:
-                    print(f"Error actualizando usuario: {e}")
+                    print(f"❌ ERROR CRÍTICO guardando usuario: {e}")
+                    import traceback
+                    print(traceback.format_exc())
+                    return False
                 
                 self.stats.total_templates += 1
                 if template.template_type == TemplateType.ANATOMICAL:
@@ -1495,7 +1501,7 @@ class BiometricDatabase:
             logger.error(f"Error guardando usuario: {e}")
             
     def _save_template(self, template: BiometricTemplate):
-        """Guarda template en disco SIN ENCRIPTACIÓN - VERSIÓN DEBUG."""
+        """Guarda template en disco"""
         try:
             print(f"🔧 DEBUG: Iniciando guardado template {template.template_id}")
             
@@ -1505,6 +1511,11 @@ class BiometricDatabase:
             
             template_file = templates_dir / f'{template.template_id}.json'
             
+            # ✅ DETECTAR SI ES BOOTSTRAP
+            is_bootstrap = template.metadata.get('bootstrap_mode', False)
+            print(f"🔍 DEBUG: Modo Bootstrap: {is_bootstrap}")
+            
+            # ✅ PREPARAR METADATA JSON CON FLAGS DE EMBEDDINGS
             template_data = {
                 'template_id': template.template_id,
                 'user_id': template.user_id,
@@ -1519,14 +1530,24 @@ class BiometricDatabase:
                 'enrollment_session': getattr(template, 'enrollment_session', ''),
                 'verification_count': getattr(template, 'verification_count', 0),
                 'success_count': getattr(template, 'success_count', 0),
-                'is_encrypted': False,
+                'is_encrypted': self.config.get('encryption_enabled', False),
                 'checksum': getattr(template, 'checksum', ''),
                 'metadata': getattr(template, 'metadata', {}),
+                
+                # ✅ AGREGAR FLAGS DE EMBEDDINGS (PARA VALIDACIÓN)
+                'has_anatomical_embedding': template.anatomical_embedding is not None,
+                'has_dynamic_embedding': template.dynamic_embedding is not None,
+                'anatomical_embedding_shape': list(template.anatomical_embedding.shape) if template.anatomical_embedding is not None else None,
+                'dynamic_embedding_shape': list(template.dynamic_embedding.shape) if template.dynamic_embedding is not None else None,
+                
+                # Los embeddings van al .bin, no al JSON
                 'anatomical_embedding': None,
                 'dynamic_embedding': None
             }
             
             print(f"📋 DEBUG: Metadatos preparados")
+            print(f"   🧠 Has anatomical: {template_data['has_anatomical_embedding']}")
+            print(f"   🔄 Has dynamic: {template_data['has_dynamic_embedding']}")
             
             with open(template_file, 'w', encoding='utf-8') as f:
                 json.dump(template_data, f, indent=2, default=str)
@@ -1534,6 +1555,7 @@ class BiometricDatabase:
             print(f"✅ DEBUG: JSON guardado: {template_file}")
             print(f"📦 DEBUG: Tamaño JSON: {template_file.stat().st_size} bytes")
             
+            # ✅ PREPARAR EMBEDDINGS PARA .BIN (SOLO SI NO ES BOOTSTRAP O SI TIENE EMBEDDINGS)
             embeddings_data = {}
             
             if hasattr(template, 'anatomical_embedding') and template.anatomical_embedding is not None:
@@ -1548,7 +1570,7 @@ class BiometricDatabase:
                     print(f"   📊 Norma: {np.linalg.norm(template.anatomical_embedding):.6f}")
                     
                     embeddings_data['anatomical'] = template.anatomical_embedding.copy()
-                    print(f"   ✅ Embedding anatómico agregado")
+                    print(f"   ✅ Embedding anatómico agregado al buffer")
             else:
                 print(f"⚠️ DEBUG: No hay embedding anatómico")
             
@@ -1564,43 +1586,80 @@ class BiometricDatabase:
                     print(f"   📊 Norma: {np.linalg.norm(template.dynamic_embedding):.6f}")
                     
                     embeddings_data['dynamic'] = template.dynamic_embedding.copy()
-                    print(f"   ✅ Embedding dinámico agregado")
+                    print(f"   ✅ Embedding dinámico agregado al buffer")
             else:
                 print(f"⚠️ DEBUG: No hay embedding dinámico")
             
+            # ✅ GUARDAR .BIN SOLO SI HAY EMBEDDINGS
             if embeddings_data:
                 embeddings_file = templates_dir / f'{template.template_id}.bin'
                 
-                print(f"🔐 DEBUG: Guardando {len(embeddings_data)} embeddings sin encriptar")
+                print(f"🔐 DEBUG: Guardando {len(embeddings_data)} embeddings")
                 print(f"   📋 Embeddings: {list(embeddings_data.keys())}")
+                print(f"   🔐 Encriptación habilitada: {self.config.get('encryption_enabled', False)}")
                 
                 try:
-                    serialized_data = pickle.dumps(embeddings_data, protocol=pickle.HIGHEST_PROTOCOL)
+                    # ✅ CREAR ESTRUCTURA CON METADATA INTERNA
+                    data_to_save = {
+                        'embeddings': embeddings_data,
+                        'metadata': {
+                            'template_id': template.template_id,
+                            'saved_at': time.time(),
+                            'is_encrypted': self.config.get('encryption_enabled', False),
+                            'version': '1.0',
+                            'bootstrap_mode': is_bootstrap
+                        }
+                    }
+                    
+                    serialized_data = pickle.dumps(data_to_save, protocol=pickle.HIGHEST_PROTOCOL)
                     print(f"📦 DEBUG: Datos serializados: {len(serialized_data)} bytes")
                     
+                    # ✅ ENCRIPTAR SOLO SI ESTÁ HABILITADO
+                    final_data = serialized_data
+                    if self.config.get('encryption_enabled', False) and CRYPTO_AVAILABLE and self.cipher:
+                        final_data = self.cipher.encrypt(serialized_data)
+                        print(f"🔐 DEBUG: Datos encriptados: {len(final_data)} bytes")
+                    else:
+                        print(f"ℹ️ DEBUG: Guardando sin encriptar")
+                    
                     with open(embeddings_file, 'wb') as f:
-                        f.write(serialized_data)
+                        f.write(final_data)
                         f.flush()
                     
-                    print(f"✅ DEBUG: BIN guardado sin encriptar: {embeddings_file}")
+                    print(f"✅ DEBUG: BIN guardado: {embeddings_file}")
                     print(f"📦 DEBUG: Tamaño final BIN: {embeddings_file.stat().st_size} bytes")
                     
-                    print(f"🔍 DEBUG: Verificando archivo...")
+                    # ✅ VERIFICACIÓN INMEDIATA
+                    print(f"🔍 DEBUG: Verificando archivo guardado...")
                     
                     with open(embeddings_file, 'rb') as f:
                         test_data = f.read()
                     
                     print(f"📦 DEBUG: Leído para verificación: {len(test_data)} bytes")
                     
-                    test_embeddings = pickle.loads(test_data)
-                    print(f"✅ DEBUG: Deserialización exitosa")
-                    print(f"📋 DEBUG: Claves recuperadas: {list(test_embeddings.keys())}")
-                    
-                    for key, embedding in test_embeddings.items():
-                        if isinstance(embedding, np.ndarray):
-                            print(f"   ✅ {key}: {embedding.shape}, norma={np.linalg.norm(embedding):.6f}")
+                    # Intentar deserializar directamente (sin encriptar)
+                    try:
+                        test_loaded = pickle.loads(test_data)
+                        print(f"✅ DEBUG: Deserialización directa exitosa")
+                        
+                        if isinstance(test_loaded, dict) and 'metadata' in test_loaded:
+                            print(f"📋 DEBUG: Formato nuevo detectado")
+                            print(f"   📋 Metadata: {test_loaded['metadata']}")
+                            test_embeddings = test_loaded['embeddings']
                         else:
-                            print(f"   ❌ {key}: tipo incorrecto {type(embedding)}")
+                            print(f"⚠️ DEBUG: Formato legacy")
+                            test_embeddings = test_loaded
+                        
+                        print(f"📋 DEBUG: Claves recuperadas: {list(test_embeddings.keys())}")
+                        
+                        for key, embedding in test_embeddings.items():
+                            if isinstance(embedding, np.ndarray):
+                                print(f"   ✅ {key}: {embedding.shape}, norma={np.linalg.norm(embedding):.6f}")
+                            else:
+                                print(f"   ❌ {key}: tipo incorrecto {type(embedding)}")
+                        
+                    except Exception as verify_error:
+                        print(f"⚠️ DEBUG: Verificación falló (puede estar encriptado): {verify_error}")
                     
                 except Exception as save_error:
                     print(f"❌ DEBUG: Error guardando embeddings: {save_error}")
@@ -1609,7 +1668,10 @@ class BiometricDatabase:
                     raise
                     
             else:
-                print(f"⚠️ DEBUG: No hay embeddings para guardar")
+                if is_bootstrap:
+                    print(f"ℹ️ DEBUG: Template Bootstrap sin embeddings (esperado)")
+                else:
+                    print(f"⚠️ DEBUG: Template normal sin embeddings (verificar)")
             
             print(f"🎉 DEBUG: Template {template.template_id} guardado completamente")
             
@@ -1620,7 +1682,7 @@ class BiometricDatabase:
             raise
     
     def _load_template(self, template_id: str) -> Optional[BiometricTemplate]:
-        """Carga template desde disco"""
+        """Carga template desde disco con detección automática de encriptación."""
         try:
             print(f"🔍 DEBUG: Cargando template {template_id}")
             
@@ -1631,6 +1693,7 @@ class BiometricDatabase:
                 print(f"   ❌ Archivo JSON no existe")
                 return None
             
+            # ✅ CARGAR JSON CON METADATA
             try:
                 with open(template_file, 'r', encoding='utf-8') as f:
                     template_data = json.load(f)
@@ -1642,8 +1705,15 @@ class BiometricDatabase:
             print(f"   📋 Tipo template: {template_data.get('template_type')}")
             print(f"   👤 Usuario: {template_data.get('user_id')}")
             print(f"   🤌 Gesto: {template_data.get('gesture_name', 'N/A')}")
-            print(f"   🔐 Encriptado según JSON: {template_data.get('is_encrypted', 'N/A')}")
+            print(f"   🔐 Encriptado según JSON: {template_data.get('is_encrypted', False)}")
+            print(f"   🧠 Has anatomical (JSON): {template_data.get('has_anatomical_embedding', False)}")
+            print(f"   🔄 Has dynamic (JSON): {template_data.get('has_dynamic_embedding', False)}")
             
+            # ✅ DETECTAR MODO BOOTSTRAP
+            is_bootstrap = template_data.get('metadata', {}).get('bootstrap_mode', False)
+            print(f"   🔧 Modo Bootstrap: {is_bootstrap}")
+            
+            # ✅ CARGAR EMBEDDINGS DESDE .BIN
             embeddings_file = self.db_path / 'templates' / f'{template_id}.bin'
             print(f"   📦 Buscando BIN: {embeddings_file}")
             
@@ -1659,35 +1729,71 @@ class BiometricDatabase:
                 else:
                     try:
                         with open(embeddings_file, 'rb') as f:
-                            embeddings_bytes = f.read()
+                            raw_bytes = f.read()
                         
-                        print(f"   📦 Bytes leídos: {len(embeddings_bytes)}")
+                        print(f"   📦 Bytes leídos: {len(raw_bytes)}")
                         
-                        encryption_enabled = self.config.get('encryption_enabled', False)
-                        print(f"   🔐 Encriptación en config: {encryption_enabled}")
-                        
-                        should_decrypt = encryption_enabled
-                        
-                        if should_decrypt and CRYPTO_AVAILABLE:
-                            try:
-                                print(f"   🔓 Intentando desencriptar...")
-                                if hasattr(self, 'cipher') and self.cipher is not None:
-                                    embeddings_bytes = self.cipher.decrypt(embeddings_bytes)
-                                    print(f"   ✅ Desencriptación exitosa")
-                                else:
-                                    print(f"   ❌ Cipher no disponible")
-                            except Exception as decrypt_error:
-                                print(f"   ⚠️ Error desencriptando: {decrypt_error}")
-                                with open(embeddings_file, 'rb') as f:
-                                    embeddings_bytes = f.read()
-                        else:
-                            print(f"   ℹ️ Sin encriptación")
-                        
-                        print(f"   🔄 Deserializando...")
+                        # ✅ INTENTAR DESERIALIZACIÓN DIRECTA PRIMERO (SIN ENCRIPTAR)
                         try:
-                            embeddings_data = pickle.loads(embeddings_bytes)
-                            print(f"   ✅ Deserialización exitosa")
-                            print(f"   📋 Claves: {list(embeddings_data.keys())}")
+                            print(f"   🔓 Intentando deserialización directa...")
+                            loaded_data = pickle.loads(raw_bytes)
+                            
+                            # ✅ VERIFICAR SI ES NUEVO FORMATO CON METADATA
+                            if isinstance(loaded_data, dict) and 'metadata' in loaded_data:
+                                print(f"   ✅ Formato nuevo con metadata detectado")
+                                print(f"      📋 Metadata BIN: {loaded_data['metadata']}")
+                                
+                                embeddings_data = loaded_data['embeddings']
+                                bin_metadata = loaded_data['metadata']
+                                
+                                is_encrypted_in_bin = bin_metadata.get('is_encrypted', False)
+                                print(f"      🔐 Encriptado según BIN metadata: {is_encrypted_in_bin}")
+                                
+                                # Validación cruzada
+                                if is_encrypted_in_bin:
+                                    print(f"      ⚠️ WARNING: BIN dice estar encriptado pero se deserializó sin desencriptar")
+                            
+                            else:
+                                # ✅ FORMATO LEGACY (SOLO EMBEDDINGS DIRECTOS)
+                                print(f"   ℹ️ Formato legacy detectado (sin metadata interna)")
+                                embeddings_data = loaded_data
+                            
+                            print(f"   ✅ Deserialización directa exitosa")
+                            
+                        except Exception as direct_error:
+                            # ✅ SI FALLA, INTENTAR DESENCRIPTAR
+                            print(f"   ⚠️ Deserialización directa falló: {direct_error}")
+                            
+                            if CRYPTO_AVAILABLE and hasattr(self, 'cipher') and self.cipher:
+                                try:
+                                    print(f"   🔓 Intentando desencriptar...")
+                                    decrypted_bytes = self.cipher.decrypt(raw_bytes)
+                                    print(f"   ✅ Desencriptación exitosa: {len(decrypted_bytes)} bytes")
+                                    
+                                    loaded_data = pickle.loads(decrypted_bytes)
+                                    
+                                    # Verificar formato
+                                    if isinstance(loaded_data, dict) and 'metadata' in loaded_data:
+                                        print(f"   ✅ Formato nuevo desencriptado")
+                                        embeddings_data = loaded_data['embeddings']
+                                        print(f"      📋 Metadata BIN: {loaded_data['metadata']}")
+                                    else:
+                                        print(f"   ℹ️ Formato legacy desencriptado")
+                                        embeddings_data = loaded_data
+                                    
+                                    print(f"   ✅ Desencriptación y deserialización exitosas")
+                                    
+                                except Exception as decrypt_error:
+                                    print(f"   ❌ Desencriptación falló: {decrypt_error}")
+                                    print(f"   💡 El archivo puede estar corrupto o usar clave diferente")
+                                    embeddings_data = {}
+                            else:
+                                print(f"   ❌ No se puede desencriptar (crypto no disponible o cipher no configurado)")
+                                embeddings_data = {}
+                        
+                        # ✅ VALIDAR Y NORMALIZAR EMBEDDINGS
+                        if embeddings_data:
+                            print(f"   📋 Claves encontradas: {list(embeddings_data.keys())}")
                             
                             for key, embedding in embeddings_data.items():
                                 if embedding is None:
@@ -1696,38 +1802,60 @@ class BiometricDatabase:
                                     print(f"      ✅ {key}: shape={embedding.shape}, dtype={embedding.dtype}")
                                     print(f"         📊 Norma: {np.linalg.norm(embedding):.6f}")
                                     print(f"         📊 Min: {embedding.min():.6f}, Max: {embedding.max():.6f}")
-                                    print(f"         📊 NaN count: {np.sum(np.isnan(embedding))}")
-                                    print(f"         📊 Inf count: {np.sum(np.isinf(embedding))}")
+                                    print(f"         📊 NaN: {np.sum(np.isnan(embedding))}, Inf: {np.sum(np.isinf(embedding))}")
+                                    
+                                    # Validar que no tenga valores inválidos
+                                    if np.any(np.isnan(embedding)) or np.any(np.isinf(embedding)):
+                                        print(f"         ⚠️ WARNING: Embedding con valores NaN/Inf - limpiando")
+                                        embedding = np.nan_to_num(embedding, nan=0.0, posinf=0.0, neginf=0.0)
+                                        embeddings_data[key] = embedding
                                 else:
-                                    print(f"      ❌ {key}: tipo incorrecto")
+                                    print(f"      ⚠️ {key}: tipo incorrecto {type(embedding)} - intentando convertir")
                                     try:
                                         converted = np.array(embedding, dtype=np.float32)
                                         embeddings_data[key] = converted
-                                        print(f"         🔄 Convertido a numpy: {converted.shape}")
-                                    except:
+                                        print(f"         ✅ Convertido a numpy: {converted.shape}")
+                                    except Exception as conv_error:
+                                        print(f"         ❌ Conversión falló: {conv_error}")
                                         embeddings_data[key] = None
-                            
-                        except Exception as pickle_error:
-                            print(f"   ❌ Error pickle: {pickle_error}")
-                            embeddings_data = {}
-                            
+                        
                     except Exception as file_error:
-                        print(f"   ❌ Error leyendo BIN: {file_error}")
+                        print(f"   ❌ Error procesando BIN: {file_error}")
+                        import traceback
+                        traceback.print_exc()
                         embeddings_data = {}
             else:
-                print(f"   ⚠️ Archivo BIN no existe")
+                if is_bootstrap:
+                    print(f"   ℹ️ Archivo BIN no existe (esperado en Bootstrap)")
+                else:
+                    print(f"   ⚠️ Archivo BIN no existe (template normal sin embeddings)")
                 embeddings_data = {}
             
+            # ✅ EXTRAER EMBEDDINGS CON VALIDACIÓN CRUZADA
             anatomical_embedding = embeddings_data.get('anatomical')
             dynamic_embedding = embeddings_data.get('dynamic')
             
-            print(f"   🧠 Embedding anatómico disponible: {anatomical_embedding is not None}")
-            print(f"   🔄 Embedding dinámico disponible: {dynamic_embedding is not None}")
+            # Validación cruzada con flags del JSON
+            has_anat_json = template_data.get('has_anatomical_embedding', False)
+            has_dyn_json = template_data.get('has_dynamic_embedding', False)
+            has_anat_actual = anatomical_embedding is not None
+            has_dyn_actual = dynamic_embedding is not None
             
+            print(f"   🔍 VALIDACIÓN CRUZADA:")
+            print(f"      Anatómico - JSON: {has_anat_json}, BIN: {has_anat_actual}, Match: {'✅' if has_anat_json == has_anat_actual else '❌'}")
+            print(f"      Dinámico - JSON: {has_dyn_json}, BIN: {has_dyn_actual}, Match: {'✅' if has_dyn_json == has_dyn_actual else '❌'}")
+            
+            if has_anat_json != has_anat_actual:
+                print(f"      ⚠️ WARNING: Inconsistencia en embedding anatómico")
+            if has_dyn_json != has_dyn_actual:
+                print(f"      ⚠️ WARNING: Inconsistencia en embedding dinámico")
+            
+            # ✅ PREPARAR DATOS PARA CREAR TEMPLATE
             template_data_copy = template_data.copy()
             template_data_copy['anatomical_embedding'] = anatomical_embedding
             template_data_copy['dynamic_embedding'] = dynamic_embedding
             
+            # ✅ CONVERTIR TEMPLATE_TYPE STRING A ENUM
             template_type_value = template_data_copy.get('template_type')
             if isinstance(template_type_value, str):
                 try:
@@ -1741,9 +1869,10 @@ class BiometricDatabase:
                         print(f"   ⚠️ Tipo desconocido '{template_type_value}', usando ANATOMICAL")
                         template_data_copy['template_type'] = TemplateType.ANATOMICAL
                 except Exception as enum_error:
-                    print(f"   ❌ Error enum: {enum_error}")
+                    print(f"   ❌ Error convirtiendo enum: {enum_error}")
                     template_data_copy['template_type'] = TemplateType.ANATOMICAL
             
+            # ✅ CREAR BIOMETRIC TEMPLATE
             print(f"   🏗️ Creando BiometricTemplate...")
             
             try:
@@ -1763,7 +1892,8 @@ class BiometricDatabase:
                     'dynamic_embedding': dynamic_embedding
                 }
                 
-                optional_fields = ['last_used', 'verification_count', 'success_count', 'is_encrypted']
+                # Campos opcionales
+                optional_fields = ['last_used', 'verification_count', 'success_count', 'is_encrypted', 'hand_side']
                 for field in optional_fields:
                     if field in template_data_copy:
                         required_fields[field] = template_data_copy[field]
@@ -1771,34 +1901,36 @@ class BiometricDatabase:
                 template = BiometricTemplate(**required_fields)
                 
                 print(f"   ✅ BiometricTemplate creado exitosamente")
-
+                
+                # ✅ VERIFICACIÓN FINAL
                 print(f"   🔍 VERIFICACIÓN FINAL:")
                 print(f"      ID: {template.template_id}")
                 print(f"      Usuario: {template.user_id}")
                 print(f"      Tipo: {template.template_type}")
                 print(f"      Gesto: {template.gesture_name}")
-                print(f"      Anatómico disponible: {'✅' if template.anatomical_embedding is not None else '❌'}")
-                print(f"      Dinámico disponible: {'✅' if template.dynamic_embedding is not None else '❌'}")
+                print(f"      Bootstrap: {is_bootstrap}")
+                print(f"      Anatómico: {'✅' if template.anatomical_embedding is not None else '❌'}")
+                print(f"      Dinámico: {'✅' if template.dynamic_embedding is not None else '❌'}")
                 
                 if template.anatomical_embedding is not None:
-                    print(f"      Anatómico shape: {template.anatomical_embedding.shape}")
-                    print(f"      Anatómico norma: {np.linalg.norm(template.anatomical_embedding):.6f}")
+                    print(f"      └─ Anatómico shape: {template.anatomical_embedding.shape}")
+                    print(f"         └─ Norma: {np.linalg.norm(template.anatomical_embedding):.6f}")
                 
                 if template.dynamic_embedding is not None:
-                    print(f"      Dinámico shape: {template.dynamic_embedding.shape}")
-                    print(f"      Dinámico norma: {np.linalg.norm(template.dynamic_embedding):.6f}")
+                    print(f"      └─ Dinámico shape: {template.dynamic_embedding.shape}")
+                    print(f"         └─ Norma: {np.linalg.norm(template.dynamic_embedding):.6f}")
                 
                 print(f"✅ DEBUG: Template {template_id} cargado exitosamente")
                 return template
                 
             except Exception as template_error:
-                print(f"   ❌ Error creando template: {template_error}")
+                print(f"   ❌ Error creando BiometricTemplate: {template_error}")
                 import traceback
                 traceback.print_exc()
                 return None
             
         except Exception as e:
-            print(f"❌ DEBUG: Error general: {e}")
+            print(f"❌ DEBUG: Error general en _load_template: {e}")
             import traceback
             traceback.print_exc()
             return None

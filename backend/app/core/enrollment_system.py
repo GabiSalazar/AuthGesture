@@ -810,7 +810,7 @@ class RealEnrollmentWorkflow:
                 error_callback=error_callback
             )
             session.all_frames_buffer = []
-            logger.info("Buffer de sesión INICIALIZADO al crear sesión")
+            print("Buffer de sesión INICIALIZADO al crear sesión")
 
             session.is_bootstrap = self.bootstrap_mode
             
@@ -2729,7 +2729,7 @@ class RealEnrollmentSystem:
             # Esto permite acumular 200+ frames para secuencia fluida robusta
             if not hasattr(session, 'all_frames_buffer'):
                 session.all_frames_buffer = []
-                logger.info("🆕 Buffer de sesión INICIALIZADO")
+                print("🆕 Buffer de sesión INICIALIZADO")
             
             session.all_frames_buffer.append({
                 'landmarks': hand_result.landmarks,
@@ -2741,7 +2741,7 @@ class RealEnrollmentSystem:
             
             # Log cada 10 frames para no saturar
             if len(session.all_frames_buffer) % 10 == 0:
-                logger.info(f"📊 Buffer sesión: {len(session.all_frames_buffer)} frames acumulados")
+                print(f"📊 Buffer sesión: {len(session.all_frames_buffer)} frames acumulados")
             
             # Verificar confianza básica
             if hand_result.confidence < 0.8:
@@ -2994,6 +2994,151 @@ class RealEnrollmentSystem:
                     import traceback
                     print(traceback.format_exc())
             
+            # ✅✅✅ GUARDAR EN MODO NORMAL ✅✅✅
+            else:
+                # MODO NORMAL: Guardar durante captura con embeddings
+                try:
+                    print("="*70)
+                    print("💾 GUARDANDO MUESTRA EN MODO NORMAL")
+                    print("="*70)
+
+                    # ✅✅✅ DEBUG CRÍTICO ✅✅✅
+                    print(f"DEBUG: workflow existe? {hasattr(self, 'workflow')}")
+                    print(f"DEBUG: template_generator existe? {hasattr(self.workflow, 'template_generator')}")
+                    print(f"DEBUG: template_generator valor: {self.workflow.template_generator}")
+
+                    if hasattr(self.workflow, 'template_generator') and self.workflow.template_generator:
+                        print(f"DEBUG: anatomical_network existe? {hasattr(self.workflow.template_generator, 'anatomical_network')}")
+                        print(f"DEBUG: anatomical_network entrenado? {self.workflow.template_generator.anatomical_network.is_trained if hasattr(self.workflow.template_generator, 'anatomical_network') else 'N/A'}")
+                        print(f"DEBUG: dynamic_network existe? {hasattr(self.workflow.template_generator, 'dynamic_network')}")
+                        print(f"DEBUG: dynamic_network entrenado? {self.workflow.template_generator.dynamic_network.is_trained if hasattr(self.workflow.template_generator, 'dynamic_network') else 'N/A'}")
+                    else:
+                        print("❌ template_generator NO EXISTE o es None")
+                    print("="*70)
+                    
+                    # Crear perfil de usuario si no existe
+                    existing_users = [u.user_id for u in self.database.list_users()]
+                    if session.user_id not in existing_users:
+                        from app.core.biometric_database import UserProfile
+                        user_profile = UserProfile(
+                            user_id=session.user_id,
+                            username=session.username,
+                            gesture_sequence=session.gesture_sequence,
+                            metadata={'enrollment_mode': 'normal', 'created_at': current_time}
+                        )
+                        self.database.store_user_profile(user_profile)
+                        print(f"✅ Perfil de usuario creado: {session.user_id}")
+                    
+                    # Generar embeddings SOLO si las redes están entrenadas
+                    anatomical_embedding = None
+                    dynamic_embedding = None
+                    
+                    # Generar embedding anatómico
+                    if hasattr(self.workflow, 'template_generator') and self.workflow.template_generator:
+                        try:
+                            anatomical_embedding = self.workflow.template_generator._generate_real_anatomical_embedding(
+                                anatomical_features,
+                                session.user_id,
+                                sample_id
+                            )
+                            if anatomical_embedding is not None:
+                                print(f"✅ Embedding anatómico generado: {anatomical_embedding.shape}")
+                        except Exception as e:
+                            print(f"⚠️ Error generando embedding anatómico: {e}")
+                    
+                    # Generar embedding dinámico
+                    if dynamic_features and hasattr(self.workflow, 'template_generator') and self.workflow.template_generator:
+                        try:
+                            # ✅✅✅ COPIAR temporal_sequence a dynamic_features ANTES de generar embedding ✅✅✅
+                            if temporal_sequence is not None:
+                                dynamic_features.temporal_sequence = temporal_sequence
+                                print(f"✅ temporal_sequence copiada a dynamic_features: {temporal_sequence.shape}")
+                            else:
+                                print(f"⚠️ No hay temporal_sequence para copiar")
+                            
+                            dynamic_embedding = self.workflow.template_generator._generate_real_dynamic_embedding(
+                                dynamic_features,
+                                session.user_id,
+                                sample_id
+                            )
+                    
+                            if dynamic_embedding is not None:
+                                print(f"✅ Embedding dinámico generado: {dynamic_embedding.shape}")
+                        except Exception as e:
+                            print(f"⚠️ Error generando embedding dinámico: {e}")
+                    
+                    # Guardar template anatómico si se generó
+                    if anatomical_embedding is not None:
+                        template_id_anat = f"{session.user_id}_anatomical_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
+                        
+                        from app.core.biometric_database import BiometricTemplate, TemplateType
+                        template_anat = BiometricTemplate(
+                            user_id=session.user_id,
+                            template_id=template_id_anat,
+                            template_type=TemplateType.ANATOMICAL,
+                            anatomical_embedding=anatomical_embedding,
+                            dynamic_embedding=None,
+                            gesture_name=session.current_gesture,
+                            quality_score=0.85,
+                            confidence=float(hand_result.confidence),
+                            enrollment_session=session.session_id,
+                            metadata={
+                                'modality': 'anatomical',
+                                'sample_id': sample_id,
+                                'bootstrap_mode': False,
+                                'data_source': 'real_enrollment_capture',
+                                'bootstrap_features': anatomical_features.complete_vector.tolist(),
+                                'has_anatomical_raw': True
+                            }
+                        )
+                        
+                        if self.database.store_biometric_template(template_anat):
+                            print(f"✅ Template anatómico guardado: {template_id_anat}")
+                        else:
+                            print(f"❌ Error guardando template anatómico")
+                    
+                    # Guardar template dinámico si se generó
+                    if dynamic_embedding is not None:
+                        template_id_dyn = f"{session.user_id}_dynamic_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
+                        
+                        from app.core.biometric_database import BiometricTemplate, TemplateType
+                        template_dyn = BiometricTemplate(
+                            user_id=session.user_id,
+                            template_id=template_id_dyn,
+                            template_type=TemplateType.DYNAMIC,
+                            anatomical_embedding=None,
+                            dynamic_embedding=dynamic_embedding,
+                            gesture_name=session.current_gesture,
+                            quality_score=0.85,
+                            confidence=float(hand_result.confidence),
+                            enrollment_session=session.session_id,
+                            metadata={
+                                'modality': 'dynamic',
+                                'sample_id': sample_id,
+                                'bootstrap_mode': False,
+                                'data_source': 'real_enrollment_capture',
+                                'temporal_sequence': temporal_sequence.tolist() if temporal_sequence is not None else [],
+                                'has_temporal_data': temporal_sequence is not None
+                            }
+                        )
+                        
+                        if self.database.store_biometric_template(template_dyn):
+                            print(f"✅ Template dinámico guardado: {template_id_dyn}")
+                        else:
+                            print(f"❌ Error guardando template dinámico")
+                    
+                    # Verificar guardado
+                    templates = self.database.list_user_templates(session.user_id)
+                    print(f"📊 Total templates para {session.user_id}: {len(templates)}")
+                    
+                except Exception as e:
+                    print("="*70)
+                    print(f"❌ ERROR GUARDANDO EN MODO NORMAL: {e}")
+                    print("="*70)
+                    import traceback
+                    print(traceback.format_exc())
+
+                    
             # Preparar respuesta base
             samples_this_gesture = len([s for s in session.samples if s.gesture_name == session.current_gesture])
             
@@ -3096,7 +3241,6 @@ class RealEnrollmentSystem:
                                 if len(temporal_sequence) >= 50:
                                     sequence_array = np.array(temporal_sequence[:50], dtype=np.float32)
                                     
-                                    import uuid
                                     template_id = f"{session.user_id}_dynamic_sequence_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                                     
                                     from app.core.biometric_database import BiometricTemplate, TemplateType
@@ -3157,10 +3301,103 @@ class RealEnrollmentSystem:
                         }
                     
                     else:
-                        # MODO NORMAL
-                        print("🔄 MODO NORMAL: Llamando a _finalize_real_enrollment")
-                        # Aquí iría la lógica de finalización normal
-                        pass
+                        # ✅✅✅ MODO NORMAL - GENERAR SECUENCIA FLUIDA ✅✅✅
+                        print("🔄 MODO NORMAL: Generando secuencia fluida y finalizando")
+                        
+                        # ========== TEMPLATE DE SECUENCIA FLUIDA (MODO NORMAL) ==========
+                        try:
+                            print("🎬 GENERANDO TEMPLATE DE SECUENCIA FLUIDA (MODO NORMAL)")
+                            print(f"📊 Buffer de sesión total: {len(session.all_frames_buffer)} frames")
+                            
+                            if hasattr(session, 'all_frames_buffer') and len(session.all_frames_buffer) >= 50:
+                                buffer_size = len(session.all_frames_buffer)
+                                print(f"✅ Buffer suficiente: {buffer_size} frames")
+                                
+                                # Tomar los últimos 50 frames
+                                recent_frames = session.all_frames_buffer[-50:]
+                                temporal_sequence_fluid = []
+                                
+                                for frame_data in recent_frames:
+                                    frame_features = self.workflow._extract_single_frame_features(
+                                        frame_data['landmarks'],
+                                        frame_data.get('world_landmarks')
+                                    )
+                                    if frame_features is not None and len(frame_features) == 320:
+                                        temporal_sequence_fluid.append(frame_features)
+                                
+                                if len(temporal_sequence_fluid) >= 50:
+                                    sequence_array = np.array(temporal_sequence_fluid[:50], dtype=np.float32)
+                                    
+                                    # Generar embedding con la red dinámica
+                                    dynamic_net = self.workflow.template_generator.dynamic_network
+                                    if dynamic_net and dynamic_net.is_trained:
+                                        try:
+                                            sequence_input = np.expand_dims(sequence_array, axis=0)
+                                            dynamic_embedding_fluid = dynamic_net.base_network.predict(sequence_input, verbose=0)
+                                            dynamic_embedding_fluid = dynamic_embedding_fluid.flatten()
+                                            print(f"✅ Embedding fluido generado: {dynamic_embedding_fluid.shape}")
+                                        except Exception as e:
+                                            print(f"⚠️ Error generando embedding fluido: {e}")
+                                            dynamic_embedding_fluid = None
+                                    else:
+                                        dynamic_embedding_fluid = None
+                                    
+                                    template_id_fluid = f"{session.user_id}_dynamic_sequence_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
+                                    
+                                    from app.core.biometric_database import BiometricTemplate, TemplateType
+                                    
+                                    template_fluid = BiometricTemplate(
+                                        user_id=session.user_id,
+                                        template_id=template_id_fluid,
+                                        template_type=TemplateType.DYNAMIC,
+                                        anatomical_embedding=None,
+                                        dynamic_embedding=dynamic_embedding_fluid,
+                                        gesture_name="FLUID_SEQUENCE",
+                                        quality_score=0.9,
+                                        confidence=0.9,
+                                        enrollment_session=session.session_id,
+                                        metadata={
+                                            'is_sequence': True,
+                                            'temporal_sequence': sequence_array.tolist(),
+                                            'sequence_frames': 50,
+                                            'bootstrap_mode': False,
+                                            'total_frames_captured': buffer_size,
+                                            'source': 'accumulated_session_buffer'
+                                        }
+                                    )
+                                    
+                                    if self.database.store_biometric_template(template_fluid):
+                                        print("="*70)
+                                        print(f"✅ TEMPLATE SECUENCIA FLUIDA GUARDADO: {template_id_fluid}")
+                                        print(f"   📊 Frames totales: {buffer_size}")
+                                        print(f"   📊 Frames usados: 50")
+                                        print(f"   🧠 Con embedding: {'Sí' if dynamic_embedding_fluid is not None else 'No'}")
+                                        print("="*70)
+                                    else:
+                                        print("❌ Error guardando template fluido")
+                                else:
+                                    print(f"⚠️ Frames insuficientes: {len(temporal_sequence_fluid)}/50")
+                            else:
+                                buffer_size = len(session.all_frames_buffer) if hasattr(session, 'all_frames_buffer') else 0
+                                print(f"⚠️ Buffer insuficiente: {buffer_size}/50")
+                                
+                        except Exception as e:
+                            print(f"❌ ERROR generando template fluido: {e}")
+                            import traceback
+                            print(traceback.format_exc())
+                        # =========================================================================
+                        
+                        return {
+                            **response_base,
+                            'status': EnrollmentStatus.COMPLETED.value,
+                            'phase': EnrollmentPhase.ENROLLMENT_COMPLETE.value,
+                            'progress': 100.0,
+                            'session_completed': True,
+                            'sample_captured': True,
+                            'message': '¡Enrollment completado! Todas las muestras guardadas.',
+                            'user_saved': True,
+                            'total_frames_captured': len(session.all_frames_buffer) if hasattr(session, 'all_frames_buffer') else 0
+                        }
                 
                 else:
                     # Avanzar al siguiente gesto
