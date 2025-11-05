@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
@@ -15,10 +15,27 @@ export default function Verification() {
   const [progress, setProgress] = useState(0)
   const [statusMessage, setStatusMessage] = useState('')
   const [currentFrame, setCurrentFrame] = useState(null)
+  
+  // ✅ REFS GLOBALES
+  const intervalRef = useRef(null)
+  const isProcessingFrameRef = useRef(false)  // ✅ FLAG ANTI-CONCURRENCIA
+  const sessionCompletedRef = useRef(false)   // ✅ FLAG DE SESIÓN COMPLETADA
 
 
   useEffect(() => {
     loadUsers()
+  }, [])
+
+  // ✅ CLEANUP AL DESMONTAR
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+      isProcessingFrameRef.current = false
+      sessionCompletedRef.current = false
+    }
   }, [])
 
   const loadUsers = async () => {
@@ -44,6 +61,10 @@ export default function Verification() {
       setError(null)
       setProgress(0)
       setStatusMessage('Iniciando verificación...')
+      
+      // ✅ RESETEAR FLAGS
+      isProcessingFrameRef.current = false
+      sessionCompletedRef.current = false
 
       // Iniciar sesión de verificación
       const response = await authenticationApi.startVerification(selectedUser.user_id)
@@ -60,23 +81,65 @@ export default function Verification() {
     }
   }
 
+  const stopProcessing = () => {
+    console.log('🛑 Deteniendo procesamiento completo')
+    
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+    
+    isProcessingFrameRef.current = false
+    sessionCompletedRef.current = true
+  }
+
   const startFrameProcessing = async (sessionId) => {
     let consecutiveErrors = 0
     const maxConsecutiveErrors = 10
     const maxValidCaptures = 5
-    let intervalRef = null  // ✅ REFERENCIA AL INTERVALO
 
-    intervalRef = setInterval(async () => {
-        try {
+    // ✅ LIMPIAR INTERVALO ANTERIOR
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current)
+      intervalRef.current = null
+    }
+
+    console.log('▶️ Iniciando loop de procesamiento')
+
+    intervalRef.current = setInterval(async () => {
+      // ✅ VERIFICAR SI YA SE COMPLETÓ LA SESIÓN
+      if (sessionCompletedRef.current) {
+        console.log('⏹️ Sesión ya completada, ignorando tick')
+        stopProcessing()
+        return
+      }
+
+      // ✅ VERIFICAR SI YA HAY UN FRAME PROCESÁNDOSE
+      if (isProcessingFrameRef.current) {
+        console.log('⏸️ Frame anterior aún procesándose, saltando tick')
+        return
+      }
+
+      // ✅ MARCAR COMO PROCESANDO
+      isProcessingFrameRef.current = true
+
+      try {
         // Procesar frame
         const frameResult = await authenticationApi.processFrame(sessionId)
+
+        // ✅ VERIFICAR NUEVAMENTE POR SI SE COMPLETÓ MIENTRAS ESPERÁBAMOS
+        if (sessionCompletedRef.current) {
+          console.log('⏹️ Sesión completada durante request, ignorando resultado')
+          isProcessingFrameRef.current = false
+          return
+        }
 
         // Resetear contador de errores
         consecutiveErrors = 0
 
-        // ✅ Actualizar frame visual si existe
+        // Actualizar frame visual si existe
         if (frameResult.frame) {
-            setCurrentFrame(frameResult.frame)
+          setCurrentFrame(frameResult.frame)
         }
 
         // Actualizar progreso
@@ -90,62 +153,63 @@ export default function Verification() {
 
         // ✅ VERIFICAR SI HAY RESULTADO DE AUTENTICACIÓN
         if (frameResult.authentication_result) {
-            console.log('✅ Resultado de autenticación recibido - DETENIENDO INMEDIATAMENTE')
-            
-            // ✅ DETENER EL INTERVALO PRIMERO
-            if (intervalRef) {
-            clearInterval(intervalRef)
-            intervalRef = null
-            }
-            
-            // Usar el resultado directamente del frameResult
-            const authResult = frameResult.authentication_result
-            handleVerificationComplete({
+          console.log('✅ Resultado de autenticación recibido - COMPLETANDO SESIÓN')
+          
+          // ✅ MARCAR COMO COMPLETADA INMEDIATAMENTE
+          sessionCompletedRef.current = true
+          isProcessingFrameRef.current = false
+          stopProcessing()
+          
+          // Usar el resultado directamente del frameResult
+          const authResult = frameResult.authentication_result
+          handleVerificationComplete({
             status: authResult.success ? 'authenticated' : 'rejected',
             user_id: authResult.user_id || selectedUser.user_id,
             confidence: authResult.fused_score || authResult.confidence || 0,
             duration: authResult.duration || 0
-            })
-            return
+          })
+          return
         }
 
         // Verificar si completado (método antiguo - fallback)
         if (frameResult.session_completed || frameResult.status === 'completed') {
-            console.log('⚠️ Sesión completada sin authentication_result')
-            
-            if (intervalRef) {
-            clearInterval(intervalRef)
-            intervalRef = null
-            }
-            
-            try {
+          console.log('⚠️ Sesión completada sin authentication_result')
+          
+          sessionCompletedRef.current = true
+          isProcessingFrameRef.current = false
+          stopProcessing()
+          
+          try {
             const finalStatus = await authenticationApi.getSessionStatus(sessionId)
             handleVerificationComplete(finalStatus)
-            } catch (statusErr) {
+          } catch (statusErr) {
             console.error('❌ Error obteniendo status final:', statusErr)
             setError('La sesión finalizó pero no se pudo obtener el resultado')
             setStep('select')
             setProcessing(false)
-            }
-            return
+          }
+          return
         }
 
         // Verificar fase de matching
         if (validCaptures >= maxValidCaptures && frameResult.phase === 'template_matching') {
-            console.log('✅ Capturas completas, esperando matching...')
-            setStatusMessage('Analizando identidad...')
+          console.log('✅ Capturas completas, esperando matching...')
+          setStatusMessage('Analizando identidad...')
         }
 
-        } catch (err) {
+        // ✅ LIBERAR FLAG DE PROCESAMIENTO
+        isProcessingFrameRef.current = false
+
+      } catch (err) {
+        // ✅ LIBERAR FLAG INMEDIATAMENTE
+        isProcessingFrameRef.current = false
+
         // ✅ MANEJAR 410 - Sesión ya cerrada
         if (err.response?.status === 410) {
-            console.log('⚠️ Recibido 410 - sesión ya procesada, ignorando')
-            
-            if (intervalRef) {
-            clearInterval(intervalRef)
-            intervalRef = null
-            }
-            return  // ✅ NO MOSTRAR ERROR - El resultado ya se procesó
+          console.log('⚠️ Recibido 410 - sesión ya procesada, deteniendo')
+          sessionCompletedRef.current = true
+          stopProcessing()
+          return  // ✅ NO MOSTRAR ERROR
         }
 
         // Otros errores
@@ -153,19 +217,23 @@ export default function Verification() {
         console.error('Error procesando frame:', err)
         
         if (consecutiveErrors >= maxConsecutiveErrors) {
-            if (intervalRef) {
-            clearInterval(intervalRef)
-            intervalRef = null
-            }
-            setError(err.response?.data?.detail || 'Error durante el procesamiento')
-            setStep('select')
-            setProcessing(false)
+          sessionCompletedRef.current = true
+          stopProcessing()
+          setError(err.response?.data?.detail || 'Error durante el procesamiento')
+          setStep('select')
+          setProcessing(false)
         }
-        }
+      }
     }, 200)
-    }
+  }
 
   const handleVerificationComplete = (finalStatus) => {
+    console.log('🏁 Completando verificación:', finalStatus)
+    
+    // ✅ DETENER TODO
+    sessionCompletedRef.current = true
+    stopProcessing()
+
     setProcessing(false)
     setStep('result')
     
@@ -184,6 +252,12 @@ export default function Verification() {
   }
 
   const handleReset = () => {
+    console.log('🔄 Reseteando componente')
+    
+    // ✅ DETENER TODO
+    sessionCompletedRef.current = true
+    stopProcessing()
+
     setStep('select')
     setSelectedUser(null)
     setSessionId(null)
@@ -193,6 +267,10 @@ export default function Verification() {
     setProgress(0)
     setStatusMessage('')
     setCurrentFrame(null)
+    
+    // ✅ RESETEAR FLAGS
+    isProcessingFrameRef.current = false
+    sessionCompletedRef.current = false
   }
 
   return (
@@ -292,60 +370,58 @@ export default function Verification() {
         </Card>
       )}
 
-        {/* PASO 2: Procesando */}
-        {step === 'processing' && (
+      {/* PASO 2: Procesando */}
+      {step === 'processing' && (
         <Card>
-            <CardHeader>
+          <CardHeader>
             <CardTitle>Verificando Identidad</CardTitle>
             <CardDescription>
-                Usuario: <strong>{selectedUser?.username}</strong>
+              Usuario: <strong>{selectedUser?.username}</strong>
             </CardDescription>
-            </CardHeader>
+          </CardHeader>
 
-            <CardContent className="space-y-6">
-                {/* ✅ Frame visual del servidor con overlays */}
-                <div className="relative bg-gray-900 rounded-lg aspect-video overflow-hidden">
-                {currentFrame ? (
-                    // Mostrar frame del servidor
-                    <>
-                    <img 
-                        src={currentFrame} 
-                        alt="Procesamiento biométrico" 
-                        className="w-full h-full object-contain"
-                    />
-                    
-                    {/* Indicador de captura activa */}
-                    <div className="absolute top-4 right-4">
-                        <div className="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-                        <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                        CAPTURANDO
-                        </div>
+          <CardContent className="space-y-6">
+            {/* Frame visual del servidor con overlays */}
+            <div className="relative bg-gray-900 rounded-lg aspect-video overflow-hidden">
+              {currentFrame ? (
+                <>
+                  <img 
+                    src={currentFrame} 
+                    alt="Procesamiento biométrico" 
+                    className="w-full h-full object-contain"
+                  />
+                  
+                  {/* Indicador de captura activa */}
+                  <div className="absolute top-4 right-4">
+                    <div className="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      CAPTURANDO
                     </div>
-                    </>
-                ) : (
-                    // Placeholder mientras carga el primer frame
-                    <div className="flex items-center justify-center h-full">
-                    <div className="text-center p-8">
-                        <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                        <Shield className="w-10 h-10 text-blue-400" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-white mb-2">
-                        Iniciando captura...
-                        </h3>
-                        <p className="text-gray-400 text-sm">
-                        Esperando primer frame del servidor
-                        </p>
-                        <Spinner className="w-6 h-6 text-blue-400 mx-auto mt-4" />
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <div className="text-center p-8">
+                    <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                      <Shield className="w-10 h-10 text-blue-400" />
                     </div>
-                    </div>
-                )}
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                      Iniciando captura...
+                    </h3>
+                    <p className="text-gray-400 text-sm">
+                      Esperando primer frame del servidor
+                    </p>
+                    <Spinner className="w-6 h-6 text-blue-400 mx-auto mt-4" />
+                  </div>
                 </div>
-            
+              )}
+            </div>
+          
             {/* Info de captura del servidor */}
             <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-xs text-blue-800 text-center">
+              <p className="text-xs text-blue-800 text-center">
                 ℹ️ El procesamiento biométrico se realiza en el servidor con su propia cámara
-                </p>
+              </p>
             </div>
 
             {/* Progress Bar */}

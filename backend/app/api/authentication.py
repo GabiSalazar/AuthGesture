@@ -166,15 +166,12 @@ async def process_authentication_frame(session_id: str):
         import base64
         import numpy as np
         from app.core.camera_manager import get_camera_manager
-        from app.core.reference_area_manager import get_reference_area_manager
-        from app.core.visual_feedback import get_visual_feedback_manager, FeedbackMessage, FeedbackLevel
         
         auth_system = get_real_authentication_system()
         
         # ✅ VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
         session = auth_system.session_manager.get_real_session(session_id)
         if not session:
-            # Sesión cerrada o no existe - retornar 410 Gone
             raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
         
         # Procesar frame
@@ -189,17 +186,14 @@ async def process_authentication_frame(session_id: str):
             camera = get_camera_manager()
             capture_result = camera.capture_frame()
             
-            # ✅ SIEMPRE extraer como tupla primero
             if isinstance(capture_result, tuple):
                 ret, frame = capture_result
                 if not ret or frame is None:
                     logger.warning("Captura de frame falló")
                     frame = None
             else:
-                # Si no es tupla, asumir que es el frame directamente
                 frame = capture_result
             
-            # ✅ VALIDACIÓN: Verificar que es numpy array
             if frame is not None:
                 if not isinstance(frame, np.ndarray):
                     logger.error(f"Frame no es numpy array: {type(frame)}")
@@ -208,15 +202,13 @@ async def process_authentication_frame(session_id: str):
                     logger.error(f"Frame shape inválido: {frame.shape}")
                     frame = None
                 else:
-                    # ✅ HACER COPIA
                     frame = frame.copy()
                     logger.debug(f"✅ Frame válido capturado: {frame.shape}")
     
             # ========================================================================
-            # PROCESAR FRAME VISUAL CON OVERLAYS
+            # DISEÑO LIMPIO Y PROFESIONAL
             # ========================================================================
             if frame is not None:
-                # Obtener sesión para información visual
                 session = auth_system.session_manager.get_real_session(session_id)
                 
                 if session and session.required_sequence:
@@ -224,181 +216,145 @@ async def process_authentication_frame(session_id: str):
                     if current_step < len(session.required_sequence):
                         expected_gesture = session.required_sequence[current_step]
                         
-                        # ========================================
-                        # PASO 1: Dibujar área de referencia
-                        # ========================================
                         try:
-                            area_manager = get_reference_area_manager()
-                            frame = area_manager.draw_reference_area(frame, expected_gesture)
-                            
-                            # ✅ CRÍTICO: Verificar que sigue siendo numpy array
                             if not isinstance(frame, np.ndarray):
-                                logger.error(f"Frame se convirtió en {type(frame)} después de draw_reference_area")
-                                raise ValueError("Frame inválido después de dibujar área")
-                            
-                            logger.debug("✅ Área de referencia dibujada correctamente")
-                            
-                        except Exception as e:
-                            logger.error(f"Error dibujando área de referencia: {e}")
-                            import traceback
-                            logger.error(traceback.format_exc())
-                        
-                        # ========================================
-                        # PASO 2: Dibujar información de progreso
-                        # ========================================
-                        try:
-                            # ✅ VERIFICAR antes de usar
-                            if not isinstance(frame, np.ndarray):
-                                logger.error(f"Frame no es numpy array antes de dibujar info: {type(frame)}")
                                 raise ValueError("Frame inválido")
                             
                             h, w = frame.shape[:2]
                             
-                            # Panel superior semi-transparente
+                            # ========================================
+                            # BARRA SUPERIOR: Información compacta
+                            # ========================================
+                            bar_height = 70
                             overlay = frame.copy()
-                            cv2.rectangle(overlay, (0, 0), (w, 100), (0, 0, 0), -1)
-                            cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
+                            cv2.rectangle(overlay, (0, 0), (w, bar_height), (0, 0, 0), -1)
+                            cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
                             
-                            # Texto de gesto actual
-                            gesture_text = f"Gesto {current_step + 1}/{len(session.required_sequence)}: {expected_gesture}"
-                            cv2.putText(frame, gesture_text, 
-                                       (20, 35), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+                            # Línea inferior de la barra (acento azul)
+                            cv2.line(frame, (0, bar_height-1), (w, bar_height-1), (66, 135, 245), 2)
                             
-                            # Progreso
+                            # IZQUIERDA: Gesto actual
+                            gesture_label = f"Gesto {current_step + 1}/{len(session.required_sequence)}:"
+                            cv2.putText(frame, gesture_label, 
+                                       (15, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (180, 180, 180), 1)
+                            cv2.putText(frame, expected_gesture, 
+                                       (15, 52), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
+                            
+                            # CENTRO: Progreso con porcentaje
                             progress = result.get('progress', 0)
-                            progress_text = f"Progreso: {progress:.1f}%"
+                            progress_text = f"{progress:.0f}%"
+                            
+                            # Círculo de progreso minimalista
+                            center_x = w // 2
+                            center_y = 35
+                            radius = 22
+                            
+                            # Fondo del círculo
+                            cv2.circle(frame, (center_x, center_y), radius, (40, 40, 40), -1)
+                            
+                            # Arco de progreso (azul)
+                            angle = int(360 * (progress / 100))
+                            if angle > 0:
+                                for i in range(-90, -90 + angle):
+                                    x1 = int(center_x + radius * np.cos(np.radians(i)))
+                                    y1 = int(center_y + radius * np.sin(np.radians(i)))
+                                    cv2.circle(frame, (x1, y1), 3, (66, 135, 245), -1)
+                            
+                            # Porcentaje en el centro
+                            text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                            text_x = center_x - text_size[0] // 2
+                            text_y = center_y + text_size[1] // 2
                             cv2.putText(frame, progress_text, 
-                                       (20, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+                                       (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                             
-                            # Capturas válidas
+                            # DERECHA: Capturas válidas
                             valid_captures = result.get('valid_captures', 0)
-                            captures_text = f"Capturas: {valid_captures}/5"
-                            cv2.putText(frame, captures_text, 
-                                       (w - 200, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
                             
-                            logger.debug("✅ Información de progreso dibujada")
+                            # Indicador de capturas (3 círculos)
+                            circle_spacing = 35
+                            start_x = w - 130
+                            circle_y = 35
                             
-                        except Exception as e:
-                            logger.error(f"Error dibujando información: {e}")
-                            import traceback
-                            logger.error(traceback.format_exc())
-                        
-                        # ========================================
-                        # PASO 3: Mensaje de feedback inferior
-                        # ========================================
-                        try:
-                            # ✅ VERIFICAR antes de usar
-                            if not isinstance(frame, np.ndarray):
-                                logger.error(f"Frame no es numpy array antes de mensaje: {type(frame)}")
-                                raise ValueError("Frame inválido")
+                            for i in range(3):
+                                circle_x = start_x + (i * circle_spacing)
+                                
+                                if i < valid_captures:
+                                    # Captura completada (verde)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (66, 245, 158), -1)
+                                    cv2.putText(frame, "✓", 
+                                               (circle_x - 6, circle_y + 6), 
+                                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                                else:
+                                    # Pendiente (gris)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (60, 60, 60), -1)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (100, 100, 100), 1)
                             
-                            if result.get('message'):
-                                h, w = frame.shape[:2]
-                                message = result['message'][:80]
-                                text_size = cv2.getTextSize(message, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)[0]
+                            logger.debug("✅ Barra superior dibujada")
+                            
+                            # ========================================
+                            # MENSAJE INFERIOR: Solo si hay algo importante
+                            # ========================================
+                            message = result.get('message', '')
+                            
+                            # Filtrar solo mensajes importantes
+                            if message and any(word in message.lower() for word in 
+                                             ['capturada', 'éxito', 'completado', 'error', 'fallido']):
+                                
+                                display_message = message[:50] + "..." if len(message) > 50 else message
+                                text_size = cv2.getTextSize(display_message, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                                
+                                # Centrado en la parte inferior
+                                y_pos = h - 25
+                                x_pos = (w - text_size[0]) // 2
+                                padding = 15
                                 
                                 # Fondo semi-transparente
-                                y_pos = h - 50
                                 overlay = frame.copy()
-                                cv2.rectangle(overlay, (10, y_pos - 10), 
-                                            (min(text_size[0] + 40, w - 10), y_pos + 30), 
+                                cv2.rectangle(overlay, 
+                                            (x_pos - padding, y_pos - 12), 
+                                            (x_pos + text_size[0] + padding, y_pos + 10), 
                                             (0, 0, 0), -1)
-                                cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
+                                cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
                                 
-                                # Color según mensaje
+                                # Color según tipo
                                 if 'capturada' in message.lower() or 'éxito' in message.lower():
-                                    color = (0, 255, 0)
-                                elif 'calidad' in message.lower() or 'insuficiente' in message.lower():
-                                    color = (0, 165, 255)
-                                elif 'error' in message.lower():
-                                    color = (0, 0, 255)
+                                    color = (66, 245, 158)
+                                elif 'error' in message.lower() or 'fallido' in message.lower():
+                                    color = (66, 135, 245)
                                 else:
-                                    color = (0, 255, 255)
+                                    color = (200, 200, 200)
                                 
-                                cv2.putText(frame, message, 
-                                           (20, y_pos + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
-                                
-                                logger.debug(f"✅ Mensaje dibujado: {message[:30]}...")
-                                
+                                cv2.putText(frame, display_message, 
+                                           (x_pos, y_pos + 2), 
+                                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                            
                         except Exception as e:
-                            logger.error(f"Error dibujando mensaje: {e}")
+                            logger.error(f"Error dibujando overlay: {e}")
                             import traceback
                             logger.error(traceback.format_exc())
                 
                 # ========================================
-                # PASO 4: Visual feedback (opcional)
+                # CONVERTIR A BASE64
                 # ========================================
                 try:
-                    # ✅ VALIDACIÓN FINAL
                     if not isinstance(frame, np.ndarray):
-                        logger.error(f"Frame no es numpy array antes de visual feedback: {type(frame)}")
-                        raise ValueError("Frame no es numpy array")
-                    
-                    visual_manager = get_visual_feedback_manager()
-                    
-                    if hasattr(auth_system, 'pipeline') and hasattr(auth_system.pipeline, 'last_roi_result'):
-                        roi_result = auth_system.pipeline.last_roi_result
-                        
-                        if roi_result and hasattr(roi_result, 'is_valid') and roi_result.is_valid:
-                            messages = []
-                            messages.append(FeedbackMessage(
-                                "Mano detectada",
-                                FeedbackLevel.SUCCESS,
-                                priority=1,
-                                icon="✓",
-                                action="Mantener posición"
-                            ))
-                            
-                            feedback_result = visual_manager.draw_feedback_overlay(frame, messages, None)
-                            
-                            # ✅ Verificar resultado
-                            if isinstance(feedback_result, tuple):
-                                logger.warning("draw_feedback_overlay retornó tupla")
-                                frame = feedback_result[0] if len(feedback_result) > 0 else frame
-                            else:
-                                frame = feedback_result
-                            
-                            logger.debug("✅ Visual feedback dibujado")
-                            
-                except Exception as e:
-                    logger.error(f"Error con visual feedback: {e}")
-                    import traceback
-                    logger.error(traceback.format_exc())
-                
-                # ========================================
-                # PASO 5: Convertir a JPEG y base64
-                # ========================================
-                try:
-                    # ✅ VALIDACIÓN FINAL antes de encodear
-                    if not isinstance(frame, np.ndarray):
-                        logger.error(f"Frame no es numpy array antes de encodear: {type(frame)}")
                         raise ValueError("Frame inválido para encodear")
                     
-                    _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+                    _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
                     frame_base64 = base64.b64encode(buffer).decode('utf-8')
-                    logger.info(f"✅ Frame codificado exitosamente: {len(frame_base64)} bytes")
+                    logger.info(f"✅ Frame codificado: {len(frame_base64)} bytes")
                     
                 except Exception as e:
                     logger.error(f"Error codificando frame: {e}")
-                    import traceback
-                    logger.error(traceback.format_exc())
                     frame_base64 = None
             else:
-                logger.warning("No se pudo obtener frame válido para visualización")
+                logger.warning("No se pudo obtener frame válido")
                     
         except Exception as e:
-            logger.error(f"Error capturando/procesando frame visual: {e}")
-            import traceback
-            logger.error(traceback.format_exc())
+            logger.error(f"Error procesando frame visual: {e}")
             frame_base64 = None
         
-        # Agregar frame al resultado
         result['frame'] = f"data:image/jpeg;base64,{frame_base64}" if frame_base64 else None
-        
-        if frame_base64:
-            logger.info(f"✅ Frame procesado exitosamente para sesión {session_id}")
-        else:
-            logger.warning(f"⚠️ No se pudo generar frame visual para sesión {session_id}")
         
         return result
         
@@ -406,8 +362,6 @@ async def process_authentication_frame(session_id: str):
         raise
     except Exception as e:
         logger.error(f"Error procesando frame: {e}")
-        import traceback
-        logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 
