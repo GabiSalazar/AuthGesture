@@ -1,0 +1,125 @@
+2025-11-04 22:04:40,385 - biometric_gesture_system - INFO - [config_manager.py:504] - Validación de configuración: ✓ EXITOSA
+2025-11-04 22:04:40,385 - biometric_gesture_system - INFO - [config_manager.py:317] - ================================================================================
+2025-11-04 22:04:40,385 - biometric_gesture_system - INFO - [config_manager.py:318] - SISTEMA BIOMÉTRICO DE GESTOS DE MANOS - CONFIG MANAGER INICIALIZADO
+2025-11-04 22:04:40,386 - biometric_gesture_system - INFO - [config_manager.py:319] - ================================================================================
+2025-11-04 22:04:40,387 - biometric_gesture_system - INFO - [config_manager.py:320] - Configuración cargada desde: biometric_config.json
+2025-11-04 22:04:40,387 - biometric_gesture_system - INFO - [config_manager.py:321] - Muestras por gesto: 7
+2025-11-04 22:04:40,388 - biometric_gesture_system - INFO - [config_manager.py:322] - Gestos por usuario: 3
+2025-11-04 22:04:40,388 - biometric_gesture_system - INFO - [config_manager.py:323] - Umbral confianza mano: 0.9
+2025-11-04 22:04:40,388 - biometric_gesture_system - INFO - [config_manager.py:324] - Umbral confianza gesto: 0.6
+2025-11-04 22:04:40,389 - biometric_gesture_system - INFO - [config_manager.py:325] - Resolución cámara: 1280x720
+2025-11-04 22:04:40,389 - biometric_gesture_system - INFO - [config_manager.py:326] - Directorios creados: 11 rutas configuradas
+2025-11-04 22:04:40,389 - biometric_gesture_system - INFO - [config_manager.py:327] - ================================================================================
+2025-11-04 22:04:40,763 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-11-04 22:04:40,765 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI NORMALIZATION SYSTEM INICIALIZADO
+2025-11-04 22:04:40,765 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución mínima: 150px
+2025-11-04 22:04:40,765 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución máxima: 600px
+2025-11-04 22:04:40,766 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Tamaño normalizado: (224, 224)
+2025-11-04 22:04:40,766 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Padding: 15%
+2025-11-04 22:04:40,766 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Sharpening: ACTIVADO
+2025-11-04 22:04:40,766 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-11-04 22:04:40,767 - biometric_gesture_system - INFO - [visual_feedback.py:62] - ======================================================================
+2025-11-04 22:04:40,767 - biometric_gesture_system - INFO - [visual_feedback.py:63] - VISUAL FEEDBACK MANAGER INICIALIZADO
+2025-11-04 22:04:40,767 - biometric_gesture_system - INFO - [visual_feedback.py:64] -   ✓ 5 niveles de feedback configurados
+2025-11-04 22:04:40,767 - biometric_gesture_system - INFO - [visual_feedback.py:65] -   ✓ Colores BGR definidos
+2025-11-04 22:04:40,768 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
+2025-11-04 22:04:40,768 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
+2025-11-04 22:04:54,884 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-11-04 22:04:54,884 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-11-04 22:04:54,884 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.use_single_area, usando default: True
+2025-11-04 22:04:54,887 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.dynamic_features, usando default: {'min_transition_frames': 8, 'max_transition_frames': 40, 'gesture_stability_threshold': 5, 'velocity_smoothing_window': 3, 'min_movement_threshold': 0.005, 'transition_detection_sensitivity': 0.85, 'temporal_downsampling': 1, 'normalize_temporal_features': True, 'use_3d_trajectories': True, 'velocity_threshold_percentile': 75, 'acceleration_smoothing': True, 'jerk_threshold': 0.1, 'minimum_sequence_duration_ms': 200}
+2025-11-04 22:04:54,888 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.sequence_management, usando default: {'sequence_length': 3, 'max_sequence_duration': 60.0, 'max_gesture_duration': 15.0, 'min_gesture_confidence': 0.7, 'min_stable_frames': 3, 'gesture_timeout': 10.0, 'sequence_timeout': 45.0, 'max_failed_attempts': 3, 'cooldown_period': 5.0, 'auto_save_sequences': True, 'validation_mode': 'moderate', 'allow_gesture_skipping': False, 'require_exact_order': True, 'enable_adaptive_timeouts': True}
+2025-11-04 22:04:54,890 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.samples_per_gesture, usando default: 8
+2025-11-04 22:04:54,890 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_confidence, usando default: 0.65
+2025-11-04 22:04:54,890 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_stability_frames, usando default: 8
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.require_all_gestures, usando default: True
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.sample_timeout, usando default: 120.0
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.session_timeout, usando default: 3600.0
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.capture_interval, usando default: 0.8
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_quality_check, usando default: True
+2025-11-04 22:04:54,891 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_duplicate_check, usando default: True
+2025-11-04 22:04:54,893 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.duplicate_threshold, usando default: 0.92
+2025-11-04 22:04:54,893 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.template_fusion_strategy, usando default: average
+2025-11-04 22:04:54,893 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_template_optimization, usando default: True
+2025-11-04 22:04:54,893 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.embedding_dimension_check, usando default: True
+2025-11-04 22:04:54,894 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_preview, usando default: True
+2025-11-04 22:04:54,894 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_quality_feedback, usando default: False
+2025-11-04 22:04:54,894 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.save_enrollment_video, usando default: False
+2025-11-04 22:04:54,895 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.siamese_anatomical, usando default: {'hidden_layers': [128, 64], 'activation': 'relu', 'dropout_rate': 0.2, 'batch_normalization': True, 'l2_regularization': 0.001, 'learning_rate': 0.001, 'batch_size': 32, 'epochs': 100, 'patience': 15, 'validation_split': 0.2, 'min_users_for_training': 2, 'min_samples_per_user': 15, 'max_samples_per_user': 50, 'min_sessions_per_user': 1, 'loss_function': 'contrastive', 'distance_metric': 'euclidean', 'margin': 1.5, 'alpha': 0.2, 'use_stratified_split': True, 'cross_validation_folds': 5, 'threshold_optimization': 'eer', 'quality_threshold': 80.0, 'use_real_augmentation': True, 'temporal_jitter': 0.02, 'noise_from_real_variance': True, 'require_independent_test': True, 'min_test_users': 1, 'performance_monitoring': True}
+2025-11-04 22:04:58,268 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.feature_preprocessing, usando default: {'anatomical_normalization': 'robust', 'dynamic_normalization': 'standard', 'normalize_per_user': False, 'balancing_method': 'balanced_subsample', 'target_balance_ratio': 1.0, 'augmentation_strategy': 'moderate', 'augmentation_factor': 1.5, 'cv_folds': 5, 'cv_strategy': 'stratified_user', 'test_size': 0.2, 'validation_size': 0.2, 'outlier_threshold': 3.0, 'min_samples_per_user': 5, 'feature_selection': False, 'variance_threshold': 0.01, 'cache_transformations': True, 'parallel_processing': False, 'random_state': 42, 'stratify_by_user': True}
+2025-11-04 22:04:58,270 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.sequence_timeout, usando default: 25.0
+2025-11-04 22:04:58,270 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.total_timeout, usando default: 45.0
+2025-11-04 22:04:58,271 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.frame_timeout, usando default: 3.0
+2025-11-04 22:04:58,271 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_low, usando default: 0.65
+2025-11-04 22:04:58,271 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_standard, usando default: 0.75
+2025-11-04 22:04:58,272 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_high, usando default: 0.85
+2025-11-04 22:04:58,272 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_maximum, usando default: 0.92
+2025-11-04 22:04:58,272 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.require_sequence_completion, usando default: True
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_gestures_for_auth, usando default: 2
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_attempts_per_session, usando default: 3
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_identification_candidates, usando default: 5
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.identification_threshold_factor, usando default: 1.1
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_quality_score, usando default: 0.7
+2025-11-04 22:04:58,273 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_confidence, usando default: 0.65
+2025-11-04 22:04:58,275 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_stability_frames, usando default: 8
+2025-11-04 22:04:58,275 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.score_fusion_strategy, usando default: weighted_average
+2025-11-04 22:04:58,275 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.anatomical_weight, usando default: 0.6
+2025-11-04 22:04:58,275 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.dynamic_weight, usando default: 0.4
+2025-11-04 22:04:58,276 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_audit_logging, usando default: True
+2025-11-04 22:04:58,276 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_continuous_auth, usando default: False
+2025-11-04 22:04:58,276 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_failed_attempts, usando default: 5
+2025-11-04 22:04:58,277 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.lockout_duration, usando default: 300.0
+2025-11-04 22:04:58,277 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.score_fusion, usando default: {'fusion_strategy': 'weighted_average', 'calibration_method': 'none', 'weight_optimization': 'grid_search', 'anatomical_weight': 0.6, 'dynamic_weight': 0.4, 'decision_threshold': 0.5, 'use_confidence_weighting': True, 'adaptive_threshold': False, 'cross_validation_folds': 5, 'optimization_metric': 'eer'}
+2025-11-04 22:04:58,277 - biometric_gesture_system - INFO - [authentication_system.py:442] - RealAuthenticationPipeline inicializado con componentes
+2025-11-04 22:04:58,277 - biometric_gesture_system - INFO - [authentication_system.py:1142] - RealSessionManager inicializado para gestión de sesiones
+2025-11-04 22:04:58,278 - biometric_gesture_system - INFO - [authentication_system.py:264] - RealSecurityAuditor inicializado para auditoría
+2025-11-04 22:04:58,278 - biometric_gesture_system - INFO - [authentication_system.py:1349] - RealAuthenticationSystem inicializado
+2025-11-04 22:04:58,278 - biometric_gesture_system - INFO - [authentication_system.py:1350] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
+2025-11-04 22:05:22,543 - biometric_gesture_system - INFO - [authentication_system.py:1384] - Inicializando sistema de autenticación...
+2025-11-04 22:05:22,544 - biometric_gesture_system - INFO - [authentication_system.py:1387] - Obteniendo referencias a redes entrenadas...
+2025-11-04 22:05:22,544 - biometric_gesture_system - INFO - [authentication_system.py:1392] - === DIAGNÓSTICO DE ESTADO DE REDES ===
+2025-11-04 22:05:22,544 - biometric_gesture_system - INFO - [authentication_system.py:1400] - Archivos de modelo en disco:
+2025-11-04 22:05:22,544 - biometric_gesture_system - INFO - [authentication_system.py:1401] -   - Anatómico: True - biometric_data\models\anatomical_model.h5
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1402] -   - Dinámico: True - biometric_data\models\dynamic_model.h5
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1405] - Estado de instancias globales:
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1406] -   - Anatómica is_trained: True
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1407] -   - Dinámica is_trained: True
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1410] - Modelos compilados:
+2025-11-04 22:05:22,545 - biometric_gesture_system - INFO - [authentication_system.py:1411] -   - Anatómica siamese_model: True
+2025-11-04 22:05:22,546 - biometric_gesture_system - INFO - [authentication_system.py:1412] -   - Dinámica siamese_model: True
+2025-11-04 22:05:22,546 - biometric_gesture_system - INFO - [authentication_system.py:1414] - === FIN DIAGNÓSTICO ===
+2025-11-04 22:05:22,547 - biometric_gesture_system - INFO - [authentication_system.py:1416] - Referencias a redes obtenidas:
+2025-11-04 22:05:22,547 - biometric_gesture_system - INFO - [authentication_system.py:1417] -   - Red anatómica disponible: True
+2025-11-04 22:05:22,547 - biometric_gesture_system - INFO - [authentication_system.py:1418] -   - Red anatómica entrenada: True
+2025-11-04 22:05:22,547 - biometric_gesture_system - INFO - [authentication_system.py:1419] -   - Red dinámica disponible: True
+2025-11-04 22:05:22,547 - biometric_gesture_system - INFO - [authentication_system.py:1420] -   - Red dinámica entrenada: True
+2025-11-04 22:05:22,548 - biometric_gesture_system - INFO - [authentication_system.py:447] - Inicializando pipeline de autenticación...
+2025-11-04 22:05:22,548 - biometric_gesture_system - INFO - [authentication_system.py:450] - Obteniendo referencias actuales a redes entrenadas...
+2025-11-04 22:05:22,548 - biometric_gesture_system - INFO - [authentication_system.py:455] - Verificando estado de entrenamiento...
+2025-11-04 22:05:22,549 - biometric_gesture_system - INFO - [authentication_system.py:456] -   - Red anatómica entrenada: True
+2025-11-04 22:05:22,549 - biometric_gesture_system - INFO - [authentication_system.py:457] -   - Red dinámica entrenada: True
+2025-11-04 22:05:37,384 - biometric_gesture_system - INFO - [authentication_system.py:497] - Pipeline de autenticación inicializado exitosamente
+2025-11-04 22:05:37,384 - biometric_gesture_system - INFO - [authentication_system.py:498] -   - Red anatómica entrenada: True
+2025-11-04 22:05:37,385 - biometric_gesture_system - INFO - [authentication_system.py:499] -   - Red dinámica entrenada: True
+2025-11-04 22:05:37,385 - biometric_gesture_system - INFO - [authentication_system.py:500] -   - Sistema de fusión listo: True
+2025-11-04 22:05:37,385 - biometric_gesture_system - INFO - [authentication_system.py:1466] - Sistema de autenticación inicializado exitosamente
+2025-11-04 22:05:37,385 - biometric_gesture_system - INFO - [authentication_system.py:1467] -   - Usuarios disponibles: 3
+2025-11-04 22:05:37,386 - biometric_gesture_system - INFO - [authentication_system.py:1468] -   - Templates totales: 129
+2025-11-04 22:05:37,386 - biometric_gesture_system - INFO - [authentication_system.py:1470] -   - Pipeline listo: True
+2025-11-04 22:05:37,386 - biometric_gesture_system - INFO - [authentication_system.py:1471] -   - Redes entrenadas: anatómica=True, dinámica=True
+2025-11-04 22:05:37,386 - biometric_gesture_system - INFO - [authentication_system.py:1500] - Iniciando verificación para usuario: 2020
+2025-11-04 22:05:37,387 - biometric_gesture_system - INFO - [authentication_system.py:1501] -   - Nivel de seguridad: standard
+2025-11-04 22:05:37,387 - biometric_gesture_system - INFO - [authentication_system.py:1502] -   - Secuencia requerida: None
+2025-11-04 22:05:37,387 - biometric_gesture_system - INFO - [authentication_system.py:1165] - Creando sesión: modo=verification, usuario=2020
+2025-11-04 22:05:37,387 - biometric_gesture_system - INFO - [authentication_system.py:1206] - Sesión creada exitosamente: fd51d2c1-09cb-46dd-8823-663b7cdbab03
+2025-11-04 22:05:37,387 - biometric_gesture_system - INFO - [authentication_system.py:1207] -   - Modo: verification
+2025-11-04 22:05:37,388 - biometric_gesture_system - INFO - [authentication_system.py:1208] -   - Usuario: 2020
+2025-11-04 22:05:37,388 - biometric_gesture_system - INFO - [authentication_system.py:1209] -   - Nivel seguridad: standard
+2025-11-04 22:05:37,388 - biometric_gesture_system - INFO - [authentication_system.py:1210] -   - Secuencia requerida: ['Open_Palm', 'Closed_Fist', 'Victory']
+2025-11-04 22:05:37,388 - biometric_gesture_system - INFO - [authentication_system.py:1531] - Verificación iniciada: sesión fd51d2c1-09cb-46dd-8823-663b7cdbab03
+2025-11-04 22:05:37,389 - biometric_gesture_system - INFO - [authentication_system.py:1532] -   - Usuario: 2020
+2025-11-04 22:05:37,389 - biometric_gesture_system - INFO - [authentication_system.py:1533] -   - Templates disponibles: 40
+2025-11-04 22:05:37,610 - biometric_gesture_system - INFO - [authentication_system.py:522] - Procesando frame para sesión fd51d2c1-09cb-46dd-8823-663b7cdbab03
+2025-11-04 22:05:37,614 - biometric_gesture_system - INFO - [authentication_system.py:533] - AUTH: Frame #1 capturado - Shape: (720, 1280, 3)
+2025-11-04 22:05:37,614 - biometric_gesture_system - INFO - [authentication_system.py:538] - AUTH: Procesando frame original para detectar mano...
+2025-11-04 22:05:37,711 - biometric_gesture_system - INFO - [authentication_system.py:542] - AUTH: No se detectó mano válida en frame original

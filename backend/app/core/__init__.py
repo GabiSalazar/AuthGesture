@@ -103,7 +103,10 @@ from app.core.feature_preprocessor import (
 # Módulo 12: Score Fusion System
 from app.core.score_fusion_system import (
     RealScoreFusionSystem,
-    get_real_score_fusion_system
+    get_real_score_fusion_system,
+    get_score_fusion_system,
+    RealIndividualScores,
+    RealFusedScore
 )
 
 # Módulo 13: Biometric Database

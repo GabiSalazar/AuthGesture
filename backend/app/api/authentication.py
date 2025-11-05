@@ -56,6 +56,11 @@ class FrameProcessResponse(BaseModel):
     frames_processed: int
     frame_processed: bool
     is_real_processing: bool
+    frame: Optional[str] = None  # ✅ NUEVO: Frame como base64
+    current_gesture: Optional[str] = None
+    gesture_confidence: Optional[float] = None
+    required_sequence: Optional[List[str]] = None
+    captured_sequence: Optional[List[str]] = None
 
 
 class AuthenticationStatusResponse(BaseModel):
@@ -151,25 +156,119 @@ async def start_identification(request: IdentificationStartRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/authentication/{session_id}/frame", response_model=FrameProcessResponse)
+@router.get("/authentication/{session_id}/frame")
 async def process_authentication_frame(session_id: str):
     """
-    Procesa un frame para la sesión de autenticación.
+    Procesa un frame para la sesión de autenticación y devuelve el frame visual.
     """
     try:
+        import cv2
+        import base64
+        import numpy as np
+        from app.core.camera_manager import get_camera_manager
+        from app.core.reference_area_manager import get_reference_area_manager
+        from app.core.visual_feedback import get_visual_feedback_manager
+        
         auth_system = get_real_authentication_system()
         
+        # Procesar frame
         result = auth_system.process_real_authentication_frame(session_id)
         
         if 'error' in result:
             raise HTTPException(status_code=404, detail=result['error'])
         
-        return FrameProcessResponse(**result)
+        # ✅ CAPTURAR Y PROCESAR FRAME VISUAL
+        frame_base64 = None
+        try:
+            camera = get_camera_manager()
+            ret, frame = camera.capture_frame()
+            
+            if ret and frame is not None:
+                # ✅ VERIFICAR QUE FRAME ES UN NUMPY ARRAY
+                if not isinstance(frame, np.ndarray):
+                    logger.error(f"Frame no es numpy array: {type(frame)}")
+                    frame = None
+                elif len(frame.shape) != 3:
+                    logger.error(f"Frame shape inválido: {frame.shape}")
+                    frame = None
+                    
+            if frame is not None:
+                # Obtener sesión para información visual
+                session = auth_system.session_manager.get_real_session(session_id)
+                
+                if session and session.required_sequence:
+                    current_step = len(session.gesture_sequence_captured)
+                    if current_step < len(session.required_sequence):
+                        expected_gesture = session.required_sequence[current_step]
+                        
+                        # Dibujar área de referencia
+                        try:
+                            area_manager = get_reference_area_manager()
+                            frame = area_manager.draw_reference_area(frame, expected_gesture)
+                        except Exception as e:
+                            logger.error(f"Error dibujando área de referencia: {e}")
+                        
+                        # Dibujar información de progreso
+                        try:
+                            # Texto de gesto actual
+                            cv2.putText(frame, f"Gesto {current_step + 1}/{len(session.required_sequence)}: {expected_gesture}", 
+                                       (20, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+                            
+                            # Progreso
+                            progress_text = f"Progreso: {result.get('progress', 0):.1f}%"
+                            cv2.putText(frame, progress_text, 
+                                       (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                            
+                            # Mensaje de feedback (en la parte inferior)
+                            if result.get('message'):
+                                message = result['message'][:60]  # Limitar caracteres
+                                text_size = cv2.getTextSize(message, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                                
+                                # Fondo semi-transparente para el texto
+                                y_pos = frame.shape[0] - 40
+                                cv2.rectangle(frame, (10, y_pos - 5), (text_size[0] + 30, y_pos + 20), 
+                                            (0, 0, 0), -1)
+                                
+                                # Texto del mensaje
+                                cv2.putText(frame, message, 
+                                           (20, y_pos + 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+                        except Exception as e:
+                            logger.error(f"Error dibujando información: {e}")
+                
+                # ✅ USAR VISUAL FEEDBACK SI ESTÁ DISPONIBLE
+                try:
+                    visual_manager = get_visual_feedback_manager()
+                    if hasattr(auth_system.pipeline, 'last_roi_result') and auth_system.pipeline.last_roi_result:
+                        roi_result = auth_system.pipeline.last_roi_result
+                        frame = visual_manager.draw_feedback(frame, roi_result)
+                except Exception as e:
+                    logger.error(f"Error con visual feedback: {e}")
+                
+                # Convertir a JPEG y base64
+                try:
+                    _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+                    frame_base64 = base64.b64encode(buffer).decode('utf-8')
+                except Exception as e:
+                    logger.error(f"Error codificando frame: {e}")
+                    frame_base64 = None
+                    
+        except Exception as e:
+            logger.error(f"Error capturando/procesando frame visual: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            frame_base64 = None
+        
+        # Agregar frame al resultado
+        result['frame'] = f"data:image/jpeg;base64,{frame_base64}" if frame_base64 else None
+        
+        return result
         
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Error procesando frame: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 

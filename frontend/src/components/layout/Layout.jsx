@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Home, UserPlus, Shield, Activity } from 'lucide-react'
+import { Home, UserPlus, Shield, Search, Activity } from 'lucide-react'
 import { cn } from '../../utils/cn'
 
 export default function Layout({ children }) {
@@ -8,7 +8,8 @@ export default function Layout({ children }) {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: Home },
     { name: 'Registro', href: '/enrollment', icon: UserPlus },
-    { name: 'Autenticación', href: '/authentication', icon: Shield },
+    { name: 'Verificación', href: '/verification', icon: Shield },
+    { name: 'Identificación', href: '/identification', icon: Search },
     { name: 'Sistema', href: '/system', icon: Activity },
   ]
 
