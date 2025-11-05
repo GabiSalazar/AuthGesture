@@ -10,6 +10,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [training, setTraining] = useState(false)
   const [error, setError] = useState(null)
+  const [pendingRetrain, setPendingRetrain] = useState(null)
+  const [retraining, setRetraining] = useState(false)
 
   useEffect(() => {
     loadData()
@@ -19,16 +21,24 @@ export default function Dashboard() {
 
   const loadData = async () => {
     try {
-      const [system, bootstrap] = await Promise.all([
+      const [system, bootstrap, pending] = await Promise.all([
         systemApi.getStatus(),
-        enrollmentApi.getBootstrapStatus()
+        enrollmentApi.getBootstrapStatus(),
+        systemApi.getPendingRetrainUsers().catch(() => ({ 
+          pending_count: 0, 
+          pending_users: [], 
+          can_retrain: false,
+          message: 'No disponible'
+        }))
       ])
       
       console.log('System Status:', system)
       console.log('Bootstrap Status:', bootstrap)
+      console.log('Pending Retrain:', pending)
       
       setSystemStatus(system)
       setBootstrapStatus(bootstrap)
+      setPendingRetrain(pending)
       setError(null)
     } catch (err) {
       console.error('Error cargando datos del dashboard:', err)
@@ -63,6 +73,39 @@ export default function Dashboard() {
       alert('Error entrenando redes:\n\n' + errorMsg)
     } finally {
       setTraining(false)
+    }
+  }
+
+  const handleRetrainNetworks = async () => {
+    if (!pendingRetrain || pendingRetrain.pending_count === 0) {
+      alert('No hay usuarios pendientes de reentrenamiento')
+      return
+    }
+    
+    if (!window.confirm(`¿Reentrenar las redes con ${pendingRetrain.pending_count} usuario(s) nuevo(s)?\n\nEsto puede tardar 3-7 minutos.`)) {
+      return
+    }
+    
+    try {
+      setRetraining(true)
+      console.log('Iniciando reentrenamiento de redes...')
+      
+      const result = await systemApi.retrainNetworks(true)
+      
+      console.log('Resultado del reentrenamiento:', result)
+      
+      if (result.success) {
+        alert('¡Redes reentrenadas exitosamente!\n\nTodos los usuarios ahora están incluidos.')
+        await loadData()
+      } else {
+        throw new Error(result.message || 'Error reentrenando redes')
+      }
+    } catch (err) {
+      console.error('Error en reentrenamiento:', err)
+      setError(err.response?.data?.detail || err.message || 'Error reentrenando redes')
+      alert('Error: ' + (err.response?.data?.detail || err.message))
+    } finally {
+      setRetraining(false)
     }
   }
 
@@ -141,6 +184,59 @@ export default function Dashboard() {
         </Card>
       )}
 
+      {/* ALERTA: Usuarios pendientes de reentrenamiento */}
+      {pendingRetrain && pendingRetrain.can_retrain && (
+        <Card className="border-orange-200 bg-orange-50">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-4">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <AlertCircle className="w-6 h-6 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-gray-900 mb-1">
+                  Reentrenamiento Disponible
+                </h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  Hay {pendingRetrain.pending_count} usuario(s) nuevo(s) que aún no están incluidos en las redes entrenadas.
+                </p>
+                
+                <div className="p-3 bg-white border border-orange-200 rounded-lg mb-4">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">
+                    Usuarios pendientes:
+                  </h4>
+                  <ul className="text-sm text-gray-700 space-y-1">
+                    {pendingRetrain.pending_users.map((user) => (
+                      <li key={user.user_id} className="flex items-center gap-2">
+                        <Users className="w-4 h-4 text-orange-600" />
+                        <span className="font-medium">{user.username}</span>
+                        <span className="text-gray-500">({user.total_templates} templates)</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <Button
+                  onClick={handleRetrainNetworks}
+                  disabled={retraining}
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  {retraining ? (
+                    <>
+                      <Spinner size="sm" className="mr-2" />
+                      Reentrenando... (esto puede tardar minutos)
+                    </>
+                  ) : (
+                    <>
+                      <Brain className="w-4 h-4 mr-2" />
+                      Reentrenar Redes Ahora
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       {/* Cards de Estadísticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Estado General */}

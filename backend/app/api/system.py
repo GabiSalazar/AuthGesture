@@ -5,7 +5,7 @@ VERSIÓN CORREGIDA - SOLO SISTEMA
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 from app.core.system_manager import get_system_manager
 
@@ -40,6 +40,12 @@ class TrainingResponse(BaseModel):
     bootstrap_mode: bool
     training_details: Optional[Dict[str, Any]] = None
 
+class PendingRetrainResponse(BaseModel):
+    """Response de usuarios pendientes de reentrenamiento"""
+    pending_count: int
+    pending_users: List[Dict[str, Any]]
+    can_retrain: bool
+    message: str
 
 @router.get("/system/status", response_model=SystemStatusResponse)
 async def get_system_status():
@@ -296,6 +302,45 @@ async def retrain_networks(force: bool = False):
         print(f"❌ ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
+@router.get("/system/pending-retrain", response_model=PendingRetrainResponse)
+async def get_pending_retrain_users():
+    """
+    Obtiene lista de usuarios pendientes de reentrenamiento.
+    
+    Returns:
+        PendingRetrainResponse con usuarios pendientes
+    """
+    try:
+        manager = get_system_manager()
+        
+        # Verificar que las redes estén entrenadas
+        if not manager.state.networks_trained:
+            return PendingRetrainResponse(
+                pending_count=0,
+                pending_users=[],
+                can_retrain=False,
+                message="Las redes no han sido entrenadas aún"
+            )
+        
+        # Obtener usuarios pendientes
+        pending_users = manager.get_pending_retrain_users()
+        
+        print(f"📊 Usuarios pendientes de reentrenamiento: {len(pending_users)}")
+        for user in pending_users:
+            print(f"   - {user['username']} ({user['user_id']}): {user['total_templates']} templates")
+        
+        return PendingRetrainResponse(
+            pending_count=len(pending_users),
+            pending_users=pending_users,
+            can_retrain=len(pending_users) > 0,
+            message=f"{len(pending_users)} usuario(s) pendiente(s) de reentrenamiento" if pending_users else "No hay usuarios pendientes"
+        )
+        
+    except Exception as e:
+        import traceback
+        error_detail = f"Error obteniendo usuarios pendientes: {str(e)}\n{traceback.format_exc()}"
+        print(f"❌ ERROR: {error_detail}")
+        raise HTTPException(status_code=500, detail=error_detail)
 
 @router.get("/system/modules")
 async def get_modules_status():

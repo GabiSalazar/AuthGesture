@@ -86,6 +86,19 @@ export const systemApi = {
   },
 
   /**
+   * Obtiene usuarios pendientes de reentrenamiento
+   */
+  getPendingRetrainUsers: async () => {
+    try {
+      const { data } = await apiClient.get('/system/pending-retrain')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo usuarios pendientes:', error)
+      throw error
+    }
+  },
+
+  /**
    * Obtiene el estado de los módulos del sistema
    */
   getModulesStatus: async () => {

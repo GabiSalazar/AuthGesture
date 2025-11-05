@@ -1,0 +1,214 @@
+2025-11-04 19:13:05,734 - biometric_gesture_system - INFO - [config_manager.py:504] - Validación de configuración: ✓ EXITOSA
+2025-11-04 19:13:05,735 - biometric_gesture_system - INFO - [config_manager.py:317] - ================================================================================
+2025-11-04 19:13:05,735 - biometric_gesture_system - INFO - [config_manager.py:318] - SISTEMA BIOMÉTRICO DE GESTOS DE MANOS - CONFIG MANAGER INICIALIZADO
+2025-11-04 19:13:05,735 - biometric_gesture_system - INFO - [config_manager.py:319] - ================================================================================
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:320] - Configuración cargada desde: biometric_config.json
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:321] - Muestras por gesto: 7
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:322] - Gestos por usuario: 3
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:323] - Umbral confianza mano: 0.9
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:324] - Umbral confianza gesto: 0.6
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:325] - Resolución cámara: 1280x720
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:326] - Directorios creados: 11 rutas configuradas
+2025-11-04 19:13:05,738 - biometric_gesture_system - INFO - [config_manager.py:327] - ================================================================================
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI NORMALIZATION SYSTEM INICIALIZADO
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución mínima: 150px
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución máxima: 600px
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Tamaño normalizado: (224, 224)
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Padding: 15%
+2025-11-04 19:13:06,113 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Sharpening: ACTIVADO
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:62] - ======================================================================
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:63] - VISUAL FEEDBACK MANAGER INICIALIZADO
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:64] -   ✓ 5 niveles de feedback configurados
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:65] -   ✓ Colores BGR definidos
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
+2025-11-04 19:13:06,114 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
+2025-11-04 19:13:25,696 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-11-04 19:13:25,696 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-11-04 19:13:25,696 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.use_single_area, usando default: True
+2025-11-04 19:13:25,696 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.dynamic_features, usando default: {'min_transition_frames': 8, 'max_transition_frames': 40, 'gesture_stability_threshold': 5, 'velocity_smoothing_window': 3, 'min_movement_threshold': 0.005, 'transition_detection_sensitivity': 0.85, 'temporal_downsampling': 1, 'normalize_temporal_features': True, 'use_3d_trajectories': True, 'velocity_threshold_percentile': 75, 'acceleration_smoothing': True, 'jerk_threshold': 0.1, 'minimum_sequence_duration_ms': 200}
+2025-11-04 19:13:25,698 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.sequence_management, usando default: {'sequence_length': 3, 'max_sequence_duration': 60.0, 'max_gesture_duration': 15.0, 'min_gesture_confidence': 0.7, 'min_stable_frames': 3, 'gesture_timeout': 10.0, 'sequence_timeout': 45.0, 'max_failed_attempts': 3, 'cooldown_period': 5.0, 'auto_save_sequences': True, 'validation_mode': 'moderate', 'allow_gesture_skipping': False, 'require_exact_order': True, 'enable_adaptive_timeouts': True}
+2025-11-04 19:13:25,698 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.samples_per_gesture, usando default: 8
+2025-11-04 19:13:25,698 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_confidence, usando default: 0.65
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_stability_frames, usando default: 8
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.require_all_gestures, usando default: True
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.sample_timeout, usando default: 120.0
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.session_timeout, usando default: 3600.0
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.capture_interval, usando default: 0.8
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_quality_check, usando default: True
+2025-11-04 19:13:25,699 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_duplicate_check, usando default: True
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.duplicate_threshold, usando default: 0.92
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.template_fusion_strategy, usando default: average
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_template_optimization, usando default: True
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.embedding_dimension_check, usando default: True
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_preview, usando default: True
+2025-11-04 19:13:25,700 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_quality_feedback, usando default: False
+2025-11-04 19:13:25,701 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.save_enrollment_video, usando default: False
+2025-11-04 19:13:25,701 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.siamese_anatomical, usando default: {'hidden_layers': [128, 64], 'activation': 'relu', 'dropout_rate': 0.2, 'batch_normalization': True, 'l2_regularization': 0.001, 'learning_rate': 0.001, 'batch_size': 32, 'epochs': 100, 'patience': 15, 'validation_split': 0.2, 'min_users_for_training': 2, 'min_samples_per_user': 15, 'max_samples_per_user': 50, 'min_sessions_per_user': 1, 'loss_function': 'contrastive', 'distance_metric': 'euclidean', 'margin': 1.5, 'alpha': 0.2, 'use_stratified_split': True, 'cross_validation_folds': 5, 'threshold_optimization': 'eer', 'quality_threshold': 80.0, 'use_real_augmentation': True, 'temporal_jitter': 0.02, 'noise_from_real_variance': True, 'require_independent_test': True, 'min_test_users': 1, 'performance_monitoring': True}
+2025-11-04 19:13:29,912 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.feature_preprocessing, usando default: {'anatomical_normalization': 'robust', 'dynamic_normalization': 'standard', 'normalize_per_user': False, 'balancing_method': 'balanced_subsample', 'target_balance_ratio': 1.0, 'augmentation_strategy': 'moderate', 'augmentation_factor': 1.5, 'cv_folds': 5, 'cv_strategy': 'stratified_user', 'test_size': 0.2, 'validation_size': 0.2, 'outlier_threshold': 3.0, 'min_samples_per_user': 5, 'feature_selection': False, 'variance_threshold': 0.01, 'cache_transformations': True, 'parallel_processing': False, 'random_state': 42, 'stratify_by_user': True}
+2025-11-04 19:13:29,913 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.sequence_timeout, usando default: 25.0
+2025-11-04 19:13:29,913 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.total_timeout, usando default: 45.0
+2025-11-04 19:13:29,915 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.frame_timeout, usando default: 3.0
+2025-11-04 19:13:29,915 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_low, usando default: 0.65
+2025-11-04 19:13:29,915 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_standard, usando default: 0.75
+2025-11-04 19:13:29,915 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_high, usando default: 0.85
+2025-11-04 19:13:29,916 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_maximum, usando default: 0.92
+2025-11-04 19:13:29,916 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.require_sequence_completion, usando default: True
+2025-11-04 19:13:29,916 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_gestures_for_auth, usando default: 2
+2025-11-04 19:13:29,916 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_attempts_per_session, usando default: 3
+2025-11-04 19:13:29,916 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_identification_candidates, usando default: 5
+2025-11-04 19:13:29,917 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.identification_threshold_factor, usando default: 1.1
+2025-11-04 19:13:29,917 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_quality_score, usando default: 0.7
+2025-11-04 19:13:29,917 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_confidence, usando default: 0.65
+2025-11-04 19:13:29,917 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_stability_frames, usando default: 8
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.score_fusion_strategy, usando default: weighted_average
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.anatomical_weight, usando default: 0.6
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.dynamic_weight, usando default: 0.4
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_audit_logging, usando default: True
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_continuous_auth, usando default: False
+2025-11-04 19:13:29,918 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_failed_attempts, usando default: 5
+2025-11-04 19:13:29,919 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.lockout_duration, usando default: 300.0
+2025-11-04 19:13:29,919 - biometric_gesture_system - ERROR - [system_manager.py:476] - ❌ Error en sistema de autenticación: name 'get_score_fusion_system' is not defined
+Traceback (most recent call last):
+  File "C:\Users\USER\Documents\biometric-gesture-system\backend\app\core\system_manager.py", line 470, in _initialize_real_authentication_system
+    self.authentication_system = get_real_authentication_system()
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\biometric-gesture-system\backend\app\core\authentication_system.py", line 3268, in get_real_authentication_system
+    _real_authentication_system_instance = RealAuthenticationSystem(config_override)
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\biometric-gesture-system\backend\app\core\authentication_system.py", line 1325, in __init__
+    self.pipeline = RealAuthenticationPipeline(self.config)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\USER\Documents\biometric-gesture-system\backend\app\core\authentication_system.py", line 429, in __init__
+    self.fusion_system = get_score_fusion_system()
+                         ^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_score_fusion_system' is not defined
+2025-11-04 19:13:30,012 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:30,012 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:33,686 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:33,686 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:38,696 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:38,696 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:42,614 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:42,614 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:47,649 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:47,649 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:52,612 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:52,612 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:13:57,989 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:13:57,989 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:02,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:02,675 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:07,686 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:07,686 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:12,690 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:12,690 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:17,677 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:17,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:22,684 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:22,684 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:27,742 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:27,745 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:32,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:32,678 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:37,683 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:37,683 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:42,669 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:42,669 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:47,686 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:47,687 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:14:52,686 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:14:52,686 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:15:00,672 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:15:00,673 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:15:49,811 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:15:49,811 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:15:52,612 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:15:52,612 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:15:57,617 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:15:57,618 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:02,610 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:02,610 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:07,939 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:07,939 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:12,669 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:12,683 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:17,616 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:17,616 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:22,623 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:22,624 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:27,611 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:27,611 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:32,613 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:32,613 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:37,624 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:37,624 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:42,623 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:42,623 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:47,624 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:47,624 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:52,615 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:52,616 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:16:57,615 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:16:57,615 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:02,615 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:02,615 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:07,614 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:07,614 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:12,608 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:12,608 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:17,629 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:17,629 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:22,623 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:22,623 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:27,613 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:27,613 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:32,610 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:32,612 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:37,614 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:37,614 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:42,618 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:42,619 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:47,615 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:47,615 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:52,616 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:52,616 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:17:57,614 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:17:57,614 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:02,609 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:02,609 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:07,923 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:07,923 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:12,681 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:12,681 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:17,990 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:17,990 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:22,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:22,678 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:27,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:27,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:32,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:32,678 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:37,670 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:37,670 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:42,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:42,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:47,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:47,677 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:52,666 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:52,667 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:18:57,687 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:18:57,687 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:19:02,693 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:19:02,693 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:19:07,671 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:19:07,672 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:20:00,671 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:20:00,671 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:21:00,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:21:00,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:22:00,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:22:00,675 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:23:00,677 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
+2025-11-04 19:23:00,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa

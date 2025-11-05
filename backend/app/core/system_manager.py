@@ -645,6 +645,54 @@ class BiometricSystemManager:
                 print(f"   - Red Dinámica: Entrenada")
                 print(f"   - Usuarios entrenados: {self.state.users_count}")
                 print(f"   - Autenticación: {'Activa' if self.state.authentication_active else 'Inactiva'}")
+                
+                # ✅ NUEVO: Guardar tracking de usuarios entrenados
+                try:
+                    from pathlib import Path
+                    import json
+                    from datetime import datetime
+                    
+                    # Obtener lista de usuarios incluidos en este entrenamiento
+                    all_users = self.database.list_users()
+                    trained_user_ids = [user.user_id for user in all_users]
+                    
+                    tracking_info = {
+                        'users_trained': trained_user_ids,
+                        'users_count': len(trained_user_ids),
+                        'timestamp': datetime.now().isoformat(),
+                        'anatomical_trained': True,
+                        'dynamic_trained': True
+                    }
+                    
+                    tracking_path = Path('biometric_data') / 'last_training.json'
+                    tracking_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    with open(tracking_path, 'w') as f:
+                        json.dump(tracking_info, f, indent=2)
+                    
+                    print(f"✅ Tracking guardado: {len(trained_user_ids)} usuarios incluidos")
+                    
+                except Exception as tracking_error:
+                    print(f"⚠️ Advertencia guardando tracking: {tracking_error}")
+                
+                # ✅ NUEVO: FASE 2 - Regenerar embeddings si es reentrenamiento
+                if force:  # Es un reentrenamiento
+                    print("\n" + "=" * 80)
+                    print("FASE 2: REGENERACIÓN DE EMBEDDINGS")
+                    print("=" * 80)
+                    print("Regenerando embeddings de usuarios normales con redes reentrenadas...")
+                    
+                    regeneration_success = self.regenerate_normal_user_embeddings()
+                    
+                    if regeneration_success:
+                        print("✅ Regeneración completada exitosamente")
+                        print("   Todos los embeddings actualizados con las nuevas redes")
+                    else:
+                        print("⚠️ Advertencia: Algunos embeddings no se regeneraron")
+                        print("   El sistema seguirá funcionando, pero revisa los logs")
+                    
+                    print("=" * 80)
+                    
             else:
                 result['message'] = "Entrenamiento parcial o fallido"
                 logger.warning("\nENTRENAMIENTO INCOMPLETO")
@@ -662,6 +710,216 @@ class BiometricSystemManager:
             print(error_trace)
             return result
     
+    def get_pending_retrain_users(self) -> List[Dict[str, Any]]:
+        """
+        Identifica usuarios que AÚN NO fueron incluidos en el entrenamiento.
+        
+        Returns:
+            Lista de diccionarios con información de usuarios pendientes
+        """
+        try:
+            from pathlib import Path
+            import json
+            
+            all_users = self.database.list_users()
+            
+            logger.info(f"📊 Total usuarios en sistema: {len(all_users)}")
+            for user in all_users:
+                logger.info(f"   - {user.username} (ID: {user.user_id})")
+            
+            # Leer tracking del último entrenamiento
+            tracking_path = Path('biometric_data') / 'last_training.json'
+            
+            # ✅ CRÍTICO: Si no existe tracking, NO ASUMIR NADA
+            if not tracking_path.exists():
+                logger.warning("❌ No existe archivo de tracking (last_training.json)")
+                logger.warning("   No se puede determinar qué usuarios están entrenados")
+                logger.warning("   Retornando lista vacía - entrena las redes primero")
+                return []
+            
+            # Leer tracking existente
+            try:
+                with open(tracking_path, 'r') as f:
+                    last_training = json.load(f)
+                    trained_user_ids = last_training.get('users_trained', [])
+                    logger.info(f"📂 Último entrenamiento incluía: {trained_user_ids}")
+            except Exception as e:
+                logger.error(f"❌ Error leyendo tracking: {e}")
+                logger.error("   No se puede determinar usuarios pendientes")
+                return []
+            
+            # Detectar usuarios NUEVOS (no en trained_user_ids)
+            pending_users = []
+            for user in all_users:
+                logger.info(f"🔍 Verificando usuario: {user.username} (ID: {user.user_id})")
+                
+                if user.user_id not in trained_user_ids:
+                    pending_users.append({
+                        'user_id': user.user_id,
+                        'username': user.username,
+                        'total_templates': user.total_templates
+                    })
+                    logger.info(f"✅ Usuario pendiente agregado: {user.username} (ID: {user.user_id})")
+                else:
+                    logger.info(f"⏭️  Usuario ya entrenado: {user.username} (ID: {user.user_id})")
+            
+            logger.info(f"📊 RESULTADO FINAL: {len(pending_users)} usuarios pendientes")
+            
+            return pending_users
+            
+        except Exception as e:
+            logger.error(f"Error obteniendo usuarios pendientes: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return []
+
+        
+    def regenerate_normal_user_embeddings(self) -> bool:
+        """
+        Regenera embeddings de usuarios normales (no bootstrap) después del reentrenamiento.
+        
+        Returns:
+            True si la regeneración fue exitosa
+        """
+        try:
+            logger.info("=== REGENERACIÓN DE EMBEDDINGS POST-REENTRENAMIENTO ===")
+            
+            # Verificar redes
+            if not self.anatomical_network.is_trained or not self.dynamic_network.is_trained:
+                logger.error("❌ Redes no están entrenadas")
+                return False
+            
+            logger.info("✅ Redes disponibles")
+            
+            # Identificar usuarios normales (no bootstrap)
+            all_users = self.database.list_users()
+            normal_users = []
+            
+            for user in all_users:
+                user_templates = self.database.list_user_templates(user.user_id)
+                is_bootstrap = any(template.metadata.get('bootstrap_mode', False) 
+                                 for template in user_templates)
+                if not is_bootstrap:
+                    normal_users.append(user)
+            
+            if not normal_users:
+                logger.info("ℹ️ No hay usuarios normales para regenerar")
+                return True
+            
+            print(f"🔄 Regenerando embeddings para {len(normal_users)} usuarios normales...")
+            
+            total_regenerated = 0
+            total_errors = 0
+            
+            for user in normal_users:
+                try:
+                    print(f"👤 Procesando: {user.username}")
+                    user_templates = self.database.list_user_templates(user.user_id)
+                    
+                    for template in user_templates:
+                        try:
+                            regenerated = self._regenerate_single_template(template)
+                            if regenerated:
+                                total_regenerated += 1
+                            else:
+                                total_errors += 1
+                        except Exception as e:
+                            logger.error(f"Error en template {template.template_id[:12]}: {e}")
+                            total_errors += 1
+                            
+                except Exception as e:
+                    logger.error(f"Error en usuario {user.username}: {e}")
+                    continue
+            
+            # Resumen
+            logger.info("=" * 60)
+            logger.info(f"✅ Templates regenerados: {total_regenerated}")
+            logger.info(f"❌ Errores: {total_errors}")
+            logger.info("=" * 60)
+            
+            return total_regenerated > 0
+            
+        except Exception as e:
+            logger.error(f"Error crítico en regeneración: {e}")
+            return False
+
+    def _regenerate_single_template(self, template) -> bool:
+        """Regenera embeddings de un template específico."""
+        try:
+            from pathlib import Path
+            import json
+            
+            template_id = template.template_id
+            print(f"   🔧 Regenerando: {template_id[:12]}...")
+            
+            # Cargar metadatos JSON
+            json_file = Path("biometric_data") / "templates" / f"{template_id}.json"
+            if not json_file.exists():
+                return False
+            
+            with open(json_file, 'r') as f:
+                json_data = json.load(f)
+            
+            metadata = json_data.get('metadata', {})
+            regenerated = False
+            
+            # REGENERACIÓN ANATÓMICA
+            if str(template.template_type) == 'TemplateType.ANATOMICAL':
+                bootstrap_features = metadata.get('bootstrap_features', [])
+                
+                if bootstrap_features and self.anatomical_network.is_trained:
+                    features_array = np.array(bootstrap_features, dtype=np.float32)
+                    
+                    # Promediar si hay múltiples vectores
+                    if features_array.ndim == 2:
+                        features_array = np.mean(features_array, axis=0)
+                    
+                    # Generar nuevo embedding
+                    new_embedding = self.anatomical_network.base_network.predict(
+                        features_array.reshape(1, -1), verbose=0
+                    )[0]
+                    
+                    # Actualizar template
+                    template.anatomical_embedding = new_embedding
+                    self.database._save_template(template)
+                    
+                    print(f"      ✅ Embedding anatómico regenerado")
+                    regenerated = True
+            
+            # REGENERACIÓN DINÁMICA
+            elif str(template.template_type) == 'TemplateType.DYNAMIC':
+                temporal_sequence = metadata.get('temporal_sequence', [])
+                
+                if temporal_sequence and self.dynamic_network.is_trained:
+                    sequence_array = np.array(temporal_sequence, dtype=np.float32)
+                    
+                    # Ajustar dimensiones (50×320)
+                    if len(sequence_array.shape) == 2:
+                        seq_length = len(sequence_array)
+                        if seq_length > 50:
+                            sequence_array = sequence_array[:50]
+                        elif seq_length < 50:
+                            padding = np.zeros((50 - seq_length, 320))
+                            sequence_array = np.vstack([sequence_array, padding])
+                        
+                        # Generar nuevo embedding
+                        new_embedding = self.dynamic_network.base_network.predict(
+                            sequence_array.reshape(1, 50, 320), verbose=0
+                        )[0]
+                        
+                        # Actualizar template
+                        template.dynamic_embedding = new_embedding
+                        self.database._save_template(template)
+                        
+                        print(f"      ✅ Embedding dinámico regenerado")
+                        regenerated = True
+            
+            return regenerated
+            
+        except Exception as e:
+            print(f"   ❌ Error: {e}")
+            return False
+        
     def cleanup_resources(self):
         """
         Limpia recursos del sistema (cámara, MediaPipe, etc).
