@@ -238,7 +238,7 @@ class ReferenceAreaManager:
             width=ref_width, height=ref_height
         )
     
-    def draw_reference_area(self, frame: np.ndarray, current_gesture: str = "Open_Palm") -> Tuple[int, int, int, int]:
+    def draw_reference_area(self, frame: np.ndarray, current_gesture: str = "Open_Palm") -> np.ndarray:
         """Dibuja el área de referencia donde debe colocarse la mano según el gesto."""
         try:
             coords = self.calculate_area_coordinates(current_gesture, frame.shape)
@@ -249,11 +249,11 @@ class ReferenceAreaManager:
             self._draw_area_corners(frame, coords, color)
             self._draw_instruction_text(frame, current_gesture, coords)
             
-            return (coords.x1, coords.y1, coords.x2, coords.y2)
+            return frame  # ✅ CORRECCIÓN
             
         except Exception as e:
             logger.error(f"Error dibujando área de referencia: {e}", exc_info=True)
-            return (0, 0, 0, 0)
+            return frame  # ✅ CORRECCIÓN
     
     def _draw_area_corners(self, frame: np.ndarray, coords: AreaCoordinates, color: Tuple[int, int, int]):
         """Dibuja las esquinas del área de referencia."""
