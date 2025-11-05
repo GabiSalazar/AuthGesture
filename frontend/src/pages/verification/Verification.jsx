@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
+import WebcamCapture from '../../components/camera/WebcamCapture'
 import { Shield, CheckCircle, XCircle, User, AlertCircle, Clock } from 'lucide-react'
 
 export default function Verification() {
@@ -58,44 +59,56 @@ export default function Verification() {
   }
 
   const startFrameProcessing = async (sessionId) => {
-    let frameCount = 0
-    const maxFrames = 100 // Máximo de intentos
+    let consecutiveErrors = 0
+    const maxConsecutiveErrors = 10
+    const maxValidCaptures = 5 // Número de capturas válidas necesarias
 
     const processLoop = setInterval(async () => {
-      try {
+        try {
         // Procesar frame
         const frameResult = await authenticationApi.processFrame(sessionId)
 
-        frameCount++
-        setProgress((frameCount / maxFrames) * 100)
-        setStatusMessage(frameResult.message || 'Procesando...')
+        // Resetear contador de errores si hay éxito
+        consecutiveErrors = 0
+
+        // ✅ USAR valid_captures en lugar de frameCount
+        const validCaptures = frameResult.valid_captures || 0
+        const capturesProgress = (validCaptures / maxValidCaptures) * 100
+        
+        setProgress(Math.min(capturesProgress, 100))
+        setStatusMessage(frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`)
+
+        console.log(`📊 Progreso: ${validCaptures}/${maxValidCaptures} capturas válidas`)
 
         // Verificar si hay resultado
         if (frameResult.session_completed || frameResult.status === 'completed') {
-          clearInterval(processLoop)
-          
-          // Obtener resultado final
-          const finalStatus = await authenticationApi.getSessionStatus(sessionId)
-          handleVerificationComplete(finalStatus)
+            clearInterval(processLoop)
+            
+            // Obtener resultado final
+            const finalStatus = await authenticationApi.getSessionStatus(sessionId)
+            handleVerificationComplete(finalStatus)
         }
 
-        // Timeout de seguridad
-        if (frameCount >= maxFrames) {
-          clearInterval(processLoop)
-          setError('Tiempo de espera agotado')
-          setStep('select')
-          setProcessing(false)
+        // ✅ NUEVO: Verificar si llegamos al límite de capturas válidas
+        if (validCaptures >= maxValidCaptures && frameResult.phase === 'template_matching') {
+            console.log('✅ Capturas completas, esperando matching...')
+            setStatusMessage('Analizando identidad...')
         }
 
-      } catch (err) {
-        clearInterval(processLoop)
+        } catch (err) {
+        consecutiveErrors++
         console.error('Error procesando frame:', err)
-        setError(err.response?.data?.detail || 'Error durante el procesamiento')
-        setStep('select')
-        setProcessing(false)
-      }
+        
+        // Solo fallar después de múltiples errores consecutivos
+        if (consecutiveErrors >= maxConsecutiveErrors) {
+            clearInterval(processLoop)
+            setError(err.response?.data?.detail || 'Error durante el procesamiento')
+            setStep('select')
+            setProcessing(false)
+        }
+        }
     }, 200) // Procesar cada 200ms
-  }
+    }
 
   const handleVerificationComplete = (finalStatus) => {
     setProcessing(false)
@@ -223,20 +236,49 @@ export default function Verification() {
         </Card>
       )}
 
-      {/* PASO 2: Procesando */}
-      {step === 'processing' && (
+        {/* PASO 2: Procesando */}
+        {step === 'processing' && (
         <Card>
-          <CardHeader>
+            <CardHeader>
             <CardTitle>Verificando Identidad</CardTitle>
             <CardDescription>
-              Usuario: <strong>{selectedUser?.username}</strong>
+                Usuario: <strong>{selectedUser?.username}</strong>
             </CardDescription>
-          </CardHeader>
+            </CardHeader>
 
-          <CardContent className="space-y-6">
-            {/* Spinner */}
-            <div className="flex justify-center py-8">
-              <Spinner size="lg" />
+            <CardContent className="space-y-6">
+                {/* ✅ Preview de estado (sin acceso a cámara) */}
+                <div className="relative bg-gray-900 rounded-lg aspect-video flex items-center justify-center">
+                    <div className="text-center p-8">
+                    <div className="w-20 h-20 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                        <Shield className="w-10 h-10 text-blue-400" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-white mb-2">
+                        Procesamiento Biométrico
+                    </h3>
+                    <p className="text-gray-400 text-sm mb-4">
+                        El servidor está capturando y analizando tus gestos
+                    </p>
+                    <div className="flex items-center justify-center gap-2 text-blue-400 text-sm">
+                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                        <span>Sistema activo</span>
+                    </div>
+                    </div>
+                    
+                    {/* Indicador de actividad */}
+                    <div className="absolute top-4 right-4">
+                    <div className="flex items-center gap-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                        CAPTURANDO
+                    </div>
+                    </div>
+                </div>
+            
+            {/* Info de captura del servidor */}
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-xs text-blue-800 text-center">
+                ℹ️ El procesamiento biométrico se realiza en el servidor con su propia cámara
+                </p>
             </div>
 
             {/* Progress Bar */}
