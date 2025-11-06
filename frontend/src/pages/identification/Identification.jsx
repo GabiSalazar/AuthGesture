@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
-import { Search, CheckCircle, XCircle, Users, AlertCircle, Clock, Brain } from 'lucide-react'
+import { Search, CheckCircle, XCircle, Users, AlertCircle, Clock, Brain, Hand } from 'lucide-react'
 
 export default function Identification() {
   const [step, setStep] = useState('ready') // 'ready', 'processing', 'result'
@@ -11,14 +11,18 @@ export default function Identification() {
   const [error, setError] = useState(null)
   const [progress, setProgress] = useState(0)
   const [statusMessage, setStatusMessage] = useState('')
-  const [currentFrame, setCurrentFrame] = useState(null) // ✅ AGREGADO
+  const [currentFrame, setCurrentFrame] = useState(null)
+  
+  // ✅ NUEVO: Estados para secuencia de gestos
+  const [capturedSequence, setCapturedSequence] = useState([])
+  const [sequenceComplete, setSequenceComplete] = useState(false)
 
-  // ✅ REFS PARA CONTROL DE INTERVALS
+  // Refs para control de intervals
   const intervalRef = useRef(null)
   const isProcessingFrameRef = useRef(false)
   const sessionCompletedRef = useRef(false)
 
-  // ✅ CLEANUP AL DESMONTAR
+  // Cleanup al desmontar
   useEffect(() => {
     return () => {
       if (intervalRef.current) {
@@ -49,9 +53,10 @@ export default function Identification() {
       setError(null)
       setProgress(0)
       setStatusMessage('Iniciando identificación...')
-      setCurrentFrame(null) // ✅ RESET FRAME
+      setCurrentFrame(null)
+      setCapturedSequence([]) // ✅ RESET SECUENCIA
+      setSequenceComplete(false) // ✅ RESET COMPLETADO
       
-      // ✅ RESETEAR FLAGS
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
 
@@ -73,45 +78,39 @@ export default function Identification() {
   const startFrameProcessing = async (sessionId) => {
     let consecutiveErrors = 0
     const maxConsecutiveErrors = 10
-    const maxValidCaptures = 3 // ✅ CAMBIADO A 3
+    const gesturesNeeded = 3 // ✅ 3 GESTOS DIFERENTES
 
-    // ✅ LIMPIAR INTERVALO ANTERIOR
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
 
-    console.log('▶️ Iniciando loop de identificación')
+    console.log('▶️ Iniciando loop de identificación por secuencia')
 
     intervalRef.current = setInterval(async () => {
-      // ✅ VERIFICAR SI YA COMPLETÓ
       if (sessionCompletedRef.current) {
         console.log('⏹️ Sesión ya completada, ignorando tick')
         stopProcessing()
         return
       }
 
-      // ✅ VERIFICAR SI YA HAY PROCESAMIENTO EN CURSO
       if (isProcessingFrameRef.current) {
         console.log('⏸️ Frame anterior aún procesándose, saltando tick')
         return
       }
 
-      // ✅ MARCAR COMO PROCESANDO
       isProcessingFrameRef.current = true
 
       try {
         // Procesar frame
         const frameResult = await authenticationApi.processFrame(sessionId)
 
-        // ✅ VERIFICAR SI SE COMPLETÓ MIENTRAS ESPERÁBAMOS
         if (sessionCompletedRef.current) {
           console.log('⏹️ Sesión completada durante request, ignorando resultado')
           isProcessingFrameRef.current = false
           return
         }
 
-        // Resetear contador de errores
         consecutiveErrors = 0
 
         // ✅ ACTUALIZAR FRAME VISUAL
@@ -119,18 +118,39 @@ export default function Identification() {
           setCurrentFrame(frameResult.frame)
         }
 
-        // Actualizar progreso
-        const validCaptures = frameResult.valid_captures || 0
-        const capturesProgress = (validCaptures / maxValidCaptures) * 100
-        
-        setProgress(Math.min(capturesProgress, 100))
-        setStatusMessage(frameResult.message || `Identificando... (${validCaptures}/${maxValidCaptures})`)
+        // ✅ ACTUALIZAR SECUENCIA CAPTURADA
+        if (frameResult.captured_sequence && Array.isArray(frameResult.captured_sequence)) {
+          setCapturedSequence(frameResult.captured_sequence)
+          console.log(`📝 Secuencia capturada: ${frameResult.captured_sequence.join(' → ')}`)
+        }
 
-        console.log(`📊 Progreso identificación: ${validCaptures}/${maxValidCaptures} capturas válidas`)
+        // ✅ ACTUALIZAR ESTADO DE COMPLETADO DE SECUENCIA
+        if (frameResult.sequence_complete !== undefined) {
+          setSequenceComplete(frameResult.sequence_complete)
+        }
+
+        // ✅ CALCULAR PROGRESO BASADO EN GESTOS CAPTURADOS
+        const gesturesCaptured = frameResult.captured_sequence?.length || 0
+        const sequenceProgress = (gesturesCaptured / gesturesNeeded) * 100
+        
+        setProgress(Math.min(sequenceProgress, 100))
+        
+        // ✅ MENSAJE DE ESTADO MEJORADO
+        let message = frameResult.message || ''
+        if (gesturesCaptured < gesturesNeeded) {
+          message = `Capturando gestos... (${gesturesCaptured}/${gesturesNeeded} gestos diferentes)`
+        } else if (frameResult.phase === 'template_matching') {
+          message = '🔍 Buscando coincidencias en base de datos...'
+        } else if (frameResult.phase === 'score_fusion') {
+          message = '🧠 Analizando características biométricas...'
+        }
+        setStatusMessage(message)
+
+        console.log(`📊 Progreso: ${gesturesCaptured}/${gesturesNeeded} gestos, fase: ${frameResult.phase}`)
 
         // ✅ VERIFICAR SI HAY RESULTADO DE AUTENTICACIÓN
         if (frameResult.authentication_result) {
-          console.log('✅ Resultado de identificación recibido - COMPLETANDO')
+          console.log('✅ Resultado de identificación recibido:', frameResult.authentication_result)
           
           sessionCompletedRef.current = true
           isProcessingFrameRef.current = false
@@ -139,10 +159,11 @@ export default function Identification() {
           const authResult = frameResult.authentication_result
           handleIdentificationComplete({
             status: authResult.success ? 'authenticated' : 'rejected',
-            user_id: authResult.user_id || 'Desconocido',
-            username: authResult.username || authResult.user_id || 'Desconocido',
+            user_id: authResult.matched_user_id || authResult.user_id || 'Desconocido',
+            username: authResult.username || authResult.matched_user_id || 'Desconocido',
             confidence: authResult.fused_score || authResult.confidence || 0,
-            duration: authResult.duration || 0
+            duration: authResult.duration || 0,
+            captured_sequence: frameResult.captured_sequence || []
           })
           return
         }
@@ -157,7 +178,10 @@ export default function Identification() {
           
           try {
             const finalStatus = await authenticationApi.getSessionStatus(sessionId)
-            handleIdentificationComplete(finalStatus)
+            handleIdentificationComplete({
+              ...finalStatus,
+              captured_sequence: frameResult.captured_sequence || []
+            })
           } catch (statusErr) {
             console.error('❌ Error obteniendo status final:', statusErr)
             setError('La sesión finalizó pero no se pudo obtener el resultado')
@@ -167,20 +191,12 @@ export default function Identification() {
           return
         }
 
-        // Verificar fase de matching
-        if (validCaptures >= maxValidCaptures && frameResult.phase === 'template_matching') {
-          console.log('✅ Capturas completas, identificando usuario...')
-          setStatusMessage('Analizando identidad...')
-        }
-
-        // ✅ LIBERAR FLAG
         isProcessingFrameRef.current = false
 
       } catch (err) {
-        // ✅ LIBERAR FLAG INMEDIATAMENTE
         isProcessingFrameRef.current = false
 
-        // ✅ MANEJAR 410
+        // Manejar 410 (sesión completada)
         if (err.response?.status === 410) {
           console.log('⚠️ Recibido 410 - sesión completada, deteniendo')
           sessionCompletedRef.current = true
@@ -205,7 +221,6 @@ export default function Identification() {
   const handleIdentificationComplete = (finalStatus) => {
     console.log('🏁 Completando identificación:', finalStatus)
     
-    // ✅ DETENER TODO
     sessionCompletedRef.current = true
     stopProcessing()
 
@@ -220,6 +235,7 @@ export default function Identification() {
       username: finalStatus.username || finalStatus.user_id || 'Desconocido',
       confidence: finalStatus.confidence || 0,
       duration: finalStatus.duration || 0,
+      captured_sequence: finalStatus.captured_sequence || [],
       message: success 
         ? '✅ Usuario identificado exitosamente' 
         : '❌ No se pudo identificar al usuario'
@@ -229,7 +245,6 @@ export default function Identification() {
   const handleReset = () => {
     console.log('🔄 Reseteando identificación')
     
-    // ✅ DETENER TODO
     sessionCompletedRef.current = true
     stopProcessing()
 
@@ -241,8 +256,9 @@ export default function Identification() {
     setProgress(0)
     setStatusMessage('')
     setCurrentFrame(null)
+    setCapturedSequence([])
+    setSequenceComplete(false)
     
-    // ✅ RESETEAR FLAGS
     isProcessingFrameRef.current = false
     sessionCompletedRef.current = false
   }
@@ -281,7 +297,7 @@ export default function Identification() {
               Iniciar Identificación
             </CardTitle>
             <CardDescription>
-              El sistema determinará tu identidad comparándote con todos los usuarios registrados
+              El sistema determinará tu identidad mediante una secuencia única de gestos
             </CardDescription>
           </CardHeader>
 
@@ -291,12 +307,12 @@ export default function Identification() {
               <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-blue-100 rounded-lg">
-                    <Brain className="w-5 h-5 text-blue-600" />
+                    <Hand className="w-5 h-5 text-blue-600" />
                   </div>
-                  <h3 className="font-semibold text-blue-900">Análisis Biométrico</h3>
+                  <h3 className="font-semibold text-blue-900">Captura de Gestos</h3>
                 </div>
                 <p className="text-sm text-blue-700">
-                  El sistema capturará y analizará tus gestos únicos
+                  Realizarás 3 gestos diferentes como tu firma biométrica
                 </p>
               </div>
 
@@ -305,22 +321,22 @@ export default function Identification() {
                   <div className="p-2 bg-purple-100 rounded-lg">
                     <Users className="w-5 h-5 text-purple-600" />
                   </div>
-                  <h3 className="font-semibold text-purple-900">Comparación 1:N</h3>
+                  <h3 className="font-semibold text-purple-900">Filtrado por Secuencia</h3>
                 </div>
                 <p className="text-sm text-purple-700">
-                  Comparará con todos los usuarios en la base de datos
+                  El sistema busca usuarios con tu misma secuencia de gestos
                 </p>
               </div>
 
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-green-100 rounded-lg">
-                    <CheckCircle className="w-5 h-5 text-green-600" />
+                    <Brain className="w-5 h-5 text-green-600" />
                   </div>
-                  <h3 className="font-semibold text-green-900">Identificación</h3>
+                  <h3 className="font-semibold text-green-900">Verificación Biométrica</h3>
                 </div>
                 <p className="text-sm text-green-700">
-                  Determina tu identidad con alta precisión
+                  Verifica tu identidad contra los candidatos filtrados
                 </p>
               </div>
             </div>
@@ -330,10 +346,20 @@ export default function Identification() {
               <h3 className="font-semibold text-gray-900 mb-2">📋 Instrucciones:</h3>
               <ul className="text-sm text-gray-700 space-y-1">
                 <li>• Haz clic en "Iniciar Identificación"</li>
-                <li>• El sistema comenzará a capturar tus gestos automáticamente</li>
-                <li>• Realiza tus gestos biométricos de forma natural</li>
-                <li>• Espera el resultado (puede tardar 10-20 segundos)</li>
+                <li>• Realiza 3 gestos diferentes con tu mano</li>
+                <li>• El sistema filtrará por tu secuencia de gestos única</li>
+                <li>• Luego verificará tu identidad biométricamente</li>
+                <li>• Espera el resultado (puede tardar 15-25 segundos)</li>
               </ul>
+            </div>
+
+            {/* Info adicional */}
+            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <h3 className="font-semibold text-purple-900 mb-2">🔐 Seguridad en Dos Capas:</h3>
+              <p className="text-sm text-purple-700">
+                <strong>Capa 1:</strong> Tu secuencia de gestos actúa como filtro inicial<br/>
+                <strong>Capa 2:</strong> Verificación biométrica profunda de características únicas
+              </p>
             </div>
           </CardContent>
 
@@ -356,12 +382,12 @@ export default function Identification() {
           <CardHeader>
             <CardTitle>Identificando Usuario</CardTitle>
             <CardDescription>
-              Analizando gestos biométricos...
+              Capturando secuencia de gestos y analizando biometría...
             </CardDescription>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* ✅ FRAME VISUAL DEL SERVIDOR */}
+            {/* Frame Visual */}
             <div className="relative bg-gray-900 rounded-lg aspect-video overflow-hidden">
               {currentFrame ? (
                 <>
@@ -396,6 +422,49 @@ export default function Identification() {
                 </div>
               )}
             </div>
+
+            {/* ✅ NUEVA: Visualización de Secuencia Capturada */}
+            {capturedSequence.length > 0 && (
+              <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-purple-900">Secuencia Capturada</h3>
+                  <Badge variant={sequenceComplete ? 'success' : 'default'}>
+                    {capturedSequence.length}/3 gestos
+                  </Badge>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  {capturedSequence.map((gesture, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <div className="px-3 py-2 bg-white border border-purple-300 rounded-lg">
+                        <span className="text-sm font-medium text-purple-900">{gesture}</span>
+                      </div>
+                      {idx < 2 && (
+                        <span className="text-purple-400">→</span>
+                      )}
+                    </div>
+                  ))}
+                  
+                  {/* Placeholders para gestos faltantes */}
+                  {capturedSequence.length < 3 && Array.from({ length: 3 - capturedSequence.length }).map((_, idx) => (
+                    <div key={`empty-${idx}`} className="flex items-center gap-2">
+                      {capturedSequence.length > 0 && (
+                        <span className="text-purple-300">→</span>
+                      )}
+                      <div className="px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg">
+                        <span className="text-sm text-gray-400">?</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {sequenceComplete && (
+                  <p className="text-xs text-purple-700 mt-3">
+                    ✅ Secuencia completa - Buscando coincidencias en base de datos...
+                  </p>
+                )}
+              </div>
+            )}
           
             {/* Info de captura del servidor */}
             <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
@@ -425,43 +494,58 @@ export default function Identification() {
               </div>
             )}
 
-            {/* Fases del proceso */}
+            {/* ✅ ACTUALIZADA: Fases del proceso con secuencia */}
             <div className="space-y-2">
               <div className="flex items-center gap-3 text-sm">
-                <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-4 h-4 text-green-600" />
-                </div>
-                <span className="text-gray-700">Capturando gestos biométricos</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${progress > 30 ? 'bg-green-100' : 'bg-gray-100'}`}>
-                  {progress > 30 ? (
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  capturedSequence.length > 0 ? 'bg-green-100' : 'bg-gray-100'
+                }`}>
+                  {capturedSequence.length > 0 ? (
                     <CheckCircle className="w-4 h-4 text-green-600" />
                   ) : (
                     <div className="w-2 h-2 bg-gray-400 rounded-full" />
                   )}
                 </div>
-                <span className="text-gray-700">Extrayendo características</span>
+                <span className="text-gray-700">Capturando secuencia de gestos</span>
               </div>
+              
               <div className="flex items-center gap-3 text-sm">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${progress > 60 ? 'bg-green-100' : 'bg-gray-100'}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  sequenceComplete ? 'bg-green-100' : 'bg-gray-100'
+                }`}>
+                  {sequenceComplete ? (
+                    <CheckCircle className="w-4 h-4 text-green-600" />
+                  ) : (
+                    <div className="w-2 h-2 bg-gray-400 rounded-full" />
+                  )}
+                </div>
+                <span className="text-gray-700">Filtrando usuarios por secuencia</span>
+              </div>
+              
+              <div className="flex items-center gap-3 text-sm">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  progress > 60 ? 'bg-green-100' : 'bg-gray-100'
+                }`}>
                   {progress > 60 ? (
                     <CheckCircle className="w-4 h-4 text-green-600" />
                   ) : (
                     <div className="w-2 h-2 bg-gray-400 rounded-full" />
                   )}
                 </div>
-                <span className="text-gray-700">Comparando con base de datos</span>
+                <span className="text-gray-700">Verificación biométrica 1:1</span>
               </div>
+              
               <div className="flex items-center gap-3 text-sm">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${progress > 90 ? 'bg-green-100' : 'bg-gray-100'}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  progress > 90 ? 'bg-green-100' : 'bg-gray-100'
+                }`}>
                   {progress > 90 ? (
                     <CheckCircle className="w-4 h-4 text-green-600" />
                   ) : (
                     <div className="w-2 h-2 bg-gray-400 rounded-full" />
                   )}
                 </div>
-                <span className="text-gray-700">Determinando identidad</span>
+                <span className="text-gray-700">Confirmando identidad</span>
               </div>
             </div>
 
@@ -511,9 +595,28 @@ export default function Identification() {
                   Identificación Fallida
                 </h2>
                 <p className="text-red-700 mb-6">
-                  No se pudo identificar al usuario en la base de datos
+                  No se pudo identificar al usuario. Posibles razones:<br/>
+                  • Secuencia de gestos no registrada<br/>
+                  • Características biométricas no coinciden
                 </p>
               </>
+            )}
+
+            {/* ✅ NUEVA: Mostrar secuencia capturada */}
+            {result.captured_sequence && result.captured_sequence.length > 0 && (
+              <div className="max-w-md mx-auto mb-6 p-4 bg-white rounded-lg">
+                <h3 className="text-sm font-semibold text-gray-700 mb-2">Secuencia Capturada:</h3>
+                <div className="flex items-center justify-center gap-2">
+                  {result.captured_sequence.map((gesture, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Badge variant="outline">{gesture}</Badge>
+                      {idx < result.captured_sequence.length - 1 && (
+                        <span className="text-gray-400">→</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
             {/* Detalles */}
