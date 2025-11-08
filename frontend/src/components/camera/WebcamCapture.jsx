@@ -11,7 +11,15 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
 
   useEffect(() => {
     if (isActive) {
-      startCamera()
+      // ⚠️ AGREGAR DELAY ANTES DE INICIAR CÁMARA
+      const timer = setTimeout(() => {
+        startCamera()
+      }, 500)  // ← 500ms de delay para liberar recursos del backend
+      
+      return () => {
+        clearTimeout(timer)
+        stopCamera()
+      }
     } else {
       stopCamera()
     }
@@ -36,22 +44,48 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: 'user'
+      // ⚠️ VERIFICAR DISPOSITIVOS DISPONIBLES
+      const existingDevices = await navigator.mediaDevices.enumerateDevices()
+      console.log('📷 Dispositivos de video disponibles:', existingDevices.filter(d => d.kind === 'videoinput').length)
+      
+      // ⚠️ REINTENTAR CON BACKOFF SI FALLA (máximo 3 intentos)
+      let retries = 3
+      let stream = null
+      
+      while (retries > 0 && !stream) {
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+              facingMode: 'user'
+            }
+          })
+          break  // Éxito - salir del loop
+        } catch (err) {
+          retries--
+          if (retries > 0) {
+            console.log(`⚠️ Reintento ${4 - retries}/3 en 500ms...`)
+            await new Promise(resolve => setTimeout(resolve, 500))
+          } else {
+            throw err  // Sin más reintentos - lanzar error
+          }
         }
-      })
+      }
 
-      if (videoRef.current) {
+      if (videoRef.current && stream) {
         videoRef.current.srcObject = stream
         setIsStreaming(true)
         setError(null)
+        console.log('✅ Cámara iniciada correctamente')
       }
     } catch (err) {
       setError('No se pudo acceder a la cámara')
-      console.error('Error al acceder a la cámara:', err)
+      console.error('❌ Error al acceder a la cámara:', err)
+      console.error('Detalles:', {
+        name: err.name,
+        message: err.message
+      })
     }
   }
 
@@ -68,6 +102,7 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
       tracks.forEach(track => track.stop())
       videoRef.current.srcObject = null
       setIsStreaming(false)
+      console.log('📷 Cámara detenida y liberada')
     }
   }
 
@@ -87,20 +122,11 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
       const ctx = canvas.getContext('2d')
       ctx.drawImage(video, 0, 0)
       
-      // ✅ CAMBIO CRÍTICO: Convertir a base64 en lugar de blob
+      // Convertir a base64
       try {
-        // Convertir canvas a base64 (data URL)
         const base64Image = canvas.toDataURL('image/jpeg', 0.9)
         
-        // Verificar que se generó correctamente
         if (base64Image && base64Image.startsWith('data:image')) {
-          // DEBUG (opcional - puedes comentar estas líneas después)
-          console.log('📸 Frame capturado:', {
-            type: typeof base64Image,
-            length: base64Image.length,
-            preview: base64Image.substring(0, 50) + '...'
-          })
-          
           // Enviar base64 al callback
           onFrame(base64Image)
         } else {

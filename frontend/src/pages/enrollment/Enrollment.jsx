@@ -42,6 +42,11 @@ export default function Enrollment() {
       setLoading(true)
       const response = await enrollmentApi.startEnrollment(userId, username, selectedGestures)
       setSessionId(response.session_id)
+      
+      // ⚠️ AGREGAR DELAY ANTES DE CAMBIAR A STEP 'CAPTURE'  // ← NUEVO
+      // Esto da tiempo al backend para liberar recursos      // ← NUEVO
+      await new Promise(resolve => setTimeout(resolve, 300))  // ← NUEVO
+      
       setStep('capture')
       setError(null)
     } catch (err) {
