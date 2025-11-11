@@ -1081,14 +1081,26 @@ class BiometricSystemManager:
     # MÉTODOS DE ENROLLMENT (WRAPPERS PARA LA API)
     # ====================================================================
 
-    def start_enrollment_session(self, user_id: str, username: str, 
-                                gesture_sequence: Optional[List[str]] = None) -> Dict[str, Any]:
+    def start_enrollment_session(
+            self, 
+            user_id: str, 
+            username: str,
+            email: Optional[str] = None,
+            phone_number: Optional[str] = None,
+            age: Optional[int] = None,
+            gender: Optional[str] = None,
+            gesture_sequence: Optional[List[str]] = None
+        ) -> Dict[str, Any]:
         """
         Inicia sesión de enrollment (wrapper para la API).
         
         Args:
             user_id: ID del usuario
             username: Nombre del usuario
+            email: Correo electrónico del usuario (opcional)
+            phone_number: Teléfono del usuario (opcional)
+            age: Edad del usuario (opcional)
+            gender: Género del usuario (opcional)
             gesture_sequence: Secuencia de gestos (opcional)
         
         Returns:
@@ -1105,10 +1117,14 @@ class BiometricSystemManager:
             if not gesture_sequence:
                 gesture_sequence = ["thumbs_up", "peace", "ok"]
             
-            # Iniciar enrollment
+            # Iniciar enrollment (pasando los nuevos datos)
             session_id = self.enrollment_system.start_real_enrollment(
                 user_id=user_id,
                 username=username,
+                email=email,              # ✅ Nuevo
+                phone_number=phone_number,              # ✅ Nuevo
+                age=age,                  # ✅ Nuevo
+                gender=gender,            # ✅ Nuevo
                 gesture_sequence=gesture_sequence,
                 progress_callback=None,
                 error_callback=None
@@ -1130,6 +1146,10 @@ class BiometricSystemManager:
                     'session_id': session_id,
                     'user_id': user_id,
                     'username': username,
+                    'email': email,                    # ✅ Nuevo
+                    'phone_number': phone_number,                    # ✅ Nuevo
+                    'age': age,                        # ✅ Nuevo
+                    'gender': gender,                  # ✅ Nuevo
                     'gesture_sequence': gesture_sequence,
                     'total_gestures': len(gesture_sequence),
                     'samples_per_gesture': self.enrollment_system.config.samples_per_gesture,

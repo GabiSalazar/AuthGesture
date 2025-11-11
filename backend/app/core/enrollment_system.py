@@ -972,6 +972,10 @@ class RealEnrollmentWorkflow:
             user_profile = UserProfile(
                 user_id=session.user_id,
                 username=session.username,
+                email=session.email,
+                phone_number=session.phone_number,
+                age=session.age,
+                gender=session.gender,
                 gesture_sequence=session.gesture_sequence,
                 total_enrollments=1,
                 metadata={
@@ -3181,6 +3185,10 @@ class RealEnrollmentSystem:
                         user_profile = UserProfile(
                             user_id=session.user_id,
                             username=session.username,
+                            email=session.email,
+                            phone_number=session.phone_number,
+                            age=session.age,
+                            gender=session.gender,
                             gesture_sequence=session.gesture_sequence,
                             metadata={'enrollment_mode': 'normal', 'created_at': current_time}
                         )
