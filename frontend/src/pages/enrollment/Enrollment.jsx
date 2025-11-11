@@ -8,8 +8,11 @@ import { UserPlus, CheckCircle, XCircle, Camera, Hand, AlertCircle, ArrowRight, 
 export default function Enrollment() {
   const navigate = useNavigate()
   const [step, setStep] = useState('form')
-  const [userId, setUserId] = useState('')
   const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [age, setAge] = useState('')
+  const [gender, setGender] = useState('')
   const [selectedGestures, setSelectedGestures] = useState([])
   const [sessionId, setSessionId] = useState(null)
   const [sessionStatus, setSessionStatus] = useState(null)
@@ -17,10 +20,17 @@ export default function Enrollment() {
   const [error, setError] = useState(null)
   
   // Estados de validación
-  const [userIdTouched, setUserIdTouched] = useState(false)
   const [usernameTouched, setUsernameTouched] = useState(false)
-  const [userIdError, setUserIdError] = useState('')
+  const [emailTouched, setEmailTouched] = useState(false)
+  const [phoneTouched, setPhoneTouched] = useState(false)
+  const [ageTouched, setAgeTouched] = useState(false)
+  const [genderTouched, setGenderTouched] = useState(false)
+
   const [usernameError, setUsernameError] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [phoneError, setPhoneError] = useState('')
+  const [ageError, setAgeError] = useState('')
+  const [genderError, setGenderError] = useState('')
 
   const availableGestures = [
     'Open_Palm',
@@ -31,20 +41,6 @@ export default function Enrollment() {
     'Pointing_Up',
     'ILoveYou'
   ]
-
-  // Validación de userId
-  const validateUserId = (value) => {
-    if (!value.trim()) {
-      return 'El ID de usuario es requerido'
-    }
-    if (value.length < 3) {
-      return 'El ID debe tener al menos 3 caracteres'
-    }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      return 'Solo se permiten letras, números y guiones bajos'
-    }
-    return ''
-  }
 
   // Validación de username
   const validateUsername = (value) => {
@@ -57,11 +53,97 @@ export default function Enrollment() {
     return ''
   }
 
-  const handleUserIdChange = (e) => {
-    const value = e.target.value
-    setUserId(value)
-    if (userIdTouched) {
-      setUserIdError(validateUserId(value))
+  const validateEmail = (value) => {
+    if (!value.trim()) {
+      return 'El email es requerido'
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(value)) {
+      return 'Email inválido'
+    }
+    return ''
+  }
+
+  const validatePhone = (value) => {
+    if (!value.trim()) {
+      return 'El teléfono es requerido'
+    }
+    if (value.length < 7) {
+      return 'El teléfono debe tener al menos 7 dígitos'
+    }
+    return ''
+  }
+
+  const validateAge = (value) => {
+    if (!value) {
+      return 'La edad es requerida'
+    }
+    const ageNum = parseInt(value)
+    if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
+      return 'Edad inválida (1-120)'
+    }
+    return ''
+  }
+
+  const validateGender = (value) => {
+    if (!value) {
+      return 'Debe seleccionar un género'
+    }
+    if (!['Femenino', 'Masculino'].includes(value)) {
+      return 'Género inválido'
+    }
+    return ''
+  }
+
+  const validateEmailUnique = async () => {
+    const emailValue = email.trim().toLowerCase()
+    
+    if (!emailValue || !emailValue.includes('@')) {
+      setEmailError('Email inválido')
+      return false
+    }
+    
+    try {
+      const response = await enrollmentApi.validateUnique('email', emailValue)
+      
+      if (!response.is_unique) {
+        setEmailError('Este email ya está registrado')
+        return false
+      }
+      
+      setEmailError('')
+      return true
+      
+    } catch (error) {
+      console.error('Error validando email:', error)
+      setEmailError('Error validando email')
+      return false
+    }
+  }
+
+  const validatePhoneUnique = async () => {
+    const phoneValue = phoneNumber.trim()
+    
+    if (!phoneValue || phoneValue.length < 7) {
+      setPhoneError('Teléfono inválido')
+      return false
+    }
+    
+    try {
+      const response = await enrollmentApi.validateUnique('phone_number', phoneValue)
+      
+      if (!response.is_unique) {
+        setPhoneError('Este teléfono ya está registrado')
+        return false
+      }
+      
+      setPhoneError('')
+      return true
+      
+    } catch (error) {
+      console.error('Error validando teléfono:', error)
+      setPhoneError('Error validando teléfono')
+      return false
     }
   }
 
@@ -73,14 +155,67 @@ export default function Enrollment() {
     }
   }
 
-  const handleUserIdBlur = () => {
-    setUserIdTouched(true)
-    setUserIdError(validateUserId(userId))
-  }
-
   const handleUsernameBlur = () => {
     setUsernameTouched(true)
     setUsernameError(validateUsername(username))
+  }
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value
+    setEmail(value)
+    if (emailTouched) {
+      setEmailError(validateEmail(value))
+    }
+  }
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true)
+    setEmailError(validateEmail(email))
+    if (!validateEmail(email)) {
+      validateEmailUnique()
+    }
+  }
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value
+    setPhoneNumber(value)
+    if (phoneTouched) {
+      setPhoneError(validatePhone(value))
+    }
+  }
+
+  const handlePhoneBlur = () => {
+    setPhoneTouched(true)
+    setPhoneError(validatePhone(phoneNumber))
+    if (!validatePhone(phoneNumber)) {
+      validatePhoneUnique()
+    }
+  }
+
+  const handleAgeChange = (e) => {
+    const value = e.target.value
+    setAge(value)
+    if (ageTouched) {
+      setAgeError(validateAge(value))
+    }
+  }
+
+  const handleAgeBlur = () => {
+    setAgeTouched(true)
+    setAgeError(validateAge(age))
+  }
+
+  const handleGenderChange = (e) => {
+    const value = e.target.value
+    setGender(value)
+    if (genderTouched) {
+      setGenderError(validateGender(value))
+    }
+  }
+
+  const handleGenderBlur = () => {
+    setGenderTouched(true)
+    setGenderError(validateGender(gender))
   }
 
   const handleGestureToggle = (gesture) => {
@@ -92,27 +227,49 @@ export default function Enrollment() {
   }
 
   const handleStartEnrollment = async () => {
-    // Validar campos antes de enviar
-    const userIdErr = validateUserId(userId)
-    const usernameErr = validateUsername(username)
-    
-    setUserIdTouched(true)
     setUsernameTouched(true)
-    setUserIdError(userIdErr)
+    setEmailTouched(true)
+    setPhoneTouched(true)
+    setAgeTouched(true)
+    setGenderTouched(true)
+    
+    const usernameErr = validateUsername(username)
+    const emailErr = validateEmail(email)
+    const phoneErr = validatePhone(phoneNumber)
+    const ageErr = validateAge(age)
+    const genderErr = validateGender(gender)
+    
     setUsernameError(usernameErr)
-
-    if (userIdErr || usernameErr || selectedGestures.length !== 3) {
+    setEmailError(emailErr)
+    setPhoneError(phoneErr)
+    setAgeError(ageErr)
+    setGenderError(genderErr)
+    
+    if (usernameErr || emailErr || phoneErr || ageErr || genderErr || selectedGestures.length !== 3) {
       setError('Por favor completa todos los campos correctamente')
+      return
+    }
+    
+    const emailUnique = await validateEmailUnique()
+    const phoneUnique = await validatePhoneUnique()
+    
+    if (!emailUnique || !phoneUnique) {
+      setError('Email o teléfono ya registrados')
       return
     }
 
     try {
       setLoading(true)
-      const response = await enrollmentApi.startEnrollment(userId, username, selectedGestures)
+      const response = await enrollmentApi.startEnrollment(
+        username, 
+        email, 
+        phoneNumber, 
+        parseInt(age), 
+        gender, 
+        selectedGestures
+      )
       setSessionId(response.session_id)
       
-      // ⚠️ AGREGAR DELAY ANTES DE CAMBIAR A STEP 'CAPTURE'
-      // Esto da tiempo al backend para liberar recursos
       await new Promise(resolve => setTimeout(resolve, 300))
       
       setStep('capture')
@@ -177,32 +334,30 @@ export default function Enrollment() {
 
   const resetForm = () => {
     setStep('form')
-    setUserId('')
     setUsername('')
+    setEmail('')
+    setPhoneNumber('')
+    setAge('')
+    setGender('')
     setSelectedGestures([])
     setSessionId(null)
     setSessionStatus(null)
     setError(null)
-    setUserIdTouched(false)
     setUsernameTouched(false)
-    setUserIdError('')
+    setEmailTouched(false)
+    setPhoneTouched(false)
+    setAgeTouched(false)
+    setGenderTouched(false)
     setUsernameError('')
+    setEmailError('')
+    setPhoneError('')
+    setAgeError('')
+    setGenderError('')
   }
 
   const handleGoBack = () => {
     navigate('/')
   }
-
-  // Determinar el estado del input
-  const getInputState = (value, error, touched) => {
-    if (!touched) return 'default'
-    if (error) return 'error'
-    if (value.trim()) return 'success'
-    return 'default'
-  }
-
-  const userIdState = getInputState(userId, userIdError, userIdTouched)
-  const usernameState = getInputState(username, usernameError, usernameTouched)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/20 py-8 px-4 sm:px-6 lg:px-8">
@@ -256,72 +411,25 @@ export default function Enrollment() {
                 {/* Datos Personales */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   
-                  {/* Input: ID de Usuario */}
-                  <div className="space-y-2">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-                      ID de Usuario
-                    </label>
-                    
-                    <div className="relative">
-                      <div className={`
-                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
-                        ${userIdState === 'error' ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
-                        ${userIdState === 'success' ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
-                        ${userIdState === 'default' ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
-                      `}>
-                        <IdCard className={`
-                          w-5 h-5 flex-shrink-0
-                          ${userIdState === 'error' ? 'text-red-500' : ''}
-                          ${userIdState === 'success' ? 'text-green-500' : ''}
-                          ${userIdState === 'default' ? 'text-gray-400' : ''}
-                        `} />
-                        
-                        <input
-                          type="text"
-                          value={userId}
-                          onChange={handleUserIdChange}
-                          onBlur={handleUserIdBlur}
-                          className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
-                          placeholder="Escribe tu ID de usuario..."
-                        />
-                        
-                        {userIdState === 'success' && (
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        )}
-                        {userIdState === 'error' && (
-                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                        )}
-                      </div>
-                    </div>
-                    
-                    {userIdError && userIdTouched && (
-                      <div className="flex items-center gap-2">
-                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
-                        <p className="text-xs text-red-600 font-medium">{userIdError}</p>
-                      </div>
-                    )}
-                  </div>
-
                   {/* Input: Nombre Completo */}
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
                       Nombre Completo
                     </label>
                     
                     <div className="relative">
                       <div className={`
                         flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
-                        ${usernameState === 'error' ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
-                        ${usernameState === 'success' ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
-                        ${usernameState === 'default' ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
+                        ${usernameError && usernameTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
+                        ${!usernameError && usernameTouched && username ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
+                        ${!usernameTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
                       `}>
                         <User className={`
                           w-5 h-5 flex-shrink-0
-                          ${usernameState === 'error' ? 'text-red-500' : ''}
-                          ${usernameState === 'success' ? 'text-green-500' : ''}
-                          ${usernameState === 'default' ? 'text-gray-400' : ''}
+                          ${usernameError && usernameTouched ? 'text-red-500' : ''}
+                          ${!usernameError && usernameTouched && username ? 'text-green-500' : ''}
+                          ${!usernameTouched ? 'text-gray-400' : ''}
                         `} />
                         
                         <input
@@ -333,10 +441,10 @@ export default function Enrollment() {
                           placeholder="Escribe tu nombre completo..."
                         />
                         
-                        {usernameState === 'success' && (
+                        {!usernameError && usernameTouched && username && (
                           <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
                         )}
-                        {usernameState === 'error' && (
+                        {usernameError && usernameTouched && (
                           <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
                         )}
                       </div>
@@ -349,6 +457,179 @@ export default function Enrollment() {
                       </div>
                     )}
                   </div>
+
+                  {/* Input: Email */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-500"></div>
+                      Email
+                    </label>
+                    
+                    <div className="relative">
+                      <div className={`
+                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
+                        ${emailError && emailTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
+                        ${!emailError && emailTouched && email ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
+                        ${!emailTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
+                      `}>
+                        <span className="text-lg">📧</span>
+                        
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={handleEmailChange}
+                          onBlur={handleEmailBlur}
+                          className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
+                          placeholder="ejemplo@correo.com"
+                        />
+                        
+                        {!emailError && emailTouched && email && (
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        )}
+                        {emailError && emailTouched && (
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {emailError && emailTouched && (
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <p className="text-xs text-red-600 font-medium">{emailError}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Input: Teléfono */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                      Teléfono
+                    </label>
+                    
+                    <div className="relative">
+                      <div className={`
+                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
+                        ${phoneError && phoneTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
+                        ${!phoneError && phoneTouched && phoneNumber ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
+                        ${!phoneTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
+                      `}>
+                        <span className="text-lg">📱</span>
+                        
+                        <input
+                          type="tel"
+                          value={phoneNumber}
+                          onChange={handlePhoneChange}
+                          onBlur={handlePhoneBlur}
+                          className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
+                          placeholder="0999999999"
+                        />
+                        
+                        {!phoneError && phoneTouched && phoneNumber && (
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        )}
+                        {phoneError && phoneTouched && (
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {phoneError && phoneTouched && (
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <p className="text-xs text-red-600 font-medium">{phoneError}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Input: Edad */}
+                  <div className="space-y-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-purple-500"></div>
+                      Edad
+                    </label>
+                    
+                    <div className="relative">
+                      <div className={`
+                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
+                        ${ageError && ageTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
+                        ${!ageError && ageTouched && age ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
+                        ${!ageTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
+                      `}>
+                        <span className="text-lg">🎂</span>
+                        
+                        <input
+                          type="number"
+                          value={age}
+                          onChange={handleAgeChange}
+                          onBlur={handleAgeBlur}
+                          min="1"
+                          max="120"
+                          className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
+                          placeholder="Ingresa tu edad"
+                        />
+                        
+                        {!ageError && ageTouched && age && (
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        )}
+                        {ageError && ageTouched && (
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {ageError && ageTouched && (
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <p className="text-xs text-red-600 font-medium">{ageError}</p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Input: Género */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+                      <div className="w-1.5 h-1.5 rounded-full bg-pink-500"></div>
+                      Género
+                    </label>
+                    
+                    <div className="relative">
+                      <div className={`
+                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
+                        ${genderError && genderTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
+                        ${!genderError && genderTouched && gender ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
+                        ${!genderTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
+                      `}>
+                        <span className="text-lg">👥</span>
+                        
+                        <select
+                          value={gender}
+                          onChange={handleGenderChange}
+                          onBlur={handleGenderBlur}
+                          className="flex-1 outline-none text-gray-900 bg-transparent"
+                        >
+                          <option value="">Selecciona tu género</option>
+                          <option value="Femenino">Femenino</option>
+                          <option value="Masculino">Masculino</option>
+                        </select>
+                        
+                        {!genderError && genderTouched && gender && (
+                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                        )}
+                        {genderError && genderTouched && (
+                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {genderError && genderTouched && (
+                      <div className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />
+                        <p className="text-xs text-red-600 font-medium">{genderError}</p>
+                      </div>
+                    )}
+                  </div>
+
                 </div>
 
                 {/* Divider */}

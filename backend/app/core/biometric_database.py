@@ -123,6 +123,11 @@ class UserProfile:
     user_id: str
     username: str
     
+    email: str
+    phone_number: str
+    age: int
+    gender: str
+    
     anatomical_templates: List[str] = field(default_factory=list)
     dynamic_templates: List[str] = field(default_factory=list)
     multimodal_templates: List[str] = field(default_factory=list)
@@ -511,6 +516,84 @@ class BiometricDatabase:
         
         print(f"BiometricDatabase inicializada en: {self.db_path}")
     
+    def is_email_unique(self, email: str, exclude_user_id: Optional[str] = None) -> bool:
+        """
+        Verifica si el email es único en la base de datos.
+        
+        Args:
+            email: Email a verificar
+            exclude_user_id: ID de usuario a excluir (útil para updates)
+        
+        Returns:
+            True si el email NO existe, False si ya está registrado
+        """
+        try:
+            with self.lock:
+                for user_id, user_profile in self.users.items():
+                    if exclude_user_id and user_id == exclude_user_id:
+                        continue
+                    if hasattr(user_profile, 'email') and user_profile.email == email:
+                        logger.info(f"❌ Email {email} ya registrado para usuario {user_id}")
+                        return False
+                return True
+        except Exception as e:
+            logger.error(f"Error verificando email único: {e}")
+            return False
+
+    def is_phone_unique(self, phone_number: str, exclude_user_id: Optional[str] = None) -> bool:
+        """
+        Verifica si el teléfono es único en la base de datos.
+        
+        Args:
+            phone_number: Número de teléfono a verificar
+            exclude_user_id: ID de usuario a excluir (útil para updates)
+        
+        Returns:
+            True si el teléfono NO existe, False si ya está registrado
+        """
+        try:
+            with self.lock:
+                for user_id, user_profile in self.users.items():
+                    if exclude_user_id and user_id == exclude_user_id:
+                        continue
+                    if hasattr(user_profile, 'phone_number') and user_profile.phone_number == phone_number:
+                        logger.info(f"❌ Teléfono {phone_number} ya registrado para usuario {user_id}")
+                        return False
+                return True
+        except Exception as e:
+            logger.error(f"Error verificando teléfono único: {e}")
+            return False
+
+    def generate_unique_user_id(self, username: str) -> str:
+        """
+        Genera un ID único para un nuevo usuario.
+        
+        Args:
+            username: Nombre del usuario
+        
+        Returns:
+            ID único del usuario (ej: "user_12345_abc")
+        """
+        import uuid
+        import time
+        
+        # Crear un ID basado en timestamp + UUID corto
+        timestamp = int(time.time() * 1000)  # Milisegundos
+        unique_suffix = uuid.uuid4().hex[:8]  # 8 caracteres random
+        
+        # Limpiar username para usarlo en el ID (solo alfanuméricos)
+        clean_name = ''.join(c for c in username.lower() if c.isalnum())[:8]
+        
+        user_id = f"user_{clean_name}_{timestamp}_{unique_suffix}"
+        
+        # Verificar que sea único (por si acaso)
+        while user_id in self.users:
+            unique_suffix = uuid.uuid4().hex[:8]
+            user_id = f"user_{clean_name}_{timestamp}_{unique_suffix}"
+        
+        logger.info(f"✅ ID generado: {user_id}")
+        return user_id
+
     def _load_database_config(self) -> Dict[str, Any]:
         """Carga configuración de la base de datos SIN ENCRIPTACIÓN para debugging."""
         default_config = {
@@ -619,9 +702,36 @@ class BiometricDatabase:
                             user_data = json.load(f)
                         
                         try:
+                            # ✅ VERIFICAR SI ES PERFIL LEGACY (sin nuevos campos)
+                            is_legacy = ('email' not in user_data or 
+                                        'phone_number' not in user_data or 
+                                        'age' not in user_data or 
+                                        'gender' not in user_data)
+                            
+                            if is_legacy:
+                                # ⚠️ PERFIL ANTIGUO - NO CARGAR (no tiene datos obligatorios)
+                                print(f"⚠️ PERFIL LEGACY DETECTADO: {user_file.name}")
+                                print(f"   Este perfil fue creado antes de implementar email/teléfono/edad/género")
+                                print(f"   🚫 NO SE CARGARÁ (datos incompletos)")
+                                
+                                # Mover a carpeta legacy
+                                legacy_dir = users_dir / 'legacy'
+                                legacy_dir.mkdir(exist_ok=True)
+                                import shutil
+                                shutil.move(str(user_file), str(legacy_dir / user_file.name))
+                                print(f"   📦 Movido a: legacy/{user_file.name}")
+                                print(f"   💡 Para recuperarlo: completar datos manualmente y volver a mover")
+                                
+                                continue  # ❌ NO CARGAR
+                            
+                            # ✅ PERFIL COMPLETO (nuevo, con todos los datos)
                             user_profile = UserProfile(
                                 user_id=user_data.get('user_id', user_file.stem),
-                                username=user_data.get('username', 'Unknown'),
+                                username=user_data['username'],
+                                email=user_data['email'],  # ✅ Ya validado que existe
+                                phone_number=user_data['phone_number'],  # ✅ Ya validado que existe
+                                age=int(user_data['age']),  # ✅ Ya validado que existe
+                                gender=user_data['gender'],  # ✅ Ya validado que existe
                                 gesture_sequence=user_data.get('gesture_sequence', []),
                                 anatomical_templates=user_data.get('anatomical_templates', []),
                                 dynamic_templates=user_data.get('dynamic_templates', []),
@@ -637,6 +747,10 @@ class BiometricDatabase:
                             print(f"✅ Usuario cargado:")
                             print(f"   👤 ID: {user_profile.user_id}")
                             print(f"   📝 Nombre: {user_profile.username}")
+                            print(f"   📧 Email: {user_profile.email}")
+                            print(f"   📱 Teléfono: {user_profile.phone_number}")
+                            print(f"   🎂 Edad: {user_profile.age}")
+                            print(f"   👥 Género: {user_profile.gender}")
                             print(f"   🎯 Gestos: {user_profile.gesture_sequence}")
                             print(f"   📊 Templates: {user_profile.total_enrollments}")
                             
@@ -938,19 +1052,48 @@ class BiometricDatabase:
                 
             return False
     
-    def create_user(self, user_id: str, username: str, 
-                   gesture_sequence: Optional[List[str]] = None,
-                   metadata: Optional[Dict[str, Any]] = None) -> bool:
+    def create_user(self, user_id: str, username: str,
+                    email: str,
+                    phone_number: str,
+                    age: int,
+                    gender: str,
+                    gesture_sequence: Optional[List[str]] = None,
+                    metadata: Optional[Dict[str, Any]] = None) -> bool:
         """Crea un nuevo usuario en la base de datos."""
         try:
             with self.lock:
                 if user_id in self.users:
                     logger.error(f"Usuario {user_id} ya existe")
                     return False
+                if not self.is_email_unique(email, exclude_user_id=user_id):
+                    logger.error(f"El email {email} ya está registrado.")
+                    return False
+                if not self.is_phone_unique(phone_number, exclude_user_id=user_id):
+                    logger.error(f"El teléfono {phone_number} ya está registrado.")
+                    return False
+                if not email or not phone_number:
+                    logger.error("Email y teléfono son requeridos")
+                    return False
+                try:
+                    age = int(age)
+                except ValueError:
+                    logger.error(f"Edad inválida: {age}")
+                    return False
+                if age < 1 or age > 120:
+                    logger.error(f"Edad inválida: {age}")
+                    return False
+                if gender not in ["Femenino", "Masculino"]:
+                    logger.error(f"Género inválido: {gender}. Debe ser 'Femenino' o 'Masculino'")
+                    return False
+
                 
                 user_profile = UserProfile(
                     user_id=user_id,
                     username=username,
+                    email=email,
+                    phone_number=phone_number,
+                    age=age,
+                    gender=gender,
                     gesture_sequence=gesture_sequence or [],
                     metadata=metadata or {}
                 )
@@ -2140,9 +2283,28 @@ class BiometricDatabase:
                     elif sample_metadata and 'username' in sample_metadata:
                         username = sample_metadata['username']
                     
+                    email = sample_metadata.get('email')
+                    phone_number = sample_metadata.get('phone_number')
+                    age = sample_metadata.get('age')
+                    gender = sample_metadata.get('gender')
+    
+                    # ✅ VALIDACIÓN DE SEGURIDAD (por si acaso)
+                    if not all([email, phone_number, age, gender]):
+                        error_msg = f"❌ ERROR CRÍTICO: Usuario {user_id} sin datos completos en metadata"
+                        print(error_msg)
+                        print(f"   Email: {email}")
+                        print(f"   Phone: {phone_number}")
+                        print(f"   Age: {age}")
+                        print(f"   Gender: {gender}")
+                        raise ValueError("Datos obligatorios faltantes en enrollment bootstrap")
+                    
                     user_profile = UserProfile(
                         user_id=user_id,
                         username=username,
+                        email=email,
+                        phone_number=phone_number,
+                        age=age,
+                        gender=gender,
                         gesture_sequence=[],
                         metadata={
                             'bootstrap_mode': True,
@@ -2154,7 +2316,12 @@ class BiometricDatabase:
                     self.users[user_id] = user_profile
                     self._save_user(user_profile)
                     
-                    print(f"✅ Usuario {user_id} creado automáticament: {username}")
+                    print(f"✅ Usuario {user_id} creado automáticamente:")
+                    print(f"   📝 Nombre: {username}")
+                    print(f"   📧 Email: {email}")
+                    print(f"   📱 Teléfono: {phone_number}")
+                    print(f"   🎂 Edad: {age}")
+                    print(f"   👥 Género: {gender}")
                 
                 if anatomical_features is None:
                     logger.error("Se requieren características anatómicas en Bootstrap")

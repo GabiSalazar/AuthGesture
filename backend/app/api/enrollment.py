@@ -21,8 +21,12 @@ router = APIRouter()
 
 class EnrollmentStartRequest(BaseModel):
     """Request para iniciar enrollment"""
-    user_id: str
+    #user_id: str
     username: str
+    email: str
+    phone_number: str
+    age: int
+    gender: str
     gesture_sequence: Optional[List[str]] = None
 
 
@@ -97,37 +101,173 @@ class BootstrapStatusResponse(BaseModel):
 
 
 # ============================================================================
+# VALIDACIÓN DE CAMPOS ÚNICOS
+# ============================================================================
+
+class ValidateUniqueRequest(BaseModel):
+    """Request para validar campos únicos"""
+    field: str  # "email" o "phone_number"
+    value: str
+
+class ValidateUniqueResponse(BaseModel):
+    """Response de validación"""
+    is_unique: bool
+    message: str
+
+@router.post("/enrollment/validate-unique", response_model=ValidateUniqueResponse)
+async def validate_unique_field(request: ValidateUniqueRequest):
+    """
+    Valida si un campo (email o teléfono) es único.
+    
+    Args:
+        request: Campo y valor a validar
+    
+    Returns:
+        ValidateUniqueResponse indicando si es único
+    """
+    try:
+        manager = get_system_manager()
+        database = manager.database
+        
+        if request.field == "email":
+            is_unique = database.is_email_unique(request.value)
+            message = "Email disponible" if is_unique else "Este email ya está registrado"
+        elif request.field == "phone_number":
+            is_unique = database.is_phone_unique(request.value)
+            message = "Teléfono disponible" if is_unique else "Este teléfono ya está registrado"
+        else:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Campo inválido: {request.field}. Solo se permite 'email' o 'phone_number'"
+            )
+        
+        return ValidateUniqueResponse(
+            is_unique=is_unique,
+            message=message
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error validando campo único: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
+# ============================================================================
 # ENDPOINTS
 # ============================================================================
 
 @router.post("/enrollment/start", response_model=EnrollmentStartResponse)
 async def start_enrollment(request: EnrollmentStartRequest):
     """
-    Inicia una nueva sesión de enrollment.
+    Inicia una nueva sesión de enrollment - ACTUALIZADO CON NUEVOS CAMPOS.
     
     Args:
-        request: Datos del usuario y secuencia de gestos
+        request: Datos del usuario (sin user_id, ahora auto-generado)
     
     Returns:
         EnrollmentStartResponse con información de la sesión
     """
     try:
         manager = get_system_manager()
+        database = manager.database
         
-        # Verificar que el sistema esté listo
+        # ============================================================================
+        # VERIFICAR QUE EL SISTEMA ESTÉ LISTO
+        # ============================================================================
         if not manager.state.enrollment_active:
             raise HTTPException(
                 status_code=503,
                 detail="Sistema de enrollment no está activo"
             )
         
-        print(f"🎬 Iniciando enrollment - User: {request.user_id}, Username: {request.username}")
+        # ============================================================================
+        # ✅ VALIDACIONES DE CAMPOS NUEVOS
+        # ============================================================================
         
-        # Iniciar sesión de enrollment
+        # 1. Validar username
+        username_stripped = request.username.strip()
+        if len(username_stripped) < 3:
+            raise HTTPException(
+                status_code=400,
+                detail="El nombre debe tener al menos 3 caracteres"
+            )
+        
+        # 2. Validar email formato básico
+        email_stripped = request.email.strip().lower()
+        if not email_stripped or '@' not in email_stripped or '.' not in email_stripped:
+            raise HTTPException(
+                status_code=400,
+                detail="Email inválido"
+            )
+        
+        # 3. Validar email único
+        if not database.is_email_unique(email_stripped):
+            raise HTTPException(
+                status_code=400,
+                detail="Este email ya está registrado"
+            )
+        
+        # 4. Validar teléfono formato básico
+        phone_stripped = request.phone_number.strip()
+        if not phone_stripped or len(phone_stripped) < 7:
+            raise HTTPException(
+                status_code=400,
+                detail="Número de teléfono inválido (mínimo 7 dígitos)"
+            )
+        
+        # 5. Validar teléfono único
+        if not database.is_phone_unique(phone_stripped):
+            raise HTTPException(
+                status_code=400,
+                detail="Este número de teléfono ya está registrado"
+            )
+        
+        # 6. Validar edad
+        try:
+            age_int = int(request.age)
+        except (ValueError, TypeError):
+            raise HTTPException(
+                status_code=400,
+                detail="Edad inválida (debe ser un número entero)"
+            )
+        
+        if age_int < 1 or age_int > 120:
+            raise HTTPException(
+                status_code=400,
+                detail="Edad inválida (debe estar entre 1 y 120 años)"
+            )
+        
+        # 7. Validar género
+        if request.gender not in ["Femenino", "Masculino"]:
+            raise HTTPException(
+                status_code=400,
+                detail="Género inválido (debe ser 'Femenino' o 'Masculino')"
+            )
+        
+        # ============================================================================
+        # ✅ GENERAR USER_ID AUTOMÁTICO
+        # ============================================================================
+        user_id = database.generate_unique_user_id(username_stripped)
+        
+        print(f"🎬 Iniciando enrollment:")
+        print(f"   User ID (generado): {user_id}")
+        print(f"   Username: {username_stripped}")
+        print(f"   Email: {email_stripped}")
+        print(f"   Teléfono: {phone_stripped}")
+        print(f"   Edad: {age_int}")
+        print(f"   Género: {request.gender}")
+        
+        # ============================================================================
+        # ✅ INICIAR SESIÓN DE ENROLLMENT CON TODOS LOS DATOS
+        # ============================================================================
         result = manager.start_enrollment_session(
-            user_id=request.user_id,
-            username=request.username,
-            gesture_sequence=request.gesture_sequence
+            user_id=user_id,  # ✅ Generado automáticamente
+            username=username_stripped,
+            gesture_sequence=request.gesture_sequence,
+            email=email_stripped,  # ✅ Nuevo campo
+            phone_number=phone_stripped,  # ✅ Nuevo campo
+            age=age_int,  # ✅ Nuevo campo
+            gender=request.gender  # ✅ Nuevo campo
         )
         
         if not result.get('success', False):
@@ -142,10 +282,13 @@ async def start_enrollment(request: EnrollmentStartRequest):
         print(f"   Gestos: {session['gesture_sequence']}")
         print(f"   Total muestras: {session['total_samples_needed']}")
         
+        # ============================================================================
+        # ✅ RETORNAR RESPUESTA
+        # ============================================================================
         return EnrollmentStartResponse(
             success=True,
             session_id=session['session_id'],
-            message=result.get('message', 'Sesión de enrollment iniciada'),
+            message=result.get('message', 'Sesión de enrollment iniciada exitosamente'),
             user_id=session['user_id'],
             username=session['username'],
             gesture_sequence=session['gesture_sequence'],

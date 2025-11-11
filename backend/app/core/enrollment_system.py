@@ -161,6 +161,11 @@ class RealEnrollmentSession:
     username: str
     gesture_sequence: List[str]
     
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    
     status: EnrollmentStatus = EnrollmentStatus.NOT_STARTED
     current_phase: EnrollmentPhase = EnrollmentPhase.INITIALIZATION
     current_gesture: str = ""
@@ -495,7 +500,7 @@ class RealTemplateGenerator:
         self.preprocessor = get_real_feature_preprocessor()
         
         print("RealTemplateGenerator inicializado con redes entrenadas")
-     
+        
     def generate_real_templates(self, samples: List[RealEnrollmentSample], user_id: str, bootstrap_mode: bool = False) -> Dict[str, List[np.ndarray]]:
         """
         Genera templates biométricos REALES con soporte Bootstrap.
@@ -792,64 +797,151 @@ class RealEnrollmentWorkflow:
         
         print("RealEnrollmentWorkflow inicializado")
     
-    def start_real_enrollment(self, user_id: str, username: str, 
-                              gesture_sequence: List[str],
-                              progress_callback: Optional[Callable] = None,
-                              error_callback: Optional[Callable] = None) -> RealEnrollmentSession:
-        """Inicia proceso de enrollment."""
+    def start_real_enrollment(self, 
+                          user_id: str,
+                          username: str,
+                          gesture_sequence: List[str],
+                          email: str,
+                          phone_number: str,
+                          age: int,
+                          gender: str,
+                          progress_callback: Optional[Callable] = None,
+                          error_callback: Optional[Callable] = None) -> RealEnrollmentSession:
+        """
+        Inicia proceso de enrollment REAL con nuevos campos OBLIGATORIOS.
+        
+        Args:
+            user_id: ID único del usuario (auto-generado) - OBLIGATORIO
+            username: Nombre completo del usuario - OBLIGATORIO
+            gesture_sequence: Lista de gestos a capturar - OBLIGATORIO
+            email: Email del usuario - OBLIGATORIO ✅
+            phone_number: Teléfono del usuario - OBLIGATORIO ✅
+            age: Edad del usuario - OBLIGATORIO ✅
+            gender: Género del usuario - OBLIGATORIO ✅
+            progress_callback: Callback para progreso (opcional)
+            error_callback: Callback para errores (opcional)
+        
+        Returns:
+            RealEnrollmentSession iniciada
+        """
         try:
-            print(f"Iniciando enrollment para usuario {user_id}")
-            print(f"  - Modo Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
+            print("=" * 70)
+            print("🚀 INICIANDO ENROLLMENT REAL")
+            print("=" * 70)
+            print(f"👤 Usuario: {username} (ID: {user_id})")
+            print(f"📧 Email: {email}")
+            print(f"📱 Teléfono: {phone_number}")
+            print(f"🎂 Edad: {age}")
+            print(f"👥 Género: {gender}")
+            print(f"🔧 Modo Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
             
+            # ✅ VALIDACIONES ADICIONALES (por seguridad)
+            if not gesture_sequence or len(gesture_sequence) == 0:
+                error_msg = "❌ ERROR: gesture_sequence no puede estar vacío"
+                print(error_msg)
+                if error_callback:
+                    error_callback(error_msg)
+                raise ValueError("gesture_sequence es obligatorio y no puede estar vacío")
+            
+            if not email or '@' not in email:
+                raise ValueError("Email inválido")
+            
+            if not phone_number or len(phone_number) < 7:
+                raise ValueError("Número de teléfono inválido")
+            
+            if not isinstance(age, int) or age < 1 or age > 120:
+                raise ValueError("Edad inválida")
+            
+            if gender not in ["Femenino", "Masculino"]:
+                raise ValueError("Género inválido")
+            
+            print(f"📋 Secuencia de gestos: {gesture_sequence}")
+            print("✅ Todas las validaciones pasadas")
+            
+            # ✅ CREAR SESIÓN CON NUEVOS CAMPOS
             session = RealEnrollmentSession(
                 session_id=str(uuid.uuid4()),
                 user_id=user_id,
                 username=username,
                 gesture_sequence=gesture_sequence,
+                # ✅ CAMPOS OBLIGATORIOS
+                email=email,
+                phone_number=phone_number,
+                age=age,
+                gender=gender,
+                # Callbacks opcionales
                 progress_callback=progress_callback,
                 error_callback=error_callback
             )
+            
+            # Inicializar buffer de frames
             session.all_frames_buffer = []
-            print("Buffer de sesión INICIALIZADO al crear sesión")
-
+            print("✅ Buffer de sesión INICIALIZADO")
+            
+            # Marcar si es bootstrap
             session.is_bootstrap = self.bootstrap_mode
             
+            # Calcular muestras necesarias
             session.total_samples_needed = len(gesture_sequence) * self.config.samples_per_gesture
             
+            print(f"📊 Configuración de captura:")
+            print(f"   🎯 Gestos: {len(gesture_sequence)}")
+            print(f"   📸 Muestras por gesto: {self.config.samples_per_gesture}")
+            print(f"   📦 Total muestras: {session.total_samples_needed}")
+            
+            # Estados iniciales
             session.status = EnrollmentStatus.INITIALIZING
             session.current_phase = EnrollmentPhase.INITIALIZATION
-            session.current_gesture = gesture_sequence[0] if gesture_sequence else ""
-
+            session.current_gesture = gesture_sequence[0]
+            
+            # Configurar workflow si existe
             if hasattr(self, 'workflow') and hasattr(self.workflow, 'set_bootstrap_mode'):
                 self.workflow.set_bootstrap_mode(self.bootstrap_mode)
-                
+                print(f"✅ Workflow configurado en modo bootstrap: {self.bootstrap_mode}")
+            
+            # Inicializar componentes
             if not self._initialize_real_components():
                 session.status = EnrollmentStatus.FAILED
-                error_msg = "Error inicializando componentes"
+                error_msg = "❌ Error inicializando componentes"
+                print(error_msg)
                 if error_callback:
                     error_callback(error_msg)
-                print(error_msg)
                 return session
             
+            print("✅ Componentes inicializados correctamente")
+            
+            # Cambiar a estado de colección
             session.status = EnrollmentStatus.COLLECTING_SAMPLES
             session.current_phase = EnrollmentPhase.SAMPLE_COLLECTION
             
+            # Guardar sesión actual
             self.current_session = session
             self.is_running = True
             
-            print(f"Enrollment iniciado: {session.session_id}")
-            print(f"  - Gestos: {' → '.join(gesture_sequence)}")
-            print(f"  - Muestras/gesto: {self.config.samples_per_gesture}")
-            print(f"  - Total muestras: {session.total_samples_needed}")
-            print(f"  - Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
-
+            print(f"✅ Enrollment iniciado: {session.session_id}")
+            print(f"   📋 Gestos: {' → '.join(gesture_sequence)}")
+            print(f"   📸 Muestras/gesto: {self.config.samples_per_gesture}")
+            print(f"   📦 Total muestras: {session.total_samples_needed}")
+            print(f"   🔧 Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
+            
+            # Estadísticas
             if self.bootstrap_mode:
                 self.stats['bootstrap_enrollments'] = self.stats.get('bootstrap_enrollments', 0) + 1
-                            
+                print(f"   📊 Bootstrap enrollments totales: {self.stats['bootstrap_enrollments']}")
+            
+            print("=" * 70)
+            
             return session
             
         except Exception as e:
-            print(f"Error iniciando enrollment: {e}")
+            print("=" * 70)
+            print(f"❌ ERROR INICIANDO ENROLLMENT")
+            print("=" * 70)
+            print(f"Error: {e}")
+            import traceback
+            print(f"Traceback: {traceback.format_exc()}")
+            print("=" * 70)
+            
             if error_callback:
                 error_callback(str(e))
             raise
@@ -2000,7 +2092,7 @@ class RealEnrollmentWorkflow:
     def _store_real_user_data(self, session: RealEnrollmentSession, templates: Dict[str, List[np.ndarray]]) -> bool:
         """
         Almacena datos del usuario en la base de datos.
-        ✅ REFACTORIZADO: Guarda múltiples templates individuales (sin promediado).
+        Guarda múltiples templates individuales sin promediado.
         
         Args:
             session: Sesión de enrollment con muestras capturadas
@@ -2013,11 +2105,14 @@ class RealEnrollmentWorkflow:
         try:
             print(f"Almacenando datos REALES del usuario {session.user_id}")
             
-            # Crear perfil de usuario
             user_profile = UserProfile(
                 user_id=session.user_id,
                 username=session.username,
                 gesture_sequence=session.gesture_sequence,
+                email=session.email,
+                phone_number=session.phone_number,
+                age=session.age,
+                gender=session.gender,
                 metadata={
                     'enrollment_mode': 'normal',
                     'session_id': session.session_id,
@@ -2035,10 +2130,8 @@ class RealEnrollmentWorkflow:
             user_profile.total_enrollments = 1
             user_profile.updated_at = time.time()
             
-            # Crear múltiples templates individuales
             biometric_templates = []
             
-            # Procesar templates ANATÓMICOS individuales
             if 'anatomical' in templates and templates['anatomical']:
                 print(f"Procesando {len(templates['anatomical'])} templates anatomicos individuales")
                 
@@ -2073,8 +2166,6 @@ class RealEnrollmentWorkflow:
                             'version': "2.0_real_individual",
                             'storage_mode': 'individual',
                             'data_source': 'real_enrollment_capture',
-                            
-                            # Guardar características raw para regeneración
                             'bootstrap_features': (sample.anatomical_features.complete_vector.tolist() 
                                                 if sample and sample.anatomical_features else []),
                             'has_anatomical_raw': True,
@@ -2085,7 +2176,6 @@ class RealEnrollmentWorkflow:
                     biometric_templates.append(biometric_template)
                     print(f"  Template anatomico {i+1}/{len(templates['anatomical'])} creado (norma: {np.linalg.norm(anatomical_embedding):.3f})")
             
-            # Procesar templates DINÁMICOS individuales
             if 'dynamic' in templates and templates['dynamic']:
                 print(f"Procesando {len(templates['dynamic'])} templates dinamicos individuales")
                 
@@ -2097,21 +2187,17 @@ class RealEnrollmentWorkflow:
                     gesture_index = i % len(session.gesture_sequence)
                     gesture_name = session.gesture_sequence[gesture_index]
                     
-                    # CORRECCIÓN CRÍTICA: Extraer temporal_sequence correctamente
                     temporal_seq = []
                     if sample:
-                        # Método 1: Atributo directo de sample
                         if hasattr(sample, 'temporal_sequence') and sample.temporal_sequence is not None:
                             temporal_seq = sample.temporal_sequence.tolist() if hasattr(sample.temporal_sequence, 'tolist') else sample.temporal_sequence
                             print(f"  Temporal sequence extraida de sample.temporal_sequence: {len(temporal_seq)} frames")
                         
-                        # Método 2: Metadata de sample
                         elif hasattr(sample, 'metadata') and isinstance(sample.metadata, dict):
                             if 'temporal_sequence' in sample.metadata and sample.metadata['temporal_sequence']:
                                 temporal_seq = sample.metadata['temporal_sequence']
                                 print(f"  Temporal sequence extraida de sample.metadata: {len(temporal_seq)} frames")
                         
-                        # Método 3: dynamic_features.temporal_sequence
                         elif (sample.dynamic_features and 
                             hasattr(sample.dynamic_features, 'temporal_sequence') and 
                             sample.dynamic_features.temporal_sequence is not None):
@@ -2144,8 +2230,6 @@ class RealEnrollmentWorkflow:
                             'version': "2.0_real_individual",
                             'storage_mode': 'individual',
                             'data_source': 'real_enrollment_capture',
-                            
-                            # Guardar secuencia temporal para regeneración
                             'temporal_sequence': temporal_seq,
                             'has_temporal_data': len(temporal_seq) > 0,
                             'bootstrap_mode': False
@@ -2155,55 +2239,45 @@ class RealEnrollmentWorkflow:
                     biometric_templates.append(biometric_template)
                     print(f"  Template dinamico {i+1}/{len(templates['dynamic'])} creado (norma: {np.linalg.norm(dynamic_embedding):.3f})")
             
-            # ========== NUEVO: Procesar template DINÁMICO de secuencia fluida ==========
             if session.dynamic_phase_completed and session.fluid_sequence_captured:
-                print(f"\n🎬 Procesando template dinámico de SECUENCIA FLUIDA")
+                print(f"\nProcesando template dinamico de SECUENCIA FLUIDA")
                 
-                # Verificar si tenemos la secuencia guardada
                 if hasattr(session, 'dynamic_sequence_data') and session.dynamic_sequence_data is not None:
                     
-                    sequence_array = session.dynamic_sequence_data  # Shape: (50, 320)
+                    sequence_array = session.dynamic_sequence_data
                     
-                    print(f"📊 Secuencia fluida:")
+                    print(f"Secuencia fluida:")
                     print(f"   - Shape: {sequence_array.shape}")
                     print(f"   - Dtype: {sequence_array.dtype}")
                     
-                    # Validar shape
                     if len(sequence_array.shape) != 2:
-                        print(f"⚠️ Shape incorrecto: esperado (50, 320), obtenido {sequence_array.shape}")
+                        print(f"Shape incorrecto: esperado (50, 320), obtenido {sequence_array.shape}")
                         sequence_array = None
                     elif sequence_array.shape[0] != 50 or sequence_array.shape[1] != 320:
-                        print(f"⚠️ Dimensiones incorrectas: {sequence_array.shape}")
+                        print(f"Dimensiones incorrectas: {sequence_array.shape}")
                         sequence_array = None
                     
                     if sequence_array is not None:
-                        # Generar embedding
                         if self.dynamic_network and hasattr(self.dynamic_network, 'is_trained') and self.dynamic_network.is_trained:
                             try:
-                                # Preprocesar para la red BiLSTM
-                                # Input esperado: (1, 50, 320)
                                 sequence_input = np.expand_dims(sequence_array, axis=0)
                                 
-                                # Predecir embedding usando la red base
                                 dynamic_embedding_sequence = self.dynamic_network.base_network.predict(
                                     sequence_input,
                                     verbose=0
                                 )
-                                dynamic_embedding_sequence = dynamic_embedding_sequence.flatten()  # (128,)
+                                dynamic_embedding_sequence = dynamic_embedding_sequence.flatten()
                                 
-                                print(f"✅ Embedding con red entrenada: {dynamic_embedding_sequence.shape}")
+                                print(f"Embedding con red entrenada: {dynamic_embedding_sequence.shape}")
                                 
                             except Exception as e:
-                                print(f"⚠️ Error con red entrenada: {e}")
+                                print(f"Error con red entrenada: {e}")
                                 print(f"Error generando embedding de secuencia: {e}")
-                                # Fallback: usar promedio de frames
                                 dynamic_embedding_sequence = np.mean(sequence_array, axis=0).flatten()[:128]
                         else:
-                            # Bootstrap: usar promedio de características
-                            print("⚠️ Modo bootstrap: usando promedio de frames")
+                            print("Modo bootstrap: usando promedio de frames")
                             dynamic_embedding_sequence = np.mean(sequence_array, axis=0).flatten()[:128]
                         
-                        # Crear template de secuencia
                         template_id_seq = f"{session.user_id}_dynamic_sequence_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                         
                         biometric_template_sequence = BiometricTemplate(
@@ -2212,7 +2286,7 @@ class RealEnrollmentWorkflow:
                             template_type=TemplateType.DYNAMIC,
                             anatomical_embedding=None,
                             dynamic_embedding=dynamic_embedding_sequence,
-                            gesture_name="FLUID_SEQUENCE",  # Identificador especial
+                            gesture_name="FLUID_SEQUENCE",
                             quality_score=0.9,
                             confidence=0.9,
                             enrollment_session=session.session_id,
@@ -2221,7 +2295,7 @@ class RealEnrollmentWorkflow:
                                 'is_sequence': True,
                                 'sequence_type': 'fluid_transition',
                                 'gesture_sequence': session.gesture_sequence,
-                                'temporal_sequence': sequence_array.tolist(),  # Guardar secuencia completa
+                                'temporal_sequence': sequence_array.tolist(),
                                 'sequence_frames': len(sequence_array),
                                 'sequence_shape': list(sequence_array.shape),
                                 'is_real_data': True,
@@ -2236,25 +2310,22 @@ class RealEnrollmentWorkflow:
                         biometric_templates.append(biometric_template_sequence)
                         session.dynamic_sequence_template_id = template_id_seq
                         
-                        print(f"✅ Template de secuencia fluida creado: {template_id_seq}")
+                        print(f"Template de secuencia fluida creado: {template_id_seq}")
                         print(f"   - Frames: {len(sequence_array)}")
                         print(f"   - Embedding shape: {dynamic_embedding_sequence.shape}")
                     else:
-                        print("⚠️ Secuencia inválida - no se creó template")
+                        print("Secuencia invalida - no se creo template")
                 else:
-                    print("⚠️ No se encontró dynamic_sequence_data en sesión")
+                    print("No se encontro dynamic_sequence_data en sesion")
             else:
-                print("⚠️ Fase dinámica no completada - sin template de secuencia")
-            # =========================================================================
+                print("Fase dinamica no completada - sin template de secuencia")
                     
-            # Almacenar perfil de usuario
             if self.database.store_user_profile(user_profile):
                 print(f"Perfil de usuario {session.user_id} almacenado")
             else:
                 print(f"Error almacenando perfil de usuario {session.user_id}")
                 return False
             
-            # Almacenar todos los templates individuales
             templates_stored = 0
             for template in biometric_templates:
                 if self.database.store_biometric_template(template):
@@ -2567,79 +2638,166 @@ class RealEnrollmentSystem:
             'save_enrollment_video': get_config('biometric.enrollment.save_enrollment_video', False)
         }
     
-    def start_real_enrollment(self, user_id: str, username: str, 
-                              gesture_sequence: List[str],
-                              progress_callback: Optional[Callable] = None,
-                              error_callback: Optional[Callable] = None) -> str:
+    def start_real_enrollment(self, 
+                          user_id: str, 
+                          username: str, 
+                          gesture_sequence: List[str],
+                          email: str,  # ✅ NUEVO - OBLIGATORIO
+                          phone_number: str,  # ✅ NUEVO - OBLIGATORIO
+                          age: int,  # ✅ NUEVO - OBLIGATORIO
+                          gender: str,  # ✅ NUEVO - OBLIGATORIO
+                          progress_callback: Optional[Callable] = None,
+                          error_callback: Optional[Callable] = None) -> str:
         """
-        Inicia proceso de enrollment con soporte Bootstrap.
+        Inicia proceso de enrollment con soporte Bootstrap y nuevos campos obligatorios.
         
         Args:
-            user_id: ID único del usuario
-            username: Nombre del usuario  
-            gesture_sequence: Secuencia de gestos
-            progress_callback: Callback de progreso
-            error_callback: Callback de errores
+            user_id: ID único del usuario (auto-generado)
+            username: Nombre completo del usuario
+            gesture_sequence: Secuencia de gestos a capturar
+            email: Email del usuario - OBLIGATORIO ✅
+            phone_number: Teléfono del usuario - OBLIGATORIO ✅
+            age: Edad del usuario - OBLIGATORIO ✅
+            gender: Género del usuario (Femenino/Masculino) - OBLIGATORIO ✅
+            progress_callback: Callback de progreso (opcional)
+            error_callback: Callback de errores (opcional)
             
         Returns:
             ID de sesión de enrollment
         """
         try:
+            # Verificar si se necesita modo bootstrap
             self.bootstrap_mode = self._check_bootstrap_needed()
             
-            print(f"Iniciando enrollment: {user_id}")
-            print(f"  - Nombre: {username}")
-            print(f"  - Gestos: {' → '.join(gesture_sequence)}")
-            print(f"  - Muestras/gesto: {self.config.samples_per_gesture}")
-            print(f"  - Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
+            print("=" * 70)
+            print("🚀 INICIANDO ENROLLMENT")
+            print("=" * 70)
+            print(f"👤 Usuario: {username}")
+            print(f"🆔 ID: {user_id}")
+            print(f"📧 Email: {email}")
+            print(f"📱 Teléfono: {phone_number}")
+            print(f"🎂 Edad: {age}")
+            print(f"👥 Género: {gender}")
+            print(f"📋 Gestos: {' → '.join(gesture_sequence)}")
+            print(f"📸 Muestras/gesto: {self.config.samples_per_gesture}")
+            print(f"🔧 Modo Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
             
-            if not user_id or not username or not gesture_sequence:
-                raise ValueError("user_id, username y gesture_sequence requeridos")
+            # ============================================================================
+            # ✅ VALIDACIONES DE CAMPOS OBLIGATORIOS
+            # ============================================================================
+            
+            if not user_id or not user_id.strip():
+                raise ValueError("user_id es obligatorio")
+            
+            if not username or not username.strip():
+                raise ValueError("username es obligatorio")
+            
+            if not gesture_sequence or len(gesture_sequence) == 0:
+                raise ValueError("gesture_sequence es obligatorio y no puede estar vacío")
+            
+            if not email or '@' not in email:
+                raise ValueError("Email inválido")
+            
+            if not phone_number or len(phone_number) < 7:
+                raise ValueError("Número de teléfono inválido")
+            
+            if not isinstance(age, int) or age < 1 or age > 120:
+                raise ValueError("Edad inválida (debe estar entre 1 y 120)")
+            
+            if gender not in ["Femenino", "Masculino"]:
+                raise ValueError("Género inválido (debe ser 'Femenino' o 'Masculino')")
+            
+            print("✅ Todas las validaciones pasadas")
+            
+            # ============================================================================
+            # VERIFICAR USUARIO EXISTENTE
+            # ============================================================================
             
             if self.config.enable_duplicate_check:
                 existing_user = self.database.get_user(user_id)
                 if existing_user:
-                    print(f"Usuario {user_id} ya existe - se actualizará")
+                    print(f"⚠️ Usuario {user_id} ya existe - se actualizará")
+            
+            # ============================================================================
+            # CONFIGURAR WORKFLOW
+            # ============================================================================
             
             self.workflow.set_bootstrap_mode(self.bootstrap_mode)
+            print(f"✅ Workflow configurado en modo bootstrap: {self.bootstrap_mode}")
+            
+            # ============================================================================
+            # ✅ INICIAR SESIÓN CON TODOS LOS CAMPOS
+            # ============================================================================
             
             session = self.workflow.start_real_enrollment(
                 user_id=user_id,
                 username=username,
                 gesture_sequence=gesture_sequence,
+                email=email,  # ✅ NUEVO
+                phone_number=phone_number,  # ✅ NUEVO
+                age=age,  # ✅ NUEVO
+                gender=gender,  # ✅ NUEVO
                 progress_callback=progress_callback,
                 error_callback=error_callback
             )
             
+            # ============================================================================
+            # VERIFICAR ESTADO DE LA SESIÓN
+            # ============================================================================
+            
             if session.status == EnrollmentStatus.FAILED:
                 self.stats['failed_enrollments'] += 1
-                raise RuntimeError("Error iniciando sesión")
+                error_msg = "Error iniciando sesión de enrollment"
+                print(f"❌ {error_msg}")
+                raise RuntimeError(error_msg)
             
+            # Marcar sesión como bootstrap si aplica
             session.is_bootstrap = self.bootstrap_mode
+            
+            # ============================================================================
+            # GUARDAR SESIÓN Y ACTUALIZAR ESTADÍSTICAS
+            # ============================================================================
             
             self.active_sessions[session.session_id] = session
             self.stats['total_enrollments'] += 1
+            
             if self.bootstrap_mode:
                 self.stats['bootstrap_enrollments'] += 1
             
-            print(f"Sesión iniciada: {session.session_id}")
-            print(f"  - Muestras necesarias: {session.total_samples_needed}")
-            print(f"  - Estado: {session.status.value}")
-            print(f"  - Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
+            # ============================================================================
+            # LOGGING FINAL
+            # ============================================================================
+            
+            print("=" * 70)
+            print("✅ SESIÓN INICIADA EXITOSAMENTE")
+            print("=" * 70)
+            print(f"🆔 Session ID: {session.session_id}")
+            print(f"📦 Muestras necesarias: {session.total_samples_needed}")
+            print(f"📊 Estado: {session.status.value}")
+            print(f"🔧 Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
+            print(f"📈 Total enrollments: {self.stats['total_enrollments']}")
+            if self.bootstrap_mode:
+                print(f"🔧 Bootstrap enrollments: {self.stats['bootstrap_enrollments']}")
+            print("=" * 70)
             
             return session.session_id
             
         except Exception as e:
-            print(f"Error iniciando enrollment: {e}")
+            print("=" * 70)
+            print("❌ ERROR INICIANDO ENROLLMENT")
+            print("=" * 70)
+            print(f"Error: {e}")
+            import traceback
+            print(f"Traceback: {traceback.format_exc()}")
+            print("=" * 70)
+            
             self.stats['failed_enrollments'] += 1
+            
             if error_callback:
                 error_callback(str(e))
+            
             raise
-    
-
-
-    
-    
+        
     # ESTA SE AGREGO NUEVA 
 
     

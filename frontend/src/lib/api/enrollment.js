@@ -23,16 +23,32 @@ export const enrollmentApi = {
   /**
    * Inicia una nueva sesión de enrollment
    */
-  startEnrollment: async (userId, username, gestureSequence = null) => {
+  startEnrollment: async (username, email, phoneNumber, age, gender, gestureSequence = null) => {
     try {
       const { data } = await apiClient.post('/enrollment/start', {
-        user_id: userId,
         username: username,
+        email: email,
+        phone_number: phoneNumber,
+        age: age,
+        gender: gender,
         gesture_sequence: gestureSequence
       })
       return data
     } catch (error) {
       console.error('Error iniciando enrollment:', error)
+      throw error
+    }
+  },
+
+  validateUnique: async (field, value) => {
+    try {
+      const { data } = await apiClient.post('/enrollment/validate-unique', {
+        field: field,
+        value: value
+      })
+      return data
+    } catch (error) {
+      console.error('Error validando campo único:', error)
       throw error
     }
   },
