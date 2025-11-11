@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
-import { UserPlus, CheckCircle, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft } from 'lucide-react'
+import { UserPlus, CheckCircle, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users } from 'lucide-react'
 
 export default function Enrollment() {
   const navigate = useNavigate()
@@ -47,8 +47,8 @@ export default function Enrollment() {
     if (!value.trim()) {
       return 'El nombre completo es requerido'
     }
-    if (value.length < 3) {
-      return 'El nombre debe tener al menos 3 caracteres'
+    if (value.length < 10) {
+      return 'El nombre debe tener al menos 10 caracteres'
     }
     return ''
   }
@@ -68,8 +68,9 @@ export default function Enrollment() {
     if (!value.trim()) {
       return 'El teléfono es requerido'
     }
-    if (value.length < 7) {
-      return 'El teléfono debe tener al menos 7 dígitos'
+    const cleaned = value.replace(/\D/g, '')
+    if (cleaned.length !== 10) {
+      return 'El teléfono debe tener exactamente 10 dígitos'
     }
     return ''
   }
@@ -79,8 +80,8 @@ export default function Enrollment() {
       return 'La edad es requerida'
     }
     const ageNum = parseInt(value)
-    if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
-      return 'Edad inválida (1-120)'
+    if (isNaN(ageNum) || ageNum < 5 || ageNum > 80) {
+      return 'Edad inválida (debe estar entre 5 y 80 años)'
     }
     return ''
   }
@@ -472,7 +473,12 @@ export default function Enrollment() {
                         ${!emailError && emailTouched && email ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
                         ${!emailTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
                       `}>
-                        <span className="text-lg">📧</span>
+                        <Mail className={`
+                          w-5 h-5 flex-shrink-0
+                          ${emailError && emailTouched ? 'text-red-500' : ''}
+                          ${!emailError && emailTouched && email ? 'text-green-500' : ''}
+                          ${!emailTouched ? 'text-gray-400' : ''}
+                        `} />
                         
                         <input
                           type="email"
@@ -514,7 +520,12 @@ export default function Enrollment() {
                         ${!phoneError && phoneTouched && phoneNumber ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
                         ${!phoneTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
                       `}>
-                        <span className="text-lg">📱</span>
+                        <Phone className={`
+                          w-5 h-5 flex-shrink-0
+                          ${phoneError && phoneTouched ? 'text-red-500' : ''}
+                          ${!phoneError && phoneTouched && phoneNumber ? 'text-green-500' : ''}
+                          ${!phoneTouched ? 'text-gray-400' : ''}
+                        `} />
                         
                         <input
                           type="tel"
@@ -556,15 +567,20 @@ export default function Enrollment() {
                         ${!ageError && ageTouched && age ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
                         ${!ageTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
                       `}>
-                        <span className="text-lg">🎂</span>
+                        <Calendar className={`
+                          w-5 h-5 flex-shrink-0
+                          ${ageError && ageTouched ? 'text-red-500' : ''}
+                          ${!ageError && ageTouched && age ? 'text-green-500' : ''}
+                          ${!ageTouched ? 'text-gray-400' : ''}
+                        `} />
                         
                         <input
                           type="number"
                           value={age}
                           onChange={handleAgeChange}
                           onBlur={handleAgeBlur}
-                          min="1"
-                          max="120"
+                          min="5"
+                          max="80"
                           className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
                           placeholder="Ingresa tu edad"
                         />
@@ -587,7 +603,7 @@ export default function Enrollment() {
                   </div>
 
                   {/* Input: Género */}
-                  <div className="space-y-2 md:col-span-2">
+                  <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
                       <div className="w-1.5 h-1.5 rounded-full bg-pink-500"></div>
                       Género
@@ -600,13 +616,18 @@ export default function Enrollment() {
                         ${!genderError && genderTouched && gender ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
                         ${!genderTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
                       `}>
-                        <span className="text-lg">👥</span>
+                        <Users className={`
+                          w-5 h-5 flex-shrink-0
+                          ${genderError && genderTouched ? 'text-red-500' : ''}
+                          ${!genderError && genderTouched && gender ? 'text-green-500' : ''}
+                          ${!genderTouched ? 'text-gray-400' : ''}
+                        `} />
                         
                         <select
                           value={gender}
                           onChange={handleGenderChange}
                           onBlur={handleGenderBlur}
-                          className="flex-1 outline-none text-gray-900 bg-transparent"
+                          className="flex-1 outline-none text-gray-900 bg-transparent cursor-pointer"
                         >
                           <option value="">Selecciona tu género</option>
                           <option value="Femenino">Femenino</option>
@@ -759,7 +780,20 @@ export default function Enrollment() {
                 <div className="pt-4">
                   <Button
                     onClick={handleStartEnrollment}
-                    disabled={!userId || !username || selectedGestures.length !== 3 || loading || userIdError || usernameError}
+                    disabled={
+                      !username || 
+                      !email || 
+                      !phoneNumber || 
+                      !age || 
+                      !gender || 
+                      selectedGestures.length !== 3 || 
+                      loading || 
+                      usernameError || 
+                      emailError || 
+                      phoneError || 
+                      ageError || 
+                      genderError
+                    }
                     className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg shadow-blue-400/25 hover:shadow-xl hover:shadow-blue-400/35 transition-all duration-300 font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (

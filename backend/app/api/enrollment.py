@@ -186,10 +186,10 @@ async def start_enrollment(request: EnrollmentStartRequest):
         
         # 1. Validar username
         username_stripped = request.username.strip()
-        if len(username_stripped) < 3:
+        if len(username_stripped) < 10:
             raise HTTPException(
                 status_code=400,
-                detail="El nombre debe tener al menos 3 caracteres"
+                detail="El nombre debe tener al menos 10 caracteres"
             )
         
         # 2. Validar email formato básico
@@ -209,19 +209,27 @@ async def start_enrollment(request: EnrollmentStartRequest):
         
         # 4. Validar teléfono formato básico
         phone_stripped = request.phone_number.strip()
-        if not phone_stripped or len(phone_stripped) < 7:
+        if not phone_stripped:
             raise HTTPException(
                 status_code=400,
-                detail="Número de teléfono inválido (mínimo 7 dígitos)"
+                detail="Número de teléfono es requerido"
             )
-        
+
+        # Limpiar solo números
+        phone_cleaned = ''.join(filter(str.isdigit, phone_stripped))
+        if len(phone_cleaned) != 10:
+            raise HTTPException(
+                status_code=400,
+                detail="Número de teléfono inválido (debe tener exactamente 10 dígitos)"
+            )
+
         # 5. Validar teléfono único
         if not database.is_phone_unique(phone_stripped):
             raise HTTPException(
                 status_code=400,
                 detail="Este número de teléfono ya está registrado"
             )
-        
+    
         # 6. Validar edad
         try:
             age_int = int(request.age)
@@ -231,10 +239,10 @@ async def start_enrollment(request: EnrollmentStartRequest):
                 detail="Edad inválida (debe ser un número entero)"
             )
         
-        if age_int < 1 or age_int > 120:
+        if age_int < 5 or age_int > 80:
             raise HTTPException(
                 status_code=400,
-                detail="Edad inválida (debe estar entre 1 y 120 años)"
+                detail="Edad inválida (debe estar entre 5 y 80 años)"
             )
         
         # 7. Validar género
