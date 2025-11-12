@@ -32,6 +32,8 @@ export default function Enrollment() {
   const [ageError, setAgeError] = useState('')
   const [genderError, setGenderError] = useState('')
 
+  const [genderDropdownOpen, setGenderDropdownOpen] = useState(false)
+
   const availableGestures = [
     'Open_Palm',
     'Closed_Fist',
@@ -610,39 +612,108 @@ export default function Enrollment() {
                     </label>
                     
                     <div className="relative">
-                      <div className={`
-                        flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white
-                        ${genderError && genderTouched ? 'border-red-300 focus-within:border-red-500 focus-within:ring-4 focus-within:ring-red-100' : ''}
-                        ${!genderError && genderTouched && gender ? 'border-green-300 focus-within:border-green-500 focus-within:ring-4 focus-within:ring-green-100' : ''}
-                        ${!genderTouched ? 'border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100' : ''}
-                      `}>
-                        <Users className={`
-                          w-5 h-5 flex-shrink-0
-                          ${genderError && genderTouched ? 'text-red-500' : ''}
-                          ${!genderError && genderTouched && gender ? 'text-green-500' : ''}
-                          ${!genderTouched ? 'text-gray-400' : ''}
-                        `} />
+                      {/* Botón principal del dropdown */}
+                      <button
+                        type="button"
+                        onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
+                        onBlur={() => {
+                          setTimeout(() => setGenderDropdownOpen(false), 200)
+                          handleGenderBlur()
+                        }}
+                        className={`
+                          w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border-2 bg-white transition-all duration-300
+                          ${genderError && genderTouched ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100' : ''}
+                          ${!genderError && genderTouched && gender ? 'border-green-300 focus:border-green-500 focus:ring-4 focus:ring-green-100' : ''}
+                          ${!genderTouched ? 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100' : ''}
+                        `}
+                      >
+                        <div className="flex items-center gap-3">
+                          <Users className={`
+                            w-5 h-5 flex-shrink-0
+                            ${genderError && genderTouched ? 'text-red-500' : ''}
+                            ${!genderError && genderTouched && gender ? 'text-green-500' : ''}
+                            ${!genderTouched ? 'text-gray-400' : ''}
+                          `} />
+                          
+                          <span className={gender ? 'text-gray-900 font-medium' : 'text-gray-400'}>
+                            {gender || 'Selecciona tu género'}
+                          </span>
+                        </div>
                         
-                        <select
-                          value={gender}
-                          onChange={handleGenderChange}
-                          onBlur={handleGenderBlur}
-                          className="flex-1 outline-none text-gray-900 bg-transparent cursor-pointer"
-                        >
-                          <option value="">Selecciona tu género</option>
-                          <option value="Femenino">Femenino</option>
-                          <option value="Masculino">Masculino</option>
-                        </select>
-                        
-                        {!genderError && genderTouched && gender && (
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        )}
-                        {genderError && genderTouched && (
-                          <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
-                        )}
-                      </div>
+                        <div className="flex items-center gap-2">
+                          {!genderError && genderTouched && gender && (
+                            <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          )}
+                          {genderError && genderTouched && (
+                            <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                          )}
+                          
+                          {/* Flecha que rota */}
+                          <svg 
+                            className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${genderDropdownOpen ? 'rotate-180' : ''}`}
+                            fill="none" 
+                            stroke="currentColor" 
+                            viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
+                      </button>
+                      
+                      {/* Lista desplegable */}
+                      {genderDropdownOpen && (
+                        <div className="absolute z-10 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden">
+                          {/* Opción Femenino */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setGender('Femenino')
+                              setGenderTouched(true)
+                              setGenderError(validateGender('Femenino'))
+                              setGenderDropdownOpen(false)
+                            }}
+                            className={`
+                              w-full px-4 py-3 text-left transition-colors
+                              ${gender === 'Femenino' ? 'bg-blue-50 text-blue-900' : 'hover:bg-gray-50 text-gray-700'}
+                            `}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium">Femenino</span>
+                              {gender === 'Femenino' && (
+                                <CheckCircle className="w-5 h-5 text-blue-500" />
+                              )}
+                            </div>
+                          </button>
+                          
+                          {/* Separador */}
+                          <div className="border-t border-gray-100" />
+                          
+                          {/* Opción Masculino */}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setGender('Masculino')
+                              setGenderTouched(true)
+                              setGenderError(validateGender('Masculino'))
+                              setGenderDropdownOpen(false)
+                            }}
+                            className={`
+                              w-full px-4 py-3 text-left transition-colors
+                              ${gender === 'Masculino' ? 'bg-blue-50 text-blue-900' : 'hover:bg-gray-50 text-gray-700'}
+                            `}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium">Masculino</span>
+                              {gender === 'Masculino' && (
+                                <CheckCircle className="w-5 h-5 text-blue-500" />
+                              )}
+                            </div>
+                          </button>
+                        </div>
+                      )}
                     </div>
                     
+                    {/* Error message */}
                     {genderError && genderTouched && (
                       <div className="flex items-center gap-2">
                         <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0" />

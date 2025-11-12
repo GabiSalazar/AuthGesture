@@ -221,116 +221,319 @@ async def process_authentication_frame(session_id: str):
                         
                         h, w = frame.shape[:2]
                         
+                        
                         # ========================================
                         # MODO VERIFICACIÓN (1:1)
+                        # ========================================
+                        # if session.mode == AuthenticationMode.VERIFICATION and session.required_sequence:
+                        #     current_step = len(session.gesture_sequence_captured)
+                        #     if current_step < len(session.required_sequence):
+                        #         expected_gesture = session.required_sequence[current_step]
+                                
+                        #         # BARRA SUPERIOR: Información compacta
+                        #         bar_height = 70
+                        #         overlay = frame.copy()
+                        #         cv2.rectangle(overlay, (0, 0), (w, bar_height), (0, 0, 0), -1)
+                        #         cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
+                                
+                        #         # Línea inferior de la barra (acento azul)
+                        #         cv2.line(frame, (0, bar_height-1), (w, bar_height-1), (66, 135, 245), 2)
+                                
+                        #         # IZQUIERDA: Gesto actual
+                        #         gesture_label = f"Gesto {current_step + 1}/{len(session.required_sequence)}:"
+                        #         cv2.putText(frame, gesture_label, 
+                        #                    (15, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (180, 180, 180), 1)
+                        #         cv2.putText(frame, expected_gesture, 
+                        #                    (15, 52), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
+                                
+                        #         # CENTRO: Progreso con porcentaje
+                        #         progress = result.get('progress', 0)
+                        #         progress_text = f"{progress:.0f}%"
+                                
+                        #         center_x = w // 2
+                        #         center_y = 35
+                        #         radius = 22
+                                
+                        #         cv2.circle(frame, (center_x, center_y), radius, (40, 40, 40), -1)
+                                
+                        #         angle = int(360 * (progress / 100))
+                        #         if angle > 0:
+                        #             for i in range(-90, -90 + angle):
+                        #                 x1 = int(center_x + radius * np.cos(np.radians(i)))
+                        #                 y1 = int(center_y + radius * np.sin(np.radians(i)))
+                        #                 cv2.circle(frame, (x1, y1), 3, (66, 135, 245), -1)
+                                
+                        #         text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                        #         text_x = center_x - text_size[0] // 2
+                        #         text_y = center_y + text_size[1] // 2
+                        #         cv2.putText(frame, progress_text, 
+                        #                    (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                                
+                        #         # DERECHA: Capturas válidas
+                        #         valid_captures = len(session.gesture_sequence_captured)
+                        #         circle_spacing = 35
+                        #         start_x = w - 130
+                        #         circle_y = 35
+                                
+                        #         for i in range(3):
+                        #             circle_x = start_x + (i * circle_spacing)
+                                    
+                        #             if i < valid_captures:
+                        #                 cv2.circle(frame, (circle_x, circle_y), 10, (66, 245, 158), -1)
+                        #                 cv2.putText(frame, "✓", 
+                        #                            (circle_x - 6, circle_y + 6), 
+                        #                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                        #             else:
+                        #                 cv2.circle(frame, (circle_x, circle_y), 10, (60, 60, 60), -1)
+                        #                 cv2.circle(frame, (circle_x, circle_y), 10, (100, 100, 100), 1)
+                        
+                        # ========================================
+                        # MODO VERIFICACIÓN (1:1) - DISEÑO LIMPIO (SIN BADGE DUPLICADO)
                         # ========================================
                         if session.mode == AuthenticationMode.VERIFICATION and session.required_sequence:
                             current_step = len(session.gesture_sequence_captured)
                             if current_step < len(session.required_sequence):
                                 expected_gesture = session.required_sequence[current_step]
-                                
-                                # BARRA SUPERIOR: Información compacta
-                                bar_height = 70
-                                overlay = frame.copy()
-                                cv2.rectangle(overlay, (0, 0), (w, bar_height), (0, 0, 0), -1)
-                                cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
-                                
-                                # Línea inferior de la barra (acento azul)
-                                cv2.line(frame, (0, bar_height-1), (w, bar_height-1), (66, 135, 245), 2)
-                                
-                                # IZQUIERDA: Gesto actual
-                                gesture_label = f"Gesto {current_step + 1}/{len(session.required_sequence)}:"
-                                cv2.putText(frame, gesture_label, 
-                                           (15, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (180, 180, 180), 1)
-                                cv2.putText(frame, expected_gesture, 
-                                           (15, 52), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (255, 255, 255), 2)
-                                
-                                # CENTRO: Progreso con porcentaje
                                 progress = result.get('progress', 0)
-                                progress_text = f"{progress:.0f}%"
                                 
+                                # ===== COLORES DE LA APP (tonos suaves) =====
+                                COLOR_PRIMARY = (255, 180, 100)  # Azul suave (BGR: 59, 130, 246)
+                                COLOR_CYAN = (214, 182, 6)       # Cyan suave (BGR: 6, 182, 214)
+                                COLOR_SLATE = (120, 120, 120)    # Gris suave
+                                COLOR_WHITE = (255, 255, 255)    # Blanco
+                                COLOR_BG_DARK = (30, 30, 30)     # Fondo oscuro suave
+                                
+                                # ===== BARRA SUPERIOR MINIMALISTA =====
+                                bar_height = 65
+                                overlay = frame.copy()
+                                
+                                # Fondo oscuro translúcido
+                                cv2.rectangle(overlay, (0, 0), (w, bar_height), COLOR_BG_DARK, -1)
+                                cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
+                                
+                                # Línea de acento sutil
+                                cv2.line(frame, (0, bar_height), (w, bar_height), COLOR_PRIMARY, 2)
+                                
+                                # ===== COLUMNA IZQUIERDA: Gesto objetivo =====
+                                left_x = 20
+                                
+                                # Label pequeño
+                                cv2.putText(frame, f"Gesto {current_step + 1}/{len(session.required_sequence)}", 
+                                        (left_x, 22), cv2.FONT_HERSHEY_SIMPLEX, 0.4, COLOR_SLATE, 1, cv2.LINE_AA)
+                                
+                                # Nombre del gesto
+                                cv2.putText(frame, expected_gesture, 
+                                        (left_x, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, COLOR_WHITE, 2, cv2.LINE_AA)
+                                
+                                # ===== COLUMNA CENTRO: Progreso con barra =====
                                 center_x = w // 2
-                                center_y = 35
-                                radius = 22
                                 
-                                cv2.circle(frame, (center_x, center_y), radius, (40, 40, 40), -1)
-                                
-                                angle = int(360 * (progress / 100))
-                                if angle > 0:
-                                    for i in range(-90, -90 + angle):
-                                        x1 = int(center_x + radius * np.cos(np.radians(i)))
-                                        y1 = int(center_y + radius * np.sin(np.radians(i)))
-                                        cv2.circle(frame, (x1, y1), 3, (66, 135, 245), -1)
-                                
-                                text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                                # Porcentaje
+                                progress_text = f"{progress:.0f}%"
+                                text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2)[0]
                                 text_x = center_x - text_size[0] // 2
-                                text_y = center_y + text_size[1] // 2
+                                
                                 cv2.putText(frame, progress_text, 
-                                           (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                                        (text_x, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, COLOR_WHITE, 2, cv2.LINE_AA)
                                 
-                                # DERECHA: Capturas válidas
-                                valid_captures = len(session.gesture_sequence_captured)
-                                circle_spacing = 35
-                                start_x = w - 130
-                                circle_y = 35
+                                # Barra de progreso
+                                bar_width = 120
+                                bar_height_px = 6
+                                bar_x = center_x - bar_width // 2
+                                bar_y = 45
                                 
-                                for i in range(3):
-                                    circle_x = start_x + (i * circle_spacing)
+                                # Fondo de la barra
+                                cv2.rectangle(frame, (bar_x, bar_y), 
+                                            (bar_x + bar_width, bar_y + bar_height_px), 
+                                            (50, 50, 50), -1)
+                                
+                                # Progreso relleno
+                                filled_width = int((progress / 100) * bar_width)
+                                if filled_width > 0:
+                                    cv2.rectangle(frame, (bar_x, bar_y), 
+                                                (bar_x + filled_width, bar_y + bar_height_px), 
+                                                COLOR_PRIMARY, -1)
+                                
+                                # ===== COLUMNA DERECHA: SOLO INDICADORES CIRCULARES =====
+                                # ✅ ELIMINADO EL BADGE GRIS - Solo quedan los círculos de progreso
+                                right_x = w - 110
+                                circle_y = 35  # Posición vertical de los círculos
+                                circle_spacing = 18
+                                
+                                import time
+                                pulse = int(time.time() * 2) % 2
+                                
+                                for i in range(len(session.required_sequence)):
+                                    circle_x = right_x + (i * circle_spacing)
                                     
-                                    if i < valid_captures:
-                                        cv2.circle(frame, (circle_x, circle_y), 10, (66, 245, 158), -1)
-                                        cv2.putText(frame, "✓", 
-                                                   (circle_x - 6, circle_y + 6), 
-                                                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                                    if i < current_step:
+                                        # Completado - círculo relleno azul
+                                        cv2.circle(frame, (circle_x, circle_y), 6, COLOR_PRIMARY, -1)
+                                    elif i == current_step:
+                                        # Actual - círculo con borde pulsante
+                                        size = 7 if pulse else 6
+                                        cv2.circle(frame, (circle_x, circle_y), size, COLOR_PRIMARY, 1)
                                     else:
-                                        cv2.circle(frame, (circle_x, circle_y), 10, (60, 60, 60), -1)
-                                        cv2.circle(frame, (circle_x, circle_y), 10, (100, 100, 100), 1)
-                        
+                                        # Pendiente - círculo gris pequeño
+                                        cv2.circle(frame, (circle_x, circle_y), 4, COLOR_SLATE, -1)
+                
                         # ========================================
                         # MODO IDENTIFICACIÓN (1:N) - NUEVO
+                        # ========================================
+                        # elif session.mode == AuthenticationMode.IDENTIFICATION:
+                        #     captured_gestures = session.gesture_sequence_captured
+                        #     gestures_needed = 3
+                        #     current_step = len(captured_gestures)
+                            
+                        #     # BARRA SUPERIOR: Información de identificación
+                        #     bar_height = 90
+                        #     overlay = frame.copy()
+                        #     cv2.rectangle(overlay, (0, 0), (w, bar_height), (0, 0, 0), -1)
+                        #     cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
+                            
+                        #     # Línea inferior de la barra (acento morado para identificación)
+                        #     cv2.line(frame, (0, bar_height-1), (w, bar_height-1), (147, 51, 234), 2)
+                            
+                        #     # TÍTULO
+                        #     cv2.putText(frame, "IDENTIFICACION 1:N", 
+                        #                (15, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (147, 51, 234), 2)
+                            
+                        #     # SUBTÍTULO: Instrucción
+                        #     instruction = "Realiza 3 gestos diferentes"
+                        #     cv2.putText(frame, instruction, 
+                        #                (15, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (180, 180, 180), 1)
+                            
+                        #     # PROGRESO: Gestos capturados
+                        #     progress_text = f"{current_step}/3 gestos"
+                        #     cv2.putText(frame, progress_text, 
+                        #                (15, 72), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                            
+                        #     # DERECHA: Indicadores de gestos capturados
+                        #     circle_spacing = 40
+                        #     start_x = w - 150
+                        #     circle_y = 45
+                            
+                        #     for i in range(3):
+                        #         circle_x = start_x + (i * circle_spacing)
+                                
+                        #         if i < current_step:
+                        #             # Gesto capturado (morado)
+                        #             cv2.circle(frame, (circle_x, circle_y), 12, (147, 51, 234), -1)
+                        #             cv2.putText(frame, "✓", 
+                        #                        (circle_x - 7, circle_y + 7), 
+                        #                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                                    
+                        #             # Nombre del gesto capturado (debajo)
+                        #             if i < len(captured_gestures):
+                        #                 gesture_name = captured_gestures[i][:8]  # Truncar
+                        #                 text_size = cv2.getTextSize(gesture_name, cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)[0]
+                        #                 text_x = circle_x - text_size[0] // 2
+                        #                 cv2.putText(frame, gesture_name, 
+                        #                            (text_x, circle_y + 22), 
+                        #                            cv2.FONT_HERSHEY_SIMPLEX, 0.3, (180, 180, 180), 1)
+                        #         else:
+                        #             # Pendiente (gris)
+                        #             cv2.circle(frame, (circle_x, circle_y), 12, (60, 60, 60), -1)
+                        #             cv2.circle(frame, (circle_x, circle_y), 12, (100, 100, 100), 1)
+                        
+                        # # ========================================
+                        # # MENSAJE INFERIOR: Solo mensajes importantes
+                        # # ========================================
+                        # message = result.get('message', '')
+                        
+                        # if message and any(word in message.lower() for word in 
+                        #                  ['capturada', 'éxito', 'completado', 'error', 'fallido', 'identificado']):
+                            
+                        #     display_message = message[:60] + "..." if len(message) > 60 else message
+                        #     text_size = cv2.getTextSize(display_message, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                            
+                        #     y_pos = h - 25
+                        #     x_pos = (w - text_size[0]) // 2
+                        #     padding = 15
+                            
+                        #     overlay = frame.copy()
+                        #     cv2.rectangle(overlay, 
+                        #                 (x_pos - padding, y_pos - 12), 
+                        #                 (x_pos + text_size[0] + padding, y_pos + 10), 
+                        #                 (0, 0, 0), -1)
+                        #     cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
+                            
+                        #     # Color según tipo
+                        #     if 'identificado' in message.lower() or 'éxito' in message.lower():
+                        #         color = (66, 245, 158)
+                        #     elif 'error' in message.lower() or 'fallido' in message.lower():
+                        #         color = (245, 66, 66)
+                        #     else:
+                        #         color = (200, 200, 200)
+                            
+                        #     cv2.putText(frame, display_message, 
+                        #                (x_pos, y_pos + 2), 
+                        #                cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                        
+                        # logger.debug("✅ Overlay dibujado correctamente")
+                        
+                        # ========================================
+                        # MODO IDENTIFICACIÓN (1:N) - DISEÑO MEJORADO
                         # ========================================
                         elif session.mode == AuthenticationMode.IDENTIFICATION:
                             captured_gestures = session.gesture_sequence_captured
                             gestures_needed = 3
                             current_step = len(captured_gestures)
                             
-                            # BARRA SUPERIOR: Información de identificación
-                            bar_height = 90
+                            # ===== COLORES DE LA APP (tonos suaves) =====
+                            COLOR_PRIMARY = (255, 180, 100)  # Azul suave (BGR: 59, 130, 246)
+                            COLOR_SLATE = (120, 120, 120)    # Gris suave
+                            COLOR_WHITE = (255, 255, 255)    # Blanco
+                            COLOR_BG_DARK = (30, 30, 30)     # Fondo oscuro suave
+                            
+                            # ===== BARRA SUPERIOR MINIMALISTA =====
+                            bar_height = 70
                             overlay = frame.copy()
-                            cv2.rectangle(overlay, (0, 0), (w, bar_height), (0, 0, 0), -1)
-                            cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
                             
-                            # Línea inferior de la barra (acento morado para identificación)
-                            cv2.line(frame, (0, bar_height-1), (w, bar_height-1), (147, 51, 234), 2)
+                            # Fondo oscuro translúcido
+                            cv2.rectangle(overlay, (0, 0), (w, bar_height), COLOR_BG_DARK, -1)
+                            cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
                             
+                            # Línea de acento sutil (azul)
+                            cv2.line(frame, (0, bar_height-1), (w, bar_height-1), COLOR_PRIMARY, 2)
+                            
+                            # ===== IZQUIERDA: Título e instrucción =====
                             # TÍTULO
                             cv2.putText(frame, "IDENTIFICACION 1:N", 
-                                       (15, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (147, 51, 234), 2)
+                                    (20, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6, COLOR_PRIMARY, 2, cv2.LINE_AA)
                             
                             # SUBTÍTULO: Instrucción
                             instruction = "Realiza 3 gestos diferentes"
                             cv2.putText(frame, instruction, 
-                                       (15, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (180, 180, 180), 1)
+                                    (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (180, 180, 180), 1, cv2.LINE_AA)
                             
-                            # PROGRESO: Gestos capturados
+                            # ===== CENTRO: Progreso con texto =====
                             progress_text = f"{current_step}/3 gestos"
-                            cv2.putText(frame, progress_text, 
-                                       (15, 72), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                            center_x = w // 2
+                            text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                            text_x = center_x - text_size[0] // 2
                             
-                            # DERECHA: Indicadores de gestos capturados
-                            circle_spacing = 40
-                            start_x = w - 150
-                            circle_y = 45
+                            cv2.putText(frame, progress_text, 
+                                    (text_x, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLOR_WHITE, 1, cv2.LINE_AA)
+                            
+                            # ===== DERECHA: Indicadores circulares de gestos capturados =====
+                            circle_spacing = 35
+                            start_x = w - 140
+                            circle_y = 40
                             
                             for i in range(3):
                                 circle_x = start_x + (i * circle_spacing)
                                 
                                 if i < current_step:
-                                    # Gesto capturado (morado)
-                                    cv2.circle(frame, (circle_x, circle_y), 12, (147, 51, 234), -1)
-                                    cv2.putText(frame, "✓", 
-                                               (circle_x - 7, circle_y + 7), 
-                                               cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                                    # Gesto capturado (azul con círculo relleno)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, COLOR_PRIMARY, -1)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (100, 180, 255), 2)
+                                    
+                                    # Checkmark simple (líneas)
+                                    cv2.line(frame, (circle_x - 4, circle_y), (circle_x - 2, circle_y + 3), 
+                                            COLOR_WHITE, 2, cv2.LINE_AA)
+                                    cv2.line(frame, (circle_x - 2, circle_y + 3), (circle_x + 4, circle_y - 4), 
+                                            COLOR_WHITE, 2, cv2.LINE_AA)
                                     
                                     # Nombre del gesto capturado (debajo)
                                     if i < len(captured_gestures):
@@ -338,49 +541,47 @@ async def process_authentication_frame(session_id: str):
                                         text_size = cv2.getTextSize(gesture_name, cv2.FONT_HERSHEY_SIMPLEX, 0.3, 1)[0]
                                         text_x = circle_x - text_size[0] // 2
                                         cv2.putText(frame, gesture_name, 
-                                                   (text_x, circle_y + 22), 
-                                                   cv2.FONT_HERSHEY_SIMPLEX, 0.3, (180, 180, 180), 1)
+                                                (text_x, circle_y + 22), 
+                                                cv2.FONT_HERSHEY_SIMPLEX, 0.3, (180, 180, 180), 1, cv2.LINE_AA)
                                 else:
                                     # Pendiente (gris)
-                                    cv2.circle(frame, (circle_x, circle_y), 12, (60, 60, 60), -1)
-                                    cv2.circle(frame, (circle_x, circle_y), 12, (100, 100, 100), 1)
-                        
-                        # ========================================
-                        # MENSAJE INFERIOR: Solo mensajes importantes
-                        # ========================================
-                        message = result.get('message', '')
-                        
-                        if message and any(word in message.lower() for word in 
-                                         ['capturada', 'éxito', 'completado', 'error', 'fallido', 'identificado']):
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (60, 60, 60), -1)
+                                    cv2.circle(frame, (circle_x, circle_y), 10, (100, 100, 100), 1)
                             
-                            display_message = message[:60] + "..." if len(message) > 60 else message
-                            text_size = cv2.getTextSize(display_message, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                            # ===== MENSAJE INFERIOR: Solo mensajes importantes =====
+                            message = result.get('message', '')
                             
-                            y_pos = h - 25
-                            x_pos = (w - text_size[0]) // 2
-                            padding = 15
+                            if message and any(word in message.lower() for word in 
+                                            ['capturada', 'éxito', 'completado', 'error', 'fallido', 'identificado']):
+                                
+                                display_message = message[:60] + "..." if len(message) > 60 else message
+                                text_size = cv2.getTextSize(display_message, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
+                                
+                                y_pos = h - 25
+                                x_pos = (w - text_size[0]) // 2
+                                padding = 15
+                                
+                                overlay = frame.copy()
+                                cv2.rectangle(overlay, 
+                                            (x_pos - padding, y_pos - 12), 
+                                            (x_pos + text_size[0] + padding, y_pos + 10), 
+                                            (0, 0, 0), -1)
+                                cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
+                                
+                                # Color según tipo
+                                if 'identificado' in message.lower() or 'éxito' in message.lower():
+                                    color = (66, 245, 158)  # Verde
+                                elif 'error' in message.lower() or 'fallido' in message.lower():
+                                    color = (245, 66, 66)   # Rojo
+                                else:
+                                    color = (200, 200, 200) # Gris
+                                
+                                cv2.putText(frame, display_message, 
+                                        (x_pos, y_pos + 2), 
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                             
-                            overlay = frame.copy()
-                            cv2.rectangle(overlay, 
-                                        (x_pos - padding, y_pos - 12), 
-                                        (x_pos + text_size[0] + padding, y_pos + 10), 
-                                        (0, 0, 0), -1)
-                            cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
-                            
-                            # Color según tipo
-                            if 'identificado' in message.lower() or 'éxito' in message.lower():
-                                color = (66, 245, 158)
-                            elif 'error' in message.lower() or 'fallido' in message.lower():
-                                color = (245, 66, 66)
-                            else:
-                                color = (200, 200, 200)
-                            
-                            cv2.putText(frame, display_message, 
-                                       (x_pos, y_pos + 2), 
-                                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
-                        
-                        logger.debug("✅ Overlay dibujado correctamente")
-                        
+                            logger.debug("✅ Overlay dibujado correctamente")
+    
                     except Exception as e:
                         logger.error(f"Error dibujando overlay: {e}")
                         import traceback
