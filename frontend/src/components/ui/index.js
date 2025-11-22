@@ -1,6 +1,10 @@
-// Re-exportar todos los componentes
 export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
 export { Button } from './Button'
 export { Badge } from './Badge'
-export { Spinner } from './Spinner'  // ← AGREGAR ESTA LÍNEA
+export { Spinner } from './Spinner'
 export { Modal } from './Modal'
+export { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from './Table'
+export { Input } from './Input'
+export { Select } from './Select'
+export { Alert } from './Alert'
+export { Dialog, DialogHeader, DialogTitle, DialogContent, DialogFooter, DialogClose } from './Dialog'

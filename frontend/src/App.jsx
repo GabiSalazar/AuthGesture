@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Layout from './components/layout/Layout'
 import Landing from './pages/landing/Landing'
-import Dashboard from './pages/dashboard/Dashboard'
+import AdminPanel from './pages/admin/AdminPanel'
 import Enrollment from './pages/enrollment/Enrollment'
 import Verification from './pages/verification/Verification'
 import Identification from './pages/identification/Identification'
@@ -18,14 +18,8 @@ function App() {
         <Route path="/verification" element={<Verification />} />
         <Route path="/identification" element={<Identification />} />
         
-        {/* Páginas de administrador CON Layout */}
-        <Route path="/admin/*" element={
-          <Layout>
-            <Routes>
-              <Route path="dashboard" element={<Dashboard />} />
-            </Routes>
-          </Layout>
-        } />
+        {/* Admin panel SIN Layout (tiene su propio header interno) */}
+        <Route path="/admin/dashboard" element={<AdminPanel />} />
       </Routes>
     </Router>
   )

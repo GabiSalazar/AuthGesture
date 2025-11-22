@@ -116,6 +116,22 @@ class BiometricTemplate:
         else:
             return BiometricQuality.POOR
 
+@dataclass
+class AuthenticationAttempt:
+    """Registro de un intento de autenticación."""
+    attempt_id: str
+    user_id: str  # Usuario que intentó autenticarse
+    timestamp: float
+    auth_type: str  # "verification" o "identification"
+    result: str  # "success" o "failed"
+    confidence: float
+    anatomical_score: float
+    dynamic_score: float
+    fused_score: float
+    ip_address: Optional[str] = None
+    device_info: Optional[str] = None
+    failure_reason: Optional[str] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class UserProfile:
@@ -204,6 +220,8 @@ class VectorIndex:
         self.template_ids: List[str] = []
         self.user_ids: List[str] = []
         
+        self.auth_attempts: Dict[str, List[AuthenticationAttempt]] = {}  # user_id -> [attempts]
+
         self.kdtree = None
         self.lsh_buckets = None
         self.clusters = None
@@ -636,6 +654,7 @@ class BiometricDatabase:
         essential_directories = [
             self.db_path / 'users',
             self.db_path / 'templates',
+            self.db_path / 'auth_attempts', 
         ]
         
         for directory in essential_directories:
@@ -1511,6 +1530,72 @@ class BiometricDatabase:
         """Obtiene perfil de usuario."""
         return self.users.get(user_id)
     
+    def update_user(self, user_id: str, updates: Dict[str, Any]) -> bool:
+        """
+        Actualiza información de un usuario.
+        
+        Args:
+            user_id: ID del usuario
+            updates: Diccionario con campos a actualizar
+            
+        Returns:
+            True si se actualizó exitosamente
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    logger.error(f"Usuario {user_id} no existe")
+                    return False
+                
+                user = self.users[user_id]
+                
+                # Validar email único si se está actualizando
+                if 'email' in updates and updates['email']:
+                    if not self.is_email_unique(updates['email'], exclude_user_id=user_id):
+                        logger.error(f"Email {updates['email']} ya está registrado")
+                        return False
+                    user.email = updates['email']
+                
+                # Validar teléfono único si se está actualizando
+                if 'phone_number' in updates and updates['phone_number']:
+                    if not self.is_phone_unique(updates['phone_number'], exclude_user_id=user_id):
+                        logger.error(f"Teléfono {updates['phone_number']} ya está registrado")
+                        return False
+                    user.phone_number = updates['phone_number']
+                
+                # Actualizar otros campos
+                if 'username' in updates:
+                    user.username = updates['username']
+                
+                if 'age' in updates:
+                    age = int(updates['age'])
+                    if age < 1 or age > 120:
+                        logger.error("Edad inválida")
+                        return False
+                    user.age = age
+                
+                if 'gender' in updates:
+                    if updates['gender'] not in ["Femenino", "Masculino"]:
+                        logger.error("Género inválido")
+                        return False
+                    user.gender = updates['gender']
+                
+                if 'gesture_sequence' in updates:
+                    user.gesture_sequence = updates['gesture_sequence']
+                
+                # Actualizar timestamp
+                user.updated_at = time.time()
+                
+                # Guardar cambios
+                self._save_user(user)
+                
+                logger.info(f"Usuario {user_id} actualizado exitosamente")
+                return True
+                
+        except Exception as e:
+            logger.error(f"Error actualizando usuario: {e}")
+            return False
+    
     def get_template(self, template_id: str) -> Optional[BiometricTemplate]:
         """Obtiene template biométrico."""
         return self.templates.get(template_id)
@@ -1620,6 +1705,94 @@ class BiometricDatabase:
         except Exception as e:
             logger.error(f"Error eliminando template: {e}")
             return False
+    
+    def store_authentication_attempt(self, attempt: AuthenticationAttempt) -> bool:
+        """
+        Almacena un intento de autenticación.
+        
+        Args:
+            attempt: Intento de autenticación
+            
+        Returns:
+            True si se almacenó exitosamente
+        """
+        try:
+            with self.lock:
+                if attempt.user_id not in self.auth_attempts:
+                    self.auth_attempts[attempt.user_id] = []
+                
+                self.auth_attempts[attempt.user_id].append(attempt)
+                
+                # Guardar en archivo JSON
+                attempts_file = self.db_path / 'auth_attempts' / f'{attempt.user_id}.json'
+                attempts_file.parent.mkdir(parents=True, exist_ok=True)
+                
+                attempts_data = [
+                    {
+                        'attempt_id': a.attempt_id,
+                        'user_id': a.user_id,
+                        'timestamp': a.timestamp,
+                        'auth_type': a.auth_type,
+                        'result': a.result,
+                        'confidence': a.confidence,
+                        'anatomical_score': a.anatomical_score,
+                        'dynamic_score': a.dynamic_score,
+                        'fused_score': a.fused_score,
+                        'ip_address': a.ip_address,
+                        'device_info': a.device_info,
+                        'failure_reason': a.failure_reason,
+                        'metadata': a.metadata
+                    }
+                    for a in self.auth_attempts[attempt.user_id]
+                ]
+                
+                with open(attempts_file, 'w') as f:
+                    json.dump(attempts_data, f, indent=2)
+                
+                logger.info(f"Intento de autenticación guardado: {attempt.attempt_id}")
+                return True
+                
+        except Exception as e:
+            logger.error(f"Error guardando intento: {e}")
+            return False
+
+    def get_user_auth_attempts(self, user_id: str, limit: Optional[int] = None) -> List[AuthenticationAttempt]:
+        """
+        Obtiene intentos de autenticación de un usuario.
+        
+        Args:
+            user_id: ID del usuario
+            limit: Límite de resultados (más recientes primero)
+            
+        Returns:
+            Lista de intentos
+        """
+        try:
+            # Cargar desde archivo si no está en memoria
+            if user_id not in self.auth_attempts:
+                attempts_file = self.db_path / 'auth_attempts' / f'{user_id}.json'
+                if attempts_file.exists():
+                    with open(attempts_file, 'r') as f:
+                        attempts_data = json.load(f)
+                        
+                    self.auth_attempts[user_id] = [
+                        AuthenticationAttempt(**data)
+                        for data in attempts_data
+                    ]
+            
+            attempts = self.auth_attempts.get(user_id, [])
+            
+            # Ordenar por timestamp descendente (más recientes primero)
+            attempts_sorted = sorted(attempts, key=lambda x: x.timestamp, reverse=True)
+            
+            if limit:
+                return attempts_sorted[:limit]
+            
+            return attempts_sorted
+            
+        except Exception as e:
+            logger.error(f"Error obteniendo intentos: {e}")
+            return []
     
     def _save_user(self, user_profile: UserProfile):
         """Guarda perfil de usuario en disco."""

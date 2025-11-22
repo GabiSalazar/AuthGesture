@@ -36,6 +36,14 @@ class UserProfileResponse(BaseModel):
     total_enrollments: int
     verification_success_rate: float
 
+class UpdateUserRequest(BaseModel):
+    """Request para actualizar usuario"""
+    username: Optional[str] = None
+    email: Optional[str] = None
+    phone_number: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    gesture_sequence: Optional[List[str]] = None
 
 @router.get("/health")
 async def biometric_database_health_check():
@@ -91,35 +99,150 @@ async def get_database_summary():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
+# @router.get("/users")
+# async def list_all_users():
+#     """Lista todos los usuarios registrados"""
+#     try:
+#         db = get_biometric_database()
+#         users = db.list_users()
+        
+#         users_data = []
+#         for user in users:
+#             users_data.append({
+#                 "user_id": user.user_id,
+#                 "username": user.username,
+#                 "total_templates": user.total_templates,
+#                 "gesture_sequence": user.gesture_sequence or [],
+#                 "total_enrollments": user.total_enrollments,
+#                 "verification_success_rate": user.verification_success_rate,
+#                 "created_at": user.created_at,
+#                 "last_activity": user.last_activity
+#             })
+        
+#         return {
+#             "status": "success",
+#             "total_users": len(users_data),
+#             "users": users_data
+#         }
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
 @router.get("/users")
-async def list_all_users():
-    """Lista todos los usuarios registrados"""
+async def list_all_users(
+    search: Optional[str] = None,
+    gender: Optional[str] = None,
+    min_age: Optional[int] = None,
+    max_age: Optional[int] = None,
+    sort_by: str = "created_at",
+    sort_order: str = "desc"
+):
+    """
+    Lista todos los usuarios registrados con filtros opcionales
+    
+    Parámetros:
+    - search: Buscar por nombre o email (case-insensitive)
+    - gender: Filtrar por género ("Femenino" o "Masculino")
+    - min_age: Edad mínima (inclusive)
+    - max_age: Edad máxima (inclusive)
+    - sort_by: Campo para ordenar (created_at, username, age, templates, last_activity)
+    - sort_order: Orden (asc o desc)
+    """
     try:
         db = get_biometric_database()
         users = db.list_users()
         
+        # ========================================
+        # APLICAR FILTROS
+        # ========================================
+        filtered_users = users
+        
+        # Filtro de búsqueda por nombre o email
+        if search:
+            search_lower = search.lower().strip()
+            filtered_users = [
+                u for u in filtered_users
+                if (search_lower in u.username.lower() or 
+                    search_lower in (u.email.lower() if hasattr(u, 'email') and u.email else ''))
+            ]
+        
+        # Filtro por género
+        if gender:
+            filtered_users = [
+                u for u in filtered_users 
+                if hasattr(u, 'gender') and u.gender == gender
+            ]
+        
+        # Filtro por edad mínima
+        if min_age is not None:
+            filtered_users = [
+                u for u in filtered_users 
+                if hasattr(u, 'age') and u.age >= min_age
+            ]
+        
+        # Filtro por edad máxima
+        if max_age is not None:
+            filtered_users = [
+                u for u in filtered_users 
+                if hasattr(u, 'age') and u.age <= max_age
+            ]
+        
+        # ========================================
+        # ORDENAMIENTO
+        # ========================================
+        reverse = (sort_order.lower() == "desc")
+        
+        if sort_by == "username":
+            filtered_users.sort(key=lambda u: u.username.lower(), reverse=reverse)
+        elif sort_by == "age":
+            filtered_users.sort(
+                key=lambda u: u.age if hasattr(u, 'age') else 0, 
+                reverse=reverse
+            )
+        elif sort_by == "templates":
+            filtered_users.sort(key=lambda u: u.total_templates, reverse=reverse)
+        elif sort_by == "last_activity":
+            filtered_users.sort(key=lambda u: u.last_activity, reverse=reverse)
+        else:  # created_at por defecto
+            filtered_users.sort(key=lambda u: u.created_at, reverse=reverse)
+        
+        # ========================================
+        # FORMATEAR RESPUESTA
+        # ========================================
         users_data = []
-        for user in users:
-            users_data.append({
+        for user in filtered_users:
+            user_dict = {
                 "user_id": user.user_id,
                 "username": user.username,
-                "total_templates": user.total_templates,
+                "email": user.email if hasattr(user, 'email') else None,
+                "phone_number": user.phone_number if hasattr(user, 'phone_number') else None,
+                "age": user.age if hasattr(user, 'age') else None,
+                "gender": user.gender if hasattr(user, 'gender') else None,
                 "gesture_sequence": user.gesture_sequence or [],
+                "total_templates": user.total_templates,
                 "total_enrollments": user.total_enrollments,
-                "verification_success_rate": user.verification_success_rate,
+                "verification_success_rate": round(user.verification_success_rate, 2),
                 "created_at": user.created_at,
                 "last_activity": user.last_activity
-            })
+            }
+            users_data.append(user_dict)
         
         return {
             "status": "success",
-            "total_users": len(users_data),
+            "total": len(users_data),
+            "filters_applied": {
+                "search": search,
+                "gender": gender,
+                "min_age": min_age,
+                "max_age": max_age,
+                "sort_by": sort_by,
+                "sort_order": sort_order
+            },
             "users": users_data
         }
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-
-
+    
 @router.get("/users/{user_id}")
 async def get_user_profile(user_id: str):
     """Obtiene perfil detallado de un usuario"""
@@ -265,7 +388,85 @@ async def delete_user(user_id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
+@router.patch("/users/{user_id}")
+async def update_user(user_id: str, request: UpdateUserRequest):
+    """Actualiza información de un usuario"""
+    try:
+        db = get_biometric_database()
+        
+        if user_id not in db.users:
+            raise HTTPException(status_code=404, detail=f"Usuario {user_id} no encontrado")
+        
+        # Preparar updates
+        updates = {}
+        if request.username is not None:
+            updates['username'] = request.username
+        if request.email is not None:
+            updates['email'] = request.email
+        if request.phone_number is not None:
+            updates['phone_number'] = request.phone_number
+        if request.age is not None:
+            updates['age'] = request.age
+        if request.gender is not None:
+            updates['gender'] = request.gender
+        if request.gesture_sequence is not None:
+            updates['gesture_sequence'] = request.gesture_sequence
+        
+        success = db.update_user(user_id, updates)
+        
+        if success:
+            return {
+                "status": "success",
+                "message": f"Usuario {user_id} actualizado exitosamente"
+            }
+        else:
+            raise HTTPException(status_code=400, detail="Error actualizando usuario")
+            
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
+@router.get("/users/{user_id}/auth-attempts")
+async def get_user_auth_attempts(user_id: str, limit: int = 50):
+    """Obtiene historial de autenticaciones de un usuario"""
+    try:
+        db = get_biometric_database()
+        
+        if user_id not in db.users:
+            raise HTTPException(status_code=404, detail=f"Usuario {user_id} no encontrado")
+        
+        attempts = db.get_user_auth_attempts(user_id, limit=limit)
+        
+        attempts_data = [
+            {
+                "attempt_id": a.attempt_id,
+                "timestamp": a.timestamp,
+                "date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(a.timestamp)),
+                "auth_type": a.auth_type,
+                "result": a.result,
+                "confidence": round(a.confidence, 3),
+                "anatomical_score": round(a.anatomical_score, 3),
+                "dynamic_score": round(a.dynamic_score, 3),
+                "fused_score": round(a.fused_score, 3),
+                "ip_address": a.ip_address,
+                "failure_reason": a.failure_reason
+            }
+            for a in attempts
+        ]
+        
+        return {
+            "status": "success",
+            "user_id": user_id,
+            "total_attempts": len(attempts_data),
+            "attempts": attempts_data
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
 @router.delete("/templates/{template_id}")
 async def delete_template(template_id: str):
     """Elimina un template específico"""
