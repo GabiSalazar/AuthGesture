@@ -64,7 +64,8 @@ from app.api import (
     biometric_database,
     enrollment,
     authentication,
-    system
+    system,
+    logs
 )
 
 # ===== REGISTRAR ROUTERS =====
@@ -85,8 +86,8 @@ app.include_router(biometric_database.router, prefix=settings.API_V1_STR)
 app.include_router(enrollment.router, prefix=settings.API_V1_STR)
 app.include_router(authentication.router, prefix=settings.API_V1_STR)
 app.include_router(system.router, prefix=settings.API_V1_STR)
-
-
+app.include_router(system.router, prefix=settings.API_V1_STR)
+app.include_router(logs.router, prefix=settings.API_V1_STR)
 
 # Evento de inicio
 @app.on_event("startup")

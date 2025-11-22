@@ -4,12 +4,14 @@ import { Card, CardContent } from '../../components/ui'
 import {
   LayoutDashboard,
   Users,
+  Settings,  // ← AGREGADO
   LogOut
 } from 'lucide-react'
 
 // Importar secciones
 import DashboardSection from '../dashboard/Dashboard'
 import UsersManagement from './sections/UsersManagement'
+import SystemManagement from './sections/SystemManagement'  // ← AGREGADO
 
 export default function AdminPanel() {
   const navigate = useNavigate()
@@ -28,7 +30,13 @@ export default function AdminPanel() {
       name: 'Usuarios',
       icon: Users,
       component: UsersManagement
-    }
+    },
+    {
+      id: 'system',
+      name: 'Sistema',
+      icon: Settings,
+      component: SystemManagement
+    }  // ← AGREGADO TODO ESTE OBJETO
   ]
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component
