@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react'
 import { systemApi } from '../../lib/api/system'
 import { enrollmentApi } from '../../lib/api/enrollment'
+import { adminApi } from '../../lib/api/admin'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, Badge, Spinner, Button } from '../../components/ui'
-import { Activity, Users, Brain, Shield, Clock, AlertCircle, Zap } from 'lucide-react'
+import { 
+  Activity, Users, Brain, Shield, Clock, AlertCircle, Zap, TrendingUp, 
+  CheckCircle, XCircle, Database, Server, RefreshCw, UserPlus, Key, BarChart3
+} from 'lucide-react'
 
 export default function Dashboard() {
   const [systemStatus, setSystemStatus] = useState(null)
   const [bootstrapStatus, setBootstrapStatus] = useState(null)
+  const [dbStats, setDbStats] = useState(null)
   const [loading, setLoading] = useState(true)
   const [training, setTraining] = useState(false)
   const [error, setError] = useState(null)
   const [pendingRetrain, setPendingRetrain] = useState(null)
-  const [retraining, setRetraining] = useState(false)
 
   useEffect(() => {
     loadData()
-    const interval = setInterval(loadData, 5000)
+    const interval = setInterval(loadData, 10000)
     return () => clearInterval(interval)
   }, [])
 
   const loadData = async () => {
     try {
-      const [system, bootstrap, pending] = await Promise.all([
+      const [system, bootstrap, pending, stats] = await Promise.all([
         systemApi.getStatus(),
         enrollmentApi.getBootstrapStatus(),
         systemApi.getPendingRetrainUsers().catch(() => ({ 
@@ -29,16 +33,14 @@ export default function Dashboard() {
           pending_users: [], 
           can_retrain: false,
           message: 'No disponible'
-        }))
+        })),
+        adminApi.getDatabaseStats().catch(() => null)
       ])
-      
-      console.log('System Status:', system)
-      console.log('Bootstrap Status:', bootstrap)
-      console.log('Pending Retrain:', pending)
       
       setSystemStatus(system)
       setBootstrapStatus(bootstrap)
       setPendingRetrain(pending)
+      setDbStats(stats)
       setError(null)
     } catch (err) {
       console.error('Error cargando datos del dashboard:', err)
@@ -55,11 +57,7 @@ export default function Dashboard() {
     
     try {
       setTraining(true)
-      console.log('Iniciando entrenamiento de redes...')
-      
       const result = await systemApi.retrainNetworks(true)
-      
-      console.log('Resultado del entrenamiento:', result)
       
       if (result.success) {
         alert('Redes entrenadas exitosamente!\n\nEl sistema ahora está en modo normal.')
@@ -69,204 +67,136 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error('Error entrenando redes:', error)
-      const errorMsg = error.response?.data?.detail || error.message || 'Error desconocido'
-      alert('Error entrenando redes:\n\n' + errorMsg)
+      alert('Error entrenando redes:\n\n' + (error.response?.data?.detail || error.message))
     } finally {
       setTraining(false)
     }
   }
 
-  const handleRetrainNetworks = async () => {
-    if (!pendingRetrain || pendingRetrain.pending_count === 0) {
-      alert('No hay usuarios pendientes de reentrenamiento')
-      return
-    }
-    
-    if (!window.confirm(`¿Reentrenar las redes con ${pendingRetrain.pending_count} usuario(s) nuevo(s)?\n\nEsto puede tardar 3-7 minutos.`)) {
-      return
-    }
-    
-    try {
-      setRetraining(true)
-      console.log('Iniciando reentrenamiento de redes...')
-      
-      const result = await systemApi.retrainNetworks(true)
-      
-      console.log('Resultado del reentrenamiento:', result)
-      
-      if (result.success) {
-        alert('¡Redes reentrenadas exitosamente!\n\nTodos los usuarios ahora están incluidos.')
-        await loadData()
-      } else {
-        throw new Error(result.message || 'Error reentrenando redes')
-      }
-    } catch (err) {
-      console.error('Error en reentrenamiento:', err)
-      setError(err.response?.data?.detail || err.message || 'Error reentrenando redes')
-      alert('Error: ' + (err.response?.data?.detail || err.message))
-    } finally {
-      setRetraining(false)
-    }
-  }
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Spinner size="lg" />
+      <div className="flex items-center justify-center py-20">
+        <div className="text-center space-y-4">
+          <Spinner size="lg" />
+          <p className="text-gray-600 text-sm">Cargando información del sistema...</p>
+        </div>
       </div>
     )
   }
 
-  // Determinar si se puede entrenar
-  const canTrain = systemStatus?.can_train && !systemStatus?.networks_trained
+  if (error) {
+    return (
+      <div className="p-6">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600" />
+            <div>
+              <h3 className="font-semibold text-red-900">Error al cargar datos</h3>
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const systemHealth = systemStatus?.networks_trained && systemStatus?.database_ready && 
+                       systemStatus?.enrollment_active ? 'healthy' : 'warning'
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-1">Panel de control del sistema biométrico</p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
+            <div className="flex items-center gap-2 px-3 py-1 bg-white border border-gray-200 rounded-full shadow-sm">
+              <div className={`w-2 h-2 rounded-full ${systemHealth === 'healthy' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`} />
+              <span className="text-xs font-medium text-gray-700">
+                {systemHealth === 'healthy' ? 'Operativo' : 'En configuración'}
+              </span>
+            </div>
+          </div>
+          <p className="text-gray-600 text-sm">
+            Panel de control y monitoreo del sistema biométrico
+          </p>
+        </div>
+        <button
+          onClick={loadData}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Actualizar
+        </button>
       </div>
 
-      {/* Error Alert */}
-      {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <AlertCircle className="w-6 h-6 text-red-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-red-900 mb-1">Error</h3>
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
+      {/* Alertas */}
+      {!systemStatus?.networks_trained && systemStatus?.users_count >= 2 && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-yellow-100 rounded-lg flex-shrink-0">
+              <Brain className="w-5 h-5 text-yellow-600" />
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-yellow-900 mb-1">
+                Redes neuronales pendientes de entrenamiento
+              </h4>
+              <p className="text-sm text-yellow-700 mb-3">
+                Ya hay {systemStatus.users_count} usuarios registrados. Es necesario entrenar las redes para activar la autenticación.
+              </p>
+              <button
+                onClick={handleTrainNetworks}
+                disabled={training}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+              >
+                <Brain className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
+                {training ? 'Entrenando...' : 'Entrenar Ahora'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* ALERTA: Necesita entrenamiento */}
-      {canTrain && (
-        <Card className="border-yellow-200 bg-yellow-50">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <div className="p-2 bg-yellow-100 rounded-lg">
-                <AlertCircle className="w-6 h-6 text-yellow-600" />
-              </div>
-              <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">
-                  Sistema listo para entrenamiento
-                </h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Tienes {systemStatus?.users_count || 0} usuarios registrados. 
-                  Es necesario entrenar las redes neuronales para activar el sistema completo.
-                </p>
-                <Button 
-                  onClick={handleTrainNetworks}
-                  disabled={training}
-                  className="bg-yellow-600 hover:bg-yellow-700"
-                >
-                  {training ? (
-                    <>
-                      <Spinner size="sm" className="mr-2" />
-                      Entrenando... (esto puede tardar minutos)
-                    </>
-                  ) : (
-                    <>
-                      <Zap className="w-4 h-4 mr-2" />
-                      Entrenar Redes Ahora
-                    </>
-                  )}
-                </Button>
-              </div>
+      {pendingRetrain && pendingRetrain.can_retrain && pendingRetrain.pending_count > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
+              <Zap className="w-5 h-5 text-blue-600" />
             </div>
-          </CardContent>
-        </Card>
+            <div className="flex-1">
+              <h4 className="text-sm font-semibold text-blue-900 mb-1">
+                Nuevos usuarios disponibles para reentrenamiento
+              </h4>
+              <p className="text-sm text-blue-700 mb-3">
+                Hay {pendingRetrain.pending_count} usuario(s) nuevo(s) que pueden incluirse en las redes neuronales.
+              </p>
+              <button
+                onClick={handleTrainNetworks}
+                disabled={training}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+              >
+                <RefreshCw className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
+                {training ? 'Reentrenando...' : 'Reentrenar Redes'}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* ALERTA: Usuarios pendientes de reentrenamiento */}
-      {pendingRetrain && pendingRetrain.can_retrain && (
-        <Card className="border-orange-200 bg-orange-50">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        {/* Total Usuarios */}
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <AlertCircle className="w-6 h-6 text-orange-600" />
-              </div>
+            <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="font-semibold text-gray-900 mb-1">
-                  Reentrenamiento Disponible
-                </h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  Hay {pendingRetrain.pending_count} usuario(s) nuevo(s) que aún no están incluidos en las redes entrenadas.
-                </p>
-                
-                <div className="p-3 bg-white border border-orange-200 rounded-lg mb-4">
-                  <h4 className="text-sm font-semibold text-gray-900 mb-2">
-                    Usuarios pendientes:
-                  </h4>
-                  <ul className="text-sm text-gray-700 space-y-1">
-                    {pendingRetrain.pending_users.map((user) => (
-                      <li key={user.user_id} className="flex items-center gap-2">
-                        <Users className="w-4 h-4 text-orange-600" />
-                        <span className="font-medium">{user.username}</span>
-                        <span className="text-gray-500">({user.total_templates} templates)</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <Button
-                  onClick={handleRetrainNetworks}
-                  disabled={retraining}
-                  className="bg-orange-600 hover:bg-orange-700"
-                >
-                  {retraining ? (
-                    <>
-                      <Spinner size="sm" className="mr-2" />
-                      Reentrenando... (esto puede tardar minutos)
-                    </>
-                  ) : (
-                    <>
-                      <Brain className="w-4 h-4 mr-2" />
-                      Reentrenar Redes Ahora
-                    </>
-                  )}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-      {/* Cards de Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* Estado General */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Estado</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {systemStatus?.status === 'operational' ? 'Operativo' : 'Parcial'}
-                </p>
-              </div>
-              <div className={`p-3 rounded-full ${systemStatus?.status === 'operational' ? 'bg-green-100' : 'bg-yellow-100'}`}>
-                <Activity className={`w-6 h-6 ${systemStatus?.status === 'operational' ? 'text-green-600' : 'text-yellow-600'}`} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Usuarios */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Usuarios</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Usuarios</p>
+                <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
                   {systemStatus?.users_count || 0}
                 </p>
+                <p className="text-xs text-gray-500">Registrados en el sistema</p>
               </div>
-              <div className="p-3 rounded-full bg-blue-100">
+              <div className="p-3 bg-blue-50 rounded-lg">
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
             </div>
@@ -274,16 +204,26 @@ export default function Dashboard() {
         </Card>
 
         {/* Redes Neuronales */}
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Redes</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {systemStatus?.networks_trained ? 'Entrenadas' : 'Pendiente'}
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Redes Neuronales</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+                    {systemStatus?.networks_trained ? 'Listas' : 'Pendiente'}
+                  </p>
+                  {systemStatus?.networks_trained ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <Clock className="w-5 h-5 text-yellow-500" />
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  {systemStatus?.networks_trained ? 'Sistema operativo' : 'Requiere entrenamiento'}
                 </p>
               </div>
-              <div className={`p-3 rounded-full ${systemStatus?.networks_trained ? 'bg-green-100' : 'bg-yellow-100'}`}>
+              <div className={`p-3 rounded-lg ${systemStatus?.networks_trained ? 'bg-green-50' : 'bg-yellow-50'}`}>
                 <Brain className={`w-6 h-6 ${systemStatus?.networks_trained ? 'text-green-600' : 'text-yellow-600'}`} />
               </div>
             </div>
@@ -291,17 +231,45 @@ export default function Dashboard() {
         </Card>
 
         {/* Autenticación */}
-        <Card>
+        <Card className="hover:shadow-md transition-shadow">
           <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600">Autenticación</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {systemStatus?.authentication_active ? 'Activa' : 'Inactiva'}
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Autenticación</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">
+                    {systemStatus?.authentication_active ? 'Activa' : 'Inactiva'}
+                  </p>
+                  {systemStatus?.authentication_active ? (
+                    <CheckCircle className="w-5 h-5 text-green-500" />
+                  ) : (
+                    <XCircle className="w-5 h-5 text-gray-400" />
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  {systemStatus?.authentication_active ? 'Sistema verificando' : 'No disponible'}
                 </p>
               </div>
-              <div className={`p-3 rounded-full ${systemStatus?.authentication_active ? 'bg-green-100' : 'bg-gray-100'}`}>
-                <Shield className={`w-6 h-6 ${systemStatus?.authentication_active ? 'text-green-600' : 'text-gray-600'}`} />
+              <div className={`p-3 rounded-lg ${systemStatus?.authentication_active ? 'bg-green-50' : 'bg-gray-50'}`}>
+                <Shield className={`w-6 h-6 ${systemStatus?.authentication_active ? 'text-green-600' : 'text-gray-400'}`} />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Base de Datos */}
+        <Card className="hover:shadow-md transition-shadow">
+          <CardContent className="pt-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Templates</p>
+                <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+                  {dbStats?.total_templates || 0}
+                </p>
+                <p className="text-xs text-gray-500">Almacenados en BD</p>
+              </div>
+              <div className="p-3 bg-blue-50 rounded-lg">
+                <Database className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </CardContent>
@@ -313,133 +281,187 @@ export default function Dashboard() {
         {/* Estado del Sistema */}
         <Card>
           <CardHeader>
-            <CardTitle>Estado del Sistema</CardTitle>
-            <CardDescription>Información detallada del sistema</CardDescription>
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <Server className="w-5 h-5 text-gray-700" />
+              Estado del Sistema
+            </CardTitle>
+            <CardDescription>Información detallada del sistema biométrico</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Nivel de Inicialización</span>
-              <Badge variant="info">{systemStatus?.initialization_level || 'N/A'}</Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Base de Datos</span>
-              <Badge variant={systemStatus?.database_ready ? 'success' : 'danger'}>
-                {systemStatus?.database_ready ? 'Lista' : 'No disponible'}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Enrollment</span>
-              <Badge variant={systemStatus?.enrollment_active ? 'success' : 'danger'}>
-                {systemStatus?.enrollment_active ? 'Activo' : 'Inactivo'}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Modo</span>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Modo Operación</span>
               <Badge variant={systemStatus?.bootstrap_mode ? 'warning' : 'success'}>
                 {systemStatus?.bootstrap_mode ? 'Bootstrap' : 'Normal'}
               </Badge>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Nivel Inicialización</span>
+              <Badge variant="info">{systemStatus?.initialization_level || 'N/A'}</Badge>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Enrollment</span>
+              <Badge variant={systemStatus?.enrollment_active ? 'success' : 'danger'}>
+                {systemStatus?.enrollment_active ? 'Activo' : 'Inactivo'}
+              </Badge>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4 text-gray-600" />
-                <span className="text-sm font-medium">Tiempo Activo</span>
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Tiempo Activo</span>
               </div>
-              <span className="font-mono text-sm">{systemStatus?.uptime || '0h 0m 0s'}</span>
+              <span className="font-mono text-xs sm:text-sm text-gray-900">{systemStatus?.uptime || '0h 0m 0s'}</span>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Versión</span>
+              <Badge variant="primary">v{systemStatus?.version || '2.0.0'}</Badge>
             </div>
           </CardContent>
         </Card>
 
-        {/* Estadísticas */}
+        {/* Estadísticas de Bootstrap */}
         <Card>
           <CardHeader>
-            <CardTitle>Estadísticas</CardTitle>
-            <CardDescription>Métricas del sistema</CardDescription>
+            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+              <BarChart3 className="w-5 h-5 text-gray-700" />
+              Estadísticas
+            </CardTitle>
+            <CardDescription>Métricas de configuración inicial</CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Versión</span>
-              <Badge variant="primary">{systemStatus?.version || '2.0.0'}</Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Templates Bootstrap</span>
-              <span className="text-sm font-bold text-gray-700">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Templates Bootstrap</span>
+              <span className="text-sm sm:text-base font-bold text-gray-900">
                 {bootstrapStatus?.templates_count || 0}
               </span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm font-medium">Usuarios Mínimos</span>
-              <span className="text-sm font-bold text-gray-700">
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+              <span className="text-xs sm:text-sm font-medium text-gray-700">Usuarios Mínimos</span>
+              <span className="text-sm sm:text-base font-bold text-gray-900">
                 {bootstrapStatus?.min_users_required || 2}
               </span>
             </div>
+            <div className="p-3 bg-gray-50 rounded-lg space-y-2">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs sm:text-sm font-medium text-gray-700">Progreso Bootstrap</span>
+                <span className="text-xs font-medium text-gray-600">
+                  {systemStatus?.users_count}/{bootstrapStatus?.min_users_required || 2}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.min(100, (systemStatus?.users_count / (bootstrapStatus?.min_users_required || 2)) * 100)}%`
+                  }}
+                />
+              </div>
+            </div>
 
-            {/* Mensaje de Bootstrap */}
             {bootstrapStatus?.message && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mt-4">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <p className="text-sm text-blue-800 font-medium">
-                      {bootstrapStatus.message}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Info: Necesita más usuarios */}
-            {systemStatus?.users_count < 2 && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg mt-4">
-                <div className="flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-blue-900 mb-1">
-                      Registra más usuarios
-                    </h4>
-                    <p className="text-sm text-blue-700">
-                      Se necesitan al menos 2 usuarios para entrenar las redes neuronales.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Info: Puede entrenar */}
-            {canTrain && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg mt-4">
-                <div className="flex items-start gap-3">
-                  <Brain className="w-5 h-5 text-green-600 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-green-900 mb-1">
-                      Listo para entrenar
-                    </h4>
-                    <p className="text-sm text-green-700">
-                      Tienes suficientes usuarios registrados. Haz clic en "Entrenar Redes Ahora" arriba.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Info: Sistema operativo */}
-            {systemStatus?.networks_trained && (
-              <div className="p-4 bg-green-50 border border-green-200 rounded-lg mt-4">
-                <div className="flex items-start gap-3">
-                  <Brain className="w-5 h-5 text-green-600 mt-0.5" />
-                  <div>
-                    <h4 className="text-sm font-semibold text-green-900 mb-1">
-                      Sistema operativo
-                    </h4>
-                    <p className="text-sm text-green-700">
-                      Las redes están entrenadas. Puedes registrar más usuarios y autenticar.
-                    </p>
-                  </div>
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs sm:text-sm text-blue-800">
+                    {bootstrapStatus.message}
+                  </p>
                 </div>
               </div>
             )}
           </CardContent>
         </Card>
       </div>
+
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+            <Zap className="w-5 h-5 text-gray-700" />
+            Acciones Rápidas
+          </CardTitle>
+          <CardDescription>Operaciones comunes del sistema</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Nuevo Usuario */}
+            <button
+              onClick={() => window.location.href = '/enrollment'}
+              className="group flex items-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-left"
+            >
+              <div className="p-2 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex-shrink-0 transition-colors">
+                <UserPlus className="w-5 h-5 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <p className="font-semibold text-gray-900 text-sm mb-0.5">Nuevo Usuario</p>
+                <p className="text-xs text-gray-500">Registrar en el sistema</p>
+              </div>
+            </button>
+
+            {/* Verificar */}
+            <button
+              onClick={() => window.location.href = '/verification'}
+              disabled={!systemStatus?.authentication_active}
+              className={`group flex items-center gap-3 px-4 py-3 rounded-lg shadow-sm transition-all duration-300 text-left ${
+                systemStatus?.authentication_active 
+                  ? 'bg-white border-2 border-gray-200 hover:border-cyan-400 hover:bg-cyan-50 hover:shadow-md' 
+                  : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed opacity-50'
+              }`}
+            >
+              <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${
+                systemStatus?.authentication_active 
+                  ? 'bg-cyan-100 group-hover:bg-cyan-200' 
+                  : 'bg-gray-200'
+              }`}>
+                <Key className={`w-5 h-5 ${systemStatus?.authentication_active ? 'text-cyan-600' : 'text-gray-400'}`} />
+              </div>
+              <div className="flex-1">
+                <p className={`font-semibold text-sm mb-0.5 ${systemStatus?.authentication_active ? 'text-gray-900' : 'text-gray-500'}`}>
+                  Verificar
+                </p>
+                <p className={`text-xs ${systemStatus?.authentication_active ? 'text-gray-500' : 'text-gray-400'}`}>
+                  Autenticación 1:1
+                </p>
+              </div>
+            </button>
+
+            {/* Entrenar IA */}
+            <button
+              onClick={handleTrainNetworks}
+              disabled={training || systemStatus?.users_count < 2}
+              className={`group flex items-center gap-3 px-4 py-3 rounded-lg shadow-sm transition-all duration-300 text-left ${
+                training || systemStatus?.users_count < 2
+                  ? 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed opacity-50'
+                  : 'bg-white border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 hover:shadow-md'
+              }`}
+            >
+              <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${
+                training || systemStatus?.users_count < 2
+                  ? 'bg-gray-200'
+                  : 'bg-green-100 group-hover:bg-green-200'
+              }`}>
+                <Brain className={`w-5 h-5 ${
+                  training 
+                    ? 'text-gray-400 animate-spin' 
+                    : systemStatus?.users_count < 2 
+                      ? 'text-gray-400' 
+                      : 'text-green-600'
+                }`} />
+              </div>
+              <div className="flex-1">
+                <p className={`font-semibold text-sm mb-0.5 ${
+                  training || systemStatus?.users_count < 2 ? 'text-gray-500' : 'text-gray-900'
+                }`}>
+                  {training ? 'Entrenando...' : 'Entrenar IA'}
+                </p>
+                <p className={`text-xs ${
+                  training || systemStatus?.users_count < 2 ? 'text-gray-400' : 'text-gray-500'
+                }`}>
+                  Redes neuronales
+                </p>
+              </div>
+            </button>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

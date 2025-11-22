@@ -1,0 +1,38 @@
+{
+  "user_id": "user_aaaaaaaa_1763825704842_5f069ff4",
+  "username": "AAAAAAAAAA",
+  "email": "aaaaaa@aaaaaaaa.com",
+  "phone_number": "0952524560",
+  "age": 24,
+  "gender": "Femenino",
+  "anatomical_templates": [
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825707881_b2f1e37f",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825709296_4e24c285",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825710855_6a828c3c",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825712635_51268fca",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825714410_d7d40d20",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825716008_d31592eb",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825717614_57fbe86f",
+    "user_aaaaaaaa_1763825704842_5f069ff4_anatomical_1763825719206_fc53bf77"
+  ],
+  "dynamic_templates": [],
+  "multimodal_templates": [],
+  "gesture_sequence": [
+    "Open_Palm",
+    "Closed_Fist",
+    "Victory"
+  ],
+  "sequence_metadata": {},
+  "total_enrollments": 8,
+  "total_verifications": 0,
+  "successful_verifications": 0,
+  "last_activity": 1763825707.457021,
+  "quality_threshold": 0.7,
+  "security_level": "standard",
+  "created_at": 1763825707.457021,
+  "updated_at": 1763825719.2060654,
+  "metadata": {
+    "enrollment_mode": "normal",
+    "created_at": 1763825707.43741
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "user_id": "user_ssssssss_1763826642078_1b98dfbd",
+  "username": "sssssssssss",
+  "email": "sssssssss@sssss.com",
+  "phone_number": "0968852654",
+  "age": 22,
+  "gender": "Femenino",
+  "anatomical_templates": [
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826645537_a28dc21d",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826647088_b01f02b8",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826648593_bd1630c2",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826650399_2dd62221",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826652146_6f32c714",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826653853_4f98ce5d",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826655720_60df304d",
+    "user_ssssssss_1763826642078_1b98dfbd_anatomical_1763826657344_a256bb03"
+  ],
+  "dynamic_templates": [
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826645595_374be100",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826647155_9dda8c98",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826648656_89ffa570",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826650460_84643b59",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826652204_aab2f3b5",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826653916_9a51e492",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826655793_79bf9386",
+    "user_ssssssss_1763826642078_1b98dfbd_dynamic_1763826657406_fad52ea9"
+  ],
+  "multimodal_templates": [],
+  "gesture_sequence": [
+    "Open_Palm",
+    "Closed_Fist",
+    "Victory"
+  ],
+  "sequence_metadata": {},
+  "total_enrollments": 16,
+  "total_verifications": 0,
+  "successful_verifications": 0,
+  "last_activity": 1763826645.3679059,
+  "quality_threshold": 0.7,
+  "security_level": "standard",
+  "created_at": 1763826645.3679059,
+  "updated_at": 1763826657.4061153,
+  "metadata": {
+    "enrollment_mode": "normal",
+    "created_at": 1763826645.316892
+  }
+}

@@ -42,6 +42,8 @@ export default function SystemManagement() {
   const [config, setConfig] = useState(null)
   const [loadingConfig, setLoadingConfig] = useState(true)
   
+  const [authThresholds, setAuthThresholds] = useState(null)
+
   // Estado de logs
   const [logs, setLogs] = useState([])
   const [logStats, setLogStats] = useState(null)
@@ -69,11 +71,12 @@ export default function SystemManagement() {
   const loadConfiguration = async () => {
     try {
       setLoadingConfig(true)
-      const [configRes, captureRes, thresholdsRes, cameraRes] = await Promise.all([
+      const [configRes, captureRes, thresholdsRes, cameraRes, authThresholdsRes] = await Promise.all([
         systemApi.getFullConfig(),
         systemApi.getCaptureSettings(),
         systemApi.getThresholds(),
-        systemApi.getCameraSettings()
+        systemApi.getCameraSettings(),
+        systemApi.getAuthenticationThresholds()
       ])
       
       setConfig({
@@ -82,6 +85,7 @@ export default function SystemManagement() {
         thresholds: thresholdsRes,
         camera: cameraRes
       })
+      setAuthThresholds(authThresholdsRes.thresholds)
     } catch (err) {
       console.error('Error cargando configuración:', err)
     } finally {
@@ -336,20 +340,32 @@ export default function SystemManagement() {
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-700 mb-1">Verificación</p>
-                      <p className="text-2xl font-bold text-blue-900">0.75</p>
+                      <p className="text-sm text-blue-700 mb-1">Verificación (1:1)</p>
+                      <p className="text-2xl font-bold text-blue-900">
+                        {authThresholds?.verification || '---'}
+                      </p>
+                      <p className="text-xs text-blue-600 mt-1">Umbral optimizado</p>
                     </div>
                     <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
-                      <p className="text-sm text-purple-700 mb-1">Identificación</p>
-                      <p className="text-2xl font-bold text-purple-900">0.80</p>
+                      <p className="text-sm text-purple-700 mb-1">Identificación (1:N)</p>
+                      <p className="text-2xl font-bold text-purple-900">
+                        {authThresholds?.identification || '---'}
+                      </p>
+                      <p className="text-xs text-purple-600 mt-1">+7% sobre verificación</p>
                     </div>
                     <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                      <p className="text-sm text-green-700 mb-1">Anatómico</p>
-                      <p className="text-2xl font-bold text-green-900">0.75</p>
+                      <p className="text-sm text-green-700 mb-1">Peso Anatómico</p>
+                      <p className="text-2xl font-bold text-green-900">
+                        {authThresholds?.anatomical_weight ? `${(authThresholds.anatomical_weight * 100).toFixed(0)}%` : '---'}
+                      </p>
+                      <p className="text-xs text-green-600 mt-1">Fusión multimodal</p>
                     </div>
                     <div className="p-4 bg-cyan-50 rounded-lg border border-cyan-200">
-                      <p className="text-sm text-cyan-700 mb-1">Dinámico</p>
-                      <p className="text-2xl font-bold text-cyan-900">0.70</p>
+                      <p className="text-sm text-cyan-700 mb-1">Peso Dinámico</p>
+                      <p className="text-2xl font-bold text-cyan-900">
+                        {authThresholds?.dynamic_weight ? `${(authThresholds.dynamic_weight * 100).toFixed(0)}%` : '---'}
+                      </p>
+                      <p className="text-xs text-cyan-600 mt-1">Fusión multimodal</p>
                     </div>
                   </div>
                 </CardContent>

@@ -8,51 +8,69 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState(null)
   const intervalRef = useRef(null)
+  const mountedRef = useRef(true)
 
   useEffect(() => {
-    if (isActive) {
-      // ⚠️ AGREGAR DELAY ANTES DE INICIAR CÁMARA
-      const timer = setTimeout(() => {
-        startCamera()
-      }, 500)  // ← 500ms de delay para liberar recursos del backend
+    let timeoutId = null
+    mountedRef.current = true
+    
+    const initCamera = async () => {
+      if (!mountedRef.current || !isActive) return
       
-      return () => {
-        clearTimeout(timer)
-        stopCamera()
+      await new Promise(resolve => setTimeout(resolve, 100))
+      
+      if (mountedRef.current && isActive) {
+        startCamera()
       }
+    }
+    
+    if (isActive) {
+      timeoutId = setTimeout(initCamera, 300)
     } else {
       stopCamera()
     }
 
-    return () => stopCamera()
+    return () => {
+      mountedRef.current = false
+      if (timeoutId) clearTimeout(timeoutId)
+      stopCamera()
+    }
   }, [isActive])
 
   useEffect(() => {
     if (isStreaming && onFrame) {
-      // Capturar y enviar frames cada 200ms (5 fps)
       intervalRef.current = setInterval(() => {
         captureAndSendFrame()
       }, 200)
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
     }
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
+        intervalRef.current = null
       }
     }
   }, [isStreaming, onFrame])
 
   const startCamera = async () => {
     try {
-      // ⚠️ VERIFICAR DISPOSITIVOS DISPONIBLES
-      const existingDevices = await navigator.mediaDevices.enumerateDevices()
-      console.log('📷 Dispositivos de video disponibles:', existingDevices.filter(d => d.kind === 'videoinput').length)
+      console.log('[WebcamCapture] Iniciando acceso a cámara')
       
-      // ⚠️ REINTENTAR CON BACKOFF SI FALLA (máximo 3 intentos)
+      if (videoRef.current?.srcObject) {
+        console.log('[WebcamCapture] Stream existente detectado - liberando')
+        stopCamera()
+        await new Promise(resolve => setTimeout(resolve, 200))
+      }
+      
       let retries = 3
       let stream = null
       
-      while (retries > 0 && !stream) {
+      while (retries > 0 && !stream && mountedRef.current) {
         try {
           stream = await navigator.mediaDevices.getUserMedia({
             video: {
@@ -61,80 +79,92 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
               facingMode: 'user'
             }
           })
-          break  // Éxito - salir del loop
+          break
+          
         } catch (err) {
+          console.error(`[WebcamCapture] Error intento ${4 - retries}/3:`, err.name, err.message)
+          
           retries--
           if (retries > 0) {
-            console.log(`⚠️ Reintento ${4 - retries}/3 en 500ms...`)
-            await new Promise(resolve => setTimeout(resolve, 500))
+            const waitTime = (4 - retries) * 500
+            await new Promise(resolve => setTimeout(resolve, waitTime))
           } else {
-            throw err  // Sin más reintentos - lanzar error
+            throw err
           }
         }
       }
 
-      if (videoRef.current && stream) {
+      if (videoRef.current && stream && mountedRef.current) {
         videoRef.current.srcObject = stream
         setIsStreaming(true)
         setError(null)
-        console.log('✅ Cámara iniciada correctamente')
+        console.log('[WebcamCapture] Cámara iniciada exitosamente')
+      } else if (!mountedRef.current && stream) {
+        console.log('[WebcamCapture] Componente desmontado - liberando stream')
+        stream.getTracks().forEach(track => track.stop())
       }
+      
     } catch (err) {
-      setError('No se pudo acceder a la cámara')
-      console.error('❌ Error al acceder a la cámara:', err)
-      console.error('Detalles:', {
-        name: err.name,
-        message: err.message
-      })
+      console.error('[WebcamCapture] Error final:', err.name, err.message)
+      
+      let errorMessage = 'No se pudo acceder a la cámara'
+      if (err.name === 'NotReadableError') {
+        errorMessage = 'Cámara en uso por otra aplicación. Cierra otras apps que usen la cámara.'
+      } else if (err.name === 'NotAllowedError') {
+        errorMessage = 'Permiso de cámara denegado. Permite el acceso en la configuración del navegador.'
+      } else if (err.name === 'NotFoundError') {
+        errorMessage = 'No se encontró ninguna cámara conectada.'
+      }
+      
+      if (mountedRef.current) {
+        setError(errorMessage)
+      }
     }
   }
 
   const stopCamera = () => {
-    // Detener intervalo de captura
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
 
-    // Detener stream de cámara
     if (videoRef.current?.srcObject) {
-      const tracks = videoRef.current.srcObject.getTracks()
+      const stream = videoRef.current.srcObject
+      const tracks = stream.getTracks()
+      
       tracks.forEach(track => track.stop())
       videoRef.current.srcObject = null
-      setIsStreaming(false)
-      console.log('📷 Cámara detenida y liberada')
+      
+      if (mountedRef.current) {
+        setIsStreaming(false)
+      }
+      
+      console.log('[WebcamCapture] Cámara liberada')
     }
   }
 
   const captureAndSendFrame = () => {
-    if (videoRef.current && canvasRef.current && onFrame) {
-      const video = videoRef.current
-      const canvas = canvasRef.current
+    if (!videoRef.current || !canvasRef.current || !onFrame) return
+    
+    const video = videoRef.current
+    const canvas = canvasRef.current
+    
+    if (video.videoWidth === 0 || video.videoHeight === 0) return
+    
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+    
+    const ctx = canvas.getContext('2d')
+    ctx.drawImage(video, 0, 0)
+    
+    try {
+      const base64Image = canvas.toDataURL('image/jpeg', 0.9)
       
-      // Asegurarse de que el video tenga dimensiones válidas
-      if (video.videoWidth === 0 || video.videoHeight === 0) {
-        return
+      if (base64Image && base64Image.startsWith('data:image')) {
+        onFrame(base64Image)
       }
-      
-      canvas.width = video.videoWidth
-      canvas.height = video.videoHeight
-      
-      const ctx = canvas.getContext('2d')
-      ctx.drawImage(video, 0, 0)
-      
-      // Convertir a base64
-      try {
-        const base64Image = canvas.toDataURL('image/jpeg', 0.9)
-        
-        if (base64Image && base64Image.startsWith('data:image')) {
-          // Enviar base64 al callback
-          onFrame(base64Image)
-        } else {
-          console.warn('⚠️ Frame capturado pero formato inválido')
-        }
-      } catch (error) {
-        console.error('❌ Error convirtiendo frame a base64:', error)
-      }
+    } catch (error) {
+      console.error('[WebcamCapture] Error convirtiendo frame:', error)
     }
   }
 
@@ -142,9 +172,9 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
     <div className="relative">
       {error ? (
         <div className="bg-gray-900 rounded-lg aspect-video flex items-center justify-center">
-          <div className="text-center">
+          <div className="text-center px-4">
             <CameraOff className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400">{error}</p>
+            <p className="text-gray-400 text-sm mb-2">{error}</p>
             <Button 
               variant="outline" 
               size="sm" 
@@ -165,7 +195,6 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
             className="w-full rounded-lg bg-gray-900"
           />
           
-          {/* Canvas oculto para captura de frames */}
           <canvas ref={canvasRef} className="hidden" />
           
           {isStreaming && (

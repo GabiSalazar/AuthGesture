@@ -401,7 +401,7 @@ export default function Enrollment() {
                     <UserPlus className="w-6 h-6 text-blue-600" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-800">Información del Usuario</h2>
+                    <h2 className="text-2xl font-bold text-gray-800">Información del usuario</h2>
                     <p className="text-gray-600 text-sm mt-0.5">
                       Completa tus datos y selecciona tu secuencia biométrica
                     </p>
@@ -731,7 +731,7 @@ export default function Enrollment() {
                   </div>
                   <div className="relative flex justify-center">
                     <span className="px-4 bg-white text-sm font-semibold text-gray-500">
-                      Secuencia Biométrica
+                      Secuencia biométrica
                     </span>
                   </div>
                 </div>
@@ -741,7 +741,7 @@ export default function Enrollment() {
                   <div className="flex items-center justify-between mb-6">
                     <div>
                       <h3 className="text-lg font-bold text-gray-800 mb-1">
-                        Selecciona 3 Gestos Únicos
+                        Selecciona 3 gestos únicos
                       </h3>
                       <p className="text-sm text-gray-500">
                         Estos gestos formarán tu secuencia de autenticación
@@ -875,7 +875,7 @@ export default function Enrollment() {
                     ) : (
                       <>
                         <Camera className="w-4 h-4 mr-2" />
-                        Iniciar Captura Biométrica
+                        Iniciar captura biométrica
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </>
                     )}
@@ -896,7 +896,7 @@ export default function Enrollment() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 text-gray-800">
                     <Camera className="w-5 h-5 text-blue-600" />
-                    Captura en Vivo
+                    Captura en vivo
                   </CardTitle>
                   <CardDescription>
                     Realiza los gestos según las indicaciones
@@ -917,7 +917,7 @@ export default function Enrollment() {
                     className="w-full"
                   >
                     <XCircle className="w-4 h-4 mr-2" />
-                    Cancelar Captura
+                    Cancelar
                   </Button>
                 </CardFooter>
               </Card>
@@ -953,10 +953,24 @@ export default function Enrollment() {
                         <p className="text-sm font-medium text-gray-700">
                           Gesto actual:
                         </p>
-                        <Badge variant="info" className="text-base">
-                          <Hand className="w-4 h-4 mr-1" />
-                          {sessionStatus.current_gesture || 'Esperando...'}
-                        </Badge>
+                        <div className="flex flex-col items-center justify-center p-4 bg-gradient-to-br from-cyan-50 to-blue-50 rounded-lg border-2 border-cyan-200">
+                          {/* Emoji grande arriba */}
+                          <div className="text-6xl mb-2">
+                            {sessionStatus.current_gesture === 'Open_Palm' && '🖐️'}
+                            {sessionStatus.current_gesture === 'Closed_Fist' && '✊'}
+                            {sessionStatus.current_gesture === 'Victory' && '✌️'}
+                            {sessionStatus.current_gesture === 'Thumb_Up' && '👍'}
+                            {sessionStatus.current_gesture === 'Thumb_Down' && '👎'}
+                            {sessionStatus.current_gesture === 'Pointing_Up' && '☝️'}
+                            {sessionStatus.current_gesture === 'ILoveYou' && '🤟'}
+                            {!sessionStatus.current_gesture && '👋'}
+                          </div>
+                          
+                          {/* Nombre abajo */}
+                          <p className="text-lg font-bold text-cyan-800">
+                            {sessionStatus.current_gesture || 'Esperando...'}
+                          </p>
+                        </div>
                       </div>
 
                       {/* Contador de muestras */}
@@ -1007,7 +1021,7 @@ export default function Enrollment() {
                 <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-3">
                   ¡Registro{' '}
                   <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
-                    Completado!
+                    completado!
                   </span>
                 </h2>
 
@@ -1046,7 +1060,7 @@ export default function Enrollment() {
                   className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg h-12 px-8"
                 >
                   <UserPlus className="w-4 h-4 mr-2" />
-                  Registrar Otro Usuario
+                  Registrar otro usuario
                 </Button>
               </CardContent>
             </Card>

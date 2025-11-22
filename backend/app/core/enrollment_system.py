@@ -768,7 +768,8 @@ class RealEnrollmentWorkflow:
         self.window_created = False
         self.window_name = "SISTEMA BIOMÉTRICO REAL"
         
-        self.camera_manager = get_camera_manager()
+        # self.camera_manager = get_camera_manager()
+        self.camera_manager = None
         self.mediapipe_processor = get_mediapipe_processor()
         self.quality_validator = get_quality_validator()
         self.area_manager = get_reference_area_manager()
@@ -1022,10 +1023,10 @@ class RealEnrollmentWorkflow:
         try:
             print("Inicializando componentes")
             
-            if not self.camera_manager.is_initialized:
-                if not self.camera_manager.initialize():
-                    print("Error inicializando cámara")
-                    return False
+            # if not self.camera_manager.is_initialized:
+            #     if not self.camera_manager.initialize():
+            #         print("Error inicializando cámara")
+            #         return False
             
             if not self.mediapipe_processor.is_initialized:
                 if not self.mediapipe_processor.initialize():

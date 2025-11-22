@@ -133,6 +133,88 @@ export const systemApi = {
   },
 
   /**
+   * Obtiene umbrales de autenticación del sistema
+   */
+  getAuthenticationThresholds: async () => {
+    try {
+      const { data } = await apiClient.get('/score-fusion/authentication-thresholds')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo umbrales de autenticación:', error)
+      throw error
+    }
+  },
+
+  // ========================================
+  // MÉTRICAS DE REDES NEURONALES
+  // ========================================
+
+  /**
+   * Obtiene métricas de la red anatómica
+   */
+  getAnatomicalNetworkMetrics: async () => {
+    try {
+      const { data } = await apiClient.get('/siamese-anatomical/metrics')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo métricas de red anatómica:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtiene métricas de la red dinámica
+   */
+  getDynamicNetworkMetrics: async () => {
+    try {
+      const { data } = await apiClient.get('/siamese-dynamic/metrics')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo métricas de red dinámica:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtiene configuración del sistema de fusión
+   */
+  getFusionConfig: async () => {
+    try {
+      const { data } = await apiClient.get('/score-fusion/config')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo configuración de fusión:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtiene resumen del sistema de fusión
+   */
+  getFusionSummary: async () => {
+    try {
+      const { data } = await apiClient.get('/score-fusion/summary')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo resumen de fusión:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtiene pesos de fusión optimizados
+   */
+  getFusionWeights: async () => {
+    try {
+      const { data } = await apiClient.get('/score-fusion/weights')
+      return data
+    } catch (error) {
+      console.error('❌ Error obteniendo pesos de fusión:', error)
+      throw error
+    }
+  },
+
+  /**
    * Limpia recursos del sistema (cámara, MediaPipe, etc)
    */
   cleanupResources: async () => {

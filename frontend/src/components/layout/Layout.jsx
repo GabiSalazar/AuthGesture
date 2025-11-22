@@ -20,9 +20,9 @@ export default function Layout({ children }) {
           <div className="flex items-center justify-between h-16">
             {/* Logo y título */}
             <div className="flex items-center gap-3">
-              <img src="/logo.png" alt="Logo BiometricAuth" className="h-10 w-10 object-contain" />
+              <img src="/logo.png" alt="Logo AUTH-GESTURE" className="h-10 w-10 object-contain" />
               <div>
-                <h1 className="text-xl font-bold text-gray-900">BiometricAuth</h1>
+                <h1 className="text-xl font-bold text-gray-900">AUTH-GESTURE</h1>
                 <p className="text-xs text-gray-500">Sistema de Autenticación</p>
               </div>
             </div>
