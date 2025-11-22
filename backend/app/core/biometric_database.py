@@ -174,7 +174,90 @@ class UserProfile:
         """Tasa de éxito en verificaciones."""
         return (self.successful_verifications / self.total_verifications * 100) if self.total_verifications > 0 else 0.0
 
-
+@dataclass
+class PersonalityProfile:
+    """Perfil de personalidad basado en cuestionario Big Five simplificado."""
+    user_id: str
+    
+    # Respuestas del cuestionario (1-5)
+    extraversion_1: int  # Pregunta 1: reservado (invertida)
+    agreeableness_1: int  # Pregunta 2: amabilidad
+    conscientiousness_1: int  # Pregunta 3: descuidado (invertida)
+    neuroticism_1: int  # Pregunta 4: calmado (invertida)
+    openness_1: int  # Pregunta 5: tradicional (invertida)
+    extraversion_2: int  # Pregunta 6: sociable
+    agreeableness_2: int  # Pregunta 7: conflictivo (invertida)
+    conscientiousness_2: int  # Pregunta 8: planificador
+    neuroticism_2: int  # Pregunta 9: preocupación
+    openness_2: int  # Pregunta 10: curiosidad
+    
+    # Respuestas en formato string "2,3,4,1,3,5,5,2,3,2"
+    raw_responses: str
+    
+    # Metadata
+    completed_at: str = field(default_factory=lambda: datetime.now().isoformat())
+    version: str = "1.0"  # Versión del cuestionario
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convierte a diccionario."""
+        return {
+            'user_id': self.user_id,
+            'extraversion_1': self.extraversion_1,
+            'agreeableness_1': self.agreeableness_1,
+            'conscientiousness_1': self.conscientiousness_1,
+            'neuroticism_1': self.neuroticism_1,
+            'openness_1': self.openness_1,
+            'extraversion_2': self.extraversion_2,
+            'agreeableness_2': self.agreeableness_2,
+            'conscientiousness_2': self.conscientiousness_2,
+            'neuroticism_2': self.neuroticism_2,
+            'openness_2': self.openness_2,
+            'raw_responses': self.raw_responses,
+            'completed_at': self.completed_at,
+            'version': self.version
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> 'PersonalityProfile':
+        """Crea desde diccionario."""
+        return cls(
+            user_id=data['user_id'],
+            extraversion_1=data['extraversion_1'],
+            agreeableness_1=data['agreeableness_1'],
+            conscientiousness_1=data['conscientiousness_1'],
+            neuroticism_1=data['neuroticism_1'],
+            openness_1=data['openness_1'],
+            extraversion_2=data['extraversion_2'],
+            agreeableness_2=data['agreeableness_2'],
+            conscientiousness_2=data['conscientiousness_2'],
+            neuroticism_2=data['neuroticism_2'],
+            openness_2=data['openness_2'],
+            raw_responses=data['raw_responses'],
+            completed_at=data.get('completed_at', datetime.now().isoformat()),
+            version=data.get('version', '1.0')
+        )
+    
+    @classmethod
+    def from_responses(cls, user_id: str, responses: List[int]) -> 'PersonalityProfile':
+        """Crea desde lista de respuestas."""
+        if len(responses) != 10:
+            raise ValueError("Se requieren exactamente 10 respuestas")
+        
+        return cls(
+            user_id=user_id,
+            extraversion_1=responses[0],
+            agreeableness_1=responses[1],
+            conscientiousness_1=responses[2],
+            neuroticism_1=responses[3],
+            openness_1=responses[4],
+            extraversion_2=responses[5],
+            agreeableness_2=responses[6],
+            conscientiousness_2=responses[7],
+            neuroticism_2=responses[8],
+            openness_2=responses[9],
+            raw_responses=','.join(map(str, responses))
+        )
+        
 @dataclass
 class DatabaseStats:
     """Estadísticas de la base de datos."""
@@ -1530,6 +1613,74 @@ class BiometricDatabase:
         """Obtiene perfil de usuario."""
         return self.users.get(user_id)
     
+    def store_personality_profile(self, profile: PersonalityProfile) -> bool:
+        """
+        Almacena el perfil de personalidad de un usuario.
+        
+        Args:
+            profile: Perfil de personalidad a almacenar
+            
+        Returns:
+            True si se guardó exitosamente
+        """
+        try:
+            personality_dir = self.db_path / "personality_profiles"
+            personality_dir.mkdir(parents=True, exist_ok=True)
+            
+            profile_path = personality_dir / f"{profile.user_id}.json"
+            
+            with open(profile_path, 'w', encoding='utf-8') as f:
+                json.dump(profile.to_dict(), f, indent=2, ensure_ascii=False)
+            
+            logger.info(f"✅ Perfil de personalidad guardado: {profile.user_id}")
+            logger.info(f"   Respuestas: {profile.raw_responses}")
+            
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error guardando perfil de personalidad: {e}")
+            return False
+
+    def get_personality_profile(self, user_id: str) -> Optional[PersonalityProfile]:
+        """
+        Obtiene el perfil de personalidad de un usuario.
+        
+        Args:
+            user_id: ID del usuario
+            
+        Returns:
+            PersonalityProfile o None si no existe
+        """
+        try:
+            personality_dir = self.db_path / "personality_profiles"
+            profile_path = personality_dir / f"{user_id}.json"
+            
+            if not profile_path.exists():
+                return None
+            
+            with open(profile_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            return PersonalityProfile.from_dict(data)
+            
+        except Exception as e:
+            logger.error(f"Error cargando perfil de personalidad: {e}")
+            return None
+
+    def has_personality_profile(self, user_id: str) -> bool:
+        """
+        Verifica si un usuario tiene perfil de personalidad.
+        
+        Args:
+            user_id: ID del usuario
+            
+        Returns:
+            True si tiene perfil
+        """
+        personality_dir = self.db_path / "personality_profiles"
+        profile_path = personality_dir / f"{user_id}.json"
+        return profile_path.exists()
+
     def update_user(self, user_id: str, updates: Dict[str, Any]) -> bool:
         """
         Actualiza información de un usuario.

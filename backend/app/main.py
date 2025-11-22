@@ -65,7 +65,8 @@ from app.api import (
     enrollment,
     authentication,
     system,
-    logs
+    logs,
+    personality
 )
 
 # ===== REGISTRAR ROUTERS =====
@@ -88,6 +89,7 @@ app.include_router(authentication.router, prefix=settings.API_V1_STR)
 app.include_router(system.router, prefix=settings.API_V1_STR)
 app.include_router(system.router, prefix=settings.API_V1_STR)
 app.include_router(logs.router, prefix=settings.API_V1_STR)
+app.include_router(personality.router, prefix=settings.API_V1_STR) 
 
 # Evento de inicio
 @app.on_event("startup")

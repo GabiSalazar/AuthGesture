@@ -1,0 +1,44 @@
+{
+  "template_id": "user_aaaaaaaa_1763832364947_6bfe2d12_dynamic_1763832706088_b4ffc6e3",
+  "user_id": "user_aaaaaaaa_1763832364947_6bfe2d12",
+  "template_type": "dynamic",
+  "gesture_name": "Closed_Fist",
+  "hand_side": "unknown",
+  "quality_score": 0.8,
+  "confidence": 0.8,
+  "created_at": 1763832706.0882328,
+  "updated_at": 1763832706.0882328,
+  "last_used": 1763832706.0882328,
+  "enrollment_session": "e7fe1470-36de-42c7-8ab2-5c5d1d1b6cff",
+  "verification_count": 0,
+  "success_count": 0,
+  "is_encrypted": false,
+  "checksum": "1496cab5326f1ccc",
+  "metadata": {
+    "modality": "dynamic",
+    "sample_index": 7,
+    "total_samples": 15,
+    "gesture_sequence": [
+      "Open_Palm",
+      "Closed_Fist",
+      "Victory"
+    ],
+    "is_real_data": true,
+    "no_synthetic_data": true,
+    "creation_date": 1763832706.0882328,
+    "version": "2.0_real_individual",
+    "storage_mode": "individual",
+    "data_source": "real_enrollment_capture",
+    "temporal_sequence": [],
+    "has_temporal_data": false,
+    "bootstrap_mode": false
+  },
+  "has_anatomical_embedding": false,
+  "has_dynamic_embedding": true,
+  "anatomical_embedding_shape": null,
+  "dynamic_embedding_shape": [
+    128
+  ],
+  "anatomical_embedding": null,
+  "dynamic_embedding": null
+}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { enrollmentApi } from '../../lib/api/enrollment'
+import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
 import { UserPlus, CheckCircle, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users } from 'lucide-react'
@@ -15,6 +16,7 @@ export default function Enrollment() {
   const [gender, setGender] = useState('')
   const [selectedGestures, setSelectedGestures] = useState([])
   const [sessionId, setSessionId] = useState(null)
+  const [userId, setUserId] = useState(null)
   const [sessionStatus, setSessionStatus] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -273,6 +275,12 @@ export default function Enrollment() {
       )
       setSessionId(response.session_id)
       
+      if (response.user_id) {
+        setUserId(response.user_id)
+        console.log('User ID guardado desde inicio:', response.user_id)
+      }
+        console.log('Enrollment iniciado, Session ID:', response.session_id)
+
       await new Promise(resolve => setTimeout(resolve, 300))
       
       setStep('capture')
@@ -303,21 +311,61 @@ export default function Enrollment() {
         session_completed: response.all_gestures_completed || response.session_completed || false
       })
 
+      // if (response.all_gestures_completed || response.session_completed) {
+      //   console.log('🎉 ENROLLMENT COMPLETADO!')
+        
+      //   try {
+      //     const bootstrapStatus = await enrollmentApi.getBootstrapStatus()
+      //     setSessionStatus(prev => ({
+      //       ...prev,
+      //       can_train_now: bootstrapStatus.can_train && !bootstrapStatus.networks_trained
+      //     }))
+      //   } catch (err) {
+      //     console.error('Error checking bootstrap status:', err)
+      //   }
+        
+      //   setStep('success')
+      // }
       if (response.all_gestures_completed || response.session_completed) {
-        console.log('🎉 ENROLLMENT COMPLETADO!')
+        console.log('ENROLLMENT COMPLETADO - Iniciando finalizacion')
         
         try {
-          const bootstrapStatus = await enrollmentApi.getBootstrapStatus()
-          setSessionStatus(prev => ({
-            ...prev,
-            can_train_now: bootstrapStatus.can_train && !bootstrapStatus.networks_trained
-          }))
+          // Verificar que tenemos el userId guardado desde el inicio
+          if (!userId) {
+            console.error('No se encontro user_id guardado')
+            setError('Error: No se pudo obtener el ID de usuario')
+            return
+          }
+          
+          console.log('Usando User ID guardado:', userId)
+          
+          // Verificar bootstrap status
+          try {
+            const bootstrapStatus = await enrollmentApi.getBootstrapStatus()
+            console.log('Bootstrap status:', bootstrapStatus)
+            
+            setSessionStatus(prev => ({
+              ...prev,
+              can_train_now: bootstrapStatus.can_train && !bootstrapStatus.networks_trained
+            }))
+          } catch (err) {
+            console.error('Error checking bootstrap status:', err)
+            // No detener el flujo si falla el bootstrap check
+          }
+          
+          // Pequeña pausa
+          await new Promise(resolve => setTimeout(resolve, 500))
+          
+          // Mostrar mensaje de confirmación
+          console.log('Mostrando pagina de confirmacion')
+          setStep('confirmation')
+          
         } catch (err) {
-          console.error('Error checking bootstrap status:', err)
+          console.error('Error en proceso de finalizacion:', err)
+          setError(err.response?.data?.detail || 'Error completando el enrollment')
         }
-        
-        setStep('success')
       }
+
     } catch (err) {
       console.error('❌ Error procesando frame:', err)
       setError(err.message || 'Error procesando frame')
@@ -1003,6 +1051,92 @@ export default function Enrollment() {
           </div>
         )}
 
+        {/* STEP: CONFIRMATION */}
+        {step === 'confirmation' && (
+          <div className="max-w-2xl mx-auto">
+            <Card className="shadow-2xl">
+              <CardContent className="pt-12 pb-12 text-center">
+
+                {/* Icono de éxito */}
+                <div className="mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500 rounded-full shadow-lg">
+                    <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3.5} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                </div>
+                {/* Título */}
+                <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-3">
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
+                    Secuencia de gestos registrada
+                  </span>
+                </h2>
+
+                {/* Descripción */}
+                <p className="text-lg text-gray-600 mb-2">
+                  Tus gestos biométricos han sido capturados exitosamente.
+                </p>
+                <p className="text-base text-gray-500 mb-8">
+                  Para finalizar tu registro, completa un breve cuestionario de personalidad.
+                </p>
+
+                {/* Información de gestos capturados */}
+                <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 mb-8 max-w-md mx-auto">
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-3xl font-black text-purple-600 mb-1">
+                        {sessionStatus?.samples_collected || 0}
+                      </div>
+                      <div className="text-xs text-gray-600 font-medium">Muestras</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-black text-blue-600 mb-1">
+                        {sessionStatus?.total_gestures || 3}
+                      </div>
+                      <div className="text-xs text-gray-600 font-medium">Gestos</div>
+                    </div>
+                    <div>
+                      <div className="text-3xl font-black text-green-600 mb-1">100%</div>
+                      <div className="text-xs text-gray-600 font-medium">Completo</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Botón para continuar */}
+                <Button
+                  onClick={() => {
+                    console.log('Usuario continua al cuestionario')
+                    setStep('questionnaire')
+                  }}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg h-12 px-8"
+                >
+                  Continuar al cuestionario
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+
+                <p className="text-sm text-gray-500 mt-4">
+                  El cuestionario toma aproximadamente 2 minutos
+                </p>
+
+              </CardContent>
+            </Card>
+          </div>
+        )}
+        
+
+        {/* STEP: QUESTIONNAIRE */}
+        {step === 'questionnaire' && userId && (
+          <PersonalityQuestionnaire
+            userId={userId}
+            username={username}
+            onComplete={(result) => {
+              console.log('Cuestionario completado:', result)
+              console.log('Respuestas guardadas:', result.raw_responses)
+              setStep('success')
+            }}
+          />
+        )}
+
         {/* STEP: SUCCESS */}
         {step === 'success' && (
           <div className="max-w-2xl mx-auto">
@@ -1010,18 +1144,18 @@ export default function Enrollment() {
               <CardContent className="pt-12 pb-12 text-center">
                 
                 {/* Icono de éxito */}
-                <div className="relative inline-block mb-6">
-                  <div className="absolute inset-0 bg-green-400/20 rounded-full blur-2xl animate-pulse" />
-                  <div className="relative">
-                    <CheckCircle className="w-20 h-20 text-green-500 mx-auto" />
+                <div className="mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-500 rounded-full shadow-lg">
+                    <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3.5} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
                 </div>
 
                 {/* Título */}
                 <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-3">
-                  ¡Registro{' '}
                   <span className="bg-gradient-to-r from-green-500 to-emerald-500 bg-clip-text text-transparent">
-                    completado!
+                    ¡Registro completado!
                   </span>
                 </h2>
 
