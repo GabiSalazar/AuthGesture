@@ -121,6 +121,35 @@ export const enrollmentApi = {
     }
   },
 
+  resendCode: async (userId, username, email) => {
+    try {
+      console.log('🔄 Reenviando código a:', email)
+      const response = await fetch('http://localhost:8000/api/email/resend-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          username: username,
+          email: email
+        })
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message || 'Error reenviando código')
+      }
+      
+      const data = await response.json()
+      console.log('✅ Código reenviado:', data)
+      return data
+    } catch (error) {
+      console.error('❌ Error reenviando código:', error)
+      throw error
+    }
+  },
+
   /**
    * Obtiene el estado de una sesión de enrollment
    */

@@ -4,8 +4,7 @@ import { enrollmentApi } from '../../lib/api/enrollment'
 import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
-import { UserPlus, CheckCircle, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users } from 'lucide-react'
-
+import { UserPlus, CheckCircle, CheckCircle2, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users, Loader2 } from 'lucide-react'
 export default function Enrollment() {
   const navigate = useNavigate()
   const [step, setStep] = useState('form')
@@ -41,6 +40,10 @@ export default function Enrollment() {
   const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', ''])
   const [verifyingCode, setVerifyingCode] = useState(false)
   const [codeError, setCodeError] = useState('')
+
+  const [resendingCode, setResendingCode] = useState(false)
+  const [resendCooldown, setResendCooldown] = useState(0)
+  const [resendSuccess, setResendSuccess] = useState(false)
 
   const availableGestures = [
     'Open_Palm',
@@ -292,11 +295,22 @@ export default function Enrollment() {
       console.log('✅ Email de verificación enviado a:', email)
       console.log('Session ID:', response.session_id)
       
-      // IR A PANTALLA DE CÓDIGO (NO A EMAIL-VERIFICATION)
       setStep('code-verification')
       setEmailVerificationPending(true)
       setError(null)
       
+      // Iniciar cooldown de 60 segundos desde el primer envío
+      setResendCooldown(60)
+      const interval = setInterval(() => {
+        setResendCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval)
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+
     } catch (err) {
       console.error('❌ Error al iniciar enrollment:', err)
       setError(err.response?.data?.detail || 'Error al iniciar enrollment')
@@ -332,6 +346,46 @@ export default function Enrollment() {
       setCodeError(err.response?.data?.detail || 'Error verificando código')
     } finally {
       setVerifyingCode(false)
+    }
+  }
+
+  const handleResendCode = async () => {
+    if (resendCooldown > 0) return
+    
+    try {
+      setResendingCode(true)
+      setResendSuccess(false)
+      setCodeError('') // Limpiar error anterior
+      
+      const response = await enrollmentApi.resendCode(userId, username, email)
+      
+      // Verificar si fue exitoso
+      if (response.success) {
+        setResendSuccess(true)
+        
+        // Cooldown de 60 segundos
+        setResendCooldown(60)
+        const interval = setInterval(() => {
+          setResendCooldown((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval)
+              return 0
+            }
+            return prev - 1
+          })
+        }, 1000)
+        
+        setTimeout(() => setResendSuccess(false), 3000)
+      } else {
+        // Si falló, mostrar el mensaje de error
+        setCodeError(response.message || 'Error al reenviar código')
+      }
+      
+    } catch (err) {
+      console.error('❌ Error reenviando código:', err)
+      setCodeError(err.message || 'Error al reenviar código')
+    } finally {
+      setResendingCode(false)
     }
   }
 
@@ -1016,13 +1070,14 @@ export default function Enrollment() {
           </div>
         )}
 
-        {/* STEP: CODE VERIFICATION */}
         {step === 'code-verification' && (
-          <div className="max-w-2xl mx-auto">
+        <div className="min-h-screen bg-gradient-to-br flex items-center justify-center p-4">
+          <div className="w-full max-w-md">
+            
             <Card className="shadow-2xl border-0 overflow-hidden">
               <CardContent className="pt-12 pb-12">
                 
-                {/* Icono de email enviado */}
+                {/* Icono */}
                 <div className="mb-6">
                   <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full">
                     <Mail className="w-10 h-10 text-blue-600" />
@@ -1036,96 +1091,130 @@ export default function Enrollment() {
 
                 {/* Descripción */}
                 <p className="text-lg text-gray-600 mb-2 text-center">
-                  Enviamos un código de verificación a:
+                  Enviamos un código a:
                 </p>
-                <p className="text-xl font-bold text-blue-600 mb-8 text-center">
+                <p className="text-xl font-bold text-cyan-600 mb-8 text-center">
                   {email}
                 </p>
 
-                {/* Input de código - 6 dígitos */}
+                {/* Inputs del código */}
                 <div className="max-w-md mx-auto mb-6">
                   <label className="block text-sm font-semibold text-gray-700 mb-4 text-center">
-                    Ingresa el código de 6 dígitos
+                    Código de 6 dígitos
                   </label>
                   
-                  <div className="flex gap-3 justify-center" onPaste={handleCodePaste}>
+                  <div className="flex gap-3 justify-center">
                     {[0, 1, 2, 3, 4, 5].map((index) => (
                       <input
                         key={index}
                         id={`code-${index}`}
                         type="text"
-                        maxLength="1"
+                        inputMode="numeric"
+                        maxLength={1}
                         value={verificationCode[index]}
                         onChange={(e) => handleCodeChange(index, e.target.value)}
                         onKeyDown={(e) => handleCodeKeyDown(index, e)}
+                        onPaste={index === 0 ? handleCodePaste : undefined}
+                        disabled={verifyingCode}
                         className={`
-                          w-14 h-16 text-center text-2xl font-bold rounded-xl border-2 
-                          transition-all duration-200
-                          ${codeError 
-                            ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100' 
-                            : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                          w-12 h-14 text-center text-2xl font-bold rounded-lg
+                          border-2 transition-all duration-200
+                          ${codeError
+                            ? 'border-red-400 bg-red-50 text-red-600'
+                            : verificationCode[index]
+                            ? 'border-cyan-500 bg-cyan-50 text-cyan-700'
+                            : 'border-gray-300 bg-white text-gray-900'
                           }
-                          ${verificationCode[index] ? 'bg-blue-50 border-blue-300' : 'bg-white'}
-                          outline-none
+                          focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent
+                          disabled:opacity-50 disabled:cursor-not-allowed
                         `}
+                        autoFocus={index === 0}
                       />
                     ))}
                   </div>
-                  
-                  {/* Error message */}
-                  {codeError && (
-                    <div className="flex items-center justify-center gap-2 mt-4">
-                      <AlertCircle className="w-4 h-4 text-red-600" />
-                      <p className="text-sm text-red-600 font-medium">{codeError}</p>
-                    </div>
-                  )}
                 </div>
 
-                {/* Información */}
-                <div className="bg-blue-50 rounded-2xl p-6 mb-6 max-w-md mx-auto">
-                  <div className="flex items-start gap-3">
-                    <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                    <div className="text-sm text-blue-800">
-                      <p className="font-semibold mb-1">¿No recibiste el código?</p>
-                      <p>Revisa tu carpeta de spam o correo no deseado. El código expira en 30 minutos.</p>
+                {/* Error */}
+                {codeError && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3 mb-6">
+                    <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm font-semibold text-red-800">{codeError}</p>
+                      
                     </div>
                   </div>
+                )}
+
+                {/* Botón verificar */}
+                <button
+                  onClick={handleVerifyCode}
+                  disabled={verifyingCode || verificationCode.some(d => !d)}
+                  className="
+                    w-full py-4 rounded-xl font-semibold text-white
+                    bg-gradient-to-r from-blue-900 to-cyan-600
+                    hover:from-blue-800 hover:to-cyan-500
+                    focus:outline-none focus:ring-4 focus:ring-cyan-500/50
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    transition-all duration-200
+                    flex items-center justify-center gap-2
+                    shadow-lg hover:shadow-xl
+                  "
+                >
+                  {verifyingCode ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Verificando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <CheckCircle2 className="w-5 h-5" />
+                      <span>Verificar código</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Reenviar código */}
+                <div className="text-center mt-6">
+                  <p className="text-sm text-gray-600 mb-2">
+                    ¿No recibiste el código?
+                  </p>
+                  
+                  {resendSuccess && (
+                    <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-sm text-green-700 font-medium">
+                        ✓ Código reenviado exitosamente
+                      </p>
+                    </div>
+                  )}
+                  
+                  <button
+                    type="button"
+                    onClick={handleResendCode}
+                    disabled={resendingCode || resendCooldown > 0}
+                    className="text-sm font-semibold text-cyan-600 hover:text-cyan-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {resendingCode ? (
+                      'Reenviando...'
+                    ) : resendCooldown > 0 ? (
+                      `Reenviar en ${resendCooldown}s`
+                    ) : (
+                      'Reenviar código'
+                    )}
+                  </button>
                 </div>
 
-                {/* Botones */}
-                <div className="flex flex-col gap-3 max-w-md mx-auto">
-                  <Button
-                    onClick={handleVerifyCode}
-                    disabled={verificationCode.join('').length !== 6 || verifyingCode}
-                    className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {verifyingCode ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        Verificando...
-                      </div>
-                    ) : (
-                      <>
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                        Verificar código
-                      </>
-                    )}
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    onClick={handleCancel}
-                    className="w-full"
-                  >
-                    <XCircle className="w-4 h-4 mr-2" />
-                    Cancelar
-                  </Button>
+                {/* Info adicional */}
+                <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                  <p className="text-xs text-gray-500">
+                    El código expirará en 30 minutos
+                  </p>
                 </div>
 
               </CardContent>
             </Card>
           </div>
-        )}
+        </div>
+      )}
 
         {/* STEP: CAPTURE */}
         {step === 'capture' && (

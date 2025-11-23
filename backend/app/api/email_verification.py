@@ -164,7 +164,65 @@ async def verify_email_token(token: str = Query(..., description="Token de verif
         redirect_url = f"{frontend_url}/enrollment?verified=false&error=Error+verificando+token"
         return RedirectResponse(url=redirect_url)
 
-
+@router.post("/resend-code")
+async def resend_verification_code(request: dict):
+    """
+    Reenvía código de verificación al usuario
+    
+    Args:
+        request: dict con user_id, username, email
+    
+    Returns:
+        Mensaje de confirmación
+    """
+    try:
+        from datetime import datetime
+        
+        user_id = request.get('user_id')
+        username = request.get('username')
+        email = request.get('email')
+        
+        email_system = get_email_verification_system()
+        
+        # Verificar si puede reenviar (cooldown de 60 segundos)
+        verification = email_system._load_verification(user_id)
+        
+        if verification:
+            # Verificar cooldown
+            created_at = datetime.fromisoformat(verification.created_at)
+            elapsed = (datetime.now() - created_at).total_seconds()
+            
+            if elapsed < 60:  # Cooldown de 60 segundos
+                remaining = int(60 - elapsed)
+                return {
+                    "success": False,
+                    "message": f"Espera {remaining} segundos antes de reenviar"
+                }
+        
+        # Enviar nuevo código
+        success = email_system.send_verification_email(
+            user_id=user_id,
+            username=username,
+            email=email
+        )
+        
+        if not success:
+            return {
+                "success": False,
+                "message": "Error al reenviar el código"
+            }
+        
+        print(f"✅ Código reenviado a: {email}")
+        
+        return {
+            "success": True,
+            "message": "Código reenviado exitosamente"
+        }
+        
+    except Exception as e:
+        print(f"❌ Error reenviando código: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
 @router.post("/resend", response_model=ResendVerificationResponse)
 async def resend_verification_email(request: ResendVerificationRequest):
     """
