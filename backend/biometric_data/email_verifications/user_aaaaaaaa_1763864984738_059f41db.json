@@ -1,0 +1,11 @@
+{
+  "user_id": "user_aaaaaaaa_1763864984738_059f41db",
+  "email": "gabriela.a.salazar.m@hotmail.com",
+  "token": "700018",
+  "created_at": "2025-11-22T21:29:44.738169",
+  "expires_at": "2025-11-22T21:59:44.738169",
+  "verified": false,
+  "verification_date": null,
+  "attempts": 0,
+  "max_attempts": 3
+}

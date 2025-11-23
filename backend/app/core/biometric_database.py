@@ -149,6 +149,7 @@ class UserProfile:
     multimodal_templates: List[str] = field(default_factory=list)
     
     gesture_sequence: Optional[List[str]] = None
+    email_verified: bool = False 
     sequence_metadata: Dict[str, Any] = field(default_factory=dict)
     
     total_enrollments: int = 0

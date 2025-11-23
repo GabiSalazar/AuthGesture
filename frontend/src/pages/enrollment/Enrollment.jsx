@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import PersonalityQuestionnaire from './PersonalityQuestionnaire'
@@ -35,6 +35,12 @@ export default function Enrollment() {
   const [genderError, setGenderError] = useState('')
 
   const [genderDropdownOpen, setGenderDropdownOpen] = useState(false)
+
+  const [emailVerificationPending, setEmailVerificationPending] = useState(false)
+
+  const [verificationCode, setVerificationCode] = useState(['', '', '', '', '', ''])
+  const [verifyingCode, setVerifyingCode] = useState(false)
+  const [codeError, setCodeError] = useState('')
 
   const availableGestures = [
     'Open_Palm',
@@ -265,6 +271,8 @@ export default function Enrollment() {
 
     try {
       setLoading(true)
+      
+      // Llamar al backend (enviará email automáticamente)
       const response = await enrollmentApi.startEnrollment(
         username, 
         email, 
@@ -273,22 +281,96 @@ export default function Enrollment() {
         gender, 
         selectedGestures
       )
+      
       setSessionId(response.session_id)
       
       if (response.user_id) {
         setUserId(response.user_id)
-        console.log('User ID guardado desde inicio:', response.user_id)
+        console.log('✅ User ID guardado:', response.user_id)
       }
-        console.log('Enrollment iniciado, Session ID:', response.session_id)
-
-      await new Promise(resolve => setTimeout(resolve, 300))
       
-      setStep('capture')
+      console.log('✅ Email de verificación enviado a:', email)
+      console.log('Session ID:', response.session_id)
+      
+      // IR A PANTALLA DE CÓDIGO (NO A EMAIL-VERIFICATION)
+      setStep('code-verification')
+      setEmailVerificationPending(true)
       setError(null)
+      
     } catch (err) {
+      console.error('❌ Error al iniciar enrollment:', err)
       setError(err.response?.data?.detail || 'Error al iniciar enrollment')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleVerifyCode = async () => {
+    const code = verificationCode.join('')
+    
+    if (code.length !== 6) {
+      setCodeError('Ingresa el código completo')
+      return
+    }
+    
+    try {
+      setVerifyingCode(true)
+      setCodeError('')
+      
+      const response = await enrollmentApi.verifyCode(userId, code)
+      
+      if (response.success) {
+        console.log('✅ Código verificado correctamente')
+        setEmailVerificationPending(false)
+        setStep('capture')
+      } else {
+        setCodeError(response.message || 'Código inválido')
+      }
+      
+    } catch (err) {
+      console.error('❌ Error verificando código:', err)
+      setCodeError(err.response?.data?.detail || 'Error verificando código')
+    } finally {
+      setVerifyingCode(false)
+    }
+  }
+
+  const handleCodeChange = (index, value) => {
+    // Solo permitir números
+    if (value && !/^\d$/.test(value)) return
+    
+    const newCode = [...verificationCode]
+    newCode[index] = value
+    setVerificationCode(newCode)
+    
+    // Auto-focus al siguiente input
+    if (value && index < 5) {
+      document.getElementById(`code-${index + 1}`)?.focus()
+    }
+    
+    // Limpiar error al escribir
+    if (codeError) setCodeError('')
+  }
+
+  const handleCodeKeyDown = (index, e) => {
+    // Backspace: volver al input anterior
+    if (e.key === 'Backspace' && !verificationCode[index] && index > 0) {
+      document.getElementById(`code-${index - 1}`)?.focus()
+    }
+    
+    // Enter: verificar código
+    if (e.key === 'Enter' && verificationCode.join('').length === 6) {
+      handleVerifyCode()
+    }
+  }
+
+  const handleCodePaste = (e) => {
+    e.preventDefault()
+    const paste = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6)
+    
+    if (paste.length === 6) {
+      setVerificationCode(paste.split(''))
+      document.getElementById('code-5')?.focus()
     }
   }
 
@@ -931,6 +1013,117 @@ export default function Enrollment() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* STEP: CODE VERIFICATION */}
+        {step === 'code-verification' && (
+          <div className="max-w-2xl mx-auto">
+            <Card className="shadow-2xl border-0 overflow-hidden">
+              <CardContent className="pt-12 pb-12">
+                
+                {/* Icono de email enviado */}
+                <div className="mb-6">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-full">
+                    <Mail className="w-10 h-10 text-blue-600" />
+                  </div>
+                </div>
+
+                {/* Título */}
+                <h2 className="text-3xl font-bold text-gray-800 mb-3 text-center">
+                  Verifica tu email
+                </h2>
+
+                {/* Descripción */}
+                <p className="text-lg text-gray-600 mb-2 text-center">
+                  Enviamos un código de verificación a:
+                </p>
+                <p className="text-xl font-bold text-blue-600 mb-8 text-center">
+                  {email}
+                </p>
+
+                {/* Input de código - 6 dígitos */}
+                <div className="max-w-md mx-auto mb-6">
+                  <label className="block text-sm font-semibold text-gray-700 mb-4 text-center">
+                    Ingresa el código de 6 dígitos
+                  </label>
+                  
+                  <div className="flex gap-3 justify-center" onPaste={handleCodePaste}>
+                    {[0, 1, 2, 3, 4, 5].map((index) => (
+                      <input
+                        key={index}
+                        id={`code-${index}`}
+                        type="text"
+                        maxLength="1"
+                        value={verificationCode[index]}
+                        onChange={(e) => handleCodeChange(index, e.target.value)}
+                        onKeyDown={(e) => handleCodeKeyDown(index, e)}
+                        className={`
+                          w-14 h-16 text-center text-2xl font-bold rounded-xl border-2 
+                          transition-all duration-200
+                          ${codeError 
+                            ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100' 
+                            : 'border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100'
+                          }
+                          ${verificationCode[index] ? 'bg-blue-50 border-blue-300' : 'bg-white'}
+                          outline-none
+                        `}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Error message */}
+                  {codeError && (
+                    <div className="flex items-center justify-center gap-2 mt-4">
+                      <AlertCircle className="w-4 h-4 text-red-600" />
+                      <p className="text-sm text-red-600 font-medium">{codeError}</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Información */}
+                <div className="bg-blue-50 rounded-2xl p-6 mb-6 max-w-md mx-auto">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div className="text-sm text-blue-800">
+                      <p className="font-semibold mb-1">¿No recibiste el código?</p>
+                      <p>Revisa tu carpeta de spam o correo no deseado. El código expira en 30 minutos.</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Botones */}
+                <div className="flex flex-col gap-3 max-w-md mx-auto">
+                  <Button
+                    onClick={handleVerifyCode}
+                    disabled={verificationCode.join('').length !== 6 || verifyingCode}
+                    className="w-full h-12 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {verifyingCode ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Verificando...
+                      </div>
+                    ) : (
+                      <>
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Verificar código
+                      </>
+                    )}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    onClick={handleCancel}
+                    className="w-full"
+                  >
+                    <XCircle className="w-4 h-4 mr-2" />
+                    Cancelar
+                  </Button>
+                </div>
+
+              </CardContent>
+            </Card>
           </div>
         )}
 

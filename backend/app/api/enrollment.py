@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 
 from app.core.system_manager import get_system_manager
+from app.core.email_verification import get_email_verification_system
 
 router = APIRouter()
 
@@ -266,6 +267,26 @@ async def start_enrollment(request: EnrollmentStartRequest):
         print(f"   Género: {request.gender}")
         
         # ============================================================================
+        # ✅ ENVIAR EMAIL DE VERIFICACIÓN
+        # ============================================================================
+        print(f"📧 Enviando email de verificación a {email_stripped}...")
+        
+        email_system = get_email_verification_system()
+        email_sent = email_system.send_verification_email(
+            user_id=user_id,
+            username=username_stripped,
+            email=email_stripped
+        )
+        
+        if not email_sent:
+            raise HTTPException(
+                status_code=500,
+                detail="Error enviando email de verificación. Por favor intenta de nuevo."
+            )
+        
+        print(f"✅ Email de verificación enviado exitosamente")
+        
+        # ============================================================================
         # ✅ INICIAR SESIÓN DE ENROLLMENT CON TODOS LOS DATOS
         # ============================================================================
         result = manager.start_enrollment_session(
@@ -296,7 +317,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
         return EnrollmentStartResponse(
             success=True,
             session_id=session['session_id'],
-            message=result.get('message', 'Sesión de enrollment iniciada exitosamente'),
+            message=f"Email de verificación enviado a {email_stripped}. Revisa tu bandeja de entrada.",
             user_id=session['user_id'],
             username=session['username'],
             gesture_sequence=session['gesture_sequence'],

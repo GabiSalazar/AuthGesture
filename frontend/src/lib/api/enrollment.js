@@ -98,6 +98,29 @@ export const enrollmentApi = {
     }
   },
 
+  verifyCode: async (userId, code) => {
+    try {
+      console.log('Verificando código:', { userId, code })
+      // Usar URL absoluta porque el router de email no usa /api/v1
+      const response = await fetch('http://localhost:8000/api/email/verify-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          code: code
+        })
+      })
+      const data = await response.json()
+      console.log('Código verificado:', data)
+      return data
+    } catch (error) {
+      console.error('Error verificando código:', error)
+      throw error
+    }
+  },
+
   /**
    * Obtiene el estado de una sesión de enrollment
    */
