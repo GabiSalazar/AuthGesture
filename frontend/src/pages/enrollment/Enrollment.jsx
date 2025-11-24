@@ -55,6 +55,17 @@ export default function Enrollment() {
     'ILoveYou'
   ]
 
+  // Función para limpiar estados de verificación
+  const resetVerificationStates = () => {
+    setVerificationCode(['', '', '', '', '', ''])
+    setCodeError('')
+    setVerifyingCode(false)
+    setResendingCode(false)
+    setResendCooldown(0)
+    setResendSuccess(false)
+    setEmailVerificationPending(false)
+  }
+
   // Validación de username
   const validateUsername = (value) => {
     if (!value.trim()) {
@@ -275,6 +286,8 @@ export default function Enrollment() {
     try {
       setLoading(true)
       
+      resetVerificationStates()
+
       // Llamar al backend (enviará email automáticamente)
       const response = await enrollmentApi.startEnrollment(
         username, 
@@ -336,6 +349,20 @@ export default function Enrollment() {
       if (response.success) {
         console.log('✅ Código verificado correctamente')
         setEmailVerificationPending(false)
+
+        // CRÍTICO: Liberar cámara del backend antes de ir a capture
+        try {
+          await fetch('http://localhost:8000/api/v1/camera/release', { 
+            method: 'POST' 
+          })
+          console.log('🎥 Cámara del backend liberada')
+        } catch (err) {
+          console.warn('No se pudo liberar cámara del backend:', err)
+        }
+        
+        // Esperar 800ms para que se complete la liberación
+        await new Promise(resolve => setTimeout(resolve, 800))
+
         setStep('capture')
       } else {
         setCodeError(response.message || 'Código inválido')
@@ -516,10 +543,14 @@ export default function Enrollment() {
         console.error('Error cancelando:', err)
       }
     }
+    resetVerificationStates()
     resetForm()
   }
 
   const resetForm = () => {
+
+    resetVerificationStates()
+    
     setStep('form')
     setUsername('')
     setEmail('')

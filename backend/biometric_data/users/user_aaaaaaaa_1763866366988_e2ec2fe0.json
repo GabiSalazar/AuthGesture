@@ -1,7 +1,7 @@
 {
   "user_id": "user_aaaaaaaa_1763866366988_e2ec2fe0",
   "username": "aaaaaaaaaaaaaaaaaaaaa",
-  "email": "gabriela.a.salazar.m@gmail.com",
+  "email": "gabriela.a.salazar.m01@gmail.com",
   "phone_number": "0598635825",
   "age": 21,
   "gender": "Femenino",
@@ -60,11 +60,11 @@
   "total_enrollments": 40,
   "total_verifications": 0,
   "successful_verifications": 0,
-  "last_activity": 1763866390.0048523,
+  "last_activity": 1763941035.6421726,
   "quality_threshold": 0.7,
   "security_level": "standard",
   "created_at": 1763866390.0048523,
-  "updated_at": 1763866437.8374069,
+  "updated_at": 1763942644.9666593,
   "metadata": {
     "enrollment_mode": "normal",
     "created_at": 1763866389.973455
