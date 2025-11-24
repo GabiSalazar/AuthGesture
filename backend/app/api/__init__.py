@@ -19,7 +19,8 @@ from app.api import (
     biometric_database,
     enrollment,
     authentication,
-    system
+    system,
+    feedback
 )
 
 __all__ = [
@@ -39,5 +40,6 @@ __all__ = [
     'biometric_database',
     'enrollment',
     'authentication',
-    'system'
+    'system',
+    'feedback'
 ]

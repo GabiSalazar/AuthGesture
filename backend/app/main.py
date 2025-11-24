@@ -67,7 +67,8 @@ from app.api import (
     system,
     logs,
     personality,
-    email_verification
+    email_verification,
+    feedback
 )
 
 # ===== REGISTRAR ROUTERS =====
@@ -93,6 +94,8 @@ app.include_router(logs.router, prefix=settings.API_V1_STR)
 app.include_router(personality.router, prefix=settings.API_V1_STR) 
 #app.include_router(email_verification.router, prefix=settings.API_V1_STR)
 app.include_router(email_verification.router, prefix="/api/email", tags=["email"])
+app.include_router(feedback.router, prefix=settings.API_V1_STR)
+
 # Evento de inicio
 @app.on_event("startup")
 async def startup_event():

@@ -21,6 +21,7 @@ export default function Verification() {
   const intervalRef = useRef(null)
   const isProcessingFrameRef = useRef(false)  // ✅ FLAG ANTI-CONCURRENCIA
   const sessionCompletedRef = useRef(false)   // ✅ FLAG DE SESIÓN COMPLETADA
+  const sessionIdRef = useRef(null) 
 
 
   useEffect(() => {
@@ -28,16 +29,38 @@ export default function Verification() {
   }, [])
 
   // ✅ CLEANUP AL DESMONTAR
+  // useEffect(() => {
+  //   return () => {
+  //     if (intervalRef.current) {
+  //       clearInterval(intervalRef.current)
+  //       intervalRef.current = null
+  //     }
+  //     isProcessingFrameRef.current = false
+  //     sessionCompletedRef.current = false
+  //   }
+  // }, [])
+
+  // ✅ CLEANUP: Cancelar sesión al desmontar (solo al desmontar componente)
   useEffect(() => {
     return () => {
+      console.log('🧹 Limpieza al desmontar Verification')
+      
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
+      
+      // ✅ CANCELAR SESIÓN EN BACKEND usando ref
+      if (sessionIdRef.current) {
+        authenticationApi.cancelSession(sessionIdRef.current).catch(err => 
+          console.log('Info: Sesión ya finalizada')
+        )
+      }
+      
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
     }
-  }, [])
+  }, [])  // ✅ Array vacío - solo ejecutar al montar/desmontar
 
   const loadUsers = async () => {
     try {
@@ -70,6 +93,7 @@ export default function Verification() {
       // Iniciar sesión de verificación
       const response = await authenticationApi.startVerification(selectedUser.user_id)
       setSessionId(response.session_id)
+      sessionIdRef.current = response.session_id
 
       // Comenzar procesamiento de frames
       startFrameProcessing(response.session_id)
@@ -262,6 +286,7 @@ export default function Verification() {
     setStep('select')
     setSelectedUser(null)
     setSessionId(null)
+    sessionIdRef.current = null
     setProcessing(false)
     setResult(null)
     setError(null)

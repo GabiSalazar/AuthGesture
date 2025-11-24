@@ -22,16 +22,39 @@ export default function Identification() {
   const isProcessingFrameRef = useRef(false)
   const sessionCompletedRef = useRef(false)
 
+  const sessionIdRef = useRef(null)
+
+  // useEffect(() => {
+  //   return () => {
+  //     if (intervalRef.current) {
+  //       clearInterval(intervalRef.current)
+  //       intervalRef.current = null
+  //     }
+  //     isProcessingFrameRef.current = false
+  //     sessionCompletedRef.current = false
+  //   }
+  // }, [])
+
   useEffect(() => {
     return () => {
+      console.log('🧹 Limpieza al desmontar Identification')
+      
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
+      
+      // ✅ Usar ref en lugar de state
+      if (sessionIdRef.current) {
+        authenticationApi.cancelSession(sessionIdRef.current).catch(err => 
+          console.log('Info: Sesión ya finalizada')
+        )
+      }
+      
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
     }
-  }, [])
+  }, [])  // ✅ Array vacío
 
   const stopProcessing = () => {
     console.log('🛑 Deteniendo procesamiento de identificación')
@@ -61,6 +84,7 @@ export default function Identification() {
 
       const response = await authenticationApi.startIdentification()
       setSessionId(response.session_id)
+      sessionIdRef.current = response.session_id
 
       startFrameProcessing(response.session_id)
 
@@ -238,6 +262,7 @@ export default function Identification() {
 
     setStep('ready')
     setSessionId(null)
+    sessionIdRef.current = null 
     setProcessing(false)
     setResult(null)
     setError(null)
