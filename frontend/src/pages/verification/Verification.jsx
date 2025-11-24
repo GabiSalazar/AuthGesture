@@ -121,7 +121,7 @@ export default function Verification() {
   const startFrameProcessing = async (sessionId) => {
     let consecutiveErrors = 0
     const maxConsecutiveErrors = 10
-    const maxValidCaptures = 5
+    const maxValidCaptures = 3
 
     // ✅ LIMPIAR INTERVALO ANTERIOR
     if (intervalRef.current) {
