@@ -74,62 +74,98 @@ class AuthenticationFeedbackService:
             # Construir HTML
             html_content = f"""
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <meta charset="utf-8">
-    <title>Confirmacion de Acceso</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Acceso</title>
 </head>
-<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
-    <div style="max-width: 600px; margin: 0 auto; background-color: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        
-        <h2 style="color: #3b82f6; margin-bottom: 20px;">Acceso a tu cuenta</h2>
-        
-        <p style="color: #333; font-size: 16px; line-height: 1.6;">
-            Hola <strong>{username}</strong>,
-        </p>
-        
-        <p style="color: #333; font-size: 16px; line-height: 1.6;">
-            Detectamos un intento de {result_text} en tu cuenta mediante {mode_text}.
-        </p>
-        
-        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <p style="margin: 5px 0;"><strong>Tipo:</strong> {mode.capitalize()}</p>
-            <p style="margin: 5px 0;"><strong>Resultado:</strong> {result_emoji}</p>
-            <p style="margin: 5px 0;"><strong>Fecha:</strong> {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} UTC</p>
-        </div>
-        
-        <p style="color: #333; font-size: 18px; font-weight: bold; margin: 30px 0; text-align: center;">
-            Fuiste tu quien intento acceder?
-        </p>
-        
-        <div style="text-align: center; margin: 30px 0;">
-            <a href="{confirm_url}" style="display: inline-block; background-color: #10b981; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px; font-size: 16px;">
-                SI, FUI YO
-            </a>
-            
-            <a href="{deny_url}" style="display: inline-block; background-color: #ef4444; color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 10px; font-size: 16px;">
-                NO FUI YO
-            </a>
-        </div>
-        
-        <p style="color: #666; font-size: 14px; margin-top: 30px; text-align: center; padding: 15px; background-color: #fff3cd; border-radius: 5px;">
-            Si no fuiste tu, haz click en "NO FUI YO" para que podamos tomar medidas de seguridad.
-        </p>
-        
-        <p style="color: #999; font-size: 13px; margin-top: 20px; text-align: center;">
-            Esta confirmacion nos ayuda a mejorar la precision del sistema biometrico y garantizar tu seguridad.
-        </p>
-        
-        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-        
-        <p style="color: #999; font-size: 12px; text-align: center;">
-            <strong>Auth-Gesture - Sistema Biometrico de Gestos de Mano</strong><br>
-            Este es un email automatico, por favor no respondas.<br>
-            Si tienes dudas, contacta al administrador del sistema.
-        </p>
-    </div>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh;">
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh; padding: 40px 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden;">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); padding: 40px 40px 30px 40px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                                Auth-Gesture
+                            </h1>
+                            <p style="margin: 8px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 400;">
+                                Autenticación Biométrica por Gestos
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Contenido -->
+                    <tr>
+                        <td style="padding: 50px 40px;">
+                            <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 24px; font-weight: 700;">
+                                Hola {username}
+                            </h2>
+                            
+                            <p style="margin: 0 0 24px 0; color: #475569; font-size: 16px; line-height: 1.6;">
+                                Se realizó una {mode_text} en tu cuenta.
+                            </p>
+                            
+                            <!-- Resultado -->
+                            <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
+                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    Resultado
+                                </p>
+                                <p style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">
+                                    {result_emoji}
+                                </p>
+                            </div>
+                            
+                            <p style="margin: 0 0 32px 0; color: #475569; font-size: 16px; line-height: 1.6; text-align: center;">
+                                ¿Fuiste tú quien intentó autenticarse?
+                            </p>
+                            
+                            <!-- Botones -->
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 32px;">
+                                <tr>
+                                    <td align="center" style="padding-bottom: 12px;">
+                                        <a href="{confirm_url}" style="display: inline-block; width: 220px; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); color: #ffffff; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+                                            Sí, fui yo
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center">
+                                        <a href="{deny_url}" style="display: inline-block; width: 220px; background-color: #f1f5f9; color: #475569; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+                                            No, no fui yo
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.6; text-align: center;">
+                                Tu confirmación nos ayuda a mejorar la seguridad del sistema.
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: #f8fafc; padding: 32px 40px; border-top: 1px solid #e2e8f0;">
+                            <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; text-align: center; font-weight: 500;">
+                                Auth-Gesture
+                            </p>
+                            <p style="margin: 0; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.5;">
+                                Este es un email automático. Por favor no respondas.
+                            </p>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
+
             """
             
             # Crear mensaje de SendGrid

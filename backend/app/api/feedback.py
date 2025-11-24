@@ -130,23 +130,24 @@ async def get_verification_metrics(user_id: Optional[str] = None):
 # FUNCIONES AUXILIARES PARA GENERAR PÁGINAS HTML
 # ====================================================================
 
+
 def _generate_success_page(response: str, was_correct: bool) -> str:
     """Genera página HTML de éxito."""
     
     if response == 'was_me':
-        emoji = "✅"
-        title = "Confirmación Recibida"
-        message = "Gracias por confirmar que fuiste tú."
+        title = "Respuesta registrada"
+        message = "Tu confirmación ha sido guardada exitosamente."
+        detail = "Gracias por ayudarnos a mantener la seguridad de tu cuenta."
+        border_color = "#10b981"
+        icon_bg = "#ecfdf5"
+        icon_color = "#10b981"
     else:
-        emoji = "🚨"
-        title = "Alerta de Seguridad Recibida"
-        message = "Gracias por reportar este intento no autorizado."
-    
-    accuracy_message = ""
-    if was_correct:
-        accuracy_message = '<p style="color: #10b981; font-weight: 500;">El sistema funcionó correctamente en este caso.</p>'
-    else:
-        accuracy_message = '<p style="color: #f59e0b; font-weight: 500;">Estamos mejorando la precisión del sistema con tu feedback.</p>'
+        title = "Alerta recibida"
+        message = "Hemos registrado tu reporte de actividad sospechosa."
+        detail = "Nuestro equipo de seguridad ha sido notificado."
+        border_color = "#ef4444"
+        icon_bg = "#fef2f2"
+        icon_color = "#ef4444"
     
     return f"""
     <!DOCTYPE html>
@@ -156,56 +157,95 @@ def _generate_success_page(response: str, was_correct: bool) -> str:
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{title}</title>
         <style>
-            body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
+            * {{
                 margin: 0;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 0;
+                box-sizing: border-box;
             }}
-            .container {{
-                background: white;
-                padding: 3rem;
-                border-radius: 1rem;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                text-align: center;
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                background: #f9fafb;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }}
+            .card {{
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-top: 4px solid {border_color};
+                border-radius: 12px;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
                 max-width: 500px;
+                width: 100%;
             }}
-            .emoji {{
-                font-size: 4rem;
-                margin-bottom: 1rem;
+            .card-header {{
+                padding: 40px 40px 0 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
             }}
-            h1 {{
-                color: #1f2937;
-                margin-bottom: 1rem;
-                font-size: 1.75rem;
+            .icon-container {{
+                flex-shrink: 0;
+                width: 56px;
+                height: 56px;
+                border-radius: 12px;
+                background: {icon_bg};
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }}
-            p {{
+            .card-body {{
+                padding: 24px 40px 40px 40px;
+                text-align: center;
+            }}
+            .title {{
+                font-size: 22px;
+                font-weight: 600;
+                color: #111827;
+                margin-bottom: 12px;
+                letter-spacing: -0.3px;
+            }}
+            .message {{
+                font-size: 16px;
+                color: #374151;
+                line-height: 1.6;
+                margin-bottom: 12px;
+            }}
+            .detail {{
+                font-size: 14px;
                 color: #6b7280;
                 line-height: 1.6;
-                margin-bottom: 0.5rem;
+                margin-bottom: 32px;
             }}
             .footer {{
-                margin-top: 2rem;
-                padding-top: 1rem;
-                border-top: 1px solid #e5e7eb;
+                font-size: 13px;
                 color: #9ca3af;
-                font-size: 0.875rem;
+                text-align: center;
+                padding-top: 24px;
+                border-top: 1px solid #f3f4f6;
             }}
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="emoji">{emoji}</div>
-            <h1>{title}</h1>
-            <p>{message}</p>
-            {accuracy_message}
-            <p style="margin-top: 1.5rem;">Tu feedback nos ayuda a mejorar la seguridad del sistema biométrico.</p>
-            <div class="footer">
-                <p>Auth-Gesture System</p>
-                <p>Puedes cerrar esta ventana</p>
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-container">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{icon_color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <h1 class="title">{title}</h1>
+            </div>
+            <div class="card-body">
+                <p class="message">{message}</p>
+                <p class="detail">{detail}</p>
+                <div class="footer">
+                    Puedes cerrar esta ventana de forma segura
+                </div>
             </div>
         </div>
     </body>
@@ -221,45 +261,100 @@ def _generate_already_responded_page() -> str:
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ya Respondido</title>
+        <title>Respuesta previa</title>
         <style>
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
+            * {
                 margin: 0;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 0;
+                box-sizing: border-box;
             }
-            .container {
-                background: white;
-                padding: 3rem;
-                border-radius: 1rem;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                text-align: center;
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                background: #f9fafb;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            .card {
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-top: 4px solid #f59e0b;
+                border-radius: 12px;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
                 max-width: 500px;
+                width: 100%;
             }
-            .emoji {
-                font-size: 4rem;
-                margin-bottom: 1rem;
+            .card-header {
+                padding: 40px 40px 0 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
             }
-            h1 {
-                color: #1f2937;
-                margin-bottom: 1rem;
+            .icon-container {
+                flex-shrink: 0;
+                width: 56px;
+                height: 56px;
+                border-radius: 12px;
+                background: #fef3c7;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
-            p {
+            .card-body {
+                padding: 24px 40px 40px 40px;
+                text-align: center;
+            }
+            .title {
+                font-size: 22px;
+                font-weight: 600;
+                color: #111827;
+                margin-bottom: 12px;
+                letter-spacing: -0.3px;
+            }
+            .message {
+                font-size: 16px;
+                color: #374151;
+                line-height: 1.6;
+                margin-bottom: 12px;
+            }
+            .detail {
+                font-size: 14px;
                 color: #6b7280;
                 line-height: 1.6;
+                margin-bottom: 32px;
+            }
+            .footer {
+                font-size: 13px;
+                color: #9ca3af;
+                text-align: center;
+                padding-top: 24px;
+                border-top: 1px solid #f3f4f6;
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="emoji">ℹ️</div>
-            <h1>Ya Respondiste</h1>
-            <p>Ya registramos tu respuesta anteriormente.</p>
-            <p style="margin-top: 1rem;">Puedes cerrar esta ventana.</p>
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-container">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                </div>
+                <h1 class="title">Respuesta registrada</h1>
+            </div>
+            <div class="card-body">
+                <p class="message">Este enlace ya fue utilizado anteriormente.</p>
+                <p class="detail">Tu respuesta original ha sido guardada y no puede modificarse por seguridad.</p>
+                <div class="footer">
+                    Puedes cerrar esta ventana de forma segura
+                </div>
+            </div>
         </div>
     </body>
     </html>
@@ -274,45 +369,100 @@ def _generate_error_page(error_message: str) -> str:
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Error</title>
+        <title>Error de validación</title>
         <style>
-            body {{
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
+            * {{
                 margin: 0;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 0;
+                box-sizing: border-box;
             }}
-            .container {{
-                background: white;
-                padding: 3rem;
-                border-radius: 1rem;
-                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                text-align: center;
+            body {{
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                background: #f9fafb;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }}
+            .card {{
+                background: #ffffff;
+                border: 1px solid #e5e7eb;
+                border-top: 4px solid #ef4444;
+                border-radius: 12px;
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
                 max-width: 500px;
+                width: 100%;
             }}
-            .emoji {{
-                font-size: 4rem;
-                margin-bottom: 1rem;
+            .card-header {{
+                padding: 40px 40px 0 40px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 20px;
             }}
-            h1 {{
-                color: #dc2626;
-                margin-bottom: 1rem;
+            .icon-container {{
+                flex-shrink: 0;
+                width: 56px;
+                height: 56px;
+                border-radius: 12px;
+                background: #fef2f2;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }}
-            p {{
+            .card-body {{
+                padding: 24px 40px 40px 40px;
+                text-align: center;
+            }}
+            .title {{
+                font-size: 22px;
+                font-weight: 600;
+                color: #111827;
+                margin-bottom: 12px;
+                letter-spacing: -0.3px;
+            }}
+            .message {{
+                font-size: 16px;
+                color: #374151;
+                line-height: 1.6;
+                margin-bottom: 12px;
+            }}
+            .detail {{
+                font-size: 14px;
                 color: #6b7280;
                 line-height: 1.6;
+                margin-bottom: 32px;
+            }}
+            .footer {{
+                font-size: 13px;
+                color: #9ca3af;
+                text-align: center;
+                padding-top: 24px;
+                border-top: 1px solid #f3f4f6;
             }}
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="emoji">❌</div>
-            <h1>Error</h1>
-            <p>{error_message}</p>
-            <p style="margin-top: 1rem;">Si el problema persiste, contacta al administrador.</p>
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-container">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                </div>
+                <h1 class="title">Error de validación</h1>
+            </div>
+            <div class="card-body">
+                <p class="message">{error_message}</p>
+                <p class="detail">Si el problema persiste, contacta al equipo de soporte técnico.</p>
+                <div class="footer">
+                    Puedes cerrar esta ventana de forma segura
+                </div>
+            </div>
         </div>
     </body>
     </html>
