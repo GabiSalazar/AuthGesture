@@ -1089,7 +1089,9 @@ class BiometricSystemManager:
             phone_number: Optional[str] = None,
             age: Optional[int] = None,
             gender: Optional[str] = None,
-            gesture_sequence: Optional[List[str]] = None
+            gesture_sequence: Optional[List[str]] = None,
+            session_token: Optional[str] = None,
+            callback_url: Optional[str] = None
         ) -> Dict[str, Any]:
         """
         Inicia sesión de enrollment (wrapper para la API).
@@ -1126,6 +1128,8 @@ class BiometricSystemManager:
                 age=age,                  # ✅ Nuevo
                 gender=gender,            # ✅ Nuevo
                 gesture_sequence=gesture_sequence,
+                session_token=session_token,    # 🔧 NUEVO
+                callback_url=callback_url,      # 🔧 NUEVO
                 progress_callback=None,
                 error_callback=None
             )

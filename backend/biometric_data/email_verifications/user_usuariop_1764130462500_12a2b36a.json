@@ -1,0 +1,11 @@
+{
+  "user_id": "user_usuariop_1764130462500_12a2b36a",
+  "email": "prueba_plugin@test.com",
+  "token": "593172",
+  "created_at": "2025-11-25T23:14:22.501975",
+  "expires_at": "2025-11-25T23:44:22.501975",
+  "verified": false,
+  "verification_date": null,
+  "attempts": 0,
+  "max_attempts": 3
+}

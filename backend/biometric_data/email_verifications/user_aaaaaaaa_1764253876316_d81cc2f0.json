@@ -1,0 +1,11 @@
+{
+  "user_id": "user_aaaaaaaa_1764253876316_d81cc2f0",
+  "email": "gabriela.salazar@epn.edu.ec",
+  "token": "798323",
+  "created_at": "2025-11-27T09:31:16.317763",
+  "expires_at": "2025-11-27T10:01:16.317763",
+  "verified": true,
+  "verification_date": "2025-11-27T09:32:35.684261",
+  "attempts": 0,
+  "max_attempts": 3
+}

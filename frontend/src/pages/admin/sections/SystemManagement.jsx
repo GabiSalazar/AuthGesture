@@ -32,16 +32,20 @@ import {
   RefreshCw,
   CheckCircle,
   AlertCircle,
-  XCircle
+  XCircle,
+  Key,
+  Copy,
+  RotateCw,
+  Zap,
+  Shield
 } from 'lucide-react'
 
 export default function SystemManagement() {
-  const [activeTab, setActiveTab] = useState('config') // 'config' | 'logs'
+  const [activeTab, setActiveTab] = useState('config') // 'config' | 'logs' | 'api-keys'
   
   // Estado de configuración
   const [config, setConfig] = useState(null)
   const [loadingConfig, setLoadingConfig] = useState(true)
-  
   const [authThresholds, setAuthThresholds] = useState(null)
 
   // Estado de logs
@@ -55,6 +59,12 @@ export default function SystemManagement() {
     limit: 100
   })
 
+  // Estado de API Keys
+  const [apiKeyData, setApiKeyData] = useState(null)
+  const [loadingApiKey, setLoadingApiKey] = useState(false)
+  const [generatingKey, setGeneratingKey] = useState(false)
+  const [copiedKey, setCopiedKey] = useState(false)
+
   // Cargar configuración al montar
   useEffect(() => {
     loadConfiguration()
@@ -65,6 +75,13 @@ export default function SystemManagement() {
     if (activeTab === 'logs') {
       loadLogs()
       loadLogStats()
+    }
+  }, [activeTab])
+
+  // Cargar API Key cuando se cambia a la tab de api-keys
+  useEffect(() => {
+    if (activeTab === 'api-keys') {
+      loadCurrentApiKey()
     }
   }, [activeTab])
 
@@ -113,6 +130,114 @@ export default function SystemManagement() {
       console.error('Error cargando estadísticas de logs:', err)
     }
   }
+
+  // ============================================
+  // FUNCIONES PARA API KEYS
+  // ============================================
+
+  const loadCurrentApiKey = async () => {
+    try {
+      setLoadingApiKey(true)
+      const response = await fetch('http://localhost:8000/api/v1/api-keys/current')
+      const data = await response.json()
+      
+      setApiKeyData(data.exists ? {
+        key: data.key,
+        created_at: data.created_at,
+        usage_count: data.usage_count,
+        last_used_at: data.last_used_at
+      } : null)
+    } catch (err) {
+      console.error('Error cargando API Key:', err)
+    } finally {
+      setLoadingApiKey(false)
+    }
+  }
+
+  const handleGenerateApiKey = async () => {
+    if (apiKeyData) {
+      if (!confirm('Ya existe una API Key. Generar una nueva invalidará la actual. ¿Continuar?')) {
+        return
+      }
+    }
+
+    try {
+      setGeneratingKey(true)
+      const response = await fetch('http://localhost:8000/api/v1/api-keys/generate', {
+        method: 'POST'
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setApiKeyData({
+          key: data.key,
+          created_at: data.created_at,
+          usage_count: 0,
+          last_used_at: null
+        })
+        alert('✅ API Key generada exitosamente')
+      }
+    } catch (err) {
+      console.error('Error generando API Key:', err)
+      alert('❌ Error al generar API Key')
+    } finally {
+      setGeneratingKey(false)
+    }
+  }
+
+  const handleRegenerateApiKey = async () => {
+    if (!confirm('⚠️ ADVERTENCIA\n\nAl regenerar la API Key:\n\n• La clave actual dejará de funcionar\n• El Plugin no podrá autenticarse hasta actualizar la nueva clave\n• Esta acción no se puede deshacer\n\n¿Estás seguro de continuar?')) {
+      return
+    }
+
+    try {
+      setGeneratingKey(true)
+      const response = await fetch('http://localhost:8000/api/v1/api-keys/regenerate', {
+        method: 'POST'
+      })
+      const data = await response.json()
+      
+      if (data.success) {
+        setApiKeyData({
+          key: data.key,
+          created_at: data.created_at,
+          usage_count: 0,
+          last_used_at: null
+        })
+        alert('✅ API Key regenerada exitosamente\n\n⚠️ IMPORTANTE: Actualiza esta nueva clave en el Plugin')
+      }
+    } catch (err) {
+      console.error('Error regenerando API Key:', err)
+      alert('❌ Error al regenerar API Key')
+    } finally {
+      setGeneratingKey(false)
+    }
+  }
+
+  const handleCopyApiKey = () => {
+    if (apiKeyData?.key) {
+      navigator.clipboard.writeText(apiKeyData.key)
+      setCopiedKey(true)
+      setTimeout(() => setCopiedKey(false), 2000)
+    }
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Nunca'
+    const date = new Date(dateString)
+    return date.toLocaleString('es-ES', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    })
+  }
+
+  // ============================================
+  // FUNCIONES DE LOGS
+  // ============================================
 
   const handleFilterChange = (key, value) => {
     setLogsFilters(prev => ({
@@ -192,11 +317,11 @@ export default function SystemManagement() {
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 border-b border-gray-200">
+      {/* Tabs - CON API KEYS */}
+      <div className="flex gap-2 border-b border-gray-200 overflow-x-auto">
         <button
           onClick={() => setActiveTab('config')}
-          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'config'
               ? 'border-blue-500 text-blue-600'
               : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -207,7 +332,7 @@ export default function SystemManagement() {
         </button>
         <button
           onClick={() => setActiveTab('logs')}
-          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors ${
+          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
             activeTab === 'logs'
               ? 'border-blue-500 text-blue-600'
               : 'border-transparent text-gray-500 hover:text-gray-700'
@@ -215,6 +340,17 @@ export default function SystemManagement() {
         >
           <FileText className="w-4 h-4 inline mr-2" />
           Logs del Sistema
+        </button>
+        <button
+          onClick={() => setActiveTab('api-keys')}
+          className={`px-4 py-2 font-medium text-sm border-b-2 transition-colors whitespace-nowrap ${
+            activeTab === 'api-keys'
+              ? 'border-blue-500 text-blue-600'
+              : 'border-transparent text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <Key className="w-4 h-4 inline mr-2" />
+          API Key Management
         </button>
       </div>
 
@@ -552,6 +688,188 @@ export default function SystemManagement() {
               )}
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {/* Tab: API Key Management - NUEVO */}
+      {activeTab === 'api-keys' && (
+        <div className="space-y-6">
+          {loadingApiKey ? (
+            <div className="flex items-center justify-center py-12">
+              <Spinner size="lg" />
+            </div>
+          ) : (
+            <>
+              {/* Header con descripción */}
+              <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-blue-600 rounded-lg">
+                      <Shield className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Gestión de API Key
+                      </h3>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        La API Key permite la comunicación segura entre el Plugin y el Sistema Biométrico. 
+                        Solo puede existir una clave activa a la vez. Al regenerar la clave, la anterior 
+                        dejará de funcionar inmediatamente.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* API Key Actual */}
+              {apiKeyData ? (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Key className="w-5 h-5" />
+                      API Key Actual
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Clave */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Clave Activa
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={apiKeyData.key}
+                          readOnly
+                          className="flex-1 px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg font-mono text-sm text-gray-900"
+                        />
+                        <Button
+                          onClick={handleCopyApiKey}
+                          className="flex items-center gap-2 px-4"
+                          title="Copiar al portapapeles"
+                        >
+                          {copiedKey ? (
+                            <>
+                              <CheckCircle className="w-4 h-4" />
+                              <span>¡Copiado!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4" />
+                              <span>Copiar</span>
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Información */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <p className="text-sm text-blue-700 mb-1">Fecha de Creación</p>
+                        <p className="text-sm font-semibold text-blue-900">
+                          {formatDate(apiKeyData.created_at)}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <p className="text-sm text-green-700 mb-1">Veces Utilizada</p>
+                        <p className="text-2xl font-bold text-green-900">
+                          {apiKeyData.usage_count || 0}
+                        </p>
+                      </div>
+                      <div className="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <p className="text-sm text-purple-700 mb-1">Último Uso</p>
+                        <p className="text-sm font-semibold text-purple-900">
+                          {formatDate(apiKeyData.last_used_at)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Botón Regenerar */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-1">
+                          <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                            Regenerar API Key
+                          </h4>
+                          <p className="text-sm text-gray-600">
+                            Genera una nueva clave e invalida la actual. El Plugin dejará de funcionar 
+                            hasta que actualices la nueva clave en su configuración.
+                          </p>
+                        </div>
+                        <Button
+                          onClick={handleRegenerateApiKey}
+                          disabled={generatingKey}
+                          variant="danger"
+                          className="flex items-center gap-2 whitespace-nowrap"
+                        >
+                          {generatingKey ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              <span>Regenerando...</span>
+                            </>
+                          ) : (
+                            <>
+                              <RotateCw className="w-4 h-4" />
+                              <span>Regenerar</span>
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                // No existe API Key
+                <Card>
+                  <CardContent className="py-12">
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                        <Key className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        No hay API Key configurada
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-6 max-w-md mx-auto">
+                        Genera una API Key para permitir la comunicación segura entre el Plugin 
+                        y el Sistema Biométrico.
+                      </p>
+                      <Button
+                        onClick={handleGenerateApiKey}
+                        disabled={generatingKey}
+                        className="flex items-center gap-2 mx-auto"
+                      >
+                        {generatingKey ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Generando...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="w-4 h-4" />
+                            <span>Autogenerar API Key</span>
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Advertencia de Seguridad */}
+              <Alert variant="warning">
+                <AlertCircle className="w-4 h-4" />
+                <div className="ml-2">
+                  <p className="font-semibold text-sm">Importante</p>
+                  <p className="text-sm mt-1">
+                    Mantén esta API Key en secreto. Cualquier persona con acceso a ella podrá 
+                    usar tu Sistema Biométrico. Si sospechas que la clave ha sido comprometida, 
+                    regenera una nueva inmediatamente.
+                  </p>
+                </div>
+              </Alert>
+            </>
+          )}
         </div>
       )}
     </div>

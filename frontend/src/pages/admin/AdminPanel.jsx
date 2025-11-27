@@ -8,7 +8,8 @@ import {
   Brain,
   LogOut,
   Menu,
-  X
+  X,
+  Shield
 } from 'lucide-react'
 
 // Importar secciones
@@ -21,6 +22,9 @@ export default function AdminPanel() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('dashboard')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Obtener username desde sessionStorage
+  const adminUsername = sessionStorage.getItem('admin_username') || 'admin'
 
   // Definición de tabs
   const tabs = [
@@ -57,9 +61,21 @@ export default function AdminPanel() {
     setMobileMenuOpen(false)
   }
 
+  const handleLogout = () => {
+    if (confirm('¿Cerrar sesión?\n\nSerás redirigido a la pantalla de login.')) {
+      // Eliminar tokens de sessionStorage
+      sessionStorage.removeItem('admin_token')
+      sessionStorage.removeItem('admin_username')
+      sessionStorage.removeItem('admin_expires_at')
+      
+      // Redirigir al login
+      navigate('/admin/login', { replace: true })
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Header con Logo + Tabs + Salir */}
+      {/* Header con Logo + Tabs + Info Admin + Salir */}
       <div className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -102,8 +118,21 @@ export default function AdminPanel() {
               })}
             </div>
 
-            {/* Botones de acción */}
-            <div className="flex items-center gap-2">
+            {/* Sección derecha: Info Admin + Botones */}
+            <div className="flex items-center gap-2 sm:gap-4">
+              {/* Info del Admin - Visible en desktop */}
+              <div className="hidden md:flex items-center gap-3 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="text-white text-sm font-bold">
+                    {adminUsername.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="hidden lg:block">
+                  <p className="text-sm font-semibold text-gray-900">{adminUsername}</p>
+                  <p className="text-xs text-gray-500">Administrador</p>
+                </div>
+              </div>
+
               {/* Botón menú móvil */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -112,10 +141,11 @@ export default function AdminPanel() {
                 {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
 
-              {/* Botón Salir */}
+              {/* Botón Salir con confirmación */}
               <button
-                onClick={() => navigate('/')}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-all shadow-sm hover:shadow"
+                title="Cerrar sesión"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline">Salir</span>
@@ -125,7 +155,21 @@ export default function AdminPanel() {
 
           {/* Mobile Menu Dropdown */}
           {mobileMenuOpen && (
-            <div className="lg:hidden pb-4 space-y-1">
+            <div className="lg:hidden pb-4 space-y-1 border-t border-gray-100 pt-4">
+              {/* Info del admin en móvil */}
+              <div className="flex items-center gap-3 px-4 py-3 mb-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
+                  <span className="text-white font-bold">
+                    {adminUsername.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{adminUsername}</p>
+                  <p className="text-xs text-gray-500">Administrador</p>
+                </div>
+              </div>
+
+              {/* Tabs en móvil */}
               {tabs.map((tab) => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id

@@ -166,6 +166,10 @@ class RealEnrollmentSession:
     age: Optional[int] = None
     gender: Optional[str] = None
     
+    # 🔧 CAMPOS PARA COMUNICACIÓN CON PLUGIN
+    session_token: Optional[str] = None
+    callback_url: Optional[str] = None
+    
     status: EnrollmentStatus = EnrollmentStatus.NOT_STARTED
     current_phase: EnrollmentPhase = EnrollmentPhase.INITIALIZATION
     current_gesture: str = ""
@@ -806,6 +810,8 @@ class RealEnrollmentWorkflow:
                           phone_number: str,
                           age: int,
                           gender: str,
+                          session_token: Optional[str] = None,
+                          callback_url: Optional[str] = None,
                           progress_callback: Optional[Callable] = None,
                           error_callback: Optional[Callable] = None) -> RealEnrollmentSession:
         """
@@ -870,6 +876,8 @@ class RealEnrollmentWorkflow:
                 phone_number=phone_number,
                 age=age,
                 gender=gender,
+                session_token=session_token,    # 🔧 NUEVO
+                callback_url=callback_url,      # 🔧 NUEVO
                 # Callbacks opcionales
                 progress_callback=progress_callback,
                 error_callback=error_callback
@@ -2651,6 +2659,8 @@ class RealEnrollmentSystem:
                           phone_number: str,  # ✅ NUEVO - OBLIGATORIO
                           age: int,  # ✅ NUEVO - OBLIGATORIO
                           gender: str,  # ✅ NUEVO - OBLIGATORIO
+                          session_token: Optional[str] = None,
+                          callback_url: Optional[str] = None,
                           progress_callback: Optional[Callable] = None,
                           error_callback: Optional[Callable] = None) -> str:
         """
@@ -2742,6 +2752,8 @@ class RealEnrollmentSystem:
                 phone_number=phone_number,  # ✅ NUEVO
                 age=age,  # ✅ NUEVO
                 gender=gender,  # ✅ NUEVO
+                session_token=session_token,    # 🔧 NUEVO
+                callback_url=callback_url,      # 🔧 NUEVO
                 progress_callback=progress_callback,
                 error_callback=error_callback
             )

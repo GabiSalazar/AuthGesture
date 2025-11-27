@@ -29,6 +29,10 @@ class EnrollmentStartRequest(BaseModel):
     age: int
     gender: str
     gesture_sequence: Optional[List[str]] = None
+    
+    # NUEVOS CAMPOS PARA COMUNICACIÓN CON PLUGIN
+    session_token: Optional[str] = None
+    callback_url: Optional[str] = None
 
 
 class EnrollmentStartResponse(BaseModel):
@@ -296,7 +300,9 @@ async def start_enrollment(request: EnrollmentStartRequest):
             email=email_stripped,  # ✅ Nuevo campo
             phone_number=phone_stripped,  # ✅ Nuevo campo
             age=age_int,  # ✅ Nuevo campo
-            gender=request.gender  # ✅ Nuevo campo
+            gender=request.gender,  # ✅ Nuevo campo
+            session_token=request.session_token,  # 🔧 NUEVO - Plugin
+            callback_url=request.callback_url      # 🔧 NUEVO - Plugin
         )
         
         if not result.get('success', False):

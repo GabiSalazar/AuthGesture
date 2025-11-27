@@ -20,7 +20,10 @@ from app.api import (
     enrollment,
     authentication,
     system,
-    feedback
+    feedback,
+    admin,
+    api_keys,
+    biometric_plugin
 )
 
 __all__ = [
@@ -41,5 +44,8 @@ __all__ = [
     'enrollment',
     'authentication',
     'system',
-    'feedback'
+    'feedback',
+    'admin',
+    'api_keys',
+    'biometric_plugin'
 ]

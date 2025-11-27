@@ -93,6 +93,18 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
+    # ============================================================================
+    # ADMIN AUTHENTICATION
+    # ============================================================================
+    ADMIN_USERNAME: str = "admin"
+    ADMIN_PASSWORD: str = "change_me_in_env"
+    ADMIN_JWT_SECRET: str = "change_me_in_env_this_is_not_secure"
+    ADMIN_JWT_EXPIRATION_HOURS: int = 8
+    
+    # BIOMETRIC JWT (para comunicación con Plugin)
+    BIOMETRIC_JWT_SECRET: str = "CHANGE_ME_IN_ENV_FILE_NOT_SECURE"
+    BIOMETRIC_JWT_EXPIRATION_HOURS: int = 1
+
     class Config:
         env_file = ".env"
         case_sensitive = True

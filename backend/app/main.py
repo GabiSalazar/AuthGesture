@@ -68,10 +68,15 @@ from app.api import (
     logs,
     personality,
     email_verification,
-    feedback
+    feedback,
+    admin,
+    api_keys,
+    biometric_plugin
 )
 
 # ===== REGISTRAR ROUTERS =====
+app.include_router(admin.router, prefix=settings.API_V1_STR)
+app.include_router(api_keys.router, prefix=settings.API_V1_STR)
 app.include_router(roi.router, prefix=settings.API_V1_STR)
 app.include_router(config.router, prefix=settings.API_V1_STR)
 app.include_router(camera.router, prefix=settings.API_V1_STR)
@@ -95,6 +100,7 @@ app.include_router(personality.router, prefix=settings.API_V1_STR)
 #app.include_router(email_verification.router, prefix=settings.API_V1_STR)
 app.include_router(email_verification.router, prefix="/api/email", tags=["email"])
 app.include_router(feedback.router, prefix=settings.API_V1_STR)
+app.include_router(biometric_plugin.router, prefix=settings.API_V1_STR)
 
 # Evento de inicio
 @app.on_event("startup")

@@ -30,12 +30,16 @@ class VerificationStartRequest(BaseModel):
     required_sequence: Optional[List[str]] = Field(None, description="Secuencia de gestos")
     ip_address: str = Field(default="localhost", description="IP del cliente")
 
+    session_token: Optional[str] = Field(None, description="Token de sesión del Plugin")
+    callback_url: Optional[str] = Field(None, description="URL para enviar resultado al Plugin")
 
 class IdentificationStartRequest(BaseModel):
     """Request para iniciar identificación 1:N"""
     security_level: str = Field(default="standard", description="Nivel de seguridad")
     ip_address: str = Field(default="localhost", description="IP del cliente")
 
+    session_token: Optional[str] = Field(None, description="Token de sesión del Plugin")
+    callback_url: Optional[str] = Field(None, description="URL para enviar resultado al Plugin")
 
 class AuthenticationStartResponse(BaseModel):
     """Response de inicio de autenticación"""
@@ -104,7 +108,9 @@ async def start_verification(request: VerificationStartRequest):
             user_id=request.user_id,
             security_level=security_level,
             required_sequence=request.required_sequence,
-            ip_address=request.ip_address
+            ip_address=request.ip_address,
+            session_token=request.session_token,
+            callback_url=request.callback_url
         )
         
         return AuthenticationStartResponse(
