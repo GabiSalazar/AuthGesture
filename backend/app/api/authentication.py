@@ -7,12 +7,14 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import logging
+import time
 
 from app.core.authentication_system import (
     get_real_authentication_system,
     AuthenticationMode,
     AuthenticationStatus,
-    SecurityLevel
+    SecurityLevel,
+    get_camera_manager
 )
 
 logger = logging.getLogger(__name__)
@@ -65,7 +67,6 @@ class FrameProcessResponse(BaseModel):
     gesture_confidence: Optional[float] = None
     required_sequence: Optional[List[str]] = None
     captured_sequence: Optional[List[str]] = None
-    # ✅ NUEVOS CAMPOS PARA IDENTIFICACIÓN
     sequence_complete: Optional[bool] = None
     gestures_needed: Optional[int] = None
 
@@ -91,6 +92,17 @@ async def start_verification(request: VerificationStartRequest):
     """
     Inicia proceso de verificación 1:1.
     """
+    # LOG INICIAL - Estado de cámara al INICIAR verificación
+    print("=" * 80)
+    print("VERIFICATION START - Estado de camara")
+    camera_manager = get_camera_manager()
+    print(f"   Camara existe: {camera_manager is not None}")
+    if camera_manager:
+        print(f"   Camara inicializada: {camera_manager.is_initialized}")
+        if camera_manager.camera:
+            print(f"   Camara abierta: {camera_manager.camera.isOpened()}")
+    print("=" * 80)
+    
     try:
         logger.info(f"API: Iniciando verificación para {request.user_id}")
         
@@ -170,6 +182,8 @@ async def process_authentication_frame(session_id: str):
     """
     Procesa un frame para la sesión de autenticación y devuelve el frame visual.
     """
+    request_time = time.time()
+    logger.info(f"REQUEST /frame | Session:{session_id} | Time:{request_time}") 
     try:
         import cv2
         import base64
@@ -178,7 +192,6 @@ async def process_authentication_frame(session_id: str):
         
         auth_system = get_real_authentication_system()
         
-        # ✅ VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
         session = auth_system.session_manager.get_real_session(session_id)
         if not session:
             raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
@@ -189,7 +202,6 @@ async def process_authentication_frame(session_id: str):
         if 'error' in result:
             raise HTTPException(status_code=404, detail=result['error'])
         
-        # ✅ CAPTURAR Y PROCESAR FRAME VISUAL
         frame_base64 = None
         try:
             camera = get_camera_manager()
@@ -212,7 +224,7 @@ async def process_authentication_frame(session_id: str):
                     frame = None
                 else:
                     frame = frame.copy()
-                    logger.debug(f"✅ Frame válido capturado: {frame.shape}")
+                    logger.debug(f"Frame válido capturado: {frame.shape}")
     
             # ========================================================================
             # DISEÑO ADAPTATIVO: VERIFICACIÓN vs IDENTIFICACIÓN
@@ -360,13 +372,11 @@ async def process_authentication_frame(session_id: str):
                                                 (bar_x + filled_width, bar_y + bar_height_px), 
                                                 COLOR_PRIMARY, -1)
                                 
-                                # ===== COLUMNA DERECHA: SOLO INDICADORES CIRCULARES =====
-                                # ✅ ELIMINADO EL BADGE GRIS - Solo quedan los círculos de progreso
                                 right_x = w - 110
                                 circle_y = 35  # Posición vertical de los círculos
                                 circle_spacing = 18
                                 
-                                import time
+                                
                                 pulse = int(time.time() * 2) % 2
                                 
                                 for i in range(len(session.required_sequence)):
@@ -486,24 +496,19 @@ async def process_authentication_frame(session_id: str):
                             gestures_needed = 3
                             current_step = len(captured_gestures)
                             
-                            # ===== COLORES DE LA APP (tonos suaves) =====
                             COLOR_PRIMARY = (255, 180, 100)  # Azul suave (BGR: 59, 130, 246)
                             COLOR_SLATE = (120, 120, 120)    # Gris suave
                             COLOR_WHITE = (255, 255, 255)    # Blanco
                             COLOR_BG_DARK = (30, 30, 30)     # Fondo oscuro suave
                             
-                            # ===== BARRA SUPERIOR MINIMALISTA =====
                             bar_height = 70
                             overlay = frame.copy()
                             
-                            # Fondo oscuro translúcido
                             cv2.rectangle(overlay, (0, 0), (w, bar_height), COLOR_BG_DARK, -1)
                             cv2.addWeighted(overlay, 0.75, frame, 0.25, 0, frame)
                             
-                            # Línea de acento sutil (azul)
                             cv2.line(frame, (0, bar_height-1), (w, bar_height-1), COLOR_PRIMARY, 2)
                             
-                            # ===== IZQUIERDA: Título e instrucción =====
                             # TÍTULO
                             cv2.putText(frame, "IDENTIFICACION 1:N", 
                                     (20, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.6, COLOR_PRIMARY, 2, cv2.LINE_AA)
@@ -513,7 +518,6 @@ async def process_authentication_frame(session_id: str):
                             cv2.putText(frame, instruction, 
                                     (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (180, 180, 180), 1, cv2.LINE_AA)
                             
-                            # ===== CENTRO: Progreso con texto =====
                             progress_text = f"{current_step}/3 gestos"
                             center_x = w // 2
                             text_size = cv2.getTextSize(progress_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)[0]
@@ -522,7 +526,6 @@ async def process_authentication_frame(session_id: str):
                             cv2.putText(frame, progress_text, 
                                     (text_x, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLOR_WHITE, 1, cv2.LINE_AA)
                             
-                            # ===== DERECHA: Indicadores circulares de gestos capturados =====
                             circle_spacing = 35
                             start_x = w - 140
                             circle_y = 40

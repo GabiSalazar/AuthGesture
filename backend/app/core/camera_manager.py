@@ -9,6 +9,7 @@ import time
 import logging
 from typing import Optional, Tuple, Dict, Any
 from datetime import datetime
+import threading
 
 # Importar config_manager
 try:
@@ -188,12 +189,17 @@ class CameraManager:
         Returns:
             Tupla (éxito, frame) donde éxito indica si la captura fue exitosa
         """
+        thread_id = threading.get_ident()
+        logger.info(f"CAPTURE_FRAME llamado desde Thread:{thread_id}")
+        
         if not self.is_initialized or not self.camera:
-            logger.error("Cámara no inicializada")
+            logger.error(f"Cámara NO inicializada | Thread:{thread_id}")
             return False, None
         
         try:
+            logger.info(f"Ejecutando camera.read() | Thread:{thread_id}")
             ret, frame = self.camera.read()
+            logger.info(f"camera.read() retornó: ret={ret}, frame={'OK' if frame is not None else 'None'} | Thread:{thread_id}")
             
             if ret:
                 self.frame_count += 1

@@ -35,7 +35,7 @@ async def anatomical_features_health_check():
             "status": "healthy",
             "module": "Anatomical Features Extractor",
             "initialized": True,
-            "message": "✅ Módulo 6 cargado correctamente",
+            "message": "Módulo 6 cargado correctamente",
             "feature_dimension": 180,
             "feature_categories": len(FeatureCategory)
         }

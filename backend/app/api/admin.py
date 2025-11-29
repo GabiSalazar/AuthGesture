@@ -124,5 +124,5 @@ async def admin_health_check():
         "status": "healthy",
         "module": "Admin Authentication",
         "initialized": True,
-        "message": "✅ Módulo de autenticación disponible"
+        "message": "Módulo de autenticación disponible"
     }

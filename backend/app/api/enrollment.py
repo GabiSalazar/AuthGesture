@@ -475,6 +475,17 @@ async def complete_enrollment(session_id: str):
         EnrollmentCompleteResponse con resultado
     """
     try:
+        # LOG INICIAL - Estado ANTES
+        print("=" * 80)
+        print("ENROLLMENT COMPLETE - Estado de camara ANTES de completar")
+        camera_manager = get_camera_manager()
+        print(f"   Camara existe: {camera_manager is not None}")
+        if camera_manager:
+            print(f"   Camara inicializada: {camera_manager.is_initialized}")
+            if camera_manager.camera:
+                print(f"   Camara abierta: {camera_manager.camera.isOpened()}")
+        print("=" * 80)
+        
         manager = get_system_manager()
         
         print(f"🎯 Completando enrollment - Session: {session_id}")
@@ -491,6 +502,17 @@ async def complete_enrollment(session_id: str):
         print(f"   User: {result['user_id']}")
         print(f"   Templates: {result['templates_created']}")
         print(f"   Tiempo: {result['enrollment_time']:.2f}s")
+        
+        # LOG FINAL - Estado DESPUÉS
+        print("=" * 80)
+        print("ENROLLMENT COMPLETE - Estado de camara DESPUES de completar")
+        camera_manager = get_camera_manager()
+        print(f"   Camara existe: {camera_manager is not None}")
+        if camera_manager:
+            print(f"   Camara inicializada: {camera_manager.is_initialized}")
+            if camera_manager.camera:
+                print(f"   Camara abierta: {camera_manager.camera.isOpened()}")
+        print("=" * 80)
         
         return EnrollmentCompleteResponse(
             success=True,

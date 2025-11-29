@@ -170,5 +170,5 @@ async def api_keys_health_check():
         "status": "healthy",
         "module": "API Keys Management",
         "initialized": True,
-        "message": "✅ Módulo de API Keys disponible"
+        "message": "Módulo de API Keys disponible"
     }
