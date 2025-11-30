@@ -9,7 +9,6 @@ import time
 import logging
 from typing import Optional, Tuple, Dict, Any
 from datetime import datetime
-import threading
 
 # Importar config_manager
 try:
@@ -90,7 +89,7 @@ class CameraManager:
                 logger.info("Cámara inicializada correctamente")
                 
                 # Periodo de calentamiento
-                self._warmup_camera()
+                # self._warmup_camera()
                 
             return success
             
@@ -189,17 +188,12 @@ class CameraManager:
         Returns:
             Tupla (éxito, frame) donde éxito indica si la captura fue exitosa
         """
-        thread_id = threading.get_ident()
-        logger.info(f"CAPTURE_FRAME llamado desde Thread:{thread_id}")
-        
         if not self.is_initialized or not self.camera:
-            logger.error(f"Cámara NO inicializada | Thread:{thread_id}")
+            logger.error("Cámara no inicializada")
             return False, None
         
         try:
-            logger.info(f"Ejecutando camera.read() | Thread:{thread_id}")
             ret, frame = self.camera.read()
-            logger.info(f"camera.read() retornó: ret={ret}, frame={'OK' if frame is not None else 'None'} | Thread:{thread_id}")
             
             if ret:
                 self.frame_count += 1
@@ -478,12 +472,52 @@ class CameraManager:
 # ===== INSTANCIA GLOBAL =====
 _camera_instance = None
 _retry_count = 0
+_last_release_time = 0
+
+# def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
+#     """Obtiene o crea la instancia global de CameraManager."""
+#     global _camera_instance, _retry_count
+    
+#     if _camera_instance is None:
+#         _camera_instance = CameraManager(camera_index)
+#         if not _camera_instance.initialize():
+#             logger.error("ERROR: No se pudo inicializar cámara")
+#             _camera_instance = None
+#             return None
+#     elif not _camera_instance.is_initialized:
+#         logger.info("Reinicializando cámara existente...")
+#         if not _camera_instance.initialize():
+#             logger.error("ERROR: No se pudo reinicializar cámara")
+#             _camera_instance = None
+            
+#             # Evitar recursión infinita
+#             _retry_count += 1
+#             if _retry_count < 3:
+#                 logger.info(f"Reintento {_retry_count}/3...")
+#                 return get_camera_manager(camera_index)
+#             else:
+#                 logger.error("FATAL: Máximo de reintentos alcanzado")
+#                 _retry_count = 0
+#                 return None
+    
+#     _retry_count = 0
+#     return _camera_instance
 
 def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
     """Obtiene o crea la instancia global de CameraManager."""
-    global _camera_instance, _retry_count
+    global _camera_instance, _retry_count, _last_release_time
     
     if _camera_instance is None:
+        # 🆕 ESPERAR SI ACABA DE LIBERARSE
+        current_time = time.time()
+        time_since_release = current_time - _last_release_time
+        
+        if _last_release_time > 0 and time_since_release < 1.5:
+            wait_time = 1.5 - time_since_release
+            logger.info(f"⏳ Esperando {wait_time:.1f}s para que Windows libere la cámara...")
+            time.sleep(wait_time)
+        
+        logger.info("📹 Creando nueva instancia de CameraManager...")
         _camera_instance = CameraManager(camera_index)
         if not _camera_instance.initialize():
             logger.error("ERROR: No se pudo inicializar cámara")
@@ -495,7 +529,6 @@ def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
             logger.error("ERROR: No se pudo reinicializar cámara")
             _camera_instance = None
             
-            # Evitar recursión infinita
             _retry_count += 1
             if _retry_count < 3:
                 logger.info(f"Reintento {_retry_count}/3...")
@@ -508,16 +541,26 @@ def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
     _retry_count = 0
     return _camera_instance
 
+# def release_camera():
+#     """Libera la instancia global de cámara."""
+#     global _camera_instance
+    
+#     if _camera_instance is not None:
+#         _camera_instance.release()
+#         _camera_instance = None
+
 
 def release_camera():
     """Libera la instancia global de cámara."""
-    global _camera_instance
+    global _camera_instance, _last_release_time
     
     if _camera_instance is not None:
+        logger.info("📹 Liberando instancia global de cámara...")
         _camera_instance.release()
         _camera_instance = None
-
-
+        _last_release_time = time.time()
+        logger.info("✅ Cámara liberada completamente")
+        
 def reset_camera_for_new_operation():
     """Reset simple para nueva operación."""
     global _camera_instance

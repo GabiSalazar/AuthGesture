@@ -1,0 +1,11 @@
+{
+  "user_id": "user_testuser_1764446842148_16c132c5",
+  "email": "test_1764446822@camera.com",
+  "token": "922714",
+  "created_at": "2025-11-29T15:07:22.148026",
+  "expires_at": "2025-11-29T15:37:22.148026",
+  "verified": false,
+  "verification_date": null,
+  "attempts": 0,
+  "max_attempts": 3
+}

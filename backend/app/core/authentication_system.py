@@ -13,10 +13,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from collections import defaultdict, deque
 import logging
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
 # ====================================================================
 # IMPORTS DEL SISTEMA BIOMÉTRICO
 # ====================================================================
@@ -515,12 +512,332 @@ class RealAuthenticationPipeline:
             logger.error(f"Error inicializando pipeline: {e}")
             return False
     
-    def process_frame_for_real_authentication(self, attempt: RealAuthenticationAttempt) -> Tuple[bool, str]:
+    # def process_frame_for_real_authentication(self, attempt: RealAuthenticationAttempt) -> Tuple[bool, str]:
+    #     """
+    #     Procesa un frame para autenticación CON ROI NORMALIZATION.
+        
+    #     Args:
+    #         attempt: Intento de autenticación actual
+            
+    #     Returns:
+    #         Tupla (frame_procesado_exitosamente, mensaje)
+    #     """
+    #     try:
+    #         if not self.is_initialized:
+    #             return False, "Pipeline no inicializado"
+            
+    #         logger.info(f"Procesando frame para sesión {attempt.session_id}")
+            
+    #         # ========================================================================
+    #         # 🆕 PASO 1: CAPTURAR FRAME ORIGINAL
+    #         # ========================================================================
+    #         ret, frame_original = get_camera_manager().capture_frame()
+    #         if not ret or frame_original is None:
+    #             return False, "Error capturando frame de cámara"
+            
+    #         attempt.frames_processed += 1
+    #         attempt.last_frame_time = time.time()
+    #         logger.info(f"AUTH: Frame #{attempt.frames_processed} capturado - Shape: {frame_original.shape}")
+            
+    #         # ========================================================================
+    #         # 🆕 PASO 2: DETECCIÓN INICIAL CON MEDIAPIPE (frame original)
+    #         # ========================================================================
+    #         logger.info("AUTH: Procesando frame original para detectar mano...")
+    #         processing_result_initial = get_mediapipe_processor().process_frame(frame_original)
+            
+    #         if not processing_result_initial or not processing_result_initial.hand_result or not processing_result_initial.hand_result.is_valid:
+    #             logger.info("AUTH: No se detectó mano válida en frame original")
+    #             return False, "No se detectó mano válida en frame"
+            
+    #         logger.info("AUTH: ✅ Mano detectada en frame original")
+    #         logger.info(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
+            
+    #         # # ========================================================================
+    #         # # 🆕 PASO 3: EXTRAER Y VALIDAR ROI
+    #         # # ========================================================================
+    #         # roi_system = get_roi_normalization_system()
+            
+    #         # # Obtener gesto actual esperado
+    #         # current_gesture = "Unknown"
+    #         # expected_gesture = None
+            
+    #         # if attempt.mode == AuthenticationMode.VERIFICATION and attempt.required_sequence:
+    #         #     current_step = len(attempt.gesture_sequence_captured)
+    #         #     if current_step < len(attempt.required_sequence):
+    #         #         expected_gesture = attempt.required_sequence[current_step]
+    #         #         current_gesture = expected_gesture
+            
+    #         # logger.info("=" * 70)
+    #         # logger.info(f"AUTH: EXTRAYENDO ROI - Gesto esperado: {current_gesture}")
+    #         # logger.info("=" * 70)
+            
+    #         # roi_result = roi_system.extract_and_validate_roi(
+    #         #     frame_original,
+    #         #     processing_result_initial.hand_result.landmarks,
+    #         #     current_gesture
+    #         # )
+
+    #         # # ✅ GUARDAR roi_result para acceso desde _process_frame_with_feedback
+    #         # self.last_roi_result = roi_result
+    #         # logger.info(f"🔍 DEBUG ROI GUARDADO:")
+    #         # logger.info(f"   - is_valid: {roi_result.is_valid}")
+    #         # logger.info(f"   - tiene roi_bbox: {hasattr(roi_result, 'roi_bbox')}")
+    #         # logger.info(f"   - roi_bbox value: {getattr(roi_result, 'roi_bbox', 'NO EXISTE')}")
+    #         # logger.info(f"   - roi_width: {roi_result.roi_width if hasattr(roi_result, 'roi_width') else 'NO EXISTE'}")
+    #         # logger.info(f"   - roi_height: {roi_result.roi_height if hasattr(roi_result, 'roi_height') else 'NO EXISTE'}")
+    #         # # ========================================================================
+    #         # # 🆕 PASO 4: VALIDAR DISTANCIA DEL ROI
+    #         # # ========================================================================
+    #         # if not roi_result.is_valid:
+    #         #     logger.info("=" * 70)
+    #         #     logger.info(f"AUTH: ❌ ROI NO VÁLIDO")
+    #         #     logger.info(f"AUTH: Estado: {roi_result.distance_status.value}")
+    #         #     logger.info(f"AUTH: Mensaje: {roi_result.feedback_message}")
+    #         #     logger.info(f"AUTH: Tamaño ROI: {roi_result.roi_width}px (rango: 150-600px)")
+    #         #     logger.info("=" * 70)
+                
+    #         #     # NO procesar - solo feedback
+    #         #     return False, roi_result.feedback_message
+            
+    #         # logger.info("=" * 70)
+    #         # logger.info("AUTH: ✅✅✅ ROI VÁLIDO - PROCEDIENDO CON AUTENTICACIÓN ✅✅✅")
+    #         # logger.info(f"AUTH: ROI dimensions: {roi_result.roi_width}x{roi_result.roi_height}px")
+    #         # logger.info(f"AUTH: Scaling factor: {roi_result.scaling_factor:.3f}x")
+    #         # logger.info(f"AUTH: Processing time: {roi_result.processing_time_ms:.2f}ms")
+    #         # logger.info("=" * 70)
+            
+    #         # ========================================================================
+    #         # ✅ PASO 5: USAR LANDMARKS DEL FRAME ORIGINAL (mejor detección)
+    #         # ========================================================================
+
+    #         # ✅ DEFINIR VARIABLES DE GESTO (necesarias para validación)
+    #         current_gesture = "Unknown"
+    #         expected_gesture = None
+
+    #         if attempt.mode == AuthenticationMode.VERIFICATION and attempt.required_sequence:
+    #             current_step = len(attempt.gesture_sequence_captured)
+    #             if current_step < len(attempt.required_sequence):
+    #                 expected_gesture = attempt.required_sequence[current_step]
+    #                 current_gesture = expected_gesture
+
+    #         logger.info("AUTH: ✅ Usando landmarks del frame ORIGINAL")
+
+    #         # ✅ DEFINIR VARIABLES DE PROCESAMIENTO (necesarias para extracción)
+    #         processing_result = processing_result_initial
+    #         hand_result = processing_result.hand_result
+    #         gesture_result = processing_result.gesture_result
+
+    #         # NUEVO: Guardar resultado para acceso externo
+    #         self.last_processing_result = processing_result
+            
+    #         # ========================================================================
+    #         # PASO 6: VALIDACIÓN DE CALIDAD (con ROI normalization activo)
+    #         # ========================================================================
+    #         # Calcular área de referencia
+    #         reference_area_coords = get_reference_area_manager().calculate_area_coordinates(
+    #             current_gesture, frame_original.shape[:2]
+    #         )
+    #         reference_area = (reference_area_coords.x1, reference_area_coords.y1,
+    #                          reference_area_coords.x2, reference_area_coords.y2)
+            
+    #         # Validar calidad usando método correcto
+    #         quality_assessment = self.quality_validator.validate_complete_quality(
+    #             hand_landmarks=hand_result.landmarks,
+    #             handedness=hand_result.handedness,
+    #             detected_gesture=gesture_result.gesture_name if gesture_result else "None",
+    #             gesture_confidence=gesture_result.confidence if gesture_result else 0.0,
+    #             target_gesture=expected_gesture or "Unknown",
+    #             reference_area=reference_area,
+    #             frame_shape=frame_original.shape[:2]
+    #         )
+            
+    #         if not quality_assessment or not quality_assessment.ready_for_capture:
+    #             # Mostrar feedback de calidad si está disponible
+    #             if self.config.enable_audit_logging:
+    #                 self._draw_real_quality_feedback(frame_original, quality_assessment)
+                
+    #             quality_score = quality_assessment.quality_score if quality_assessment else 0.0
+    #             logger.info(f"AUTH: Calidad insuficiente: {quality_score:.3f}")
+    #             return False, f"Calidad insuficiente: {quality_score:.3f}" if quality_assessment else "Sin evaluación de calidad"
+            
+    #         logger.info(f"AUTH: ✅ Frame válido - Quality: {quality_assessment.quality_score:.1f}")
+            
+    #         # ========================================================================
+    #         # PASO 7: OBTENER GESTO DETECTADO
+    #         # ========================================================================
+    #         detected_gesture = None
+    #         if processing_result.gesture_result and processing_result.gesture_result.is_valid:
+    #             detected_gesture = processing_result.gesture_result.gesture_name
+            
+    #         # Validar gesto si es necesario
+    #         if expected_gesture and detected_gesture != expected_gesture:
+    #             logger.info(f"AUTH: Gesto incorrecto - Esperado: {expected_gesture}, Detectado: {detected_gesture}")
+    #             return False, f"Gesto esperado: {expected_gesture}, detectado: {detected_gesture}"
+            
+    #         # ========================================================================
+    #         # PASO 8: EXTRAER CARACTERÍSTICAS ANATÓMICAS
+    #         # ========================================================================
+    #         anatomical_features = self.anatomical_extractor.extract_features(
+    #             processing_result.hand_result.landmarks,
+    #             processing_result.hand_result.world_landmarks,
+    #             hand_result.handedness
+    #         )
+            
+    #         if not anatomical_features:
+    #             logger.error("AUTH: Error extrayendo características anatómicas")
+    #             return False, "Error extrayendo características anatómicas"
+            
+    #         logger.info(f"AUTH: ✅ Características anatómicas extraídas")
+            
+    #         # ========================================================================
+    #         # PASO 9: AGREGAR AL BUFFER TEMPORAL PARA CARACTERÍSTICAS DINÁMICAS
+    #         # ========================================================================
+    #         self.temporal_buffer.append({
+    #             'landmarks': processing_result.hand_result.landmarks,
+    #             'world_landmarks': processing_result.hand_result.world_landmarks,
+    #             'timestamp': time.time(),
+    #             'gesture': detected_gesture
+    #         })
+            
+    #         logger.info(f"AUTH: Frame agregado a buffer temporal ({len(self.temporal_buffer)} frames)")
+            
+    #         # ========================================================================
+    #         # PASO 10: EXTRAER CARACTERÍSTICAS DINÁMICAS DEL BUFFER
+    #         # ========================================================================
+    #         dynamic_features = None
+    #         if len(self.temporal_buffer) >= 5:  # Mínimo 5 frames para características temporales
+    #             dynamic_features = self._extract_real_dynamic_features_from_buffer()
+                
+    #             if dynamic_features and len(self.temporal_buffer) > 0:
+    #                 logger.info(f"AUTH: ✅ Características dinámicas extraídas del buffer ({len(self.temporal_buffer)} frames)")
+            
+    #         if not dynamic_features:
+    #             logger.info(f"AUTH: Acumulando frames para características dinámicas... ({len(self.temporal_buffer)}/5)")
+    #             return False, "Acumulando frames para características dinámicas..."
+            
+    #         # ========================================================================
+    #         # PASO 11: GENERAR EMBEDDINGS USANDO REDES ENTRENADAS
+    #         # ========================================================================
+    #         anatomical_embedding = self._generate_real_anatomical_embedding(anatomical_features)
+    #         dynamic_embedding = self._generate_real_dynamic_embedding(dynamic_features)
+            
+    #         if anatomical_embedding is None and dynamic_embedding is None:
+    #             logger.error("AUTH: Error generando embeddings biométricos")
+    #             return False, "Error generando embeddings biométricos"
+            
+    #         logger.info(f"AUTH: ✅ Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
+            
+    #         # ========================================================================
+    #         # PASO 12: ALMACENAR CARACTERÍSTICAS CAPTURADAS
+    #         # ========================================================================
+    #         if anatomical_embedding is not None:
+    #             attempt.anatomical_features.append(anatomical_embedding)
+    #             logger.info(f"AUTH: Embedding anatómico agregado - Total: {len(attempt.anatomical_features)}")
+            
+    #         if dynamic_embedding is not None:
+    #             attempt.dynamic_features.append(dynamic_embedding)
+    #             logger.info(f"AUTH: Embedding dinámico agregado - Total: {len(attempt.dynamic_features)}")
+            
+    #         attempt.quality_scores.append(quality_assessment.quality_score)
+    #         attempt.confidence_scores.append(processing_result.gesture_result.confidence if processing_result.gesture_result else 0.0)
+            
+    #         # Incrementar contador de capturas válidas
+    #         attempt.valid_captures += 1
+    #         logger.info(f"AUTH: ✅ Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
+
+    #         # ========================================================================
+    #         # PASO 13: REGISTRAR GESTO CAPTURADO (CON LÓGICA DE IDENTIFICACIÓN)
+    #         # ========================================================================
+    #         if detected_gesture:
+    #             # ✅ VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
+    #             if attempt.mode == AuthenticationMode.VERIFICATION:
+    #                 attempt.gesture_sequence_captured.append(detected_gesture)
+    #                 logger.info(f"AUTH: ✅ Gesto '{detected_gesture}' capturado (Verificación)")
+    #                 logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/{len(attempt.required_sequence) if attempt.required_sequence else '?'}")
+                
+    #             # ✅ IDENTIFICACIÓN 1:N - Solo agregar gestos NUEVOS (diferentes)
+    #             elif attempt.mode == AuthenticationMode.IDENTIFICATION:
+    #                 # Verificar si ya capturamos 3 gestos
+    #                 if len(attempt.gesture_sequence_captured) < 3:
+    #                     # Verificar si este gesto ya está en la secuencia
+    #                     if detected_gesture not in attempt.gesture_sequence_captured:
+    #                         # ✅ GESTO NUEVO - Agregarlo
+    #                         attempt.gesture_sequence_captured.append(detected_gesture)
+    #                         logger.info(f"AUTH: ✅ Gesto NUEVO capturado: '{detected_gesture}'")
+    #                         logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
+    #                         logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/3 gestos únicos")
+    #                     else:
+    #                         # ❌ GESTO REPETIDO - Ignorar (no agregar embeddings ni contar)
+    #                         logger.info(f"AUTH: ⚠️ Gesto '{detected_gesture}' ya capturado - esperando gesto diferente")
+    #                         logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
+    #                         logger.info(f"AUTH:    Necesitas hacer un gesto diferente")
+                            
+    #                         # ❌ IMPORTANTE: Eliminar los embeddings que acabamos de agregar
+    #                         if len(attempt.anatomical_features) > 0:
+    #                             attempt.anatomical_features.pop()
+    #                             logger.info(f"AUTH:    Embedding anatómico removido")
+    #                         if len(attempt.dynamic_features) > 0:
+    #                             attempt.dynamic_features.pop()
+    #                             logger.info(f"AUTH:    Embedding dinámico removido")
+                            
+    #                         # Decrementar contador de capturas válidas
+    #                         attempt.valid_captures -= 1
+                            
+    #                         # Retornar sin procesar más
+    #                         return False, f"Gesto '{detected_gesture}' repetido - haz un gesto diferente"
+    #                 else:
+    #                     logger.info(f"AUTH: ℹ️ Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
+    #         # ========================================================================
+    #         # PASO 14: LOG DE PROGRESO
+    #         # ========================================================================
+    #         logger.info(f"AUTH: Frame procesado exitosamente para sesión {attempt.session_id}")
+    #         logger.info(f"AUTH:   - Gesto detectado: {detected_gesture}")
+    #         logger.info(f"AUTH:   - Calidad: {quality_assessment.quality_score:.3f}")
+    #         logger.info(f"AUTH:   - Embeddings: anatómico={anatomical_embedding is not None}, dinámico={dynamic_embedding is not None}")
+    #         logger.info(f"AUTH:   - Progreso secuencia: {len(attempt.gesture_sequence_captured)}/{len(attempt.required_sequence) if attempt.required_sequence else 'N/A'}")
+    #         #logger.info(f"AUTH:   - ROI usado: {roi_result.roi_width}x{roi_result.roi_height}px")
+            
+    #         # ========================================================================
+    #         # PASO 15: VERIFICAR SI COMPLETAMOS LA SECUENCIA REQUERIDA
+    #         # ========================================================================
+
+    #         # VERIFICACIÓN 1:1
+    #         if (attempt.mode == AuthenticationMode.VERIFICATION and 
+    #             attempt.required_sequence and 
+    #             len(attempt.gesture_sequence_captured) >= len(attempt.required_sequence)):
+                
+    #             attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
+    #             logger.info("AUTH: 🎉 Secuencia de verificación completada - procediendo a matching biométrico")
+    #             return True, "Secuencia completada - procediendo a matching biométrico"
+
+    #         # ✅ IDENTIFICACIÓN 1:N
+    #         elif (attempt.mode == AuthenticationMode.IDENTIFICATION and 
+    #             len(attempt.gesture_sequence_captured) >= 3):
+                
+    #             attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
+    #             logger.info("AUTH: 🎉 Secuencia de identificación completada (3 gestos únicos)")
+    #             logger.info(f"AUTH:    Secuencia capturada: {attempt.gesture_sequence_captured}")
+    #             logger.info("AUTH:    Procediendo a filtrado por secuencia + verificación biométrica")
+    #             return True, "Secuencia de 3 gestos completada - procediendo a identificación"
+
+    #         # ========================================================================
+    #         # RETORNO EXITOSO
+    #         # ========================================================================
+    #         return True, f"Características capturadas - {len(attempt.anatomical_features)} muestras"
+            
+    #     except Exception as e:
+    #         logger.error(f"Error procesando frame para autenticación: {e}")
+    #         import traceback
+    #         logger.error(f"Traceback: {traceback.format_exc()}")
+    #         return False, f"Error de procesamiento: {str(e)}"
+    
+    def process_frame_for_real_authentication(self, attempt: RealAuthenticationAttempt, frame_image: np.ndarray) -> Tuple[bool, str]:
         """
-        Procesa un frame para autenticación CON ROI NORMALIZATION.
+        Procesa un frame recibido del FRONTEND para autenticación.
         
         Args:
             attempt: Intento de autenticación actual
+            frame_image: Frame capturado desde el frontend (numpy array BGR)
             
         Returns:
             Tupla (frame_procesado_exitosamente, mensaje)
@@ -532,18 +849,16 @@ class RealAuthenticationPipeline:
             logger.info(f"Procesando frame para sesión {attempt.session_id}")
             
             # ========================================================================
-            # 🆕 PASO 1: CAPTURAR FRAME ORIGINAL
+            # PASO 1: USAR FRAME RECIBIDO DEL FRONTEND (NO CAPTURAR)
             # ========================================================================
-            ret, frame_original = get_camera_manager().capture_frame()
-            if not ret or frame_original is None:
-                return False, "Error capturando frame de cámara"
+            frame_original = frame_image
             
             attempt.frames_processed += 1
             attempt.last_frame_time = time.time()
-            logger.info(f"AUTH: Frame #{attempt.frames_processed} capturado - Shape: {frame_original.shape}")
+            logger.info(f"AUTH: Frame #{attempt.frames_processed} recibido del frontend - Shape: {frame_original.shape}")
             
             # ========================================================================
-            # 🆕 PASO 2: DETECCIÓN INICIAL CON MEDIAPIPE (frame original)
+            # PASO 2: DETECCIÓN INICIAL CON MEDIAPIPE (frame original)
             # ========================================================================
             logger.info("AUTH: Procesando frame original para detectar mano...")
             processing_result_initial = get_mediapipe_processor().process_frame(frame_original)
@@ -555,64 +870,6 @@ class RealAuthenticationPipeline:
             logger.info("AUTH: ✅ Mano detectada en frame original")
             logger.info(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
             
-            # # ========================================================================
-            # # 🆕 PASO 3: EXTRAER Y VALIDAR ROI
-            # # ========================================================================
-            # roi_system = get_roi_normalization_system()
-            
-            # # Obtener gesto actual esperado
-            # current_gesture = "Unknown"
-            # expected_gesture = None
-            
-            # if attempt.mode == AuthenticationMode.VERIFICATION and attempt.required_sequence:
-            #     current_step = len(attempt.gesture_sequence_captured)
-            #     if current_step < len(attempt.required_sequence):
-            #         expected_gesture = attempt.required_sequence[current_step]
-            #         current_gesture = expected_gesture
-            
-            # logger.info("=" * 70)
-            # logger.info(f"AUTH: EXTRAYENDO ROI - Gesto esperado: {current_gesture}")
-            # logger.info("=" * 70)
-            
-            # roi_result = roi_system.extract_and_validate_roi(
-            #     frame_original,
-            #     processing_result_initial.hand_result.landmarks,
-            #     current_gesture
-            # )
-
-            # # ✅ GUARDAR roi_result para acceso desde _process_frame_with_feedback
-            # self.last_roi_result = roi_result
-            # logger.info(f"🔍 DEBUG ROI GUARDADO:")
-            # logger.info(f"   - is_valid: {roi_result.is_valid}")
-            # logger.info(f"   - tiene roi_bbox: {hasattr(roi_result, 'roi_bbox')}")
-            # logger.info(f"   - roi_bbox value: {getattr(roi_result, 'roi_bbox', 'NO EXISTE')}")
-            # logger.info(f"   - roi_width: {roi_result.roi_width if hasattr(roi_result, 'roi_width') else 'NO EXISTE'}")
-            # logger.info(f"   - roi_height: {roi_result.roi_height if hasattr(roi_result, 'roi_height') else 'NO EXISTE'}")
-            # # ========================================================================
-            # # 🆕 PASO 4: VALIDAR DISTANCIA DEL ROI
-            # # ========================================================================
-            # if not roi_result.is_valid:
-            #     logger.info("=" * 70)
-            #     logger.info(f"AUTH: ❌ ROI NO VÁLIDO")
-            #     logger.info(f"AUTH: Estado: {roi_result.distance_status.value}")
-            #     logger.info(f"AUTH: Mensaje: {roi_result.feedback_message}")
-            #     logger.info(f"AUTH: Tamaño ROI: {roi_result.roi_width}px (rango: 150-600px)")
-            #     logger.info("=" * 70)
-                
-            #     # NO procesar - solo feedback
-            #     return False, roi_result.feedback_message
-            
-            # logger.info("=" * 70)
-            # logger.info("AUTH: ✅✅✅ ROI VÁLIDO - PROCEDIENDO CON AUTENTICACIÓN ✅✅✅")
-            # logger.info(f"AUTH: ROI dimensions: {roi_result.roi_width}x{roi_result.roi_height}px")
-            # logger.info(f"AUTH: Scaling factor: {roi_result.scaling_factor:.3f}x")
-            # logger.info(f"AUTH: Processing time: {roi_result.processing_time_ms:.2f}ms")
-            # logger.info("=" * 70)
-            
-            # ========================================================================
-            # ✅ PASO 5: USAR LANDMARKS DEL FRAME ORIGINAL (mejor detección)
-            # ========================================================================
-
             # ✅ DEFINIR VARIABLES DE GESTO (necesarias para validación)
             current_gesture = "Unknown"
             expected_gesture = None
@@ -634,14 +891,14 @@ class RealAuthenticationPipeline:
             self.last_processing_result = processing_result
             
             # ========================================================================
-            # PASO 6: VALIDACIÓN DE CALIDAD (con ROI normalization activo)
+            # PASO 3: VALIDACIÓN DE CALIDAD
             # ========================================================================
             # Calcular área de referencia
             reference_area_coords = get_reference_area_manager().calculate_area_coordinates(
                 current_gesture, frame_original.shape[:2]
             )
             reference_area = (reference_area_coords.x1, reference_area_coords.y1,
-                             reference_area_coords.x2, reference_area_coords.y2)
+                            reference_area_coords.x2, reference_area_coords.y2)
             
             # Validar calidad usando método correcto
             quality_assessment = self.quality_validator.validate_complete_quality(
@@ -666,7 +923,7 @@ class RealAuthenticationPipeline:
             logger.info(f"AUTH: ✅ Frame válido - Quality: {quality_assessment.quality_score:.1f}")
             
             # ========================================================================
-            # PASO 7: OBTENER GESTO DETECTADO
+            # PASO 4: OBTENER GESTO DETECTADO
             # ========================================================================
             detected_gesture = None
             if processing_result.gesture_result and processing_result.gesture_result.is_valid:
@@ -678,7 +935,7 @@ class RealAuthenticationPipeline:
                 return False, f"Gesto esperado: {expected_gesture}, detectado: {detected_gesture}"
             
             # ========================================================================
-            # PASO 8: EXTRAER CARACTERÍSTICAS ANATÓMICAS
+            # PASO 5: EXTRAER CARACTERÍSTICAS ANATÓMICAS
             # ========================================================================
             anatomical_features = self.anatomical_extractor.extract_features(
                 processing_result.hand_result.landmarks,
@@ -693,7 +950,7 @@ class RealAuthenticationPipeline:
             logger.info(f"AUTH: ✅ Características anatómicas extraídas")
             
             # ========================================================================
-            # PASO 9: AGREGAR AL BUFFER TEMPORAL PARA CARACTERÍSTICAS DINÁMICAS
+            # PASO 6: AGREGAR AL BUFFER TEMPORAL PARA CARACTERÍSTICAS DINÁMICAS
             # ========================================================================
             self.temporal_buffer.append({
                 'landmarks': processing_result.hand_result.landmarks,
@@ -705,7 +962,7 @@ class RealAuthenticationPipeline:
             logger.info(f"AUTH: Frame agregado a buffer temporal ({len(self.temporal_buffer)} frames)")
             
             # ========================================================================
-            # PASO 10: EXTRAER CARACTERÍSTICAS DINÁMICAS DEL BUFFER
+            # PASO 7: EXTRAER CARACTERÍSTICAS DINÁMICAS DEL BUFFER
             # ========================================================================
             dynamic_features = None
             if len(self.temporal_buffer) >= 5:  # Mínimo 5 frames para características temporales
@@ -719,7 +976,7 @@ class RealAuthenticationPipeline:
                 return False, "Acumulando frames para características dinámicas..."
             
             # ========================================================================
-            # PASO 11: GENERAR EMBEDDINGS USANDO REDES ENTRENADAS
+            # PASO 8: GENERAR EMBEDDINGS USANDO REDES ENTRENADAS
             # ========================================================================
             anatomical_embedding = self._generate_real_anatomical_embedding(anatomical_features)
             dynamic_embedding = self._generate_real_dynamic_embedding(dynamic_features)
@@ -731,7 +988,7 @@ class RealAuthenticationPipeline:
             logger.info(f"AUTH: ✅ Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
             
             # ========================================================================
-            # PASO 12: ALMACENAR CARACTERÍSTICAS CAPTURADAS
+            # PASO 9: ALMACENAR CARACTERÍSTICAS CAPTURADAS
             # ========================================================================
             if anatomical_embedding is not None:
                 attempt.anatomical_features.append(anatomical_embedding)
@@ -749,7 +1006,7 @@ class RealAuthenticationPipeline:
             logger.info(f"AUTH: ✅ Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
 
             # ========================================================================
-            # PASO 13: REGISTRAR GESTO CAPTURADO (CON LÓGICA DE IDENTIFICACIÓN)
+            # PASO 10: REGISTRAR GESTO CAPTURADO (CON LÓGICA DE IDENTIFICACIÓN)
             # ========================================================================
             if detected_gesture:
                 # ✅ VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
@@ -790,18 +1047,18 @@ class RealAuthenticationPipeline:
                             return False, f"Gesto '{detected_gesture}' repetido - haz un gesto diferente"
                     else:
                         logger.info(f"AUTH: ℹ️ Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
+            
             # ========================================================================
-            # PASO 14: LOG DE PROGRESO
+            # PASO 11: LOG DE PROGRESO
             # ========================================================================
             logger.info(f"AUTH: Frame procesado exitosamente para sesión {attempt.session_id}")
             logger.info(f"AUTH:   - Gesto detectado: {detected_gesture}")
             logger.info(f"AUTH:   - Calidad: {quality_assessment.quality_score:.3f}")
             logger.info(f"AUTH:   - Embeddings: anatómico={anatomical_embedding is not None}, dinámico={dynamic_embedding is not None}")
             logger.info(f"AUTH:   - Progreso secuencia: {len(attempt.gesture_sequence_captured)}/{len(attempt.required_sequence) if attempt.required_sequence else 'N/A'}")
-            #logger.info(f"AUTH:   - ROI usado: {roi_result.roi_width}x{roi_result.roi_height}px")
             
             # ========================================================================
-            # PASO 15: VERIFICAR SI COMPLETAMOS LA SECUENCIA REQUERIDA
+            # PASO 12: VERIFICAR SI COMPLETAMOS LA SECUENCIA REQUERIDA
             # ========================================================================
 
             # VERIFICACIÓN 1:1
@@ -833,7 +1090,7 @@ class RealAuthenticationPipeline:
             import traceback
             logger.error(f"Traceback: {traceback.format_exc()}")
             return False, f"Error de procesamiento: {str(e)}"
-     
+    
     def _extract_real_dynamic_features_from_buffer(self) -> Optional[DynamicFeatureVector]:
         """Extrae características dinámicas del buffer temporal."""
         try:
@@ -1714,12 +1971,223 @@ class RealAuthenticationSystem:
             self.statistics['identification_errors'] += 1
             raise
     
-    def process_real_authentication_frame(self, session_id: str) -> Dict[str, Any]:
+    # def process_real_authentication_frame(self, session_id: str) -> Dict[str, Any]:
+    #     """
+    #     Procesa un frame para una sesión de autenticación.
+        
+    #     Args:
+    #         session_id: ID de la sesión
+            
+    #     Returns:
+    #         Información del frame procesado y estado de la sesión
+    #     """
+    #     try:
+    #         # Limpiar sesiones expiradas
+    #         self.session_manager.cleanup_expired_real_sessions()
+            
+    #         # Obtener sesión
+    #         session = self.session_manager.get_real_session(session_id)
+    #         if not session:
+    #             return {'error': 'Sesión no encontrada o expirada', 'is_real': True}
+            
+    #         # Verificar timeout
+    #         if session.duration > self.config.total_timeout:
+    #             self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT)
+    #             return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
+            
+    #         # Procesar frame
+    #         success, message = self.pipeline.process_frame_for_real_authentication(session)
+            
+    #         self.statistics['total_frames_processed'] += 1
+    #         if success and (session.anatomical_features or session.dynamic_features):
+    #             self.statistics['total_embeddings_generated'] += 1
+            
+    #         response = {
+    #             'session_id': session_id,
+    #             'status': session.status.value,
+    #             'phase': session.current_phase.value,
+    #             'progress': session.sequence_progress,
+    #             'message': message,
+    #             'frames_processed': session.frames_processed,
+    #             'valid_captures': session.valid_captures,
+    #             'duration': session.duration,
+    #             'frame_processed': success,
+    #             'is_real_processing': True,
+    #             'no_simulation': True
+    #         }
+
+    #         # NUEVO: Incluir información del gesto detectado para captura secuencial
+    #         if success:
+    #             try:
+    #                 # Obtener el último gesto procesado desde el pipeline
+    #                 pipeline = self.pipeline
+    #                 if hasattr(pipeline, 'last_processing_result') and pipeline.last_processing_result:
+    #                     gesture_result = pipeline.last_processing_result.gesture_result
+    #                     if gesture_result:
+    #                         response['current_gesture'] = gesture_result.gesture_name
+    #                         response['gesture_confidence'] = gesture_result.confidence
+    #                     else:
+    #                         response['current_gesture'] = 'None'
+    #                         response['gesture_confidence'] = 0.0
+    #                 else:
+    #                     response['current_gesture'] = 'None'
+    #                     response['gesture_confidence'] = 0.0
+    #             except:
+    #                 response['current_gesture'] = 'None'
+    #                 response['gesture_confidence'] = 0.0
+    #         else:
+    #             response['current_gesture'] = 'None'
+    #             response['gesture_confidence'] = 0.0
+    
+    #         # Si es verificación, incluir información de secuencia
+    #         if session.mode == AuthenticationMode.VERIFICATION:
+    #             response.update({
+    #                 'required_sequence': session.required_sequence,
+    #                 'captured_sequence': session.gesture_sequence_captured,
+    #                 'sequence_complete': len(session.gesture_sequence_captured) >= len(session.required_sequence) if session.required_sequence else False
+    #             })
+            
+    #         # Información de características capturadas
+    #         response.update({
+    #             'anatomical_features_captured': len(session.anatomical_features),
+    #             'dynamic_features_captured': len(session.dynamic_features),
+    #             'average_quality': np.mean(session.quality_scores) if session.quality_scores else 0.0,
+    #             'average_confidence': np.mean(session.confidence_scores) if session.confidence_scores else 0.0,
+    #             # ✅ NUEVO: Incluir embeddings reales para identificación secuencial
+    #             #'anatomical_embedding': session.anatomical_features[-1] if session.anatomical_features else None,
+    #             #'dynamic_embedding': session.dynamic_features[-1] if session.dynamic_features else None,
+    #             'has_embeddings': len(session.anatomical_features) > 0
+    #         })
+            
+    #         # Verificar si podemos proceder al matching
+    #         if session.current_phase == AuthenticationPhase.TEMPLATE_MATCHING:
+    #             auth_result = self._perform_real_authentication_matching(session)
+                
+    #             # ✅ INCLUIR RESULTADO COMPLETO EN RESPONSE
+    #             response['authentication_result'] = {
+    #                 'success': auth_result.success,
+    #                 'user_id': auth_result.user_id,
+    #                 'matched_user_id': auth_result.matched_user_id,
+    #                 'anatomical_score': auth_result.anatomical_score,
+    #                 'dynamic_score': auth_result.dynamic_score,
+    #                 'fused_score': auth_result.fused_score,
+    #                 'confidence': auth_result.confidence,
+    #                 'duration': auth_result.duration,
+    #                 'feedback_token': session.feedback_token if hasattr(session, 'feedback_token') else None,
+    #                 'is_real_result': True
+    #             }
+                
+    #             # Completar sesión
+    #             # final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
+    #             # self._complete_real_authentication(session, final_status)
+                
+    #             # Completar sesión
+    #             final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
+
+    #             #✅ Determinar user_id según el modo
+    #             final_user_id = session.user_id
+                
+    #             # Solo para IDENTIFICACIÓN: usar matched_user_id si está disponible
+    #             if session.mode == AuthenticationMode.IDENTIFICATION:
+    #                 if auth_result.matched_user_id:
+    #                     final_user_id = auth_result.matched_user_id
+    #                 else:
+    #                     final_user_id = 'unknown'  # Fallback para identificación fallida
+    #             # Para VERIFICACIÓN: final_user_id ya tiene session.user_id correcto
+                
+                
+    #             # ✅ GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
+    #             attempt = AuthenticationAttempt(
+    #                 attempt_id=str(uuid.uuid4()),
+    #                 user_id=auth_result.user_id or auth_result.matched_user_id or "unknown",
+    #                 timestamp=time.time(),
+    #                 auth_type="verification" if session.mode == AuthenticationMode.VERIFICATION else "identification",
+    #                 result="success" if auth_result.success else "failed",
+    #                 confidence=auth_result.confidence,
+    #                 anatomical_score=auth_result.anatomical_score,
+    #                 dynamic_score=auth_result.dynamic_score,
+    #                 fused_score=auth_result.fused_score,
+    #                 ip_address=session.metadata.get('ip_address', 'unknown') if hasattr(session, 'metadata') else 'unknown',
+    #                 device_info=str(session.metadata.get('device_info', '')) if hasattr(session, 'metadata') else '',
+    #                 failure_reason=", ".join(auth_result.risk_factors) if not auth_result.success and auth_result.risk_factors else None,
+
+    #                 metadata={
+    #                     'session_id': session.session_id,
+    #                     'security_level': session.security_level.value if hasattr(session, 'security_level') else 'standard',
+    #                     'duration': auth_result.duration,
+    #                     'frames_processed': auth_result.frames_processed,
+    #                     'gestures_captured': auth_result.gestures_captured if hasattr(auth_result, 'gestures_captured') else []
+    #                 }
+    #             )
+
+    #             # Guardar en base de datos
+    #             self.database.store_authentication_attempt(attempt)
+    #             logger.info(f"✅ Intento de autenticación guardado: {attempt.attempt_id}")
+
+    #             # 🔧 ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
+    #             if session.callback_url and session.session_token:
+    #                 try:
+    #                     logger.info(f"📤 Enviando resultado de autenticación al Plugin")
+    #                     logger.info(f"   Callback URL: {session.callback_url}")
+                        
+    #                     # Obtener email del usuario
+    #                     user_email = None
+    #                     if final_user_id and final_user_id != 'unknown':
+    #                         user_profile = self.database.get_user(final_user_id)
+    #                         if user_profile:
+    #                             user_email = user_profile.email
+                        
+    #                     if user_email:
+    #                         webhook_service = get_plugin_webhook_service()
+    #                         webhook_service.set_api_key("sk_live_009f37683c1868404039fdf3d5c6e28b")
+                            
+    #                         success_webhook = webhook_service.send_authentication_result(
+    #                             callback_url=session.callback_url,
+    #                             user_id=final_user_id,
+    #                             email=user_email,
+    #                             session_token=session.session_token,
+    #                             authenticated=auth_result.success,
+    #                             confidence=auth_result.confidence
+    #                         )
+                            
+    #                         if success_webhook:
+    #                             logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+    #                         else:
+    #                             logger.warning(f"⚠️ No se pudo enviar resultado al Plugin")
+    #                     else:
+    #                         logger.warning(f"⚠️ No se pudo obtener email del usuario {final_user_id}")
+                            
+    #                 except Exception as e:
+    #                     logger.error(f"❌ Error enviando resultado al Plugin: {e}")
+    #                     # No fallar la autenticación si falla el envío al Plugin
+                        
+    #             self._complete_real_authentication(session, final_status)
+
+    #             # ✅ MARCAR COMO COMPLETADO
+    #             response['session_completed'] = True
+    #             response['final_status'] = final_status.value
+                
+    #             # ✅ LOG PARA CONFIRMAR
+    #             logger.info(f"✅ Resultado incluido en response - success={auth_result.success}")
+
+    #         return response  # ✅ Retornar ANTES de que se cierre la sesión
+                        
+    #     except Exception as e:
+    #         logger.error(f"Error procesando frame de autenticación REAL: {e}")
+    #         return {
+    #             'error': str(e),
+    #             'is_real': True,
+    #             'no_simulation': True
+    #         }
+    
+    
+    def process_real_authentication_frame(self, session_id: str, frame_image: np.ndarray) -> Dict[str, Any]:
         """
-        Procesa un frame para una sesión de autenticación.
+        Procesa un frame recibido del FRONTEND para autenticación.
         
         Args:
             session_id: ID de la sesión
+            frame_image: Frame capturado desde el frontend (numpy array BGR)
             
         Returns:
             Información del frame procesado y estado de la sesión
@@ -1738,8 +2206,8 @@ class RealAuthenticationSystem:
                 self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT)
                 return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
             
-            # Procesar frame
-            success, message = self.pipeline.process_frame_for_real_authentication(session)
+            # ✅ PROCESAR FRAME RECIBIDO DEL FRONTEND
+            success, message = self.pipeline.process_frame_for_real_authentication(session, frame_image)
             
             self.statistics['total_frames_processed'] += 1
             if success and (session.anatomical_features or session.dynamic_features):
@@ -1781,7 +2249,7 @@ class RealAuthenticationSystem:
             else:
                 response['current_gesture'] = 'None'
                 response['gesture_confidence'] = 0.0
-    
+        
             # Si es verificación, incluir información de secuencia
             if session.mode == AuthenticationMode.VERIFICATION:
                 response.update({
@@ -1796,9 +2264,6 @@ class RealAuthenticationSystem:
                 'dynamic_features_captured': len(session.dynamic_features),
                 'average_quality': np.mean(session.quality_scores) if session.quality_scores else 0.0,
                 'average_confidence': np.mean(session.confidence_scores) if session.confidence_scores else 0.0,
-                # ✅ NUEVO: Incluir embeddings reales para identificación secuencial
-                #'anatomical_embedding': session.anatomical_features[-1] if session.anatomical_features else None,
-                #'dynamic_embedding': session.dynamic_features[-1] if session.dynamic_features else None,
                 'has_embeddings': len(session.anatomical_features) > 0
             })
             
@@ -1821,13 +2286,9 @@ class RealAuthenticationSystem:
                 }
                 
                 # Completar sesión
-                # final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
-                # self._complete_real_authentication(session, final_status)
-                
-                # Completar sesión
                 final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
 
-                #✅ Determinar user_id según el modo
+                # ✅ Determinar user_id según el modo
                 final_user_id = session.user_id
                 
                 # Solo para IDENTIFICACIÓN: usar matched_user_id si está disponible
@@ -1837,7 +2298,6 @@ class RealAuthenticationSystem:
                     else:
                         final_user_id = 'unknown'  # Fallback para identificación fallida
                 # Para VERIFICACIÓN: final_user_id ya tiene session.user_id correcto
-                
                 
                 # ✅ GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
                 attempt = AuthenticationAttempt(
@@ -1853,7 +2313,6 @@ class RealAuthenticationSystem:
                     ip_address=session.metadata.get('ip_address', 'unknown') if hasattr(session, 'metadata') else 'unknown',
                     device_info=str(session.metadata.get('device_info', '')) if hasattr(session, 'metadata') else '',
                     failure_reason=", ".join(auth_result.risk_factors) if not auth_result.success and auth_result.risk_factors else None,
-
                     metadata={
                         'session_id': session.session_id,
                         'security_level': session.security_level.value if hasattr(session, 'security_level') else 'standard',
@@ -1882,30 +2341,23 @@ class RealAuthenticationSystem:
                         
                         if user_email:
                             webhook_service = get_plugin_webhook_service()
+                            webhook_service.set_api_key("sk_live_009f37683c1868404039fdf3d5c6e28b")
                             
-                            plugin_api_key = os.getenv('PLUGIN_API_KEY')
+                            success_webhook = webhook_service.send_authentication_result(
+                                callback_url=session.callback_url,
+                                user_id=final_user_id,
+                                email=user_email,
+                                session_token=session.session_token,
+                                authenticated=auth_result.success,
+                                confidence=auth_result.confidence
+                            )
                             
-                            if not plugin_api_key:
-                                logger.error(f"PLUGIN_API_KEY no configurado en .env")
-                                logger.warning(f"No se puede enviar resultado al Plugin")
+                            if success_webhook:
+                                logger.info(f"✅ Resultado enviado exitosamente al Plugin")
                             else:
-                                webhook_service.set_api_key(plugin_api_key)
-                                
-                                success_webhook = webhook_service.send_authentication_result(
-                                    callback_url=session.callback_url,
-                                    user_id=final_user_id,
-                                    email=user_email,
-                                    session_token=session.session_token,
-                                    authenticated=auth_result.success,
-                                    confidence=auth_result.confidence
-                                )
-                                
-                                if success_webhook:
-                                    logger.info(f"Resultado enviado exitosamente al Plugin")
-                                else:
-                                    logger.warning(f"No se pudo enviar resultado al Plugin")
+                                logger.warning(f"⚠️ No se pudo enviar resultado al Plugin")
                         else:
-                            logger.warning(f"No se pudo obtener email del usuario {final_user_id}")
+                            logger.warning(f"⚠️ No se pudo obtener email del usuario {final_user_id}")
                             
                     except Exception as e:
                         logger.error(f"❌ Error enviando resultado al Plugin: {e}")

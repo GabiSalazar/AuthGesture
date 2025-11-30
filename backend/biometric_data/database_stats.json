@@ -1,19 +1,19 @@
 {
-  "total_users": 14,
-  "total_templates": 752,
+  "total_users": 13,
+  "total_templates": 712,
   "total_verifications": 0,
   "successful_verifications": 0,
-  "anatomical_templates": 468,
-  "dynamic_templates": 284,
+  "anatomical_templates": 444,
+  "dynamic_templates": 268,
   "multimodal_templates": 0,
   "excellent_quality": 0,
   "good_quality": 0,
   "fair_quality": 0,
   "poor_quality": 0,
-  "total_size_mb": 141.49491214752197,
+  "total_size_mb": 142.98610305786133,
   "index_size_mb": 0.0,
   "backup_size_mb": 0.0,
   "avg_search_time_ms": 0.0,
   "cache_hit_rate": 0.0,
-  "last_updated": 1764437142.4300394
+  "last_updated": 1764513858.5873787
 }
