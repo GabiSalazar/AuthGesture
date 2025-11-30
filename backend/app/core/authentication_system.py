@@ -38,7 +38,10 @@ from app.core.dynamic_features_extractor import get_dynamic_features_extractor
 from app.core.enrollment_system import get_real_enrollment_system
 from app.core.biometric_database import AuthenticationAttempt
 from app.services.plugin_webhook_service import get_plugin_webhook_service
+from app.services.lockout_notification_service import send_lockout_alert_email
+from app.config import Settings
 
+settings = Settings()
 logger = get_logger()
 
 
@@ -251,6 +254,9 @@ class RealAuthenticationResult:
     audit_log_id: Optional[str] = None
     timestamp: float = field(default_factory=time.time)
 
+    is_locked: bool = False
+    lockout_info: Optional[Dict[str, Any]] = None
+    
 # ====================================================================
 # AUDITOR DE SEGURIDAD
 # ====================================================================
@@ -2282,7 +2288,9 @@ class RealAuthenticationSystem:
                     'confidence': auth_result.confidence,
                     'duration': auth_result.duration,
                     'feedback_token': session.feedback_token if hasattr(session, 'feedback_token') else None,
-                    'is_real_result': True
+                    'is_real_result': True,
+                    'is_locked': auth_result.is_locked if hasattr(auth_result, 'is_locked') else False,
+                    'lockout_info': auth_result.lockout_info if hasattr(auth_result, 'lockout_info') else None
                 }
                 
                 # Completar sesión
@@ -2454,11 +2462,48 @@ class RealAuthenticationSystem:
                 risk_factors=[f"Error en matching: {str(e)}"]
             )
     
-    def _perform_real_verification(self, session: RealAuthenticationAttempt, 
-                              anatomical_emb: Optional[np.ndarray], 
-                              dynamic_emb: Optional[np.ndarray]) -> RealAuthenticationResult:
+    def _perform_real_verification(self, session: RealAuthenticationAttempt, anatomical_emb: Optional[np.ndarray], dynamic_emb: Optional[np.ndarray]) -> RealAuthenticationResult:
         """Realiza verificación 1:1."""
         try:
+            
+            is_locked, remaining_minutes = self.database.check_if_locked(session.user_id)
+            
+            if is_locked:
+                logger.warning(f"Intento de verificación bloqueado para usuario {session.user_id}")
+                logger.warning(f"Tiempo restante de bloqueo: {remaining_minutes} minutos")
+                
+                user_profile = self.database.get_user(session.user_id)
+                lockout_until_timestamp = user_profile.lockout_until if user_profile else None
+                
+                lockout_datetime = None
+                if lockout_until_timestamp:
+                    from datetime import datetime
+                    lockout_datetime = datetime.fromtimestamp(lockout_until_timestamp).isoformat()
+                
+                return RealAuthenticationResult(
+                    attempt_id=session.attempt_id,
+                    success=False,
+                    user_id=session.user_id,
+                    anatomical_score=0.0,
+                    dynamic_score=0.0,
+                    fused_score=0.0,
+                    confidence=0.0,
+                    security_level=session.security_level,
+                    authentication_mode=AuthenticationMode.VERIFICATION,
+                    duration=session.duration,
+                    frames_processed=session.frames_processed,
+                    gestures_captured=session.gesture_sequence_captured,
+                    average_quality=0.0,
+                    average_confidence=0.0,
+                    risk_factors=[f"Cuenta bloqueada por {remaining_minutes} minutos debido a múltiples intentos fallidos"],
+                    is_locked=True,
+                    lockout_info={
+                        "remaining_minutes": remaining_minutes,
+                        "locked_until": lockout_datetime,
+                        "reason": "multiple_failed_attempts",
+                        "max_attempts": settings.MAX_FAILED_ATTEMPTS
+                    }
+                )
             logger.info(f"Realizando verificación 1:1 para usuario {session.user_id}")
             
             # ✅ OBTENER TEMPLATES DEL USUARIO
@@ -2820,9 +2865,29 @@ class RealAuthenticationSystem:
             logger.info(f"✅ Score fusionado: {fused_score.fused_score:.4f}")
             logger.info(f"✅ Confianza fusionada: {fused_score.confidence:.4f}")
             
-            return RealAuthenticationResult(
+            # return RealAuthenticationResult(
+            #     attempt_id=session.attempt_id,
+            #     success=False,  # Se determinará por umbral en matching
+            #     user_id=session.user_id,
+            #     anatomical_score=individual_scores.anatomical_score,
+            #     dynamic_score=individual_scores.dynamic_score,
+            #     fused_score=fused_score.fused_score,
+            #     confidence=fused_score.confidence,
+            #     security_level=session.security_level,
+            #     authentication_mode=AuthenticationMode.VERIFICATION,
+            #     duration=session.duration,
+            #     frames_processed=session.frames_processed,
+            #     gestures_captured=session.gesture_sequence_captured,
+            #     average_quality=np.mean(session.quality_scores) if session.quality_scores else 0.0,
+            #     average_confidence=np.mean(session.confidence_scores) if session.confidence_scores else 0.0
+            # )
+            
+            verification_threshold = 0.75
+            verification_success = fused_score.fused_score >= verification_threshold
+            
+            result = RealAuthenticationResult(
                 attempt_id=session.attempt_id,
-                success=False,  # Se determinará por umbral en matching
+                success=verification_success,
                 user_id=session.user_id,
                 anatomical_score=individual_scores.anatomical_score,
                 dynamic_score=individual_scores.dynamic_score,
@@ -2834,8 +2899,65 @@ class RealAuthenticationSystem:
                 frames_processed=session.frames_processed,
                 gestures_captured=session.gesture_sequence_captured,
                 average_quality=np.mean(session.quality_scores) if session.quality_scores else 0.0,
-                average_confidence=np.mean(session.confidence_scores) if session.confidence_scores else 0.0
+                average_confidence=np.mean(session.confidence_scores) if session.confidence_scores else 0.0,
+                risk_factors=[]
             )
+            
+            if verification_success:
+                self.database.reset_failed_attempts(session.user_id)
+                logger.info(f"Contador de intentos fallidos reseteado para {session.user_id}")
+            else:
+                if settings.ENABLE_LOCKOUT:
+                    new_count = self.database.record_failed_attempt(session.user_id)
+                    logger.warning(f"Intento fallido registrado. Total: {new_count}/{settings.MAX_FAILED_ATTEMPTS}")
+                    
+                    if new_count >= settings.MAX_FAILED_ATTEMPTS:
+                        lockout_until = self.database.lock_account(
+                            session.user_id,
+                            settings.LOCKOUT_DURATION_MINUTES
+                        )
+                        
+                        logger.error(f"Cuenta {session.user_id} bloqueada por {settings.LOCKOUT_DURATION_MINUTES} minutos")
+                        
+                        result.risk_factors.append(f"Cuenta bloqueada por {settings.LOCKOUT_DURATION_MINUTES} minutos")
+                        
+                        # ✅ ACTUALIZAR RESULTADO CON INFORMACIÓN DE BLOQUEO
+                        from datetime import datetime
+                        lockout_datetime = datetime.fromtimestamp(lockout_until).isoformat()
+                        result.is_locked = True
+                        result.lockout_info = {
+                            "remaining_minutes": settings.LOCKOUT_DURATION_MINUTES,
+                            "locked_until": lockout_datetime,
+                            "reason": "multiple_failed_attempts",
+                            "max_attempts": settings.MAX_FAILED_ATTEMPTS
+                        }
+                        
+                        if settings.ENABLE_LOCKOUT_EMAIL:
+                            try:
+                                user_profile = self.database.get_user(session.user_id)
+                                if user_profile and hasattr(user_profile, 'email') and user_profile.email:
+                                    email_sent = send_lockout_alert_email(
+                                        user_id=session.user_id,
+                                        username=user_profile.username,
+                                        user_email=user_profile.email,
+                                        failed_attempts=new_count,
+                                        lockout_until=lockout_until,
+                                        duration_minutes=settings.LOCKOUT_DURATION_MINUTES
+                                    )
+                                    if email_sent:
+                                        logger.info(f"Email de alerta enviado a {user_profile.email}")
+                                    else:
+                                        logger.warning(f"No se pudo enviar email de alerta a {user_profile.email}")
+                                else:
+                                    logger.warning(f"Usuario {session.user_id} no tiene email configurado")
+                            except Exception as email_error:
+                                logger.error(f"Error enviando email de alerta: {email_error}")
+                    else:
+                        attempts_remaining = settings.MAX_FAILED_ATTEMPTS - new_count
+                        result.risk_factors.append(f"Intentos restantes: {attempts_remaining}")
+                        logger.warning(f"Intentos restantes: {attempts_remaining}")
+            
+            return result
             
         except Exception as e:
             logger.error(f"❌ ERROR CRÍTICO en verificación: {e}")

@@ -759,6 +759,12 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
             result['gestures_needed'] = 3
             result['captured_sequence'] = session.gesture_sequence_captured
         
+        # ✅ INFORMACIÓN DE BLOQUEO (si existe)
+        if 'is_locked' not in result:
+            result['is_locked'] = False
+        if 'lockout_info' not in result:
+            result['lockout_info'] = None
+            
         return result
         
     except HTTPException:

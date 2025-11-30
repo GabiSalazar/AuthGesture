@@ -165,6 +165,11 @@ class UserProfile:
     
     metadata: Dict[str, Any] = field(default_factory=dict)
     
+    failed_attempts: int = 0
+    last_failed_timestamp: Optional[float] = None
+    lockout_until: Optional[float] = None
+    lockout_history: List[Dict[str, Any]] = field(default_factory=list)
+    
     @property
     def total_templates(self) -> int:
         """Total de templates registrados."""
@@ -1748,6 +1753,194 @@ class BiometricDatabase:
             logger.error(f"Error actualizando usuario: {e}")
             return False
     
+    def check_if_locked(self, user_id: str) -> Tuple[bool, int]:
+        """
+        Verifica si un usuario está bloqueado por intentos fallidos.
+        
+        Args:
+            user_id: ID del usuario
+            
+        Returns:
+            Tupla (is_locked, remaining_minutes)
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    logger.warning(f"Usuario {user_id} no existe")
+                    return False, 0
+                
+                user = self.users[user_id]
+                
+                if not hasattr(user, 'lockout_until') or user.lockout_until is None:
+                    return False, 0
+                
+                current_time = time.time()
+                
+                if current_time < user.lockout_until:
+                    remaining_seconds = user.lockout_until - current_time
+                    remaining_minutes = int(remaining_seconds / 60) + 1
+                    logger.info(f"Usuario {user_id} bloqueado. Tiempo restante: {remaining_minutes} minutos")
+                    return True, remaining_minutes
+                else:
+                    user.lockout_until = None
+                    user.failed_attempts = 0
+                    self._save_user(user)
+                    logger.info(f"Bloqueo de usuario {user_id} expirado. Cuenta desbloqueada")
+                    return False, 0
+                    
+        except Exception as e:
+            logger.error(f"Error verificando bloqueo de usuario {user_id}: {e}")
+            return False, 0
+    
+    def record_failed_attempt(self, user_id: str) -> int:
+        """
+        Registra un intento fallido de autenticación.
+        
+        Args:
+            user_id: ID del usuario
+            
+        Returns:
+            Número actual de intentos fallidos
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    logger.error(f"Usuario {user_id} no existe")
+                    return 0
+                
+                user = self.users[user_id]
+                
+                if not hasattr(user, 'failed_attempts'):
+                    user.failed_attempts = 0
+                
+                user.failed_attempts += 1
+                user.last_failed_timestamp = time.time()
+                
+                self._save_user(user)
+                
+                logger.warning(f"Intento fallido registrado para {user_id}. Total: {user.failed_attempts}")
+                
+                return user.failed_attempts
+                
+        except Exception as e:
+            logger.error(f"Error registrando intento fallido para {user_id}: {e}")
+            return 0
+    
+    def lock_account(self, user_id: str, duration_minutes: int) -> float:
+        """
+        Bloquea una cuenta por un período de tiempo específico.
+        
+        Args:
+            user_id: ID del usuario
+            duration_minutes: Duración del bloqueo en minutos
+            
+        Returns:
+            Timestamp de lockout_until
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    logger.error(f"Usuario {user_id} no existe")
+                    return 0.0
+                
+                user = self.users[user_id]
+                
+                current_time = time.time()
+                lockout_until = current_time + (duration_minutes * 60)
+                
+                user.lockout_until = lockout_until
+                
+                if not hasattr(user, 'lockout_history'):
+                    user.lockout_history = []
+                
+                lockout_record = {
+                    'locked_at': current_time,
+                    'lockout_until': lockout_until,
+                    'duration_minutes': duration_minutes,
+                    'failed_attempts': user.failed_attempts,
+                    'reason': 'multiple_failed_attempts'
+                }
+                user.lockout_history.append(lockout_record)
+                
+                self._save_user(user)
+                
+                logger.warning(f"Cuenta {user_id} bloqueada por {duration_minutes} minutos hasta {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(lockout_until))}")
+                
+                return lockout_until
+                
+        except Exception as e:
+            logger.error(f"Error bloqueando cuenta {user_id}: {e}")
+            return 0.0
+    
+    def reset_failed_attempts(self, user_id: str) -> None:
+        """
+        Resetea el contador de intentos fallidos después de autenticación exitosa.
+        
+        Args:
+            user_id: ID del usuario
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    logger.warning(f"Usuario {user_id} no existe")
+                    return
+                
+                user = self.users[user_id]
+                
+                if hasattr(user, 'failed_attempts') and user.failed_attempts > 0:
+                    previous_attempts = user.failed_attempts
+                    user.failed_attempts = 0
+                    user.last_failed_timestamp = None
+                    
+                    self._save_user(user)
+                    
+                    logger.info(f"Contador de intentos fallidos reseteado para {user_id} (tenía {previous_attempts} intentos)")
+                    
+        except Exception as e:
+            logger.error(f"Error reseteando intentos fallidos para {user_id}: {e}")
+    
+    def get_lockout_info(self, user_id: str) -> Dict[str, Any]:
+        """
+        Obtiene información completa del estado de bloqueo de un usuario.
+        
+        Args:
+            user_id: ID del usuario
+            
+        Returns:
+            Diccionario con información de bloqueo
+        """
+        try:
+            with self.lock:
+                if user_id not in self.users:
+                    return {
+                        'exists': False,
+                        'is_locked': False,
+                        'failed_attempts': 0,
+                        'lockout_history': []
+                    }
+                
+                user = self.users[user_id]
+                
+                is_locked, remaining_minutes = self.check_if_locked(user_id)
+                
+                return {
+                    'exists': True,
+                    'is_locked': is_locked,
+                    'remaining_minutes': remaining_minutes,
+                    'failed_attempts': getattr(user, 'failed_attempts', 0),
+                    'last_failed_timestamp': getattr(user, 'last_failed_timestamp', None),
+                    'lockout_until': getattr(user, 'lockout_until', None),
+                    'lockout_history': getattr(user, 'lockout_history', [])
+                }
+                
+        except Exception as e:
+            logger.error(f"Error obteniendo info de bloqueo para {user_id}: {e}")
+            return {
+                'exists': False,
+                'is_locked': False,
+                'error': str(e)
+            }
+
     def get_template(self, template_id: str) -> Optional[BiometricTemplate]:
         """Obtiene template biométrico."""
         return self.templates.get(template_id)

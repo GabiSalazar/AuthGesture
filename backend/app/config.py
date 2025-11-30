@@ -57,10 +57,18 @@ class Settings(BaseSettings):
     EMAIL_FROM_NAME: str = "Sistema Biométrico"
 
     # ============================================================================
-    # CONFIGURACIÓN DE VERIFICACIÓN DE EMAIL (NUEVO)
+    # CONFIGURACIÓN DE VERIFICACIÓN DE EMAIL
     # ============================================================================
     EMAIL_VERIFICATION_EXPIRY_MINUTES: int = 30
     EMAIL_RESEND_COOLDOWN_SECONDS: int = 60
+    
+    # ============================================================================
+    # SEGURIDAD - BLOQUEO DE CUENTA POR INTENTOS FALLIDOS
+    # ============================================================================
+    MAX_FAILED_ATTEMPTS: int = 3
+    LOCKOUT_DURATION_MINUTES: int = 1 #CAMBIAR A 30
+    ENABLE_LOCKOUT: bool = True
+    ENABLE_LOCKOUT_EMAIL: bool = True
     
     # ============================================================================
     # MEDIAPIPE
@@ -94,7 +102,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     
     # ============================================================================
-    # PLUGIN INTEGRATION (NUEVO)
+    # PLUGIN INTEGRATION
     # ============================================================================
     PLUGIN_API_KEY: Optional[str] = None
     

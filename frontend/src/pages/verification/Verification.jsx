@@ -629,6 +629,136 @@ import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import { Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand } from 'lucide-react'
 
+// Componente para el modal de cuenta bloqueada con countdown
+function LockedAccountModal({ result, onBack }) {
+  const [timeRemaining, setTimeRemaining] = useState(null)
+
+  useEffect(() => {
+    if (!result?.lockout_info?.locked_until) return
+
+    const calculateTimeRemaining = () => {
+      const now = new Date().getTime()
+      const lockoutTime = new Date(result.lockout_info.locked_until).getTime()
+      const diff = lockoutTime - now
+
+      if (diff <= 0) {
+        setTimeRemaining({ minutes: 0, seconds: 0, expired: true })
+        return
+      }
+
+      const minutes = Math.floor(diff / 60000)
+      const seconds = Math.floor((diff % 60000) / 1000)
+      setTimeRemaining({ minutes, seconds, expired: false })
+    }
+
+    // Calcular inmediatamente
+    calculateTimeRemaining()
+
+    // Actualizar cada segundo
+    const interval = setInterval(calculateTimeRemaining, 1000)
+
+    return () => clearInterval(interval)
+  }, [result?.lockout_info?.locked_until])
+
+  const formatTime = (time) => {
+    if (!time) return '00:00'
+    const mins = String(time.minutes).padStart(2, '0')
+    const secs = String(time.seconds).padStart(2, '0')
+    return `${mins}:${secs}`
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-red-500 to-red-600 px-8 py-6">
+          <div className="flex items-center gap-4">
+            <div className="bg-white/20 rounded-full p-3">
+              <svg 
+                className="w-8 h-8 text-white" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+                />
+              </svg>
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold text-white">
+                Cuenta Bloqueada
+              </h2>
+              <p className="text-red-100 text-sm mt-1">
+                Múltiples intentos fallidos detectados
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Contenido */}
+        <div className="p-8 space-y-6">
+          {/* Usuario */}
+          <div className="flex items-center justify-between py-3 border-b border-slate-200">
+            <span className="text-slate-600 font-medium">Usuario</span>
+            <span className="text-slate-900 font-semibold">{result.username}</span>
+          </div>
+
+          {/* Countdown - Destacado */}
+          <div className="bg-slate-50 rounded-xl p-6 text-center border border-slate-200">
+            <p className="text-slate-600 text-sm mb-3">
+              Tiempo restante de bloqueo
+            </p>
+            <div className="text-4xl font-bold text-red-400 mb-2 font-mono tracking-wider">
+              {timeRemaining ? formatTime(timeRemaining) : '00:00'}
+            </div>
+            <p className="text-slate-500 text-sm">
+              {timeRemaining && !timeRemaining.expired ? 'minutos : segundos' : 'Cuenta desbloqueada'}
+            </p>
+          </div>
+
+          {/* Desbloqueo automático */}
+          {result.lockout_info?.locked_until && (
+            <div className="flex items-center justify-between py-3 border-b border-slate-200">
+              <span className="text-slate-600 font-medium">Se desbloqueará</span>
+              <span className="text-slate-900 font-semibold">
+                {new Date(result.lockout_info.locked_until).toLocaleString('es-ES', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  year: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
+              </span>
+            </div>
+          )}
+
+          {/* Razón */}
+          <div className="flex items-center justify-between py-3">
+            <span className="text-slate-600 font-medium">Razón</span>
+            <span className="text-red-600 font-semibold">
+              {result.lockout_info?.max_attempts} intentos fallidos
+            </span>
+          </div>
+
+          {/* Mensaje informativo */}
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <p className="text-sm text-slate-700 leading-relaxed">
+              Por seguridad, tu cuenta ha sido bloqueada temporalmente. El desbloqueo es automático. 
+              Asegúrate de realizar correctamente la secuencia de gestos en tu próximo intento.
+            </p>
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  )
+}
 export default function Verification() {
   const navigate = useNavigate()
   const [step, setStep] = useState('select') // 'select', 'processing', 'result'
@@ -865,6 +995,26 @@ export default function Verification() {
 
         console.log(`📊 Progreso: ${validCaptures}/${maxValidCaptures} capturas válidas`)
 
+        // // ✅ VERIFICAR SI HAY RESULTADO DE AUTENTICACIÓN
+        // if (frameResult.authentication_result) {
+        //   console.log('✅ Resultado de autenticación recibido - COMPLETANDO SESIÓN')
+          
+        //   // ✅ MARCAR COMO COMPLETADA INMEDIATAMENTE
+        //   sessionCompletedRef.current = true
+        //   isProcessingFrameRef.current = false
+        //   stopProcessing()
+          
+        //   // Usar el resultado directamente del frameResult
+        //   const authResult = frameResult.authentication_result
+        //   handleVerificationComplete({
+        //     status: authResult.success ? 'authenticated' : 'rejected',
+        //     user_id: authResult.user_id || selectedUser.user_id,
+        //     confidence: authResult.fused_score || authResult.confidence || 0,
+        //     duration: authResult.duration || 0
+        //   })
+        //   return
+        // }
+
         // ✅ VERIFICAR SI HAY RESULTADO DE AUTENTICACIÓN
         if (frameResult.authentication_result) {
           console.log('✅ Resultado de autenticación recibido - COMPLETANDO SESIÓN')
@@ -876,6 +1026,23 @@ export default function Verification() {
           
           // Usar el resultado directamente del frameResult
           const authResult = frameResult.authentication_result
+          
+          // ✅ VERIFICAR SI LA CUENTA ESTÁ BLOQUEADA
+          if (authResult.is_locked && authResult.lockout_info) {
+            console.log('🔒 Cuenta bloqueada detectada')
+            setProcessing(false)
+            setStep('locked')
+            setResult({
+              success: false,
+              is_locked: true,
+              lockout_info: authResult.lockout_info,
+              user_id: authResult.user_id || selectedUser.user_id,
+              username: selectedUser?.username || authResult.user_id
+            })
+            return
+          }
+          
+          // ✅ AUTENTICACIÓN NORMAL (NO BLOQUEADA)
           handleVerificationComplete({
             status: authResult.success ? 'authenticated' : 'rejected',
             user_id: authResult.user_id || selectedUser.user_id,
@@ -1356,6 +1523,20 @@ export default function Verification() {
             </div>
           </div>
         )}
+
+        {/* MODAL DE CUENTA BLOQUEADA */}
+        {step === 'locked' && result && (
+          <LockedAccountModal 
+            result={result}
+            onBack={() => {
+              setStep('select')
+              setResult(null)
+              setError(null)
+              setSelectedUser(null)
+            }}
+          />
+        )}
+
       </div>
     </div>
   )
