@@ -721,13 +721,13 @@ export default function SystemManagement() {
                 </CardContent>
               </Card>
 
-              {/* API Key Actual */}
+              {/* API key */}
               {apiKeyData ? (
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Key className="w-5 h-5" />
-                      API Key Actual
+                      API Key
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
@@ -856,18 +856,6 @@ export default function SystemManagement() {
                 </Card>
               )}
 
-              {/* Advertencia de Seguridad */}
-              <Alert variant="warning">
-                <AlertCircle className="w-4 h-4" />
-                <div className="ml-2">
-                  <p className="font-semibold text-sm">Importante</p>
-                  <p className="text-sm mt-1">
-                    Mantén esta API Key en secreto. Cualquier persona con acceso a ella podrá 
-                    usar tu Sistema Biométrico. Si sospechas que la clave ha sido comprometida, 
-                    regenera una nueva inmediatamente.
-                  </p>
-                </div>
-              </Alert>
             </>
           )}
         </div>

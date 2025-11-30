@@ -628,10 +628,13 @@ import { useNavigate } from 'react-router-dom'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import { Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand } from 'lucide-react'
+import TimeoutModal from '../../components/TimeoutModal'
 
 // Componente para el modal de cuenta bloqueada con countdown
 function LockedAccountModal({ result, onBack }) {
+
   const [timeRemaining, setTimeRemaining] = useState(null)
+
 
   useEffect(() => {
     if (!result?.lockout_info?.locked_until) return
@@ -773,6 +776,8 @@ export default function Verification() {
   
   const [sessionInfo, setSessionInfo] = useState(null)
 
+  const [timeoutInfo, setTimeoutInfo] = useState(null)
+  
   // ✅ REFS PARA CÁMARA Y CANVAS
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
@@ -1085,9 +1090,44 @@ export default function Verification() {
         // ✅ LIBERAR FLAG INMEDIATAMENTE
         isProcessingFrameRef.current = false
 
-        // ✅ MANEJAR 410 - Sesión ya cerrada
-        if (err.response?.status === 410) {
-          console.log('⚠️ Recibido 410 - sesión ya procesada, deteniendo')
+        // // ✅ MANEJAR 410 - Sesión ya cerrada
+        // if (err.response?.status === 410) {
+        //   console.log('⚠️ Recibido 410 - sesión ya procesada, deteniendo')
+        //   sessionCompletedRef.current = true
+        //   stopProcessing()
+        //   return
+        // }
+
+        // ✅ MANEJAR ERRORES DE TIMEOUT
+        const errorDetail = err.response?.data?.detail
+
+        // Caso 1: Timeout (HTTP 408) - sesión expiró en este frame
+        if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
+          console.log('⏱️ Timeout detectado - mostrando modal')
+          setTimeoutInfo({
+            type: errorDetail.error_type || 'timeout_total',
+            duration: errorDetail.details?.duration || 0,
+            gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+            gesturesRequired: errorDetail.details?.gestures_required || 3,
+            timeLimit: errorDetail.details?.time_limit || 45
+          })
+          sessionCompletedRef.current = true
+          stopProcessing()
+          return
+        }
+
+        // Caso 2: Sesión limpiada (HTTP 410) - sesión ya fue cerrada
+        if (err.response?.status === 410 && 
+            (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+          console.log('⏱️ Sesión limpiada - mostrando modal')
+          setTimeoutInfo({
+            type: 'session_cleaned',
+            duration: 0,
+            gesturesCaptured: 0,
+            gesturesRequired: 3,
+            timeLimit: 45,
+            message: errorDetail?.message || 'La sesión fue cerrada'
+          })
           sessionCompletedRef.current = true
           stopProcessing()
           return
@@ -1130,6 +1170,22 @@ export default function Verification() {
         ? '✅ Identidad verificada exitosamente' 
         : '❌ Identidad no verificada'
     })
+  }
+
+  const handleRetryAfterTimeout = () => {
+    setTimeoutInfo(null)
+    setError(null)
+    setStatusMessage('')
+    setStep('select')
+    setProcessing(false)
+    setResult(null)
+    sessionCompletedRef.current = false
+    isProcessingFrameRef.current = false
+  }
+
+  const handleCancelAfterTimeout = () => {
+    setTimeoutInfo(null)
+    navigate('/')
   }
 
   const handleReset = () => {
@@ -1538,6 +1594,12 @@ export default function Verification() {
         )}
 
       </div>
+      {/* Modal de Timeout */}
+      <TimeoutModal
+        timeoutInfo={timeoutInfo}
+        onRetry={handleRetryAfterTimeout}
+        onCancel={handleCancelAfterTimeout}
+      />
     </div>
   )
 }

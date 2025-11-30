@@ -2210,7 +2210,22 @@ class RealAuthenticationSystem:
             # Verificar timeout
             if session.duration > self.config.total_timeout:
                 self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT)
-                return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
+                # return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
+                return {
+                    'error': 'session_timeout',
+                    'error_type': 'timeout_total',
+                    'status': 'timeout',
+                    'details': {
+                        'reason': 'timeout_total',  # Puede ser: timeout_total, timeout_inactividad, timeout_por_gesto
+                        'duration': round(session.duration, 1),
+                        'gestures_captured': len(session.gesture_sequence_captured),
+                        'gestures_required': 3,
+                        'frames_processed': session.frames_processed,
+                        'time_limit': self.config.total_timeout
+                    },
+                    'message': f'Tiempo máximo agotado ({self.config.total_timeout}s)',
+                    'is_real': True
+                }
             
             # ✅ PROCESAR FRAME RECIBIDO DEL FRONTEND
             success, message = self.pipeline.process_frame_for_real_authentication(session, frame_image)

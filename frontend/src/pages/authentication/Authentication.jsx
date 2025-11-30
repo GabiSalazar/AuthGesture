@@ -35,6 +35,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../co
 import { Button } from '../components/ui/button'
 import { Shield, User, Users, Video, VideoOff, Check, X, AlertCircle, Loader2 } from 'lucide-react'
 import { authenticationApi } from '../services/api'
+import TimeoutModal from '../../components/TimeoutModal'
 
 export default function Authentication() {
   // Estados principales
@@ -53,6 +54,8 @@ export default function Authentication() {
   const canvasRef = useRef(null)
   const streamRef = useRef(null)
   const intervalRef = useRef(null)
+
+  const [timeoutInfo, setTimeoutInfo] = useState(null)
 
   // Cargar usuarios disponibles al montar
   useEffect(() => {
@@ -180,9 +183,48 @@ export default function Authentication() {
           stopProcessing()
         }
 
+      // } catch (err) {
+      //   console.error('Error procesando frame:', err)
+      //   setError('Error procesando frame: ' + (err.response?.data?.detail || err.message))
+      //   stopProcessing()
+      // }
+
       } catch (err) {
         console.error('Error procesando frame:', err)
-        setError('Error procesando frame: ' + (err.response?.data?.detail || err.message))
+        
+        // Detectar errores específicos de timeout
+        const errorDetail = err.response?.data?.detail
+        
+        // Caso 1: Timeout (HTTP 408) - sesión expiró en este frame
+        if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
+          setTimeoutInfo({
+            type: errorDetail.error_type || 'timeout_total',
+            duration: errorDetail.details?.duration || 0,
+            gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+            gesturesRequired: errorDetail.details?.gestures_required || 3,
+            timeLimit: errorDetail.details?.time_limit || 45
+          })
+          stopProcessing()
+          return
+        }
+        
+        // Caso 2: Sesión limpiada (HTTP 410) - sesión ya fue cerrada
+        if (err.response?.status === 410 && 
+            (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+          setTimeoutInfo({
+            type: 'session_cleaned',
+            duration: 0,
+            gesturesCaptured: 0,
+            gesturesRequired: 3,
+            timeLimit: 45,
+            message: errorDetail?.message || 'La sesión fue cerrada'
+          })
+          stopProcessing()
+          return
+        }
+        
+        // Caso 3: Otros errores
+        setError('Error procesando frame: ' + (errorDetail || err.message))
         stopProcessing()
       }
     }, 100) // Procesar cada 100ms (~10 FPS)
@@ -196,6 +238,33 @@ export default function Authentication() {
     }
     setIsProcessing(false)
     stopCamera()
+  }
+
+  const handleRetryAfterTimeout = () => {
+    // Limpiar estado de timeout
+    setTimeoutInfo(null)
+    setError(null)
+    setMessage('')
+    
+    // Reiniciar autenticación
+    setStep('ready')
+    setProcessing(false)
+    setResult(null)
+    setSessionInfo(null)
+  }
+
+  const handleCancelAfterTimeout = () => {
+    // Limpiar todo y volver al inicio
+    setTimeoutInfo(null)
+    setError(null)
+    setMessage('')
+    setStep('ready')
+    setProcessing(false)
+    setResult(null)
+    setSessionInfo(null)
+    
+    // Navegar de regreso
+    navigate('/')
   }
 
   // Resetear todo
@@ -490,6 +559,14 @@ export default function Authentication() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal de Timeout */}
+      <TimeoutModal
+        timeoutInfo={timeoutInfo}
+        onRetry={handleRetryAfterTimeout}
+        onCancel={handleCancelAfterTimeout}
+      />
+      
     </div>
   )
 }

@@ -519,11 +519,40 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
             logger.error(f"Error decodificando frame del frontend: {e}")
             raise HTTPException(status_code=400, detail=f"Frame inválido: {str(e)}")
         
+        # # ✅ PROCESAR FRAME (usando el frame recibido del frontend)
+        # result = auth_system.process_real_authentication_frame(session_id, frame)
+        
+        # if 'error' in result:
+        #     raise HTTPException(status_code=404, detail=result['error'])
+        
         # ✅ PROCESAR FRAME (usando el frame recibido del frontend)
         result = auth_system.process_real_authentication_frame(session_id, frame)
         
+        # ✅ MANEJAR ERRORES CON JSON ESTRUCTURADO
         if 'error' in result:
-            raise HTTPException(status_code=404, detail=result['error'])
+            # Caso 1: Sesión limpiada por timeout
+            if result.get('error') == 'Sesión no encontrada o expirada':
+                raise HTTPException(
+                    status_code=410,
+                    detail={
+                        'error': 'session_expired',
+                        'error_type': 'session_cleaned',
+                        'message': 'La sesión fue cerrada por timeout o inactividad',
+                        'details': {
+                            'reason': 'session_not_found',
+                            'suggestion': 'Inicie una nueva sesión de autenticación'
+                        }
+                    }
+                )
+            # Caso 2: Timeout detectado en este frame
+            elif result.get('error') == 'session_timeout':
+                raise HTTPException(
+                    status_code=408,
+                    detail=result
+                )
+            # Caso 3: Otros errores
+            else:
+                raise HTTPException(status_code=404, detail=result['error'])
         
         # ✅ DIBUJAR OVERLAY EN EL FRAME RECIBIDO
         try:
