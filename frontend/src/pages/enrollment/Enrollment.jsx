@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
-import { UserPlus, CheckCircle, CheckCircle2, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users, Loader2 } from 'lucide-react'
+import { UserPlus, CheckCircle, CheckCircle2, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users, Loader2, RefreshCw } from 'lucide-react'
+
 export default function Enrollment() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const reenrollmentData = location.state?.reenrollment ? location.state : null
+
   const [step, setStep] = useState('form')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -44,6 +48,22 @@ export default function Enrollment() {
   const [resendingCode, setResendingCode] = useState(false)
   const [resendCooldown, setResendCooldown] = useState(0)
   const [resendSuccess, setResendSuccess] = useState(false)
+
+  // Detectar si viene desde forgot-sequence y pre-cargar datos
+  useEffect(() => {
+    if (reenrollmentData && reenrollmentData.userData) {
+      const { userData } = reenrollmentData
+      
+      setUsername(userData.username || '')
+      setEmail(userData.email || '')
+      setPhoneNumber(userData.phone_number || '')
+      setAge(userData.age?.toString() || '')
+      setGender(userData.gender || '')
+      setSelectedGestures(userData.gesture_sequence || [])
+      
+      console.log('Datos pre-cargados para re-registro:', userData)
+    }
+  }, [reenrollmentData])
 
   const availableGestures = [
     'Open_Palm',
@@ -655,6 +675,7 @@ export default function Enrollment() {
                           value={username}
                           onChange={handleUsernameChange}
                           onBlur={handleUsernameBlur}
+                          disabled={reenrollmentData !== null}
                           className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
                           placeholder="Escribe tu nombre completo..."
                         />
@@ -702,6 +723,7 @@ export default function Enrollment() {
                           value={email}
                           onChange={handleEmailChange}
                           onBlur={handleEmailBlur}
+                          disabled={reenrollmentData !== null}
                           className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
                           placeholder="ejemplo@correo.com"
                         />
@@ -749,6 +771,7 @@ export default function Enrollment() {
                           value={phoneNumber}
                           onChange={handlePhoneChange}
                           onBlur={handlePhoneBlur}
+                          disabled={reenrollmentData !== null}
                           className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
                           placeholder="0999999999"
                         />
@@ -796,6 +819,7 @@ export default function Enrollment() {
                           value={age}
                           onChange={handleAgeChange}
                           onBlur={handleAgeBlur}
+                          disabled={reenrollmentData !== null}
                           min="5"
                           max="80"
                           className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
@@ -835,6 +859,7 @@ export default function Enrollment() {
                           setTimeout(() => setGenderDropdownOpen(false), 200)
                           handleGenderBlur()
                         }}
+                        disabled={reenrollmentData !== null}
                         className={`
                           w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl border-2 bg-white transition-all duration-300
                           ${genderError && genderTouched ? 'border-red-300 focus:border-red-500 focus:ring-4 focus:ring-red-100' : ''}
@@ -1437,7 +1462,7 @@ export default function Enrollment() {
         )}
         
 
-        {/* STEP: QUESTIONNAIRE */}
+        {/* STEP: QUESTIONNAIRE
         {step === 'questionnaire' && userId && (
           <PersonalityQuestionnaire
             userId={userId}
@@ -1448,6 +1473,94 @@ export default function Enrollment() {
               setStep('success')
             }}
           />
+        )} */}
+
+        {/* STEP: QUESTIONNAIRE */}
+        {step === 'questionnaire' && userId && (
+          reenrollmentData?.reusePersonality ? (
+            <>
+              {(() => {
+                console.log('Re-registro detectado: Saltando cuestionario, usando perfil existente')
+                console.log('Perfil de personalidad:', reenrollmentData.personalityProfile)
+                
+                // Auto-avanzar al siguiente step después de un breve delay
+                setTimeout(async () => {
+                console.log('Perfil de personalidad reutilizado exitosamente')
+                
+                // Guardar personality profile automáticamente
+                if (reenrollmentData?.personalityProfile) {
+                  try {
+                    const responses = reenrollmentData.personalityProfile.raw_responses
+                      ? reenrollmentData.personalityProfile.raw_responses.split(',').map(Number)
+                      : reenrollmentData.personalityProfile.responses || [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+                    
+                    console.log('Guardando personality profile:', responses)
+                    
+                    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+                    const response = await fetch(`${apiUrl}/personality/submit`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        user_id: userId,
+                        responses: responses
+                      })
+                    })
+                    
+                    if (response.ok) {
+                      console.log('Personality profile guardado exitosamente')
+                    } else {
+                      console.warn('Error guardando personality profile, pero continuando')
+                    }
+                  } catch (error) {
+                    console.error('Error guardando personality profile:', error)
+                  }
+                }
+                
+                setStep('success')
+              }, 2000)
+                
+                return (
+                  <div className="max-w-2xl mx-auto">
+                    <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-100 overflow-hidden p-12">
+                      <div className="text-center space-y-6">
+                        <div className="flex justify-center">
+                          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                            <CheckCircle className="w-8 h-8 text-blue-600" />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                            Perfil de Personalidad Conservado
+                          </h2>
+                          <p className="text-gray-600">
+                            Estamos reutilizando tu perfil de personalidad existente.
+                            <br />
+                            No necesitas completar el cuestionario nuevamente.
+                          </p>
+                        </div>
+                        
+                        <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                          <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+                          <span>Continuando al siguiente paso...</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })()}
+            </>
+          ) : (
+            <PersonalityQuestionnaire
+              userId={userId}
+              username={username}
+              onComplete={(result) => {
+                console.log('Cuestionario completado:', result)
+                console.log('Respuestas guardadas:', result.raw_responses)
+                setStep('success')
+              }}
+            />
+          )
         )}
 
         {/* STEP: SUCCESS */}

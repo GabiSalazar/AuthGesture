@@ -833,6 +833,28 @@ class BiometricDatabase:
     # MÉTODOS DE VALIDACIÓN
     # ========================================================================
     
+    # def is_email_unique(self, email: str, exclude_user_id: Optional[str] = None) -> bool:
+    #     """Verifica si el email es único."""
+    #     try:
+    #         with self.lock:
+    #             query = self.supabase.table('users').select('user_id').eq('email', email)
+                
+    #             if exclude_user_id:
+    #                 query = query.neq('user_id', exclude_user_id)
+                
+    #             response = query.execute()
+                
+    #             is_unique = len(response.data) == 0
+                
+    #             if not is_unique:
+    #                 logger.info(f"❌ Email {email} ya registrado")
+                
+    #             return is_unique
+                
+    #     except Exception as e:
+    #         logger.error(f"Error verificando email único: {e}")
+    #         return False
+    
     def is_email_unique(self, email: str, exclude_user_id: Optional[str] = None) -> bool:
         """Verifica si el email es único."""
         try:
@@ -855,11 +877,33 @@ class BiometricDatabase:
             logger.error(f"Error verificando email único: {e}")
             return False
     
+    # def is_phone_unique(self, phone_number: str, exclude_user_id: Optional[str] = None) -> bool:
+    #     """Verifica si el teléfono es único."""
+    #     try:
+    #         with self.lock:
+    #             query = self.supabase.table('users').select('user_id').eq('phone_number', phone_number)
+                
+    #             if exclude_user_id:
+    #                 query = query.neq('user_id', exclude_user_id)
+                
+    #             response = query.execute()
+                
+    #             is_unique = len(response.data) == 0
+                
+    #             if not is_unique:
+    #                 logger.info(f"❌ Teléfono {phone_number} ya registrado")
+                
+    #             return is_unique
+                
+    #     except Exception as e:
+    #         logger.error(f"Error verificando teléfono único: {e}")
+    #         return False
+    
     def is_phone_unique(self, phone_number: str, exclude_user_id: Optional[str] = None) -> bool:
-        """Verifica si el teléfono es único."""
+        """Verifica si el teléfono es único entre usuarios activos."""
         try:
             with self.lock:
-                query = self.supabase.table('users').select('user_id').eq('phone_number', phone_number)
+                query = self.supabase.table('users').select('user_id').eq('phone_number', phone_number).eq('is_active', True)
                 
                 if exclude_user_id:
                     query = query.neq('user_id', exclude_user_id)
@@ -869,7 +913,7 @@ class BiometricDatabase:
                 is_unique = len(response.data) == 0
                 
                 if not is_unique:
-                    logger.info(f"❌ Teléfono {phone_number} ya registrado")
+                    logger.info(f"Teléfono {phone_number} ya registrado para usuario activo")
                 
                 return is_unique
                 
@@ -894,6 +938,160 @@ class BiometricDatabase:
         
         logger.info(f"✅ ID generado: {user_id}")
         return user_id
+    
+    def get_user_by_email(self, email: str, active_only: bool = True) -> Optional[UserProfile]:
+        """
+        Obtiene usuario por email.
+        
+        Args:
+            email: Email del usuario
+            active_only: Si True, solo busca usuarios activos
+        
+        Returns:
+            UserProfile o None
+        """
+        try:
+            with self.lock:
+                query = self.supabase.table('users').select('*').eq('email', email.lower().strip())
+                
+                if active_only:
+                    query = query.eq('is_active', True)
+                
+                response = query.execute()
+                
+                if not response.data:
+                    logger.info(f"No se encontró usuario con email: {email}")
+                    return None
+                
+                user_data = response.data[0]
+                
+                user = UserProfile(
+                    user_id=user_data['user_id'],
+                    username=user_data['username'],
+                    email=user_data['email'],
+                    phone_number=user_data['phone_number'],
+                    age=user_data['age'],
+                    gender=user_data['gender'],
+                    gesture_sequence=user_data.get('gesture_sequence', []),
+                    created_at=user_data.get('created_at'),
+                    updated_at=user_data.get('updated_at'),
+                    metadata=user_data.get('metadata', {})
+                )
+                
+                # Cargar templates si ya están cargados
+                if user.user_id in self.users:
+                    existing_user = self.users[user.user_id]
+                    user.anatomical_templates = existing_user.anatomical_templates
+                    user.dynamic_templates = existing_user.dynamic_templates
+                
+                logger.info(f"Usuario encontrado: {user.user_id}")
+                return user
+                
+        except Exception as e:
+            logger.error(f"Error obteniendo usuario por email: {e}")
+            return None
+        
+    def deactivate_user_and_rename(self, user_id: str, reason: str = "forgot_sequence") -> dict:
+        """
+        Desactiva usuario renombrando su user_id y libera el ID original.
+        
+        Args:
+            user_id: ID del usuario a desactivar
+            reason: Razón de la desactivación
+        
+        Returns:
+            dict con información del proceso
+        """
+        from datetime import datetime
+        
+        try:
+            with self.lock:
+                user = self.get_user(user_id)
+                if not user:
+                    raise ValueError(f"Usuario {user_id} no encontrado")
+                
+                timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+                new_inactive_id = f"{user_id}_inactive_{timestamp}"
+                
+                logger.info(f"Desactivando usuario: {user_id} -> {new_inactive_id}")
+                
+                new_metadata = {
+                    **user.metadata,
+                    'original_user_id': user_id,
+                    'deactivation_reason': reason,
+                    'deactivated_at': datetime.now().isoformat()
+                }
+                
+                # Renombrar en user_profiles
+                self.supabase.table('user').update({
+                    'user_id': new_inactive_id,
+                    'is_active': False,
+                    'metadata': new_metadata
+                }).eq('user_id', user_id).execute()
+                
+                logger.info(f"user_profiles actualizado: {user_id} -> {new_inactive_id}")
+                
+                # Renombrar en biometric_templates
+                templates_result = self.supabase.table('biometric_templates').update({
+                    'user_id': new_inactive_id,
+                    'is_active': False
+                }).eq('user_id', user_id).execute()
+                
+                templates_count = len(templates_result.data) if templates_result.data else 0
+                logger.info(f"biometric_templates actualizados: {templates_count} templates")
+                
+                # Renombrar en personality_profiles
+                personality_result = self.supabase.table('personality_profiles').update({
+                    'user_id': new_inactive_id
+                }).eq('user_id', user_id).execute()
+                
+                has_personality = len(personality_result.data) > 0 if personality_result.data else False
+                logger.info(f"personality_profiles actualizado: {has_personality}")
+                
+                # Renombrar en authentication_attempts
+                auth_result = self.supabase.table('authentication_attempts').update({
+                    'user_id': new_inactive_id
+                }).eq('user_id', user_id).execute()
+                
+                auth_count = len(auth_result.data) if auth_result.data else 0
+                logger.info(f"authentication_attempts actualizados: {auth_count} intentos")
+                
+                # Actualizar cache local
+                if user_id in self.users:
+                    del self.users[user_id]
+                    logger.info(f"Usuario eliminado del cache local: {user_id}")
+                
+                # Obtener perfil de personalidad con nuevo ID
+                personality_profile = None
+                try:
+                    personality_profile = self.get_personality_profile(new_inactive_id)
+                except Exception as e:
+                    logger.warning(f"No se pudo obtener perfil de personalidad: {e}")
+                
+                logger.info(f"Usuario desactivado exitosamente: {user_id} -> {new_inactive_id}")
+                
+                return {
+                    'success': True,
+                    'original_user_id': user_id,
+                    'new_inactive_id': new_inactive_id,
+                    'user_data': {
+                        'email': user.email,
+                        'phone_number': user.phone_number,
+                        'age': user.age,
+                        'gender': user.gender,
+                        'username': user.username,
+                        'gesture_sequence': user.gesture_sequence
+                    },
+                    'personality_profile': personality_profile,
+                    'templates_updated': templates_count,
+                    'auth_attempts_updated': auth_count
+                }
+                
+        except Exception as e:
+            logger.error(f"Error desactivando usuario {user_id}: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
+            raise
     
     # ========================================================================
     # MÉTODOS DE USUARIO

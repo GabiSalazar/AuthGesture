@@ -7,6 +7,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import Enrollment from './pages/enrollment/Enrollment'
 import Verification from './pages/verification/Verification'
 import Identification from './pages/identification/Identification'
+import ForgotSequence from './pages/forgot-sequence/ForgotSequence'
 
 import './App.css'
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/enrollment" element={<Enrollment />} />
         <Route path="/verification" element={<Verification />} />
         <Route path="/identification" element={<Identification />} />
+        <Route path="/forgot-sequence" element={<ForgotSequence />} />
         
         {/* Login de Admin (PÚBLICO - no requiere autenticación) */}
         <Route path="/admin/login" element={<AdminLogin />} />

@@ -71,7 +71,8 @@ from app.api import (
     feedback,
     admin,
     api_keys,
-    biometric_plugin
+    biometric_plugin,
+    forgot_sequence
 )
 
 # ===== REGISTRAR ROUTERS =====
@@ -101,6 +102,7 @@ app.include_router(personality.router, prefix=settings.API_V1_STR)
 app.include_router(email_verification.router, prefix="/api/email", tags=["email"])
 app.include_router(feedback.router, prefix=settings.API_V1_STR)
 app.include_router(biometric_plugin.router, prefix=settings.API_V1_STR)
+app.include_router(forgot_sequence.router, prefix=settings.API_V1_STR)
 
 # Evento de inicio
 @app.on_event("startup")
