@@ -110,7 +110,16 @@ from app.core.score_fusion_system import (
 )
 
 # Módulo 13: Biometric Database
-from app.core.biometric_database import (
+# from app.core.biometric_database import (
+#     BiometricDatabase,
+#     UserProfile,
+#     BiometricTemplate,
+#     TemplateType,
+#     DatabaseStats,
+#     get_biometric_database
+# )
+
+from app.core.supabase_biometric_storage import (
     BiometricDatabase,
     UserProfile,
     BiometricTemplate,

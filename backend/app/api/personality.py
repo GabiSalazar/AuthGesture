@@ -12,7 +12,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from app.core.biometric_database import get_biometric_database, PersonalityProfile
+# from app.core.biometric_database import get_biometric_database, PersonalityProfile
+from app.core.supabase_biometric_storage import get_biometric_database, PersonalityProfile
 from app.services.plugin_webhook_service import get_plugin_webhook_service
 from app.core.system_manager import get_system_manager
 

@@ -31,12 +31,12 @@ from app.core.siamese_anatomical_network import get_real_siamese_anatomical_netw
 from app.core.siamese_dynamic_network import get_real_siamese_dynamic_network
 from app.core.feature_preprocessor import get_real_feature_preprocessor
 from app.core.score_fusion_system import get_real_score_fusion_system
-from app.core.biometric_database import get_biometric_database, TemplateType
+# from app.core.biometric_database import get_biometric_database, TemplateType, AuthenticationAttempt
+from app.core.supabase_biometric_storage import get_biometric_database, TemplateType, AuthenticationAttempt
 from app.core.roi_normalization import get_roi_normalization_system
 from app.core.visual_feedback import get_visual_feedback_manager
 from app.core.dynamic_features_extractor import get_dynamic_features_extractor
 from app.core.enrollment_system import get_real_enrollment_system
-from app.core.biometric_database import AuthenticationAttempt
 from app.services.plugin_webhook_service import get_plugin_webhook_service
 from app.services.lockout_notification_service import send_lockout_alert_email
 from app.config import Settings

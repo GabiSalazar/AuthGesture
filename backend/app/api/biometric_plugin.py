@@ -8,7 +8,8 @@ from typing import Optional, Dict, Any
 import logging
 
 from app.services.api_key_service import get_api_key_service
-from app.core.biometric_database import get_biometric_database
+# from app.core.biometric_database import get_biometric_database
+from app.core.supabase_biometric_storage import get_biometric_database
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/biometric", tags=["Biometric Plugin"])

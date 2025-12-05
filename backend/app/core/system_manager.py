@@ -12,7 +12,8 @@ from pathlib import Path
 import numpy as np
 
 from app.core.config_manager import get_logger, get_config
-from app.core.biometric_database import get_biometric_database
+# from app.core.biometric_database import get_biometric_database
+from app.core.supabase_biometric_storage import get_biometric_database
 from app.core.enrollment_system import get_real_enrollment_system
 from app.core.authentication_system import get_real_authentication_system
 from app.core.siamese_anatomical_network import get_real_siamese_anatomical_network

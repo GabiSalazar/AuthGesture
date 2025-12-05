@@ -146,24 +146,20 @@ class UserProfile:
     
     anatomical_templates: List[str] = field(default_factory=list)
     dynamic_templates: List[str] = field(default_factory=list)
-    multimodal_templates: List[str] = field(default_factory=list)
     
     gesture_sequence: Optional[List[str]] = None
-    email_verified: bool = False 
-    sequence_metadata: Dict[str, Any] = field(default_factory=dict)
-    
+        
     total_enrollments: int = 0
     total_verifications: int = 0
     successful_verifications: int = 0
     last_activity: float = field(default_factory=time.time)
-    
-    quality_threshold: float = 0.7
-    security_level: str = "standard"
-    
+        
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
     
     metadata: Dict[str, Any] = field(default_factory=dict)
+    
+    is_active: bool = True 
     
     failed_attempts: int = 0
     last_failed_timestamp: Optional[float] = None
@@ -173,7 +169,7 @@ class UserProfile:
     @property
     def total_templates(self) -> int:
         """Total de templates registrados."""
-        return len(self.anatomical_templates) + len(self.dynamic_templates) + len(self.multimodal_templates)
+        return len(self.anatomical_templates) + len(self.dynamic_templates)
     
     @property
     def verification_success_rate(self) -> float:
@@ -202,7 +198,6 @@ class PersonalityProfile:
     
     # Metadata
     completed_at: str = field(default_factory=lambda: datetime.now().isoformat())
-    version: str = "1.0"  # Versión del cuestionario
     
     def to_dict(self) -> Dict[str, Any]:
         """Convierte a diccionario."""
@@ -220,7 +215,6 @@ class PersonalityProfile:
             'openness_2': self.openness_2,
             'raw_responses': self.raw_responses,
             'completed_at': self.completed_at,
-            'version': self.version
         }
     
     @classmethod
@@ -240,7 +234,6 @@ class PersonalityProfile:
             openness_2=data['openness_2'],
             raw_responses=data['raw_responses'],
             completed_at=data.get('completed_at', datetime.now().isoformat()),
-            version=data.get('version', '1.0')
         )
     
     @classmethod
@@ -2195,15 +2188,15 @@ class BiometricDatabase:
                 'checksum': getattr(template, 'checksum', ''),
                 'metadata': getattr(template, 'metadata', {}),
                 
-                # ✅ AGREGAR FLAGS DE EMBEDDINGS (PARA VALIDACIÓN)
-                'has_anatomical_embedding': template.anatomical_embedding is not None,
-                'has_dynamic_embedding': template.dynamic_embedding is not None,
-                'anatomical_embedding_shape': list(template.anatomical_embedding.shape) if template.anatomical_embedding is not None else None,
-                'dynamic_embedding_shape': list(template.dynamic_embedding.shape) if template.dynamic_embedding is not None else None,
+                # # ✅ AGREGAR FLAGS DE EMBEDDINGS (PARA VALIDACIÓN)
+                # 'has_anatomical_embedding': template.anatomical_embedding is not None,
+                # 'has_dynamic_embedding': template.dynamic_embedding is not None,
+                # 'anatomical_embedding_shape': list(template.anatomical_embedding.shape) if template.anatomical_embedding is not None else None,
+                # 'dynamic_embedding_shape': list(template.dynamic_embedding.shape) if template.dynamic_embedding is not None else None,
                 
-                # Los embeddings van al .bin, no al JSON
-                'anatomical_embedding': None,
-                'dynamic_embedding': None
+                # # Los embeddings van al .bin, no al JSON
+                # 'anatomical_embedding': None,
+                # 'dynamic_embedding': None
             }
             
             print(f"📋 DEBUG: Metadatos preparados")

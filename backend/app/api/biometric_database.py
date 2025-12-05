@@ -7,7 +7,14 @@ from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 import numpy as np
 
-from app.core.biometric_database import (
+# from app.core.biometric_database import (
+#     get_biometric_database,
+#     TemplateType,
+#     BiometricQuality,
+#     SearchStrategy
+# )
+
+from app.core.supabase_biometric_storage import (
     get_biometric_database,
     TemplateType,
     BiometricQuality,

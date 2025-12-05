@@ -33,7 +33,13 @@ try:
     from app.core.siamese_dynamic_network import get_real_siamese_dynamic_network
     from app.core.feature_preprocessor import get_real_feature_preprocessor
     from app.core.score_fusion_system import get_real_score_fusion_system
-    from app.core.biometric_database import (
+    # from app.core.biometric_database import (
+    #     get_biometric_database, 
+    #     BiometricTemplate, 
+    #     UserProfile, 
+    #     TemplateType
+    # )
+    from app.core.supabase_biometric_storage import (
         get_biometric_database, 
         BiometricTemplate, 
         UserProfile, 
@@ -976,7 +982,9 @@ class RealEnrollmentWorkflow:
                 self.database.store_biometric_template(template)
             
             # Guardar perfil de usuario
-            from app.core.biometric_database import UserProfile
+            # from app.core.biometric_database import UserProfile
+            from app.core.supabase_biometric_storage import UserProfile
+
             
             user_profile = UserProfile(
                 user_id=session.user_id,
@@ -3194,7 +3202,8 @@ class RealEnrollmentSystem:
                     # Crear perfil de usuario si no existe
                     existing_users = [u.user_id for u in self.database.list_users()]
                     if session.user_id not in existing_users:
-                        from app.core.biometric_database import UserProfile
+                        # from app.core.biometric_database import UserProfile
+                        from app.core.supabase_biometric_storage import UserProfile
                         user_profile = UserProfile(
                             user_id=session.user_id,
                             username=session.username,
@@ -3250,7 +3259,8 @@ class RealEnrollmentSystem:
                     if anatomical_embedding is not None:
                         template_id_anat = f"{session.user_id}_anatomical_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                         
-                        from app.core.biometric_database import BiometricTemplate, TemplateType
+                        # from app.core.biometric_database import BiometricTemplate, TemplateType
+                        from app.core.supabase_biometric_storage import BiometricTemplate, TemplateType
                         template_anat = BiometricTemplate(
                             user_id=session.user_id,
                             template_id=template_id_anat,
@@ -3280,7 +3290,8 @@ class RealEnrollmentSystem:
                     if dynamic_embedding is not None:
                         template_id_dyn = f"{session.user_id}_dynamic_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                         
-                        from app.core.biometric_database import BiometricTemplate, TemplateType
+                        # from app.core.biometric_database import BiometricTemplate, TemplateType
+                        from app.core.supabase_biometric_storage import BiometricTemplate, TemplateType
                         template_dyn = BiometricTemplate(
                             user_id=session.user_id,
                             template_id=template_id_dyn,
@@ -3422,7 +3433,8 @@ class RealEnrollmentSystem:
                                     
                                     template_id = f"{session.user_id}_dynamic_sequence_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                                     
-                                    from app.core.biometric_database import BiometricTemplate, TemplateType
+                                    # from app.core.biometric_database import BiometricTemplate, TemplateType
+                                    from app.core.supabase_biometric_storage import BiometricTemplate, TemplateType
                                     
                                     template = BiometricTemplate(
                                         user_id=session.user_id,
@@ -3523,7 +3535,8 @@ class RealEnrollmentSystem:
                                     
                                     template_id_fluid = f"{session.user_id}_dynamic_sequence_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
                                     
-                                    from app.core.biometric_database import BiometricTemplate, TemplateType
+                                    # from app.core.biometric_database import BiometricTemplate, TemplateType
+                                    from app.core.supabase_biometric_storage import BiometricTemplate, TemplateType
                                     
                                     template_fluid = BiometricTemplate(
                                         user_id=session.user_id,
