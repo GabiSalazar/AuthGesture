@@ -992,20 +992,88 @@ class BiometricDatabase:
             logger.error(f"Error obteniendo usuario por email: {e}")
             return None
         
+    # def deactivate_user_and_rename(self, user_id: str, reason: str = "forgot_sequence") -> dict:
+    #     from datetime import datetime
+    #     import traceback
+        
+    #     try:
+    #         with self.lock:
+    #             user = self.get_user(user_id)
+    #             if not user:
+    #                 raise ValueError(f"Usuario {user_id} no encontrado")
+                
+    #             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    #             new_inactive_id = f"{user_id}_inactive_{timestamp}"
+                
+    #             logger.info(f"Desactivando usuario: {user_id} -> {new_inactive_id}")
+                
+    #             new_metadata = {
+    #                 **user.metadata,
+    #                 'original_user_id': user_id,
+    #                 'deactivation_reason': reason,
+    #                 'deactivated_at': datetime.now().isoformat()
+    #             }
+                
+    #             # ✅ Solo actualiza users, CASCADE hace el resto automáticamente
+    #             self.supabase.table('users').update({
+    #                 'user_id': new_inactive_id,
+    #                 'is_active': False,
+    #                 'metadata': new_metadata
+    #             }).eq('user_id', user_id).execute()
+                
+    #             logger.info(f"✅ Usuario desactivado: {user_id} -> {new_inactive_id}")
+                
+    #             # Actualizar cache local
+    #             if user_id in self.users:
+    #                 del self.users[user_id]
+                
+    #             personality_profile = None
+    #             try:
+    #                 personality_profile = self.get_personality_profile(new_inactive_id)
+    #             except Exception as e:
+    #                 logger.warning(f"No se pudo obtener perfil de personalidad: {e}")
+                
+    #             return {
+    #                 'success': True,
+    #                 'original_user_id': user_id,
+    #                 'new_inactive_id': new_inactive_id,
+    #                 'user_data': {
+    #                     'email': user.email,
+    #                     'phone_number': user.phone_number,
+    #                     'age': user.age,
+    #                     'gender': user.gender,
+    #                     'username': user.username,
+    #                     'gesture_sequence': user.gesture_sequence
+    #                 },
+    #                 'personality_profile': personality_profile
+    #             }
+                
+    #     except Exception as e:
+    #         logger.error(f"Error desactivando usuario {user_id}: {e}")
+    #         logger.error(f"Traceback: {traceback.format_exc()}")
+    #         raise
+    
     def deactivate_user_and_rename(self, user_id: str, reason: str = "forgot_sequence") -> dict:
         from datetime import datetime
         import traceback
         
         try:
             with self.lock:
+                print("=" * 80)
+                print(f"🔄 INICIANDO DEACTIVATE_USER_AND_RENAME")
+                print(f"   User ID original: {user_id}")
+                print("=" * 80)
+                
                 user = self.get_user(user_id)
                 if not user:
                     raise ValueError(f"Usuario {user_id} no encontrado")
                 
+                print(f"✅ Usuario encontrado en memoria: {user.username}")
+                
                 timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
                 new_inactive_id = f"{user_id}_inactive_{timestamp}"
                 
-                logger.info(f"Desactivando usuario: {user_id} -> {new_inactive_id}")
+                print(f"📝 Nuevo ID inactivo: {new_inactive_id}")
                 
                 new_metadata = {
                     **user.metadata,
@@ -1014,14 +1082,61 @@ class BiometricDatabase:
                     'deactivated_at': datetime.now().isoformat()
                 }
                 
-                # ✅ Solo actualiza users, CASCADE hace el resto automáticamente
-                self.supabase.table('users').update({
-                    'user_id': new_inactive_id,
-                    'is_active': False,
-                    'metadata': new_metadata
-                }).eq('user_id', user_id).execute()
+                print(f"📊 Metadata actualizado: {new_metadata}")
                 
-                logger.info(f"✅ Usuario desactivado: {user_id} -> {new_inactive_id}")
+                # ✅ VERIFICAR QUE EL USUARIO EXISTE EN SUPABASE ANTES DEL UPDATE
+                print(f"\n🔍 Verificando usuario en Supabase...")
+                check = self.supabase.table('users').select('id, user_id, is_active').eq('user_id', user_id).execute()
+                print(f"   Resultado verificación: {check.data}")
+                
+                if not check.data:
+                    raise ValueError(f"Usuario {user_id} no existe en Supabase")
+                
+                print(f"✅ Usuario confirmado en Supabase")
+                print(f"   ID interno Supabase: {check.data[0]['id']}")
+                
+                # ✅ EJECUTAR UPDATE
+                print(f"\n🔄 EJECUTANDO UPDATE...")
+                print(f"   Cambiando user_id: {user_id} -> {new_inactive_id}")
+                print(f"   Cambiando is_active: True -> False")
+                
+                try:
+                    result = self.supabase.table('users').update({
+                        'user_id': new_inactive_id,
+                        'is_active': False,
+                        'metadata': new_metadata,
+                        'updated_at': datetime.now().isoformat()
+                    }).eq('user_id', user_id).execute()
+                    
+                    print(f"\n📊 RESULTADO DEL UPDATE:")
+                    print(f"   Status code: {getattr(result, 'status_code', 'N/A')}")
+                    print(f"   Data: {result.data}")
+                    print(f"   Count: {getattr(result, 'count', 'N/A')}")
+                    
+                    if result.data:
+                        print(f"✅ UPDATE EXITOSO - {len(result.data)} registro(s) afectado(s)")
+                        print(f"   Nuevo user_id en BD: {result.data[0].get('user_id')}")
+                    else:
+                        print(f"❌ UPDATE FALLÓ - No se afectaron registros")
+                        raise Exception("UPDATE no afectó ningún registro")
+                    
+                except Exception as update_error:
+                    print(f"\n❌ EXCEPCIÓN EN UPDATE:")
+                    print(f"   Error: {update_error}")
+                    print(f"   Tipo: {type(update_error)}")
+                    print(f"   Traceback:")
+                    traceback.print_exc()
+                    raise
+                
+                # VERIFICAR QUE EL CAMBIO SE APLICÓ
+                print(f"\n🔍 Verificando cambio en Supabase...")
+                verify = self.supabase.table('users').select('user_id, is_active').eq('user_id', new_inactive_id).execute()
+                print(f"   Búsqueda por nuevo ID: {verify.data}")
+                
+                verify_old = self.supabase.table('users').select('user_id, is_active').eq('user_id', user_id).execute()
+                print(f"   Búsqueda por ID original: {verify_old.data}")
+                
+                logger.info(f"✅ Usuario renombrado: {user_id} -> {new_inactive_id}")
                 
                 # Actualizar cache local
                 if user_id in self.users:
@@ -1032,6 +1147,10 @@ class BiometricDatabase:
                     personality_profile = self.get_personality_profile(new_inactive_id)
                 except Exception as e:
                     logger.warning(f"No se pudo obtener perfil de personalidad: {e}")
+                
+                print("=" * 80)
+                print(f"✅ DEACTIVATE_USER_AND_RENAME COMPLETADO")
+                print("=" * 80)
                 
                 return {
                     'success': True,
@@ -1049,6 +1168,12 @@ class BiometricDatabase:
                 }
                 
         except Exception as e:
+            print("=" * 80)
+            print(f"❌ ERROR EN DEACTIVATE_USER_AND_RENAME")
+            print(f"   Error: {e}")
+            print(f"   Traceback:")
+            traceback.print_exc()
+            print("=" * 80)
             logger.error(f"Error desactivando usuario {user_id}: {e}")
             logger.error(f"Traceback: {traceback.format_exc()}")
             raise
@@ -2232,8 +2357,64 @@ class BiometricDatabase:
     # MÉTODOS INTERNOS CRÍTICOS (GUARDAR EN SUPABASE)
     # ========================================================================
     
+    # def _save_user(self, user_profile: UserProfile):
+    #     """Guarda perfil de usuario en Supabase."""
+    #     try:
+    #         print(f"🔍 Guardando usuario en Supabase: {user_profile.user_id}")
+            
+    #         # Convertir timestamps a ISO format
+    #         created_at = datetime.fromtimestamp(user_profile.created_at).isoformat()
+    #         updated_at = datetime.fromtimestamp(user_profile.updated_at).isoformat()
+            
+    #         last_activity = None
+    #         if user_profile.last_activity:
+    #             last_activity = datetime.fromtimestamp(user_profile.last_activity).isoformat()
+            
+    #         last_failed_timestamp = None
+    #         if user_profile.last_failed_timestamp:
+    #             last_failed_timestamp = datetime.fromtimestamp(user_profile.last_failed_timestamp).isoformat()
+            
+    #         lockout_until = None
+    #         if user_profile.lockout_until:
+    #             lockout_until = datetime.fromtimestamp(user_profile.lockout_until).isoformat()
+            
+    #         user_data = {
+    #             'user_id': user_profile.user_id,
+    #             'username': user_profile.username,
+    #             'email': user_profile.email,
+    #             'phone_number': user_profile.phone_number,
+    #             'age': user_profile.age,
+    #             'gender': user_profile.gender,
+    #             'anatomical_templates': user_profile.anatomical_templates,
+    #             'dynamic_templates': user_profile.dynamic_templates,
+    #             'gesture_sequence': user_profile.gesture_sequence or [],
+    #             'total_enrollments': user_profile.total_enrollments,
+    #             'total_verifications': user_profile.total_verifications,
+    #             'successful_verifications': user_profile.successful_verifications,
+    #             'last_activity': last_activity,
+    #             'is_active': user_profile.is_active,
+    #             'failed_attempts': user_profile.failed_attempts,
+    #             'last_failed_timestamp': last_failed_timestamp,
+    #             'lockout_until': lockout_until,
+    #             'lockout_history': user_profile.lockout_history,
+    #             'created_at': created_at,
+    #             'updated_at': updated_at,
+    #             'metadata': user_profile.metadata
+    #         }
+            
+    #         # ✅ UPSERT EN SUPABASE
+    #         result = self.supabase.table('users').upsert(user_data, on_conflict='user_id').execute()
+            
+    #         print(f"✅ Usuario guardado en Supabase: {user_profile.user_id}")
+            
+    #     except Exception as e:
+    #         print(f"❌ ERROR guardando usuario en Supabase: {e}")
+    #         import traceback
+    #         traceback.print_exc()
+    #         logger.error(f"Error guardando usuario: {e}")
+    
     def _save_user(self, user_profile: UserProfile):
-        """Guarda perfil de usuario en Supabase."""
+        """Guarda perfil de usuario en Supabase - CORREGIDO para re-enrollment."""
         try:
             print(f"🔍 Guardando usuario en Supabase: {user_profile.user_id}")
             
@@ -2277,17 +2458,33 @@ class BiometricDatabase:
                 'metadata': user_profile.metadata
             }
             
-            # ✅ UPSERT EN SUPABASE
-            result = self.supabase.table('users').upsert(user_data, on_conflict='user_id').execute()
+            # ✅ VERIFICAR SI USUARIO EXISTE (evita sobrescritura en re-enrollment)
+            existing = self.supabase.table('users')\
+                .select('id')\
+                .eq('user_id', user_profile.user_id)\
+                .execute()
             
-            print(f"✅ Usuario guardado en Supabase: {user_profile.user_id}")
+            if existing.data:
+                # Usuario existe → UPDATE
+                print(f"   Usuario existe, actualizando...")
+                self.supabase.table('users')\
+                    .update(user_data)\
+                    .eq('user_id', user_profile.user_id)\
+                    .execute()
+                print(f"✅ Usuario actualizado en Supabase: {user_profile.user_id}")
+            else:
+                # Usuario NO existe → INSERT (crea nuevo registro)
+                print(f"   Usuario nuevo, insertando...")
+                self.supabase.table('users')\
+                    .insert(user_data)\
+                    .execute()
+                print(f"✅ Usuario insertado en Supabase: {user_profile.user_id}")
             
         except Exception as e:
             print(f"❌ ERROR guardando usuario en Supabase: {e}")
             import traceback
             traceback.print_exc()
             logger.error(f"Error guardando usuario: {e}")
-    
     def _save_template(self, template: BiometricTemplate):
         """Guarda template en Supabase."""
         try:
