@@ -856,10 +856,10 @@ class BiometricDatabase:
     #         return False
     
     def is_email_unique(self, email: str, exclude_user_id: Optional[str] = None) -> bool:
-        """Verifica si el email es único."""
+        """Verifica si el email es único entre usuarios activos."""
         try:
             with self.lock:
-                query = self.supabase.table('users').select('user_id').eq('email', email)
+                query = self.supabase.table('users').select('user_id').eq('email', email).eq('is_active', True)
                 
                 if exclude_user_id:
                     query = query.neq('user_id', exclude_user_id)
@@ -869,7 +869,7 @@ class BiometricDatabase:
                 is_unique = len(response.data) == 0
                 
                 if not is_unique:
-                    logger.info(f"❌ Email {email} ya registrado")
+                    logger.info(f"Email {email} ya registrado para usuario activo")
                 
                 return is_unique
                 
@@ -973,6 +973,7 @@ class BiometricDatabase:
                     age=user_data['age'],
                     gender=user_data['gender'],
                     gesture_sequence=user_data.get('gesture_sequence', []),
+                    is_active=user_data.get('is_active', True),
                     created_at=user_data.get('created_at'),
                     updated_at=user_data.get('updated_at'),
                     metadata=user_data.get('metadata', {})
@@ -992,17 +993,8 @@ class BiometricDatabase:
             return None
         
     def deactivate_user_and_rename(self, user_id: str, reason: str = "forgot_sequence") -> dict:
-        """
-        Desactiva usuario renombrando su user_id y libera el ID original.
-        
-        Args:
-            user_id: ID del usuario a desactivar
-            reason: Razón de la desactivación
-        
-        Returns:
-            dict con información del proceso
-        """
         from datetime import datetime
+        import traceback
         
         try:
             with self.lock:
@@ -1022,53 +1014,24 @@ class BiometricDatabase:
                     'deactivated_at': datetime.now().isoformat()
                 }
                 
-                # Renombrar en user_profiles
-                self.supabase.table('user').update({
+                # ✅ Solo actualiza users, CASCADE hace el resto automáticamente
+                self.supabase.table('users').update({
                     'user_id': new_inactive_id,
                     'is_active': False,
                     'metadata': new_metadata
                 }).eq('user_id', user_id).execute()
                 
-                logger.info(f"user_profiles actualizado: {user_id} -> {new_inactive_id}")
-                
-                # Renombrar en biometric_templates
-                templates_result = self.supabase.table('biometric_templates').update({
-                    'user_id': new_inactive_id,
-                    'is_active': False
-                }).eq('user_id', user_id).execute()
-                
-                templates_count = len(templates_result.data) if templates_result.data else 0
-                logger.info(f"biometric_templates actualizados: {templates_count} templates")
-                
-                # Renombrar en personality_profiles
-                personality_result = self.supabase.table('personality_profiles').update({
-                    'user_id': new_inactive_id
-                }).eq('user_id', user_id).execute()
-                
-                has_personality = len(personality_result.data) > 0 if personality_result.data else False
-                logger.info(f"personality_profiles actualizado: {has_personality}")
-                
-                # Renombrar en authentication_attempts
-                auth_result = self.supabase.table('authentication_attempts').update({
-                    'user_id': new_inactive_id
-                }).eq('user_id', user_id).execute()
-                
-                auth_count = len(auth_result.data) if auth_result.data else 0
-                logger.info(f"authentication_attempts actualizados: {auth_count} intentos")
+                logger.info(f"✅ Usuario desactivado: {user_id} -> {new_inactive_id}")
                 
                 # Actualizar cache local
                 if user_id in self.users:
                     del self.users[user_id]
-                    logger.info(f"Usuario eliminado del cache local: {user_id}")
                 
-                # Obtener perfil de personalidad con nuevo ID
                 personality_profile = None
                 try:
                     personality_profile = self.get_personality_profile(new_inactive_id)
                 except Exception as e:
                     logger.warning(f"No se pudo obtener perfil de personalidad: {e}")
-                
-                logger.info(f"Usuario desactivado exitosamente: {user_id} -> {new_inactive_id}")
                 
                 return {
                     'success': True,
@@ -1082,16 +1045,93 @@ class BiometricDatabase:
                         'username': user.username,
                         'gesture_sequence': user.gesture_sequence
                     },
-                    'personality_profile': personality_profile,
-                    'templates_updated': templates_count,
-                    'auth_attempts_updated': auth_count
+                    'personality_profile': personality_profile
                 }
                 
         except Exception as e:
             logger.error(f"Error desactivando usuario {user_id}: {e}")
-            import traceback
             logger.error(f"Traceback: {traceback.format_exc()}")
             raise
+        
+    def reactivate_user(self, original_user_id: str) -> bool:
+        """
+        Reactiva un usuario inactivo renombrándolo a su ID original.
+        
+        Args:
+            original_user_id: ID original del usuario (sin sufijo _inactive_)
+        
+        Returns:
+            bool: True si se reactivó exitosamente
+        """
+        from datetime import datetime
+        import traceback
+        
+        try:
+            with self.lock:
+                # Buscar usuario inactivo con este ID original en metadata
+                response = self.supabase.table('users')\
+                    .select('*')\
+                    .eq('is_active', False)\
+                    .execute()
+                
+                if not response.data:
+                    logger.warning(f"No hay usuarios inactivos")
+                    return False
+                
+                # Buscar el que tiene original_user_id en metadata
+                inactive_user = None
+                for user in response.data:
+                    metadata = user.get('metadata', {})
+                    if metadata.get('original_user_id') == original_user_id:
+                        inactive_user = user
+                        break
+                
+                if not inactive_user:
+                    logger.warning(f"No se encontró usuario inactivo con original_user_id: {original_user_id}")
+                    return False
+                
+                old_user_id = inactive_user['user_id']
+                
+                logger.info(f"🔄 Reactivando usuario: {old_user_id} → {original_user_id}")
+                
+                # Actualizar metadata
+                new_metadata = inactive_user.get('metadata', {})
+                new_metadata['reactivated_at'] = datetime.now().isoformat()
+                new_metadata['reactivation_count'] = new_metadata.get('reactivation_count', 0) + 1
+                
+                # ✅ UPDATE en Supabase: renombrar y reactivar
+                self.supabase.table('users').update({
+                    'user_id': original_user_id,
+                    'is_active': True,
+                    'failed_attempts': 0,
+                    'last_failed_timestamp': None,
+                    'lockout_until': None,
+                    'updated_at': datetime.now().isoformat(),
+                    'metadata': new_metadata
+                }).eq('user_id', old_user_id).execute()
+                
+                logger.info(f"✅ Usuario reactivado exitosamente: {original_user_id}")
+                
+                # Actualizar cache local si existe
+                if old_user_id in self.users:
+                    user_profile = self.users[old_user_id]
+                    user_profile.user_id = original_user_id
+                    user_profile.is_active = True
+                    user_profile.failed_attempts = 0
+                    user_profile.last_failed_timestamp = None
+                    user_profile.lockout_until = None
+                    user_profile.metadata = new_metadata
+                    
+                    # Mover en cache
+                    self.users[original_user_id] = user_profile
+                    del self.users[old_user_id]
+                
+                return True
+                
+        except Exception as e:
+            logger.error(f"❌ Error reactivando usuario {original_user_id}: {e}")
+            logger.error(f"Traceback: {traceback.format_exc()}")
+            return False
     
     # ========================================================================
     # MÉTODOS DE USUARIO

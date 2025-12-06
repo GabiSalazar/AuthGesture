@@ -161,6 +161,186 @@ async def validate_unique_field(request: ValidateUniqueRequest):
 # ENDPOINTS
 # ============================================================================
 
+# @router.post("/enrollment/start", response_model=EnrollmentStartResponse)
+# async def start_enrollment(request: EnrollmentStartRequest):
+#     """
+#     Inicia una nueva sesión de enrollment - ACTUALIZADO CON NUEVOS CAMPOS.
+    
+#     Args:
+#         request: Datos del usuario (sin user_id, ahora auto-generado)
+    
+#     Returns:
+#         EnrollmentStartResponse con información de la sesión
+#     """
+#     try:
+#         manager = get_system_manager()
+#         database = manager.database
+        
+#         # ============================================================================
+#         # VERIFICAR QUE EL SISTEMA ESTÉ LISTO
+#         # ============================================================================
+#         if not manager.state.enrollment_active:
+#             raise HTTPException(
+#                 status_code=503,
+#                 detail="Sistema de enrollment no está activo"
+#             )
+        
+#         # ============================================================================
+#         # ✅ VALIDACIONES DE CAMPOS NUEVOS
+#         # ============================================================================
+        
+#         # 1. Validar username
+#         username_stripped = request.username.strip()
+#         if len(username_stripped) < 10:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="El nombre debe tener al menos 10 caracteres"
+#             )
+        
+#         # 2. Validar email formato básico
+#         email_stripped = request.email.strip().lower()
+#         if not email_stripped or '@' not in email_stripped or '.' not in email_stripped:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Email inválido"
+#             )
+        
+#         # 3. Validar email único
+#         if not database.is_email_unique(email_stripped):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Este email ya está registrado"
+#             )
+        
+#         # 4. Validar teléfono formato básico
+#         phone_stripped = request.phone_number.strip()
+#         if not phone_stripped:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Número de teléfono es requerido"
+#             )
+
+#         # Limpiar solo números
+#         phone_cleaned = ''.join(filter(str.isdigit, phone_stripped))
+#         if len(phone_cleaned) != 10:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Número de teléfono inválido (debe tener exactamente 10 dígitos)"
+#             )
+
+#         # 5. Validar teléfono único
+#         if not database.is_phone_unique(phone_stripped):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Este número de teléfono ya está registrado"
+#             )
+    
+#         # 6. Validar edad
+#         try:
+#             age_int = int(request.age)
+#         except (ValueError, TypeError):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Edad inválida (debe ser un número entero)"
+#             )
+        
+#         if age_int < 5 or age_int > 80:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Edad inválida (debe estar entre 5 y 80 años)"
+#             )
+        
+#         # 7. Validar género
+#         if request.gender not in ["Femenino", "Masculino"]:
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail="Género inválido (debe ser 'Femenino' o 'Masculino')"
+#             )
+        
+#         # ============================================================================
+#         # ✅ GENERAR USER_ID AUTOMÁTICO
+#         # ============================================================================
+#         user_id = database.generate_unique_user_id(username_stripped)
+        
+#         print(f"🎬 Iniciando enrollment:")
+#         print(f"   User ID (generado): {user_id}")
+#         print(f"   Username: {username_stripped}")
+#         print(f"   Email: {email_stripped}")
+#         print(f"   Teléfono: {phone_stripped}")
+#         print(f"   Edad: {age_int}")
+#         print(f"   Género: {request.gender}")
+        
+#         # ============================================================================
+#         # ✅ ENVIAR EMAIL DE VERIFICACIÓN
+#         # ============================================================================
+#         print(f"📧 Enviando email de verificación a {email_stripped}...")
+        
+#         email_system = get_email_verification_system()
+#         email_sent = email_system.send_verification_email(
+#             user_id=user_id,
+#             username=username_stripped,
+#             email=email_stripped
+#         )
+        
+#         if not email_sent:
+#             raise HTTPException(
+#                 status_code=500,
+#                 detail="Error enviando email de verificación. Por favor intenta de nuevo."
+#             )
+        
+#         print(f"✅ Email de verificación enviado exitosamente")
+        
+#         # ============================================================================
+#         # ✅ INICIAR SESIÓN DE ENROLLMENT CON TODOS LOS DATOS
+#         # ============================================================================
+#         result = manager.start_enrollment_session(
+#             user_id=user_id,  # ✅ Generado automáticamente
+#             username=username_stripped,
+#             gesture_sequence=request.gesture_sequence,
+#             email=email_stripped,  # ✅ Nuevo campo
+#             phone_number=phone_stripped,  # ✅ Nuevo campo
+#             age=age_int,  # ✅ Nuevo campo
+#             gender=request.gender,  # ✅ Nuevo campo
+#             session_token=request.session_token,  # 🔧 NUEVO - Plugin
+#             callback_url=request.callback_url      # 🔧 NUEVO - Plugin
+#         )
+        
+#         if not result.get('success', False):
+#             raise HTTPException(
+#                 status_code=400,
+#                 detail=result.get('message', 'Error iniciando enrollment')
+#             )
+        
+#         session = result['session']
+        
+#         print(f"✅ Sesión creada: {session['session_id']}")
+#         print(f"   Gestos: {session['gesture_sequence']}")
+#         print(f"   Total muestras: {session['total_samples_needed']}")
+        
+#         # ============================================================================
+#         # ✅ RETORNAR RESPUESTA
+#         # ============================================================================
+#         return EnrollmentStartResponse(
+#             success=True,
+#             session_id=session['session_id'],
+#             message=f"Email de verificación enviado a {email_stripped}. Revisa tu bandeja de entrada.",
+#             user_id=session['user_id'],
+#             username=session['username'],
+#             gesture_sequence=session['gesture_sequence'],
+#             total_gestures=session['total_gestures'],
+#             samples_per_gesture=session['samples_per_gesture'],
+#             total_samples_needed=session['total_samples_needed']
+#         )
+        
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         import traceback
+#         error_detail = f"Error iniciando enrollment: {str(e)}\n{traceback.format_exc()}"
+#         print(f"❌ ERROR: {error_detail}")
+#         raise HTTPException(status_code=500, detail=error_detail)
+
+
 @router.post("/enrollment/start", response_model=EnrollmentStartResponse)
 async def start_enrollment(request: EnrollmentStartRequest):
     """
@@ -205,12 +385,49 @@ async def start_enrollment(request: EnrollmentStartRequest):
                 detail="Email inválido"
             )
         
-        # 3. Validar email único
-        if not database.is_email_unique(email_stripped):
-            raise HTTPException(
-                status_code=400,
-                detail="Este email ya está registrado"
-            )
+        # ============================================================================
+        # 🔄 DETECTAR RE-ENROLLMENT (antes de validar unicidad)
+        # ============================================================================
+        print("=" * 80)
+        print("🔍 VERIFICANDO SI ES RE-ENROLLMENT")
+        print("=" * 80)
+        
+        is_reenrollment = False
+        original_user_id = None
+        
+        # Buscar si existe usuario inactivo con este email
+        existing_inactive_user = database.get_user_by_email(email_stripped, active_only=False)
+        
+        if existing_inactive_user and not existing_inactive_user.is_active:
+            print(f"✅ Re-enrollment detectado!")
+            print(f"   Usuario inactivo encontrado: {existing_inactive_user.user_id}")
+            
+            # Extraer ID original del usuario inactivo
+            # Formato: user_abc_inactive_timestamp -> user_abc
+            if '_inactive_' in existing_inactive_user.user_id:
+                original_user_id = existing_inactive_user.user_id.split('_inactive_')[0]
+                is_reenrollment = True
+                print(f"   ID original extraído: {original_user_id}")
+                print(f"   Este ID será reutilizado")
+            else:
+                print(f"⚠️ Usuario inactivo sin formato '_inactive_', generando nuevo ID")
+        else:
+            print(f"ℹ️ No hay usuario inactivo con email {email_stripped}")
+            print(f"   Será un enrollment nuevo")
+        
+        print("=" * 80)
+        
+        # ============================================================================
+        # ✅ VALIDAR EMAIL ÚNICO (solo para enrollments nuevos)
+        # ============================================================================
+        if not is_reenrollment:
+            if not database.is_email_unique(email_stripped):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Este email ya está registrado"
+                )
+        else:
+            print(f"🔄 Re-enrollment: Saltando validación de unicidad de email")
         
         # 4. Validar teléfono formato básico
         phone_stripped = request.phone_number.strip()
@@ -228,12 +445,17 @@ async def start_enrollment(request: EnrollmentStartRequest):
                 detail="Número de teléfono inválido (debe tener exactamente 10 dígitos)"
             )
 
-        # 5. Validar teléfono único
-        if not database.is_phone_unique(phone_stripped):
-            raise HTTPException(
-                status_code=400,
-                detail="Este número de teléfono ya está registrado"
-            )
+        # ============================================================================
+        # ✅ VALIDAR TELÉFONO ÚNICO (solo para enrollments nuevos)
+        # ============================================================================
+        if not is_reenrollment:
+            if not database.is_phone_unique(phone_stripped):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Este número de teléfono ya está registrado"
+                )
+        else:
+            print(f"🔄 Re-enrollment: Saltando validación de unicidad de teléfono")
     
         # 6. Validar edad
         try:
@@ -258,17 +480,52 @@ async def start_enrollment(request: EnrollmentStartRequest):
             )
         
         # ============================================================================
-        # ✅ GENERAR USER_ID AUTOMÁTICO
+        # ✅ GENERAR O REUTILIZAR USER_ID
         # ============================================================================
-        user_id = database.generate_unique_user_id(username_stripped)
+        if is_reenrollment and original_user_id:
+            user_id = original_user_id
+            print("=" * 80)
+            print(f"🔄 RE-ENROLLMENT: Reutilizando ID original")
+            print(f"   User ID: {user_id}")
+            print("=" * 80)
+            
+            # ✅✅✅ NUEVO: REACTIVAR USUARIO EN SUPABASE ✅✅✅
+            print(f"🔄 Reactivando usuario en Supabase...")
+            try:
+                reactivation_success = database.reactivate_user(original_user_id)
+                
+                if not reactivation_success:
+                    print(f"❌ ERROR: No se pudo reactivar usuario {original_user_id}")
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Error reactivando usuario existente. Por favor contacta soporte."
+                    )
+                
+                print(f"✅ Usuario {original_user_id} reactivado exitosamente en Supabase")
+                
+            except Exception as reactivation_error:
+                print(f"❌ Excepción reactivando usuario: {reactivation_error}")
+                import traceback
+                print(traceback.format_exc())
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"Error crítico reactivando usuario: {str(reactivation_error)}"
+                )
+        else:
+            user_id = database.generate_unique_user_id(username_stripped)
+            print("=" * 80)
+            print(f"🆕 NUEVO ENROLLMENT: ID generado")
+            print(f"   User ID: {user_id}")
+            print("=" * 80)
         
         print(f"🎬 Iniciando enrollment:")
-        print(f"   User ID (generado): {user_id}")
+        print(f"   User ID: {user_id}")
         print(f"   Username: {username_stripped}")
         print(f"   Email: {email_stripped}")
         print(f"   Teléfono: {phone_stripped}")
         print(f"   Edad: {age_int}")
         print(f"   Género: {request.gender}")
+        print(f"   Es re-enrollment: {is_reenrollment}")
         
         # ============================================================================
         # ✅ ENVIAR EMAIL DE VERIFICACIÓN
@@ -294,15 +551,15 @@ async def start_enrollment(request: EnrollmentStartRequest):
         # ✅ INICIAR SESIÓN DE ENROLLMENT CON TODOS LOS DATOS
         # ============================================================================
         result = manager.start_enrollment_session(
-            user_id=user_id,  # ✅ Generado automáticamente
+            user_id=user_id,  # ✅ Original reutilizado o nuevo generado
             username=username_stripped,
             gesture_sequence=request.gesture_sequence,
-            email=email_stripped,  # ✅ Nuevo campo
-            phone_number=phone_stripped,  # ✅ Nuevo campo
-            age=age_int,  # ✅ Nuevo campo
-            gender=request.gender,  # ✅ Nuevo campo
-            session_token=request.session_token,  # 🔧 NUEVO - Plugin
-            callback_url=request.callback_url      # 🔧 NUEVO - Plugin
+            email=email_stripped,
+            phone_number=phone_stripped,
+            age=age_int,
+            gender=request.gender,
+            session_token=request.session_token,
+            callback_url=request.callback_url
         )
         
         if not result.get('success', False):
@@ -339,8 +596,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
         error_detail = f"Error iniciando enrollment: {str(e)}\n{traceback.format_exc()}"
         print(f"❌ ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
-
-
+    
 @router.post("/enrollment/process-frame")
 async def process_enrollment_frame(request: ProcessFrameRequest):
     """

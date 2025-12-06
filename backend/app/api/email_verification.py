@@ -369,7 +369,18 @@ async def verify_code(request: dict):
             }
         
         # Expirado
+        # expires_at = datetime.fromisoformat(verification.expires_at)
+        # if datetime.now() > expires_at:
+        #     return {
+        #         "success": False,
+        #         "message": "Código expirado. Solicita uno nuevo."
+        #     }
+        
+        # Expirado
         expires_at = datetime.fromisoformat(verification.expires_at)
+        # Remover timezone si existe para comparación
+        if expires_at.tzinfo is not None:
+            expires_at = expires_at.replace(tzinfo=None)
         if datetime.now() > expires_at:
             return {
                 "success": False,

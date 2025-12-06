@@ -221,48 +221,101 @@ class ForgotSequenceService:
             }
     
     def initiate_reenrollment(self, user_id: str) -> Dict[str, Any]:
-        """Desactiva usuario actual y prepara datos para re-registro."""
+        """
+        Desactiva usuario actual y prepara datos para re-registro.
+        
+        Flujo:
+        1. Renombra user_id actual agregando _inactive_timestamp
+        2. Marca usuario como inactivo (is_active = False)
+        3. Actualiza todas las tablas relacionadas con CASCADE
+        4. Libera el user_id original para reutilización
+        5. Retorna datos necesarios para el nuevo enrollment
+        
+        Args:
+            user_id: ID del usuario actual a desactivar
+            
+        Returns:
+            Dict con:
+                - success: bool
+                - message: str
+                - original_user_id: str (el ID que se reutilizará)
+                - user_data: dict (email, phone, age, gender, etc)
+                - personality_profile: dict o None
+                - reuse_personality: bool
+        """
         try:
+            print("=" * 80)
+            print(f"🔄 INICIANDO RE-ENROLLMENT")
+            print("=" * 80)
+            print(f"Usuario a desactivar: {user_id}")
             logger.info(f"Iniciando proceso de re-registro para: {user_id}")
             
+            # Desactivar usuario y renombrar su ID
             result = self.database.deactivate_user_and_rename(
                 user_id, 
                 reason="forgot_sequence_reenroll"
             )
             
             if not result['success']:
+                print(f"❌ ERROR: No se pudo desactivar usuario {user_id}")
                 logger.error(f"Error desactivando usuario {user_id}")
                 return {
                     'success': False,
                     'message': 'Error desactivando usuario'
                 }
             
-            logger.info(f"Usuario desactivado exitosamente: {user_id} -> {result['new_inactive_id']}")
+            print(f"✅ Usuario desactivado exitosamente:")
+            print(f"   ID original: {result['original_user_id']}")
+            print(f"   ID inactivo: {result['new_inactive_id']}")
+            logger.info(f"Usuario desactivado: {user_id} -> {result['new_inactive_id']}")
+            logger.info(f"ID original liberado: {result['original_user_id']}")
             
+            # Convertir personality profile a dict si existe
             personality_profile_dict = None
-            if result['personality_profile']:
+            if result.get('personality_profile'):
                 try:
                     personality_profile_dict = result['personality_profile'].to_dict()
+                    print(f"✅ Perfil de personalidad obtenido para reutilizar")
+                    logger.info(f"Perfil de personalidad obtenido para reutilizar")
                 except Exception as e:
+                    print(f"⚠️ Error convirtiendo perfil de personalidad: {e}")
                     logger.warning(f"Error convirtiendo perfil de personalidad a dict: {e}")
+            else:
+                print(f"ℹ️ No hay perfil de personalidad para reutilizar")
             
+            print("=" * 80)
+            print(f"✅ RE-ENROLLMENT PREPARADO")
+            print("=" * 80)
+            print(f"ID que se reutilizará: {result['original_user_id']}")
+            print(f"Email: {result['user_data'].get('email')}")
+            print(f"Username: {result['user_data'].get('username')}")
+            print(f"Reutilizar personalidad: {personality_profile_dict is not None}")
+            print("=" * 80)
+            
+            # Retornar datos para el nuevo enrollment
             return {
                 'success': True,
                 'message': 'Usuario desactivado. Listo para re-registro',
-                'original_user_id': result['original_user_id'],
-                'user_data': result['user_data'],
-                'personality_profile': personality_profile_dict,
+                'original_user_id': result['original_user_id'],  # ✅ ID que se reutilizará
+                'user_data': result['user_data'],  # email, phone, age, gender, username, gesture_sequence
+                'personality_profile': personality_profile_dict,  # Perfil a reutilizar
                 'reuse_personality': personality_profile_dict is not None
             }
             
         except ValueError as e:
+            print(f"❌ ERROR DE VALIDACIÓN: {e}")
             logger.error(f"Error de validación en reenrollment: {e}")
             return {
                 'success': False,
                 'message': str(e)
             }
         except Exception as e:
+            print(f"❌ ERROR CRÍTICO: {e}")
             logger.error(f"Error iniciando reenrollment: {e}")
+            import traceback
+            print(f"Traceback:")
+            traceback.print_exc()
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return {
                 'success': False,
                 'message': 'Error preparando re-registro'

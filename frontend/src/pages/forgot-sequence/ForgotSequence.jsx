@@ -76,6 +76,7 @@ export default function ForgotSequence() {
       navigate('/enrollment', {
         state: {
           reenrollment: true,
+          original_user_id: result.original_user_id,
           userData: result.user_data,
           personalityProfile: result.personality_profile,
           reusePersonality: result.reuse_personality
