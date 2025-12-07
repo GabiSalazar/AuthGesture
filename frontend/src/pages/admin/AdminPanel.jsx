@@ -17,6 +17,7 @@ import DashboardSection from '../dashboard/Dashboard'
 import UsersManagement from './sections/UsersManagement'
 import SystemManagement from './sections/SystemManagement'
 import AINetworks from './sections/AINetworks'
+import AuthenticationLogs from './sections/AuthenticationLogs'
 
 export default function AdminPanel() {
   const navigate = useNavigate()
@@ -51,7 +52,13 @@ export default function AdminPanel() {
       name: 'IA y Redes',
       icon: Brain,
       component: AINetworks
-    }
+    },
+    {
+      id: 'auth',
+      name: 'Autenticaciones',
+      icon: Shield,
+      component: AuthenticationLogs
+    } 
   ]
 
   const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component

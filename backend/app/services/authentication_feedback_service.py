@@ -203,7 +203,11 @@ class AuthenticationFeedbackService:
         confidence: float,
         user_email: str,
         ip_address: str = "localhost",
-        duration: float = 0.0
+        duration: float = 0.0,
+        anatomical_score: float = 0.0,
+        dynamic_score: float = 0.0,
+        fused_score: float = 0.0,
+        gestures_captured: list = None
     ) -> Dict[str, Any]:
         """
         Guarda un intento de autenticacion en Supabase y envia email de feedback.
@@ -218,6 +222,10 @@ class AuthenticationFeedbackService:
             user_email: Email del usuario (REQUERIDO para enviar feedback)
             ip_address: IP del cliente
             duration: Duracion del proceso
+            anatomical_score: Score anatómico
+            dynamic_score: Score dinámico
+            fused_score: Score fusionado
+            gestures_captured: Lista de gestos capturados
             
         Returns:
             Diccionario con id y feedback_token
@@ -234,6 +242,10 @@ class AuthenticationFeedbackService:
                 'mode': mode,
                 'system_decision': system_decision,
                 'confidence': confidence,
+                'anatomical_score': anatomical_score,
+                'dynamic_score': dynamic_score,
+                'fused_score': fused_score,
+                'gestures_captured': gestures_captured or [],
                 'feedback_token': feedback_token,
                 'ip_address': ip_address,
                 'duration': duration,
@@ -244,6 +256,8 @@ class AuthenticationFeedbackService:
             result = self.client.table('authentication_attempts').insert(data).execute()
             
             logger.info(f"Intento guardado: {user_id} - {system_decision}")
+            logger.info(f"   Scores: A={anatomical_score:.4f}, D={dynamic_score:.4f}, F={fused_score:.4f}")
+            logger.info(f"   Gestos: {gestures_captured}")
             
             # ENVIAR EMAIL DE FEEDBACK AUTOMATICAMENTE
             try:

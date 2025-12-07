@@ -2029,6 +2029,209 @@ class BiometricDatabase:
             logger.error(f"Error obteniendo intentos: {e}")
             return []
     
+    def get_all_auth_attempts(self, limit: Optional[int] = None) -> List[AuthenticationAttempt]:
+        """Obtiene TODOS los intentos de autenticación del sistema (estructura REAL)."""
+        try:
+            print("\n" + "=" * 80)
+            print("🔍 DEBUG: get_all_auth_attempts() INICIADO")
+            print("=" * 80)
+            
+            # ✅ QUERY DIRECTA A SUPABASE CON ESTRUCTURA REAL
+            print(f"📊 Creando query a tabla 'authentication_attempts'...")
+            print(f"   Limit: {limit}")
+            
+            query = self.supabase.table('authentication_attempts')\
+                .select('*')\
+                .order('timestamp', desc=True)
+            
+            if limit:
+                query = query.limit(limit)
+            
+            print(f"🔄 Ejecutando query en Supabase...")
+            response = query.execute()
+            
+            print(f"✅ Query ejecutada exitosamente")
+            print(f"📊 Total de registros obtenidos: {len(response.data)}")
+            
+            if len(response.data) == 0:
+                print("⚠️ NO SE ENCONTRARON REGISTROS EN LA TABLA")
+                print("=" * 80 + "\n")
+                return []
+            
+            # Mostrar primer registro
+            print(f"\n📝 PRIMER REGISTRO (ejemplo):")
+            first = response.data[0]
+            print(f"   id: {first.get('id')}")
+            print(f"   user_id: {first.get('user_id')}")
+            print(f"   mode: {first.get('mode')}")
+            print(f"   system_decision: {first.get('system_decision')}")
+            print(f"   confidence: {first.get('confidence')}")
+            print(f"   timestamp: {first.get('timestamp')}")
+            print(f"   username: {first.get('username')}")
+            print(f"   duration: {first.get('duration')}")
+            
+            attempts = []
+            
+            for idx, data in enumerate(response.data):
+                try:
+                    # Convertir timestamp ISO a float
+                    timestamp = data.get('timestamp')
+                    if isinstance(timestamp, str):
+                        timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00')).timestamp()
+                    elif timestamp is None:
+                        timestamp = time.time()
+                    
+                    # ✅ MAPEAR ESTRUCTURA REAL DE SUPABASE
+                    attempt_id = str(data.get('id', f"attempt_{idx}_{int(time.time())}"))
+                    auth_type = data.get('mode', 'unknown')
+                    result = 'success' if data.get('system_decision') == 'authenticated' else 'failed'
+                    
+                    # ✅ EXTRAER SCORES DIRECTAMENTE DE LAS COLUMNAS
+                    anatomical_score = float(data.get('anatomical_score', 0.0))
+                    dynamic_score = float(data.get('dynamic_score', 0.0))
+                    fused_score = float(data.get('fused_score', 0.0))
+                    confidence = float(data.get('confidence', fused_score))
+                    
+                    # ✅ EXTRAER GESTOS
+                    gestures_captured = data.get('gestures_captured', [])
+                    
+                    attempts.append(AuthenticationAttempt(
+                        attempt_id=attempt_id,
+                        user_id=data.get('user_id', 'unknown'),
+                        timestamp=timestamp,
+                        auth_type=auth_type,
+                        result=result,
+                        confidence=confidence,
+                        anatomical_score=anatomical_score,
+                        dynamic_score=dynamic_score,
+                        fused_score=fused_score,
+                        ip_address=data.get('ip_address'),
+                        device_info=None,
+                        failure_reason=None,
+                        metadata={
+                            'session_id': data.get('session_id'),
+                            'username': data.get('username'),
+                            'duration': data.get('duration'),
+                            'feedback_token': data.get('feedback_token'),
+                            'user_feedback': data.get('user_feedback'),
+                            'gestures_captured': gestures_captured
+                        }
+                    ))
+                    
+                except Exception as item_error:
+                    print(f"⚠️ Error procesando registro {idx}: {item_error}")
+                    import traceback
+                    traceback.print_exc()
+                    continue
+            
+            print(f"\n✅ TOTAL PROCESADO: {len(attempts)} intentos")
+            print("=" * 80 + "\n")
+            
+            logger.info(f"✅ Total de intentos procesados correctamente: {len(attempts)}")
+            return attempts
+            
+        except Exception as e:
+            print("\n" + "=" * 80)
+            print(f"❌ ERROR EN get_all_auth_attempts()")
+            print(f"   Error: {e}")
+            print("=" * 80 + "\n")
+            logger.error(f"❌ Error obteniendo todos los intentos: {e}")
+            import traceback
+            traceback.print_exc()
+            return []
+        
+    def get_all_identification_attempts(self, limit: int = 100, user_id: Optional[str] = None) -> List[AuthenticationAttempt]:
+        """
+        Obtiene todos los intentos de IDENTIFICACIÓN de la base de datos.
+        
+        Args:
+            limit: Número máximo de intentos a recuperar
+            user_id: Filtrar por usuario específico (opcional)
+            
+        Returns:
+            Lista de AuthenticationAttempt con intentos de identificación
+        """
+        try:
+            logger.info(f"📊 Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
+            
+            # Query base
+            query = self.supabase.table('identification_attempts')\
+                .select('*')\
+                .order('timestamp', desc=True)\
+                .limit(limit)
+            
+            # Filtrar por usuario si se especifica
+            if user_id:
+                query = query.eq('identified_user_id', user_id)
+            
+            response = query.execute()
+            
+            if not response.data:
+                logger.info("No se encontraron intentos de identificación")
+                return []
+            
+            logger.info(f"✅ Se recuperaron {len(response.data)} intentos de identificación")
+            
+            # Convertir a AuthenticationAttempt
+            attempts = []
+            for data in response.data:
+                try:
+                    # Extraer campos específicos de identificación
+                    identified_user_id = data.get('identified_user_id')
+                    username = data.get('username', 'Unknown')
+                    user_email = data.get('user_email')
+                    
+                    # Scores biométricos
+                    anatomical_score = float(data.get('anatomical_score', 0.0))
+                    dynamic_score = float(data.get('dynamic_score', 0.0))
+                    fused_score = float(data.get('fused_score', 0.0))
+                    confidence = float(data.get('confidence', fused_score))
+                    
+                    # Gestos y candidatos
+                    gestures_captured = data.get('gestures_captured', [])
+                    all_candidates = data.get('all_candidates', [])
+                    top_match_score = data.get('top_match_score')
+                    
+                    # Crear AuthenticationAttempt
+                    attempt = AuthenticationAttempt(
+                        attempt_id=data.get('id', str(uuid.uuid4())),
+                        user_id=identified_user_id or 'unknown',
+                        timestamp=self._parse_timestamp(data.get('timestamp')),
+                        auth_type='identification',
+                        result='success' if data.get('system_decision') == 'authenticated' else 'failed',
+                        confidence=confidence,
+                        anatomical_score=anatomical_score,
+                        dynamic_score=dynamic_score,
+                        fused_score=fused_score,
+                        ip_address=data.get('ip_address', 'unknown'),
+                        device_info=data.get('device_info', ''),
+                        failure_reason=None if data.get('system_decision') == 'authenticated' else 'No identificado',
+                        metadata={
+                            'session_id': data.get('session_id'),
+                            'username': username,
+                            'user_email': user_email,
+                            'duration': data.get('duration'),
+                            'gestures_captured': gestures_captured,
+                            'all_candidates': all_candidates,
+                            'top_match_score': top_match_score,
+                            'is_identification': True
+                        }
+                    )
+                    
+                    attempts.append(attempt)
+                    
+                except Exception as e:
+                    logger.error(f"Error procesando intento de identificación: {e}")
+                    continue
+            
+            logger.info(f"✅ Procesados {len(attempts)} intentos de identificación correctamente")
+            return attempts
+            
+        except Exception as e:
+            logger.error(f"❌ Error recuperando intentos de identificación: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return []
     # ========================================================================
     # MÉTODOS DE PERSONALITY PROFILES
     # ========================================================================

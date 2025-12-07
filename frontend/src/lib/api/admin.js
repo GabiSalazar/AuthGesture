@@ -57,6 +57,34 @@ export const adminApi = {
   },
 
   /**
+   * Obtiene historial de autenticaciones de un usuario
+   */
+  async getUserAuthAttempts(userId, limit = 50) {
+    const response = await apiClient.get(`/biometric-database/users/${userId}/auth-attempts`, {
+      params: { limit }
+    })
+    return response.data
+  },
+
+  /**
+   * Obtiene TODOS los intentos de autenticación del sistema
+   */
+  async getAllAuthAttempts(limit = 500) {
+    const response = await apiClient.get('/authentication/all-attempts', {
+      params: { limit }
+    })
+    return response.data
+  },
+
+  /**
+   * Obtiene estadísticas globales de autenticación
+   */
+  async getAuthStats() {
+    const response = await apiClient.get('/authentication/stats')
+    return response.data
+  },
+
+  /**
    * Actualiza información de un usuario
    */
   async updateUser(userId, updates) {

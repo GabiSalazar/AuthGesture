@@ -40,6 +40,7 @@ from app.core.enrollment_system import get_real_enrollment_system
 from app.services.plugin_webhook_service import get_plugin_webhook_service
 from app.services.lockout_notification_service import send_lockout_alert_email
 from app.config import Settings
+from app.services.identification_service import get_identification_service
 
 settings = Settings()
 logger = get_logger()
@@ -1705,6 +1706,10 @@ class RealAuthenticationSystem:
         self.feedback_service = get_feedback_service()
         logger.info("Servicio de feedback inicializado")
 
+        # Servicio de identificación
+        self.identification_service = get_identification_service()
+        logger.info("Servicio de identificación inicializado")
+        
         self.database = get_biometric_database()
         self.fusion_system = get_real_score_fusion_system()
         
@@ -2457,6 +2462,9 @@ class RealAuthenticationSystem:
                 self.statistics[f'{session.mode.value}_errors'] += 1
             
             session.current_phase = AuthenticationPhase.COMPLETED
+            
+            # ✅ GUARDAR RESULTADO EN SESIÓN PARA FEEDBACK
+            session.last_auth_result = result
             
             return result
             
@@ -3418,36 +3426,168 @@ class RealAuthenticationSystem:
             else:
                 logger.info(f"Autenticación fallida - Razón: {final_status.value}")
             
+            # # ✅ GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
+            # if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
+            #     try:
+            #         system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
+                    
+            #         # ✅ OBTENER EMAIL Y USERNAME DEL USUARIO
+            #         user_profile = self.database.get_user(session.user_id)
+            #         user_email = user_profile.email if user_profile else "unknown@example.com"
+            #         username = user_profile.username if user_profile else session.user_id
+                    
+            #         # ✅ EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
+            #         anatomical_score = 0.0
+            #         dynamic_score = 0.0
+            #         fused_score = 0.0
+            #         confidence = 0.0
+            #         gestures_captured = []
+                    
+            #         if hasattr(session, 'last_auth_result') and session.last_auth_result:
+            #             anatomical_score = session.last_auth_result.anatomical_score
+            #             dynamic_score = session.last_auth_result.dynamic_score
+            #             fused_score = session.last_auth_result.fused_score
+            #             confidence = session.last_auth_result.confidence
+            #             gestures_captured = session.last_auth_result.gestures_captured
+            #         elif hasattr(session, 'final_score'):
+            #             fused_score = session.final_score
+            #             confidence = session.final_score
+                    
+            #         # Gestos de la sesión si no están en el resultado
+            #         if not gestures_captured and hasattr(session, 'gesture_sequence_captured'):
+            #             gestures_captured = session.gesture_sequence_captured
+                        
+            #         feedback_data = self.feedback_service.save_authentication_attempt(
+            #             session_id=session.attempt_id,
+            #             user_id=session.user_id,
+            #             username=username,  # ✅ Username real
+            #             mode='verification' if session.mode == AuthenticationMode.VERIFICATION else 'identification',
+            #             system_decision=system_decision,
+            #             confidence=confidence,
+            #             ip_address=session.ip_address,
+            #             duration=session.duration,
+            #             user_email=user_email,
+            #             anatomical_score=anatomical_score,
+            #             dynamic_score=dynamic_score,
+            #             fused_score=fused_score,
+            #             gestures_captured=gestures_captured
+            #         )
+                    
+            #         # Guardar token de feedback en la sesión
+            #         session.feedback_token = feedback_data['feedback_token']
+                    
+            #         logger.info(f"✅ Intento guardado en Supabase - Token: {feedback_data['feedback_token']}")
+                    
+            #     except Exception as e:
+            #         logger.error(f"⚠️ Error guardando intento en Supabase: {e}")
+            #         # No fallar la autenticación si falla el guardado
             # ✅ GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
             if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
                 try:
                     system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
                     
-                    # ✅ OBTENER EMAIL Y USERNAME DEL USUARIO
-                    user_profile = self.database.get_user(session.user_id)
-                    user_email = user_profile.email if user_profile else "unknown@example.com"
-                    username = user_profile.username if user_profile else session.user_id
+                    # ✅ EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
+                    anatomical_score = 0.0
+                    dynamic_score = 0.0
+                    fused_score = 0.0
+                    confidence = 0.0
+                    gestures_captured = []
+                    all_candidates = []
+                    top_match_score = None
                     
-                    feedback_data = self.feedback_service.save_authentication_attempt(
-                        session_id=session.attempt_id,
-                        user_id=session.user_id,
-                        username=username,  # ✅ Username real
-                        mode='verification' if session.mode == AuthenticationMode.VERIFICATION else 'identification',
-                        system_decision=system_decision,
-                        confidence=session.final_score if hasattr(session, 'final_score') else 0.0,
-                        ip_address=session.ip_address,
-                        duration=session.duration,
-                        user_email=user_email  # ✅ AGREGADO
-                    )
+                    if hasattr(session, 'last_auth_result') and session.last_auth_result:
+                        anatomical_score = session.last_auth_result.anatomical_score
+                        dynamic_score = session.last_auth_result.dynamic_score
+                        fused_score = session.last_auth_result.fused_score
+                        confidence = session.last_auth_result.confidence
+                        gestures_captured = session.last_auth_result.gestures_captured
+                        
+                        # Datos específicos de identificación
+                        if hasattr(session.last_auth_result, 'all_candidates'):
+                            all_candidates = session.last_auth_result.all_candidates
+                        if hasattr(session.last_auth_result, 'top_match_score'):
+                            top_match_score = session.last_auth_result.top_match_score
                     
-                    # Guardar token de feedback en la sesión
-                    session.feedback_token = feedback_data['feedback_token']
+                    elif hasattr(session, 'final_score'):
+                        fused_score = session.final_score
+                        confidence = session.final_score
                     
-                    logger.info(f"✅ Intento guardado en Supabase - Token: {feedback_data['feedback_token']}")
+                    if not gestures_captured and hasattr(session, 'gesture_sequence_captured'):
+                        gestures_captured = session.gesture_sequence_captured
+                    
+                    # ✅ USAR SERVICIO CORRECTO SEGÚN MODO
+                    if session.mode == AuthenticationMode.VERIFICATION:
+                        # ========================================
+                        # VERIFICACIÓN 1:1 → authentication_attempts
+                        # ========================================
+                        user_profile = self.database.get_user(session.user_id)
+                        user_email = user_profile.email if user_profile else "unknown@example.com"
+                        username = user_profile.username if user_profile else session.user_id
+                        
+                        logger.info(f"📊 Guardando VERIFICACIÓN: user={session.user_id}, decision={system_decision}")
+                        
+                        feedback_data = self.feedback_service.save_authentication_attempt(
+                            session_id=session.attempt_id,
+                            user_id=session.user_id,
+                            username=username,
+                            mode='verification',
+                            system_decision=system_decision,
+                            confidence=confidence,
+                            ip_address=session.ip_address,
+                            duration=session.duration,
+                            user_email=user_email,
+                            anatomical_score=anatomical_score,
+                            dynamic_score=dynamic_score,
+                            fused_score=fused_score,
+                            gestures_captured=gestures_captured
+                        )
+                        
+                        if feedback_data and 'feedback_token' in feedback_data:
+                            session.feedback_token = feedback_data['feedback_token']
+                            logger.info(f"✅ Verificación guardada con feedback_token: {feedback_data['feedback_token']}")
+                    
+                    elif session.mode == AuthenticationMode.IDENTIFICATION:
+                        # ========================================
+                        # IDENTIFICACIÓN 1:N → identification_attempts
+                        # ========================================
+                        identified_user_id = None
+                        username = None
+                        user_email = None
+                        
+                        # Obtener datos del usuario identificado (si existe)
+                        if hasattr(session, 'last_auth_result') and session.last_auth_result:
+                            if hasattr(session.last_auth_result, 'matched_user_id') and session.last_auth_result.matched_user_id:
+                                identified_user_id = session.last_auth_result.matched_user_id
+                                user_profile = self.database.get_user(identified_user_id)
+                                if user_profile:
+                                    username = user_profile.username
+                                    user_email = user_profile.email
+                        
+                        logger.info(f"📊 Guardando IDENTIFICACIÓN: user={identified_user_id or 'unknown'}, decision={system_decision}")
+                        
+                        identification_data = self.identification_service.save_identification_attempt(
+                            session_id=session.attempt_id,
+                            identified_user_id=identified_user_id,
+                            username=username,
+                            user_email=user_email,
+                            system_decision=system_decision,
+                            confidence=confidence,
+                            anatomical_score=anatomical_score,
+                            dynamic_score=dynamic_score,
+                            fused_score=fused_score,
+                            all_candidates=all_candidates,
+                            top_match_score=top_match_score,
+                            gestures_captured=gestures_captured,
+                            ip_address=session.ip_address,
+                            duration=session.duration
+                        )
+                        
+                        if identification_data:
+                            logger.info(f"✅ Identificación guardada: {identification_data['session_id']}")
                     
                 except Exception as e:
-                    logger.error(f"⚠️ Error guardando intento en Supabase: {e}")
-                    # No fallar la autenticación si falla el guardado
+                    logger.error(f"❌ Error guardando intento de autenticación: {str(e)}")
+            
             
         except Exception as e:
             logger.error(f"Error completando autenticación: {e}")
