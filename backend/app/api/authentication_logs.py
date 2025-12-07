@@ -193,6 +193,74 @@ async def get_authentication_stats():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
+@router.get("/all-identification-attempts")
+async def get_all_identification_attempts(
+    limit: int = Query(500, ge=1, le=1000, description="Máximo número de intentos a retornar")
+):
+    """
+    Obtiene TODOS los intentos de IDENTIFICACIÓN (1:N) del sistema.
+    
+    Diseñado para el panel de administración - Tab "Autenticaciones".
+    """
+    try:
+        db = get_biometric_database()
+        
+        logger.info(f"📊 Obteniendo intentos de IDENTIFICACIÓN desde Supabase...")
+        all_attempts = db.get_all_identification_attempts(limit=limit)
+        
+        logger.info(f"📊 Total de intentos de identificación obtenidos: {len(all_attempts)}")
+        
+        if len(all_attempts) == 0:
+            return {
+                "status": "success",
+                "total_attempts": 0,
+                "returned_attempts": 0,
+                "attempts": [],
+                "message": "No hay intentos de identificación registrados"
+            }
+        
+        # Formatear datos
+        attempts_data = []
+        for attempt in all_attempts:
+            try:
+                attempts_data.append({
+                    "attempt_id": attempt.attempt_id,
+                    "user_id": attempt.user_id,
+                    "username": attempt.metadata.get('username', 'Unknown'),
+                    "timestamp": attempt.timestamp,
+                    "date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(attempt.timestamp)),
+                    "auth_type": "identification",
+                    "result": attempt.result,
+                    "confidence": round(attempt.confidence, 4),
+                    "anatomical_score": round(attempt.anatomical_score, 4),
+                    "dynamic_score": round(attempt.dynamic_score, 4),
+                    "fused_score": round(attempt.fused_score, 4),
+                    "ip_address": attempt.ip_address or "N/A",
+                    "device_info": attempt.device_info or "N/A",
+                    "gestures_captured": attempt.metadata.get('gestures_captured', []),
+                    "all_candidates": attempt.metadata.get('all_candidates', []),
+                    "top_match_score": attempt.metadata.get('top_match_score'),
+                    "metadata": attempt.metadata
+                })
+            except Exception as format_error:
+                logger.error(f"Error formateando intento: {format_error}")
+                continue
+        
+        logger.info(f"✅ Retornando {len(attempts_data)} intentos de identificación")
+        
+        return {
+            "status": "success",
+            "total_attempts": len(all_attempts),
+            "returned_attempts": len(attempts_data),
+            "attempts": attempts_data
+        }
+        
+    except Exception as e:
+        logger.error(f"❌ Error obteniendo intentos de identificación: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
 @router.get("/recent")
 async def get_recent_authentication_attempts(
     limit: int = Query(10, ge=1, le=50, description="Número de intentos recientes"),

@@ -2139,14 +2139,43 @@ class BiometricDatabase:
             import traceback
             traceback.print_exc()
             return []
-        
-    def get_all_identification_attempts(self, limit: int = 100, user_id: Optional[str] = None) -> List[AuthenticationAttempt]:
+    
+    def _parse_timestamp(self, timestamp_value):
         """
-        Obtiene todos los intentos de IDENTIFICACIÓN de la base de datos.
+        Parsea timestamp desde diferentes formatos a float Unix timestamp.
         
         Args:
-            limit: Número máximo de intentos a recuperar
-            user_id: Filtrar por usuario específico (opcional)
+            timestamp_value: Timestamp en formato ISO string, float, o None
+            
+        Returns:
+            float: Unix timestamp
+        """
+        try:
+            if timestamp_value is None:
+                return time.time()
+            
+            # Si ya es float/int (timestamp Unix)
+            if isinstance(timestamp_value, (int, float)):
+                return float(timestamp_value)
+            
+            # Si es string ISO format (de Supabase)
+            if isinstance(timestamp_value, str):
+                dt = datetime.fromisoformat(timestamp_value.replace('Z', '+00:00'))
+                return dt.timestamp()
+            
+            # Fallback
+            return time.time()
+            
+        except Exception as e:
+            logger.error(f"Error parseando timestamp: {e}")
+            return time.time()
+    
+    def get_all_identification_attempts(self, limit: int = 500) -> List[AuthenticationAttempt]:
+        """
+        Obtiene todos los intentos de IDENTIFICACIÓN (1:N) desde Supabase.
+        
+        Args:
+            limit: Número máximo de intentos a recuperar (default: 500)
             
         Returns:
             Lista de AuthenticationAttempt con intentos de identificación
@@ -2154,17 +2183,12 @@ class BiometricDatabase:
         try:
             logger.info(f"📊 Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
             
-            # Query base
-            query = self.supabase.table('identification_attempts')\
+            # Query a tabla identification_attempts
+            response = self.supabase.table('identification_attempts')\
                 .select('*')\
                 .order('timestamp', desc=True)\
-                .limit(limit)
-            
-            # Filtrar por usuario si se especifica
-            if user_id:
-                query = query.eq('identified_user_id', user_id)
-            
-            response = query.execute()
+                .limit(limit)\
+                .execute()
             
             if not response.data:
                 logger.info("No se encontraron intentos de identificación")
@@ -2176,21 +2200,15 @@ class BiometricDatabase:
             attempts = []
             for data in response.data:
                 try:
-                    # Extraer campos específicos de identificación
+                    # Extraer campos
                     identified_user_id = data.get('identified_user_id')
                     username = data.get('username', 'Unknown')
-                    user_email = data.get('user_email')
                     
-                    # Scores biométricos
+                    # Scores
                     anatomical_score = float(data.get('anatomical_score', 0.0))
                     dynamic_score = float(data.get('dynamic_score', 0.0))
                     fused_score = float(data.get('fused_score', 0.0))
                     confidence = float(data.get('confidence', fused_score))
-                    
-                    # Gestos y candidatos
-                    gestures_captured = data.get('gestures_captured', [])
-                    all_candidates = data.get('all_candidates', [])
-                    top_match_score = data.get('top_match_score')
                     
                     # Crear AuthenticationAttempt
                     attempt = AuthenticationAttempt(
@@ -2209,12 +2227,11 @@ class BiometricDatabase:
                         metadata={
                             'session_id': data.get('session_id'),
                             'username': username,
-                            'user_email': user_email,
+                            'user_email': data.get('user_email'),
                             'duration': data.get('duration'),
-                            'gestures_captured': gestures_captured,
-                            'all_candidates': all_candidates,
-                            'top_match_score': top_match_score,
-                            'is_identification': True
+                            'gestures_captured': data.get('gestures_captured', []),
+                            'all_candidates': data.get('all_candidates', []),
+                            'top_match_score': data.get('top_match_score')
                         }
                     )
                     
@@ -2224,7 +2241,7 @@ class BiometricDatabase:
                     logger.error(f"Error procesando intento de identificación: {e}")
                     continue
             
-            logger.info(f"✅ Procesados {len(attempts)} intentos de identificación correctamente")
+            logger.info(f"✅ Procesados {len(attempts)} intentos de identificación")
             return attempts
             
         except Exception as e:

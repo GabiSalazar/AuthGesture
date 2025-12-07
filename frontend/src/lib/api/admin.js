@@ -77,6 +77,16 @@ export const adminApi = {
   },
 
   /**
+   * Obtiene TODOS los intentos de IDENTIFICACIÓN del sistema
+   */
+  async getAllIdentificationAttempts(limit = 500) {
+    const response = await apiClient.get('/authentication/all-identification-attempts', {
+      params: { limit }
+    })
+    return response.data
+  },
+  
+  /**
    * Obtiene estadísticas globales de autenticación
    */
   async getAuthStats() {

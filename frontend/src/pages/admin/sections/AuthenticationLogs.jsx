@@ -43,16 +43,46 @@ export default function AuthenticationLogs() {
     loadData()
   }, [])
 
+  // const loadData = async () => {
+  //   setLoading(true)
+  //   try {
+  //     const [attemptsData, statsData, usersData] = await Promise.all([
+  //       adminApi.getAllAuthAttempts(),
+  //       adminApi.getAuthStats(),
+  //       adminApi.getUsers()
+  //     ])
+
+  //     setAttempts(attemptsData.attempts || [])
+  //     setStats(statsData)
+  //     setUsers(usersData.users || [])
+  //   } catch (err) {
+  //     console.error('Error cargando datos:', err)
+  //     alert('Error al cargar datos de autenticación')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
   const loadData = async () => {
     setLoading(true)
     try {
-      const [attemptsData, statsData, usersData] = await Promise.all([
+      const [verificationData, identificationData, statsData, usersData] = await Promise.all([
         adminApi.getAllAuthAttempts(),
+        adminApi.getAllIdentificationAttempts(),
         adminApi.getAuthStats(),
         adminApi.getUsers()
       ])
 
-      setAttempts(attemptsData.attempts || [])
+      // ✅ COMBINAR ambas listas
+      const allAttempts = [
+        ...(verificationData.attempts || []),
+        ...(identificationData.attempts || [])
+      ]
+
+      // ✅ ORDENAR por timestamp (más reciente primero)
+      allAttempts.sort((a, b) => b.timestamp - a.timestamp)
+
+      setAttempts(allAttempts)
       setStats(statsData)
       setUsers(usersData.users || [])
     } catch (err) {
