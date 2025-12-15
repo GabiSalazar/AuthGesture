@@ -136,7 +136,7 @@
 2025-11-05 07:49:04,048 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 92x118 (ratio: 0.78)
 2025-11-05 07:49:04,048 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (92px < 150px)
-2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,049 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -164,7 +164,7 @@
 2025-11-05 07:49:04,197 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 90x106 (ratio: 0.85)
 2025-11-05 07:49:04,197 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,198 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (90px < 150px)
-2025-11-05 07:49:04,199 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,199 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,199 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,199 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,200 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -192,7 +192,7 @@
 2025-11-05 07:49:04,306 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 87x100 (ratio: 0.87)
 2025-11-05 07:49:04,306 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,306 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (87px < 150px)
-2025-11-05 07:49:04,307 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,307 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,307 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,307 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,308 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -220,7 +220,7 @@
 2025-11-05 07:49:04,510 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 87x97 (ratio: 0.90)
 2025-11-05 07:49:04,511 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,511 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (87px < 150px)
-2025-11-05 07:49:04,511 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,511 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,512 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,512 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,513 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -248,7 +248,7 @@
 2025-11-05 07:49:04,711 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 82x98 (ratio: 0.84)
 2025-11-05 07:49:04,713 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,713 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (82px < 150px)
-2025-11-05 07:49:04,713 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,713 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,713 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,714 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,714 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -276,7 +276,7 @@
 2025-11-05 07:49:04,921 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 96x106 (ratio: 0.91)
 2025-11-05 07:49:04,922 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:04,922 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (96px < 150px)
-2025-11-05 07:49:04,926 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:04,926 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:04,927 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:04,928 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:04,932 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -304,7 +304,7 @@
 2025-11-05 07:49:05,135 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Dimensiones finales - 88x140 (ratio: 0.63)
 2025-11-05 07:49:05,135 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: PASO 3 - Validando tamaño (rango: 150-600px)
 2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: ❌ RECHAZO - Usuario muy lejos (88px < 150px)
-2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: False
 2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:05,136 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -350,7 +350,7 @@
 2025-11-05 07:49:05,784 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 8, Válidos: 1
 2025-11-05 07:49:05,784 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 12.5%
 2025-11-05 07:49:05,784 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:05,785 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:05,785 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:05,785 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:05,785 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:05,786 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -391,7 +391,7 @@
 2025-11-05 07:49:05,930 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 9, Válidos: 2
 2025-11-05 07:49:05,930 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 22.2%
 2025-11-05 07:49:05,931 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:05,931 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:05,931 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:05,931 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:05,932 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:05,932 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -432,7 +432,7 @@
 2025-11-05 07:49:06,144 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 10, Válidos: 3
 2025-11-05 07:49:06,144 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 30.0%
 2025-11-05 07:49:06,145 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:06,145 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:06,145 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:06,145 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:06,145 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:06,147 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -473,7 +473,7 @@
 2025-11-05 07:49:06,347 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 11, Válidos: 4
 2025-11-05 07:49:06,347 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 36.4%
 2025-11-05 07:49:06,347 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:06,348 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:06,348 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:06,348 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:06,349 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:06,349 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -514,7 +514,7 @@
 2025-11-05 07:49:06,570 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 12, Válidos: 5
 2025-11-05 07:49:06,570 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 41.7%
 2025-11-05 07:49:06,570 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:06,570 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:06,570 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:06,571 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:06,571 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:06,571 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -555,7 +555,7 @@
 2025-11-05 07:49:06,741 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 13, Válidos: 6
 2025-11-05 07:49:06,742 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 46.2%
 2025-11-05 07:49:06,742 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:06,742 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:06,742 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:06,742 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:06,743 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:06,743 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -599,7 +599,7 @@
 2025-11-05 07:49:06,956 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 14, Válidos: 7
 2025-11-05 07:49:06,956 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 50.0%
 2025-11-05 07:49:06,956 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:06,957 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:06,957 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:06,957 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:06,958 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:06,958 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -643,7 +643,7 @@
 2025-11-05 07:49:07,141 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 15, Válidos: 8
 2025-11-05 07:49:07,142 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 53.3%
 2025-11-05 07:49:07,142 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:07,143 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:07,143 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:07,143 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:07,143 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:07,143 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -687,7 +687,7 @@
 2025-11-05 07:49:07,343 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 16, Válidos: 9
 2025-11-05 07:49:07,344 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 56.2%
 2025-11-05 07:49:07,344 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:07,344 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:07,344 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:07,344 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:07,346 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:07,346 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -731,7 +731,7 @@
 2025-11-05 07:49:07,535 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 17, Válidos: 10
 2025-11-05 07:49:07,535 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 58.8%
 2025-11-05 07:49:07,536 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:07,536 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:07,536 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:07,536 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:07,536 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:07,537 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -775,7 +775,7 @@
 2025-11-05 07:49:07,741 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 18, Válidos: 11
 2025-11-05 07:49:07,741 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 61.1%
 2025-11-05 07:49:07,741 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:07,741 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:07,741 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:07,742 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:07,742 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:07,742 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -819,7 +819,7 @@
 2025-11-05 07:49:07,943 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 19, Válidos: 12
 2025-11-05 07:49:07,943 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 63.2%
 2025-11-05 07:49:07,943 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:07,944 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:07,944 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:07,944 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:07,944 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:07,944 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -860,7 +860,7 @@
 2025-11-05 07:49:08,129 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 20, Válidos: 13
 2025-11-05 07:49:08,130 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 65.0%
 2025-11-05 07:49:08,130 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:08,130 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:08,130 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:08,130 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:08,131 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:08,131 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -901,7 +901,7 @@
 2025-11-05 07:49:08,334 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 21, Válidos: 14
 2025-11-05 07:49:08,334 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 66.7%
 2025-11-05 07:49:08,334 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:08,335 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:08,335 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:08,335 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:08,335 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:08,336 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -942,7 +942,7 @@
 2025-11-05 07:49:08,559 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 22, Válidos: 15
 2025-11-05 07:49:08,559 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 68.2%
 2025-11-05 07:49:08,559 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:08,560 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:08,560 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:08,560 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:08,565 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:08,566 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -983,7 +983,7 @@
 2025-11-05 07:49:08,736 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 23, Válidos: 16
 2025-11-05 07:49:08,736 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 69.6%
 2025-11-05 07:49:08,736 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:08,738 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:08,738 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:08,738 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:08,738 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:08,739 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1024,7 +1024,7 @@
 2025-11-05 07:49:08,937 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 24, Válidos: 17
 2025-11-05 07:49:08,937 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 70.8%
 2025-11-05 07:49:08,938 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:08,938 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:08,938 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:08,938 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:08,938 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:08,940 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1065,7 +1065,7 @@
 2025-11-05 07:49:09,148 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 25, Válidos: 18
 2025-11-05 07:49:09,148 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 72.0%
 2025-11-05 07:49:09,149 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:09,149 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:09,149 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:09,149 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:09,150 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:09,150 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1106,7 +1106,7 @@
 2025-11-05 07:49:09,333 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 26, Válidos: 19
 2025-11-05 07:49:09,334 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 73.1%
 2025-11-05 07:49:09,334 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:09,334 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:09,334 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:09,334 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:09,335 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:09,335 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1147,7 +1147,7 @@
 2025-11-05 07:49:09,532 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 27, Válidos: 20
 2025-11-05 07:49:09,533 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 74.1%
 2025-11-05 07:49:09,533 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:09,534 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:09,534 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:09,534 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:09,534 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:09,535 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1188,7 +1188,7 @@
 2025-11-05 07:49:09,738 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 28, Válidos: 21
 2025-11-05 07:49:09,738 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 75.0%
 2025-11-05 07:49:09,739 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:09,739 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:09,739 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:09,739 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:09,740 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:09,740 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1232,7 +1232,7 @@
 2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 29, Válidos: 22
 2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 75.9%
 2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:09,937 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:09,938 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:09,938 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1293,7 +1293,7 @@
 2025-11-05 07:49:16,554 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 30, Válidos: 23
 2025-11-05 07:49:16,554 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 76.7%
 2025-11-05 07:49:16,555 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:16,555 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:16,555 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:16,555 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:16,556 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:16,556 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1334,7 +1334,7 @@
 2025-11-05 07:49:16,747 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 31, Válidos: 24
 2025-11-05 07:49:16,747 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 77.4%
 2025-11-05 07:49:16,747 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:16,749 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:16,749 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:16,749 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:16,749 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:16,749 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1375,7 +1375,7 @@
 2025-11-05 07:49:16,851 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 32, Válidos: 25
 2025-11-05 07:49:16,852 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 78.1%
 2025-11-05 07:49:16,852 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:16,853 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:16,853 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:16,853 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:16,854 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:16,854 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1416,7 +1416,7 @@
 2025-11-05 07:49:16,985 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 33, Válidos: 26
 2025-11-05 07:49:16,986 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 78.8%
 2025-11-05 07:49:16,986 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:16,986 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:16,986 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:16,986 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:16,988 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:16,988 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1457,7 +1457,7 @@
 2025-11-05 07:49:17,314 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 34, Válidos: 27
 2025-11-05 07:49:17,314 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 79.4%
 2025-11-05 07:49:17,315 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:17,315 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:17,315 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:17,315 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:17,315 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:17,316 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1498,7 +1498,7 @@
 2025-11-05 07:49:17,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 35, Válidos: 28
 2025-11-05 07:49:17,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 80.0%
 2025-11-05 07:49:17,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:17,442 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:17,442 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:17,442 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:17,442 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:17,442 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1539,7 +1539,7 @@
 2025-11-05 07:49:17,563 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 36, Válidos: 29
 2025-11-05 07:49:17,563 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 80.6%
 2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:17,564 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1580,7 +1580,7 @@
 2025-11-05 07:49:17,751 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 37, Válidos: 30
 2025-11-05 07:49:17,751 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 81.1%
 2025-11-05 07:49:17,751 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:17,752 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:17,752 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:17,752 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:17,752 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:17,752 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1621,7 +1621,7 @@
 2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 38, Válidos: 31
 2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 81.6%
 2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:17,899 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:17,903 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:17,903 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1662,7 +1662,7 @@
 2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 39, Válidos: 32
 2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 82.1%
 2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,025 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,026 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,026 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1703,7 +1703,7 @@
 2025-11-05 07:49:18,147 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 40, Válidos: 33
 2025-11-05 07:49:18,147 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 82.5%
 2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,148 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1744,7 +1744,7 @@
 2025-11-05 07:49:18,268 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 41, Válidos: 34
 2025-11-05 07:49:18,268 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 82.9%
 2025-11-05 07:49:18,268 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,268 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,268 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,269 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,269 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,269 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1785,7 +1785,7 @@
 2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 42, Válidos: 35
 2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 83.3%
 2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,390 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,392 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,392 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1826,7 +1826,7 @@
 2025-11-05 07:49:18,554 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 43, Válidos: 36
 2025-11-05 07:49:18,554 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 83.7%
 2025-11-05 07:49:18,555 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,555 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,555 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,555 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,556 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,556 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1867,7 +1867,7 @@
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 44, Válidos: 37
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 84.1%
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,672 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1908,7 +1908,7 @@
 2025-11-05 07:49:18,792 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 45, Válidos: 38
 2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 84.4%
 2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,793 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,794 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1949,7 +1949,7 @@
 2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 46, Válidos: 39
 2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 84.8%
 2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:18,949 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:18,951 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:18,951 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1990,7 +1990,7 @@
 2025-11-05 07:49:19,076 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 47, Válidos: 40
 2025-11-05 07:49:19,076 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 85.1%
 2025-11-05 07:49:19,076 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,077 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,077 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,077 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,077 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,077 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2031,7 +2031,7 @@
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 48, Válidos: 41
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 85.4%
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,209 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2072,7 +2072,7 @@
 2025-11-05 07:49:19,373 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 49, Válidos: 42
 2025-11-05 07:49:19,374 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 85.7%
 2025-11-05 07:49:19,374 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,374 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,374 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,374 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,375 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,375 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2113,7 +2113,7 @@
 2025-11-05 07:49:19,491 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 50, Válidos: 43
 2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 86.0%
 2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,492 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2154,7 +2154,7 @@
 2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 51, Válidos: 44
 2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 86.3%
 2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,606 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,607 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2195,7 +2195,7 @@
 2025-11-05 07:49:19,752 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 52, Válidos: 45
 2025-11-05 07:49:19,752 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 86.5%
 2025-11-05 07:49:19,752 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,752 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,752 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,753 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,753 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,753 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2236,7 +2236,7 @@
 2025-11-05 07:49:19,887 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 53, Válidos: 46
 2025-11-05 07:49:19,887 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 86.8%
 2025-11-05 07:49:19,887 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:19,887 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:19,887 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:19,888 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:19,888 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:19,888 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2277,7 +2277,7 @@
 2025-11-05 07:49:20,000 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 54, Válidos: 47
 2025-11-05 07:49:20,001 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 87.0%
 2025-11-05 07:49:20,001 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:20,001 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:20,001 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:20,002 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:20,002 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:20,002 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2318,7 +2318,7 @@
 2025-11-05 07:49:20,173 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 55, Válidos: 48
 2025-11-05 07:49:20,173 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 87.3%
 2025-11-05 07:49:20,173 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:20,174 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:20,174 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:20,174 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:20,174 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:20,174 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2359,7 +2359,7 @@
 2025-11-05 07:49:22,530 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 56, Válidos: 49
 2025-11-05 07:49:22,531 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 87.5%
 2025-11-05 07:49:22,531 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:22,532 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:22,532 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:22,532 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:22,532 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:22,532 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2400,7 +2400,7 @@
 2025-11-05 07:49:22,654 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 57, Válidos: 50
 2025-11-05 07:49:22,655 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 87.7%
 2025-11-05 07:49:22,655 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:22,655 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:22,655 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:22,656 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:22,656 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:22,656 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2441,7 +2441,7 @@
 2025-11-05 07:49:22,847 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 58, Válidos: 51
 2025-11-05 07:49:22,847 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 87.9%
 2025-11-05 07:49:22,848 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:22,848 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:22,848 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:22,848 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:22,848 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:22,849 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2482,7 +2482,7 @@
 2025-11-05 07:49:22,959 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 59, Válidos: 52
 2025-11-05 07:49:22,959 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 88.1%
 2025-11-05 07:49:22,959 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:22,960 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:22,960 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:22,960 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:22,960 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:22,960 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2523,7 +2523,7 @@
 2025-11-05 07:49:23,079 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 60, Válidos: 53
 2025-11-05 07:49:23,080 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 88.3%
 2025-11-05 07:49:23,080 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,080 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,080 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,081 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,081 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,081 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2564,7 +2564,7 @@
 2025-11-05 07:49:23,245 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 61, Válidos: 54
 2025-11-05 07:49:23,245 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 88.5%
 2025-11-05 07:49:23,245 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,246 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,246 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,246 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,247 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,247 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2605,7 +2605,7 @@
 2025-11-05 07:49:23,357 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 62, Válidos: 55
 2025-11-05 07:49:23,358 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 88.7%
 2025-11-05 07:49:23,358 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,359 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,359 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,359 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,359 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,360 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2646,7 +2646,7 @@
 2025-11-05 07:49:23,472 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 63, Válidos: 56
 2025-11-05 07:49:23,473 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 88.9%
 2025-11-05 07:49:23,473 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,473 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,473 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,474 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,474 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,474 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2687,7 +2687,7 @@
 2025-11-05 07:49:23,645 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 64, Válidos: 57
 2025-11-05 07:49:23,646 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.1%
 2025-11-05 07:49:23,646 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,646 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,646 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,646 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,647 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,647 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2728,7 +2728,7 @@
 2025-11-05 07:49:23,764 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 65, Válidos: 58
 2025-11-05 07:49:23,765 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.2%
 2025-11-05 07:49:23,765 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,765 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,765 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,766 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,766 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,766 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2769,7 +2769,7 @@
 2025-11-05 07:49:23,878 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 66, Válidos: 59
 2025-11-05 07:49:23,878 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.4%
 2025-11-05 07:49:23,878 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:23,878 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:23,878 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:23,880 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:23,880 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:23,880 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2810,7 +2810,7 @@
 2025-11-05 07:49:24,044 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 67, Válidos: 60
 2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.6%
 2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,045 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2851,7 +2851,7 @@
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 68, Válidos: 61
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.7%
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,158 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2892,7 +2892,7 @@
 2025-11-05 07:49:24,265 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 69, Válidos: 62
 2025-11-05 07:49:24,265 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 89.9%
 2025-11-05 07:49:24,265 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,266 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,266 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,266 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,266 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,266 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2933,7 +2933,7 @@
 2025-11-05 07:49:24,442 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 70, Válidos: 63
 2025-11-05 07:49:24,442 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.0%
 2025-11-05 07:49:24,442 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,442 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,442 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,443 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,443 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,443 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2974,7 +2974,7 @@
 2025-11-05 07:49:24,562 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 71, Válidos: 64
 2025-11-05 07:49:24,562 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.1%
 2025-11-05 07:49:24,563 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,563 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,563 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,563 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,564 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,564 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3017,7 +3017,7 @@
 2025-11-05 07:49:24,664 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 72, Válidos: 65
 2025-11-05 07:49:24,664 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.3%
 2025-11-05 07:49:24,665 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:24,665 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:24,665 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:24,665 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:24,665 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:24,667 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3122,7 +3122,7 @@
 2025-11-05 07:49:26,620 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 73, Válidos: 66
 2025-11-05 07:49:26,620 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.4%
 2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:26,621 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3163,7 +3163,7 @@
 2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 74, Válidos: 67
 2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.5%
 2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:26,731 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:26,733 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:26,733 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3204,7 +3204,7 @@
 2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 75, Válidos: 68
 2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.7%
 2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:26,829 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:26,830 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:26,830 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3245,7 +3245,7 @@
 2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 76, Válidos: 69
 2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.8%
 2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:26,911 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:26,912 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3286,7 +3286,7 @@
 2025-11-05 07:49:27,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 77, Válidos: 70
 2025-11-05 07:49:27,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 90.9%
 2025-11-05 07:49:27,025 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:27,025 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:27,025 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:27,026 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:27,026 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:27,026 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3491,7 +3491,7 @@
 2025-11-05 07:49:31,505 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 78, Válidos: 71
 2025-11-05 07:49:31,505 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.0%
 2025-11-05 07:49:31,505 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:31,506 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:31,506 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:31,506 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:31,507 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:31,508 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3532,7 +3532,7 @@
 2025-11-05 07:49:31,597 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 79, Válidos: 72
 2025-11-05 07:49:31,598 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.1%
 2025-11-05 07:49:31,598 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:31,598 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:31,598 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:31,598 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:31,599 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:31,599 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3573,7 +3573,7 @@
 2025-11-05 07:49:31,693 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 80, Válidos: 73
 2025-11-05 07:49:31,694 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.2%
 2025-11-05 07:49:31,694 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:31,694 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:31,694 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:31,695 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:31,695 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:31,696 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3614,7 +3614,7 @@
 2025-11-05 07:49:31,833 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 81, Válidos: 74
 2025-11-05 07:49:31,833 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.4%
 2025-11-05 07:49:31,833 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:31,834 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:31,834 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:31,834 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:31,834 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:31,834 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3655,7 +3655,7 @@
 2025-11-05 07:49:31,945 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 82, Válidos: 75
 2025-11-05 07:49:31,945 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.5%
 2025-11-05 07:49:31,945 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:31,945 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:31,945 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:31,946 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:31,946 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:31,946 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3696,7 +3696,7 @@
 2025-11-05 07:49:32,131 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 83, Válidos: 76
 2025-11-05 07:49:32,131 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.6%
 2025-11-05 07:49:32,131 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:32,132 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:32,132 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:32,132 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:32,132 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:32,132 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3737,7 +3737,7 @@
 2025-11-05 07:49:32,319 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 84, Válidos: 77
 2025-11-05 07:49:32,319 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.7%
 2025-11-05 07:49:32,319 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:32,319 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:32,319 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:32,320 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:32,320 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:32,320 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -3778,7 +3778,7 @@
 2025-11-05 07:49:32,522 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 85, Válidos: 78
 2025-11-05 07:49:32,522 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 91.8%
 2025-11-05 07:49:32,523 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 07:49:32,523 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 07:49:32,523 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 07:49:32,523 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 07:49:32,523 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 07:49:32,524 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE

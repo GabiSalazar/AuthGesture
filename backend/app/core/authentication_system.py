@@ -81,11 +81,11 @@ def calculate_score_with_voting(similarities, vote_threshold=0.85, min_vote_rati
     if vote_ratio >= min_vote_ratio:
         # Hay consenso: promediar solo los votos positivos
         score = np.mean(high_similarities)
-        logger.info(f"     ✅ Consenso alcanzado - Score: {score:.4f}")
+        logger.info(f"     Consenso alcanzado - Score: {score:.4f}")
         return float(score)
     else:
         # No hay consenso: rechazo automático
-        logger.info(f"     ❌ Consenso NO alcanzado - Rechazo automático")
+        logger.info(f"     Consenso NO alcanzado - Rechazo automático")
         return 0.0
     
 # ====================================================================
@@ -460,7 +460,7 @@ class RealAuthenticationPipeline:
         try:
             logger.info("Inicializando pipeline de autenticación...")
 
-            # ✅ NUEVO: Obtener referencias ACTUALES a las redes (después del entrenamiento)
+            # NUEVO: Obtener referencias ACTUALES a las redes (después del entrenamiento)
             logger.info("Obteniendo referencias actuales a redes entrenadas...")
             self.anatomical_network = get_real_siamese_anatomical_network()
             self.dynamic_network = get_real_siamese_dynamic_network()
@@ -536,7 +536,7 @@ class RealAuthenticationPipeline:
     #         logger.info(f"Procesando frame para sesión {attempt.session_id}")
             
     #         # ========================================================================
-    #         # 🆕 PASO 1: CAPTURAR FRAME ORIGINAL
+    #         # PASO 1: CAPTURAR FRAME ORIGINAL
     #         # ========================================================================
     #         ret, frame_original = get_camera_manager().capture_frame()
     #         if not ret or frame_original is None:
@@ -547,7 +547,7 @@ class RealAuthenticationPipeline:
     #         logger.info(f"AUTH: Frame #{attempt.frames_processed} capturado - Shape: {frame_original.shape}")
             
     #         # ========================================================================
-    #         # 🆕 PASO 2: DETECCIÓN INICIAL CON MEDIAPIPE (frame original)
+    #         # PASO 2: DETECCIÓN INICIAL CON MEDIAPIPE (frame original)
     #         # ========================================================================
     #         logger.info("AUTH: Procesando frame original para detectar mano...")
     #         processing_result_initial = get_mediapipe_processor().process_frame(frame_original)
@@ -556,11 +556,11 @@ class RealAuthenticationPipeline:
     #             logger.info("AUTH: No se detectó mano válida en frame original")
     #             return False, "No se detectó mano válida en frame"
             
-    #         logger.info("AUTH: ✅ Mano detectada en frame original")
+    #         logger.info("AUTH: Mano detectada en frame original")
     #         logger.info(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
             
     #         # # ========================================================================
-    #         # # 🆕 PASO 3: EXTRAER Y VALIDAR ROI
+    #         # # PASO 3: EXTRAER Y VALIDAR ROI
     #         # # ========================================================================
     #         # roi_system = get_roi_normalization_system()
             
@@ -584,20 +584,20 @@ class RealAuthenticationPipeline:
     #         #     current_gesture
     #         # )
 
-    #         # # ✅ GUARDAR roi_result para acceso desde _process_frame_with_feedback
+    #         # # GUARDAR roi_result para acceso desde _process_frame_with_feedback
     #         # self.last_roi_result = roi_result
-    #         # logger.info(f"🔍 DEBUG ROI GUARDADO:")
+    #         # logger.info(f"DEBUG ROI GUARDADO:")
     #         # logger.info(f"   - is_valid: {roi_result.is_valid}")
     #         # logger.info(f"   - tiene roi_bbox: {hasattr(roi_result, 'roi_bbox')}")
     #         # logger.info(f"   - roi_bbox value: {getattr(roi_result, 'roi_bbox', 'NO EXISTE')}")
     #         # logger.info(f"   - roi_width: {roi_result.roi_width if hasattr(roi_result, 'roi_width') else 'NO EXISTE'}")
     #         # logger.info(f"   - roi_height: {roi_result.roi_height if hasattr(roi_result, 'roi_height') else 'NO EXISTE'}")
     #         # # ========================================================================
-    #         # # 🆕 PASO 4: VALIDAR DISTANCIA DEL ROI
+    #         # # PASO 4: VALIDAR DISTANCIA DEL ROI
     #         # # ========================================================================
     #         # if not roi_result.is_valid:
     #         #     logger.info("=" * 70)
-    #         #     logger.info(f"AUTH: ❌ ROI NO VÁLIDO")
+    #         #     logger.info(f"AUTH: ROI NO VÁLIDO")
     #         #     logger.info(f"AUTH: Estado: {roi_result.distance_status.value}")
     #         #     logger.info(f"AUTH: Mensaje: {roi_result.feedback_message}")
     #         #     logger.info(f"AUTH: Tamaño ROI: {roi_result.roi_width}px (rango: 150-600px)")
@@ -607,17 +607,17 @@ class RealAuthenticationPipeline:
     #         #     return False, roi_result.feedback_message
             
     #         # logger.info("=" * 70)
-    #         # logger.info("AUTH: ✅✅✅ ROI VÁLIDO - PROCEDIENDO CON AUTENTICACIÓN ✅✅✅")
+    #         # logger.info("AUTH: ROI VÁLIDO - PROCEDIENDO CON AUTENTICACIÓN ")
     #         # logger.info(f"AUTH: ROI dimensions: {roi_result.roi_width}x{roi_result.roi_height}px")
     #         # logger.info(f"AUTH: Scaling factor: {roi_result.scaling_factor:.3f}x")
     #         # logger.info(f"AUTH: Processing time: {roi_result.processing_time_ms:.2f}ms")
     #         # logger.info("=" * 70)
             
     #         # ========================================================================
-    #         # ✅ PASO 5: USAR LANDMARKS DEL FRAME ORIGINAL (mejor detección)
+    #         # PASO 5: USAR LANDMARKS DEL FRAME ORIGINAL (mejor detección)
     #         # ========================================================================
 
-    #         # ✅ DEFINIR VARIABLES DE GESTO (necesarias para validación)
+    #         # DEFINIR VARIABLES DE GESTO (necesarias para validación)
     #         current_gesture = "Unknown"
     #         expected_gesture = None
 
@@ -627,9 +627,9 @@ class RealAuthenticationPipeline:
     #                 expected_gesture = attempt.required_sequence[current_step]
     #                 current_gesture = expected_gesture
 
-    #         logger.info("AUTH: ✅ Usando landmarks del frame ORIGINAL")
+    #         logger.info("AUTH: Usando landmarks del frame ORIGINAL")
 
-    #         # ✅ DEFINIR VARIABLES DE PROCESAMIENTO (necesarias para extracción)
+    #         # DEFINIR VARIABLES DE PROCESAMIENTO (necesarias para extracción)
     #         processing_result = processing_result_initial
     #         hand_result = processing_result.hand_result
     #         gesture_result = processing_result.gesture_result
@@ -667,7 +667,7 @@ class RealAuthenticationPipeline:
     #             logger.info(f"AUTH: Calidad insuficiente: {quality_score:.3f}")
     #             return False, f"Calidad insuficiente: {quality_score:.3f}" if quality_assessment else "Sin evaluación de calidad"
             
-    #         logger.info(f"AUTH: ✅ Frame válido - Quality: {quality_assessment.quality_score:.1f}")
+    #         logger.info(f"AUTH: Frame válido - Quality: {quality_assessment.quality_score:.1f}")
             
     #         # ========================================================================
     #         # PASO 7: OBTENER GESTO DETECTADO
@@ -694,7 +694,7 @@ class RealAuthenticationPipeline:
     #             logger.error("AUTH: Error extrayendo características anatómicas")
     #             return False, "Error extrayendo características anatómicas"
             
-    #         logger.info(f"AUTH: ✅ Características anatómicas extraídas")
+    #         logger.info(f"AUTH: Características anatómicas extraídas")
             
     #         # ========================================================================
     #         # PASO 9: AGREGAR AL BUFFER TEMPORAL PARA CARACTERÍSTICAS DINÁMICAS
@@ -716,7 +716,7 @@ class RealAuthenticationPipeline:
     #             dynamic_features = self._extract_real_dynamic_features_from_buffer()
                 
     #             if dynamic_features and len(self.temporal_buffer) > 0:
-    #                 logger.info(f"AUTH: ✅ Características dinámicas extraídas del buffer ({len(self.temporal_buffer)} frames)")
+    #                 logger.info(f"AUTH: Características dinámicas extraídas del buffer ({len(self.temporal_buffer)} frames)")
             
     #         if not dynamic_features:
     #             logger.info(f"AUTH: Acumulando frames para características dinámicas... ({len(self.temporal_buffer)}/5)")
@@ -732,7 +732,7 @@ class RealAuthenticationPipeline:
     #             logger.error("AUTH: Error generando embeddings biométricos")
     #             return False, "Error generando embeddings biométricos"
             
-    #         logger.info(f"AUTH: ✅ Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
+    #         logger.info(f"AUTH: Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
             
     #         # ========================================================================
     #         # PASO 12: ALMACENAR CARACTERÍSTICAS CAPTURADAS
@@ -750,36 +750,36 @@ class RealAuthenticationPipeline:
             
     #         # Incrementar contador de capturas válidas
     #         attempt.valid_captures += 1
-    #         logger.info(f"AUTH: ✅ Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
+    #         logger.info(f"AUTH: Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
 
     #         # ========================================================================
     #         # PASO 13: REGISTRAR GESTO CAPTURADO (CON LÓGICA DE IDENTIFICACIÓN)
     #         # ========================================================================
     #         if detected_gesture:
-    #             # ✅ VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
+    #             # VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
     #             if attempt.mode == AuthenticationMode.VERIFICATION:
     #                 attempt.gesture_sequence_captured.append(detected_gesture)
-    #                 logger.info(f"AUTH: ✅ Gesto '{detected_gesture}' capturado (Verificación)")
+    #                 logger.info(f"AUTH: Gesto '{detected_gesture}' capturado (Verificación)")
     #                 logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/{len(attempt.required_sequence) if attempt.required_sequence else '?'}")
                 
-    #             # ✅ IDENTIFICACIÓN 1:N - Solo agregar gestos NUEVOS (diferentes)
+    #             # IDENTIFICACIÓN 1:N - Solo agregar gestos NUEVOS (diferentes)
     #             elif attempt.mode == AuthenticationMode.IDENTIFICATION:
     #                 # Verificar si ya capturamos 3 gestos
     #                 if len(attempt.gesture_sequence_captured) < 3:
     #                     # Verificar si este gesto ya está en la secuencia
     #                     if detected_gesture not in attempt.gesture_sequence_captured:
-    #                         # ✅ GESTO NUEVO - Agregarlo
+    #                         # GESTO NUEVO - Agregarlo
     #                         attempt.gesture_sequence_captured.append(detected_gesture)
-    #                         logger.info(f"AUTH: ✅ Gesto NUEVO capturado: '{detected_gesture}'")
+    #                         logger.info(f"AUTH: Gesto NUEVO capturado: '{detected_gesture}'")
     #                         logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
     #                         logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/3 gestos únicos")
     #                     else:
-    #                         # ❌ GESTO REPETIDO - Ignorar (no agregar embeddings ni contar)
-    #                         logger.info(f"AUTH: ⚠️ Gesto '{detected_gesture}' ya capturado - esperando gesto diferente")
+    #                         # GESTO REPETIDO - Ignorar (no agregar embeddings ni contar)
+    #                         logger.info(f"AUTH: Gesto '{detected_gesture}' ya capturado - esperando gesto diferente")
     #                         logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
     #                         logger.info(f"AUTH:    Necesitas hacer un gesto diferente")
                             
-    #                         # ❌ IMPORTANTE: Eliminar los embeddings que acabamos de agregar
+    #                         # IMPORTANTE: Eliminar los embeddings que acabamos de agregar
     #                         if len(attempt.anatomical_features) > 0:
     #                             attempt.anatomical_features.pop()
     #                             logger.info(f"AUTH:    Embedding anatómico removido")
@@ -793,7 +793,7 @@ class RealAuthenticationPipeline:
     #                         # Retornar sin procesar más
     #                         return False, f"Gesto '{detected_gesture}' repetido - haz un gesto diferente"
     #                 else:
-    #                     logger.info(f"AUTH: ℹ️ Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
+    #                     logger.info(f"AUTH: Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
     #         # ========================================================================
     #         # PASO 14: LOG DE PROGRESO
     #         # ========================================================================
@@ -817,7 +817,7 @@ class RealAuthenticationPipeline:
     #             logger.info("AUTH: 🎉 Secuencia de verificación completada - procediendo a matching biométrico")
     #             return True, "Secuencia completada - procediendo a matching biométrico"
 
-    #         # ✅ IDENTIFICACIÓN 1:N
+    #         # IDENTIFICACIÓN 1:N
     #         elif (attempt.mode == AuthenticationMode.IDENTIFICATION and 
     #             len(attempt.gesture_sequence_captured) >= 3):
                 
@@ -874,10 +874,10 @@ class RealAuthenticationPipeline:
                 logger.info("AUTH: No se detectó mano válida en frame original")
                 return False, "No se detectó mano válida en frame"
             
-            logger.info("AUTH: ✅ Mano detectada en frame original")
+            logger.info("AUTH: Mano detectada en frame original")
             logger.info(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
             
-            # ✅ DEFINIR VARIABLES DE GESTO (necesarias para validación)
+            # DEFINIR VARIABLES DE GESTO (necesarias para validación)
             current_gesture = "Unknown"
             expected_gesture = None
 
@@ -887,9 +887,9 @@ class RealAuthenticationPipeline:
                     expected_gesture = attempt.required_sequence[current_step]
                     current_gesture = expected_gesture
 
-            logger.info("AUTH: ✅ Usando landmarks del frame ORIGINAL")
+            logger.info("AUTH: Usando landmarks del frame ORIGINAL")
 
-            # ✅ DEFINIR VARIABLES DE PROCESAMIENTO (necesarias para extracción)
+            # DEFINIR VARIABLES DE PROCESAMIENTO (necesarias para extracción)
             processing_result = processing_result_initial
             hand_result = processing_result.hand_result
             gesture_result = processing_result.gesture_result
@@ -927,7 +927,7 @@ class RealAuthenticationPipeline:
                 logger.info(f"AUTH: Calidad insuficiente: {quality_score:.3f}")
                 return False, f"Calidad insuficiente: {quality_score:.3f}" if quality_assessment else "Sin evaluación de calidad"
             
-            logger.info(f"AUTH: ✅ Frame válido - Quality: {quality_assessment.quality_score:.1f}")
+            logger.info(f"AUTH: Frame válido - Quality: {quality_assessment.quality_score:.1f}")
             
             # ========================================================================
             # PASO 4: OBTENER GESTO DETECTADO
@@ -954,7 +954,7 @@ class RealAuthenticationPipeline:
                 logger.error("AUTH: Error extrayendo características anatómicas")
                 return False, "Error extrayendo características anatómicas"
             
-            logger.info(f"AUTH: ✅ Características anatómicas extraídas")
+            logger.info(f"AUTH: Características anatómicas extraídas")
             
             # ========================================================================
             # PASO 6: AGREGAR AL BUFFER TEMPORAL PARA CARACTERÍSTICAS DINÁMICAS
@@ -976,7 +976,7 @@ class RealAuthenticationPipeline:
                 dynamic_features = self._extract_real_dynamic_features_from_buffer()
                 
                 if dynamic_features and len(self.temporal_buffer) > 0:
-                    logger.info(f"AUTH: ✅ Características dinámicas extraídas del buffer ({len(self.temporal_buffer)} frames)")
+                    logger.info(f"AUTH: Características dinámicas extraídas del buffer ({len(self.temporal_buffer)} frames)")
             
             if not dynamic_features:
                 logger.info(f"AUTH: Acumulando frames para características dinámicas... ({len(self.temporal_buffer)}/5)")
@@ -992,7 +992,7 @@ class RealAuthenticationPipeline:
                 logger.error("AUTH: Error generando embeddings biométricos")
                 return False, "Error generando embeddings biométricos"
             
-            logger.info(f"AUTH: ✅ Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
+            logger.info(f"AUTH: Embeddings generados - Anatómico: {anatomical_embedding is not None}, Dinámico: {dynamic_embedding is not None}")
             
             # ========================================================================
             # PASO 9: ALMACENAR CARACTERÍSTICAS CAPTURADAS
@@ -1010,36 +1010,36 @@ class RealAuthenticationPipeline:
             
             # Incrementar contador de capturas válidas
             attempt.valid_captures += 1
-            logger.info(f"AUTH: ✅ Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
+            logger.info(f"AUTH: Captura válida #{attempt.valid_captures} - Embeddings almacenados exitosamente")
 
             # ========================================================================
             # PASO 10: REGISTRAR GESTO CAPTURADO (CON LÓGICA DE IDENTIFICACIÓN)
             # ========================================================================
             if detected_gesture:
-                # ✅ VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
+                # VERIFICACIÓN 1:1 - Agregar todos los gestos de la secuencia requerida
                 if attempt.mode == AuthenticationMode.VERIFICATION:
                     attempt.gesture_sequence_captured.append(detected_gesture)
-                    logger.info(f"AUTH: ✅ Gesto '{detected_gesture}' capturado (Verificación)")
+                    logger.info(f"AUTH: Gesto '{detected_gesture}' capturado (Verificación)")
                     logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/{len(attempt.required_sequence) if attempt.required_sequence else '?'}")
                 
-                # ✅ IDENTIFICACIÓN 1:N - Solo agregar gestos NUEVOS (diferentes)
+                # IDENTIFICACIÓN 1:N - Solo agregar gestos NUEVOS (diferentes)
                 elif attempt.mode == AuthenticationMode.IDENTIFICATION:
                     # Verificar si ya capturamos 3 gestos
                     if len(attempt.gesture_sequence_captured) < 3:
                         # Verificar si este gesto ya está en la secuencia
                         if detected_gesture not in attempt.gesture_sequence_captured:
-                            # ✅ GESTO NUEVO - Agregarlo
+                            # GESTO NUEVO - Agregarlo
                             attempt.gesture_sequence_captured.append(detected_gesture)
-                            logger.info(f"AUTH: ✅ Gesto NUEVO capturado: '{detected_gesture}'")
+                            logger.info(f"AUTH: Gesto NUEVO capturado: '{detected_gesture}'")
                             logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
                             logger.info(f"AUTH:    Progreso: {len(attempt.gesture_sequence_captured)}/3 gestos únicos")
                         else:
-                            # ❌ GESTO REPETIDO - Ignorar (no agregar embeddings ni contar)
-                            logger.info(f"AUTH: ⚠️ Gesto '{detected_gesture}' ya capturado - esperando gesto diferente")
+                            # GESTO REPETIDO - Ignorar (no agregar embeddings ni contar)
+                            logger.info(f"AUTH: Gesto '{detected_gesture}' ya capturado - esperando gesto diferente")
                             logger.info(f"AUTH:    Secuencia actual: {attempt.gesture_sequence_captured}")
                             logger.info(f"AUTH:    Necesitas hacer un gesto diferente")
                             
-                            # ❌ IMPORTANTE: Eliminar los embeddings que acabamos de agregar
+                            # IMPORTANTE: Eliminar los embeddings que acabamos de agregar
                             if len(attempt.anatomical_features) > 0:
                                 attempt.anatomical_features.pop()
                                 logger.info(f"AUTH:    Embedding anatómico removido")
@@ -1053,7 +1053,7 @@ class RealAuthenticationPipeline:
                             # Retornar sin procesar más
                             return False, f"Gesto '{detected_gesture}' repetido - haz un gesto diferente"
                     else:
-                        logger.info(f"AUTH: ℹ️ Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
+                        logger.info(f"AUTH: Ya se capturaron 3 gestos únicos - ignorando capturas adicionales")
             
             # ========================================================================
             # PASO 11: LOG DE PROGRESO
@@ -1077,7 +1077,7 @@ class RealAuthenticationPipeline:
                 logger.info("AUTH: 🎉 Secuencia de verificación completada - procediendo a matching biométrico")
                 return True, "Secuencia completada - procediendo a matching biométrico"
 
-            # ✅ IDENTIFICACIÓN 1:N
+            # IDENTIFICACIÓN 1:N
             elif (attempt.mode == AuthenticationMode.IDENTIFICATION and 
                 len(attempt.gesture_sequence_captured) >= 3):
                 
@@ -1124,7 +1124,7 @@ class RealAuthenticationPipeline:
             if not dynamic_features:
                 return None
             
-            # ✅ CRÍTICO: CONSTRUIR temporal_sequence desde el buffer del extractor
+            # CRÍTICO: CONSTRUIR temporal_sequence desde el buffer del extractor
             if hasattr(self.dynamic_extractor, 'temporal_buffer') and len(self.dynamic_extractor.temporal_buffer) >= 5:
                 temporal_frames = []
                 
@@ -1152,9 +1152,9 @@ class RealAuthenticationPipeline:
                 if len(temporal_frames) >= 5:
                     temporal_sequence = np.array(temporal_frames, dtype=np.float32)
                     dynamic_features.temporal_sequence = temporal_sequence
-                    logger.info(f"✅ Temporal sequence construida para autenticación: {temporal_sequence.shape}")
+                    logger.info(f"Temporal sequence construida para autenticación: {temporal_sequence.shape}")
                 else:
-                    logger.warning(f"⚠️ Insuficientes frames válidos: {len(temporal_frames)}")
+                    logger.warning(f"Insuficientes frames válidos: {len(temporal_frames)}")
             
             if dynamic_features and self._validate_real_dynamic_features(dynamic_features):
                 logger.info(f"Características dinámicas extraídas del buffer: dim={dynamic_features.complete_vector.shape[0]}")
@@ -1175,19 +1175,19 @@ class RealAuthenticationPipeline:
         Convierte el buffer temporal en formato compatible con RealSiameseDynamicNetwork.
         """
         try:
-            # ✅ CORRECCIÓN: Usar el buffer correcto DEL EXTRACTOR DINÁMICO
+            # CORRECCIÓN: Usar el buffer correcto DEL EXTRACTOR DINÁMICO
             if len(self.dynamic_extractor.temporal_buffer) < 5:  # Mínimo 5 frames
                 logger.warning("Buffer temporal insuficiente para secuencia dinámica")
                 return None
             
-            # ✅ EXTRAER LANDMARKS DE CADA FRAME EN EL BUFFER DEL EXTRACTOR DINÁMICO
+            # EXTRAER LANDMARKS DE CADA FRAME EN EL BUFFER DEL EXTRACTOR DINÁMICO
             temporal_frames = []
             for frame_data in self.dynamic_extractor.temporal_buffer:
                 if hasattr(frame_data, 'landmarks') and frame_data.landmarks is not None:
                     landmarks = frame_data.landmarks
                     world_landmarks = getattr(frame_data, 'world_landmarks', None)
                     
-                    # ✅ USAR EL MÉTODO CORREGIDO
+                    # USAR EL MÉTODO CORREGIDO
                     frame_features = self._extract_single_frame_features(landmarks, world_landmarks)
 
                     if frame_features is not None:
@@ -1197,10 +1197,10 @@ class RealAuthenticationPipeline:
                 logger.warning("Insuficientes frames válidos para secuencia")
                 return None
             
-            # ✅ CONVERTIR A ARRAY NUMPY
+            # CONVERTIR A ARRAY NUMPY
             temporal_sequence = np.array(temporal_frames, dtype=np.float32)
             
-            # ✅ LIMITAR LONGITUD MÁXIMA (50 frames para red dinámica)
+            # LIMITAR LONGITUD MÁXIMA (50 frames para red dinámica)
             if len(temporal_sequence) > 50:
                 temporal_sequence = temporal_sequence[-50:]  # Últimos 50 frames
             
@@ -1215,13 +1215,13 @@ class RealAuthenticationPipeline:
         Extrae características de un frame individual para secuencia temporal.
         """
         try:
-            # ✅ CORRECCIÓN: Usar world_landmarks cuando esté disponible
+            # CORRECCIÓN: Usar world_landmarks cuando esté disponible
             anatomical_features = self.anatomical_extractor.extract_features(landmarks, world_landmarks)
             
             if anatomical_features and anatomical_features.complete_vector is not None:
                 frame_features = anatomical_features.complete_vector
                 
-                # ✅ ASEGURAR DIMENSIÓN CORRECTA (320 para red dinámica)
+                # ASEGURAR DIMENSIÓN CORRECTA (320 para red dinámica)
                 if len(frame_features) >= 180:  # Anatómicas son 180 dims
                     # Expandir a 320 dims para compatibilidad temporal
                     padded_features = np.zeros(320, dtype=np.float32)
@@ -1502,13 +1502,13 @@ class RealSessionManager:
             with self.lock:
                 logger.info(f"Creando sesión: modo={mode.value}, usuario={user_id}")
                 
-                # ✅ LIMPIEZA PREVENTIVA: Cerrar sesiones activas previas de esta IP
+                # LIMPIEZA PREVENTIVA: Cerrar sesiones activas previas de esta IP
                 existing_ip_sessions = [
                     sid for sid, s in self.active_sessions.items() 
                     if s.ip_address == ip_address
                 ]
                 if existing_ip_sessions:
-                    logger.info(f"🧹 Cerrando {len(existing_ip_sessions)} sesión(es) previa(s) de IP {ip_address}")
+                    logger.info(f"Cerrando {len(existing_ip_sessions)} sesión(es) previa(s) de IP {ip_address}")
                     for old_session_id in existing_ip_sessions:
                         self.close_real_session(old_session_id, AuthenticationStatus.CANCELLED)
         
@@ -1543,8 +1543,8 @@ class RealSessionManager:
                     ip_address=ip_address,
                     device_info=device_info or {},
                     required_sequence=required_sequence or [],
-                    session_token=session_token,    # 🔧 NUEVO
-                    callback_url=callback_url       # 🔧 NUEVO
+                    session_token=session_token,    # NUEVO
+                    callback_url=callback_url       # NUEVO
                 )
                 
                 attempt.status = AuthenticationStatus.IN_PROGRESS
@@ -1631,15 +1631,15 @@ class RealSessionManager:
                 expired_sessions = []
                 
                 for session_id, session in self.active_sessions.items():
-                    # ✅ LIMPIEZA POR TIMEOUT TOTAL (desde el inicio)
+                    # LIMPIEZA POR TIMEOUT TOTAL (desde el inicio)
                     if current_time - session.start_time > self.config.total_timeout:
                         expired_sessions.append((session_id, "timeout_total"))
-                    # ✅ LIMPIEZA POR INACTIVIDAD (60 segundos sin frames)
+                    # LIMPIEZA POR INACTIVIDAD (60 segundos sin frames)
                     elif current_time - session.last_frame_time > 60:
                         expired_sessions.append((session_id, "inactividad"))
                 
                 for session_id, reason in expired_sessions:
-                    logger.info(f"🧹 Limpiando sesión {session_id} por {reason}")
+                    logger.info(f"Limpiando sesión {session_id} por {reason}")
                     self.close_real_session(session_id, AuthenticationStatus.TIMEOUT)
                 
                 if expired_sessions:
@@ -1768,12 +1768,12 @@ class RealAuthenticationSystem:
         try:
             logger.info("Inicializando sistema de autenticación...")
             
-            # ✅ CORRECCIÓN CRÍTICA: OBTENER Y ALMACENAR REFERENCIAS A REDES
+            # CORRECCIÓN CRÍTICA: OBTENER Y ALMACENAR REFERENCIAS A REDES
             logger.info("Obteniendo referencias a redes entrenadas...")
             self.anatomical_network = get_real_siamese_anatomical_network()
             self.dynamic_network = get_real_siamese_dynamic_network()
             
-            # ✅ LOGS DE DIAGNÓSTICO ESPECÍFICOS
+            # LOGS DE DIAGNÓSTICO ESPECÍFICOS
             logger.info("=== DIAGNÓSTICO DE ESTADO DE REDES ===")
             
             # Verificar archivos de modelo en disco
@@ -1816,7 +1816,7 @@ class RealAuthenticationSystem:
                 logger.error("No hay usuarios con templates biométricos - completa enrollments primero")
                 return False
             
-            # ✅ VERIFICAR ESTADO DE REDES ANTES DE CONTINUAR
+            # VERIFICAR ESTADO DE REDES ANTES DE CONTINUAR
             if not self.anatomical_network or not self.anatomical_network.is_trained:
                 logger.error("Red anatómica no está disponible o no entrenada")
                 return False
@@ -1830,7 +1830,7 @@ class RealAuthenticationSystem:
                     logger.error("Error inicializando pipeline de autenticación")
                     return False
             
-            # ✅ VERIFICAR O INICIALIZAR SISTEMA DE FUSIÓN
+            # VERIFICAR O INICIALIZAR SISTEMA DE FUSIÓN
             if hasattr(self, 'fusion_system'):
                 if not hasattr(self.fusion_system, 'is_initialized') or not self.fusion_system.is_initialized:
                     # Intentar inicializar sistema de fusión con las redes
@@ -1911,8 +1911,8 @@ class RealAuthenticationSystem:
                 ip_address=ip_address,
                 device_info=device_info,
                 required_sequence=required_sequence,
-                session_token=session_token,    # 🔧 NUEVO
-                callback_url=callback_url       # 🔧 NUEVO
+                session_token=session_token,    # NUEVO
+                callback_url=callback_url       # NUEVO
             )
             
             self.statistics['verification_attempts'] += 1
@@ -1965,8 +1965,8 @@ class RealAuthenticationSystem:
                 security_level=security_level,
                 ip_address=ip_address,
                 device_info=device_info,
-                session_token=session_token,    # 🔧 NUEVO
-                callback_url=callback_url       # 🔧 NUEVO
+                session_token=session_token,    # NUEVO
+                callback_url=callback_url       # NUEVO
             )
             
             self.statistics['identification_attempts'] += 1
@@ -2064,7 +2064,7 @@ class RealAuthenticationSystem:
     #             'dynamic_features_captured': len(session.dynamic_features),
     #             'average_quality': np.mean(session.quality_scores) if session.quality_scores else 0.0,
     #             'average_confidence': np.mean(session.confidence_scores) if session.confidence_scores else 0.0,
-    #             # ✅ NUEVO: Incluir embeddings reales para identificación secuencial
+    #             # NUEVO: Incluir embeddings reales para identificación secuencial
     #             #'anatomical_embedding': session.anatomical_features[-1] if session.anatomical_features else None,
     #             #'dynamic_embedding': session.dynamic_features[-1] if session.dynamic_features else None,
     #             'has_embeddings': len(session.anatomical_features) > 0
@@ -2074,7 +2074,7 @@ class RealAuthenticationSystem:
     #         if session.current_phase == AuthenticationPhase.TEMPLATE_MATCHING:
     #             auth_result = self._perform_real_authentication_matching(session)
                 
-    #             # ✅ INCLUIR RESULTADO COMPLETO EN RESPONSE
+    #             # INCLUIR RESULTADO COMPLETO EN RESPONSE
     #             response['authentication_result'] = {
     #                 'success': auth_result.success,
     #                 'user_id': auth_result.user_id,
@@ -2095,7 +2095,7 @@ class RealAuthenticationSystem:
     #             # Completar sesión
     #             final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
 
-    #             #✅ Determinar user_id según el modo
+    #             #Determinar user_id según el modo
     #             final_user_id = session.user_id
                 
     #             # Solo para IDENTIFICACIÓN: usar matched_user_id si está disponible
@@ -2107,7 +2107,7 @@ class RealAuthenticationSystem:
     #             # Para VERIFICACIÓN: final_user_id ya tiene session.user_id correcto
                 
                 
-    #             # ✅ GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
+    #             # GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
     #             attempt = AuthenticationAttempt(
     #                 attempt_id=str(uuid.uuid4()),
     #                 user_id=auth_result.user_id or auth_result.matched_user_id or "unknown",
@@ -2133,9 +2133,9 @@ class RealAuthenticationSystem:
 
     #             # Guardar en base de datos
     #             self.database.store_authentication_attempt(attempt)
-    #             logger.info(f"✅ Intento de autenticación guardado: {attempt.attempt_id}")
+    #             logger.info(f"Intento de autenticación guardado: {attempt.attempt_id}")
 
-    #             # 🔧 ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
+    #             # ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
     #             if session.callback_url and session.session_token:
     #                 try:
     #                     logger.info(f"📤 Enviando resultado de autenticación al Plugin")
@@ -2162,26 +2162,26 @@ class RealAuthenticationSystem:
     #                         )
                             
     #                         if success_webhook:
-    #                             logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+    #                             logger.info(f"Resultado enviado exitosamente al Plugin")
     #                         else:
-    #                             logger.warning(f"⚠️ No se pudo enviar resultado al Plugin")
+    #                             logger.warning(f"No se pudo enviar resultado al Plugin")
     #                     else:
-    #                         logger.warning(f"⚠️ No se pudo obtener email del usuario {final_user_id}")
+    #                         logger.warning(f"No se pudo obtener email del usuario {final_user_id}")
                             
     #                 except Exception as e:
-    #                     logger.error(f"❌ Error enviando resultado al Plugin: {e}")
+    #                     logger.error(f"Error enviando resultado al Plugin: {e}")
     #                     # No fallar la autenticación si falla el envío al Plugin
                         
     #             self._complete_real_authentication(session, final_status)
 
-    #             # ✅ MARCAR COMO COMPLETADO
+    #             # MARCAR COMO COMPLETADO
     #             response['session_completed'] = True
     #             response['final_status'] = final_status.value
                 
-    #             # ✅ LOG PARA CONFIRMAR
-    #             logger.info(f"✅ Resultado incluido en response - success={auth_result.success}")
+    #             # LOG PARA CONFIRMAR
+    #             logger.info(f"Resultado incluido en response - success={auth_result.success}")
 
-    #         return response  # ✅ Retornar ANTES de que se cierre la sesión
+    #         return response  # Retornar ANTES de que se cierre la sesión
                         
     #     except Exception as e:
     #         logger.error(f"Error procesando frame de autenticación REAL: {e}")
@@ -2232,7 +2232,7 @@ class RealAuthenticationSystem:
                     'is_real': True
                 }
             
-            # ✅ PROCESAR FRAME RECIBIDO DEL FRONTEND
+            # PROCESAR FRAME RECIBIDO DEL FRONTEND
             success, message = self.pipeline.process_frame_for_real_authentication(session, frame_image)
             
             self.statistics['total_frames_processed'] += 1
@@ -2297,7 +2297,7 @@ class RealAuthenticationSystem:
             if session.current_phase == AuthenticationPhase.TEMPLATE_MATCHING:
                 auth_result = self._perform_real_authentication_matching(session)
                 
-                # ✅ INCLUIR RESULTADO COMPLETO EN RESPONSE
+                # INCLUIR RESULTADO COMPLETO EN RESPONSE
                 response['authentication_result'] = {
                     'success': auth_result.success,
                     'user_id': auth_result.user_id,
@@ -2316,7 +2316,7 @@ class RealAuthenticationSystem:
                 # Completar sesión
                 final_status = AuthenticationStatus.AUTHENTICATED if auth_result.success else AuthenticationStatus.REJECTED
 
-                # ✅ Determinar user_id según el modo
+                # Determinar user_id según el modo
                 final_user_id = session.user_id
                 
                 # Solo para IDENTIFICACIÓN: usar matched_user_id si está disponible
@@ -2327,7 +2327,7 @@ class RealAuthenticationSystem:
                         final_user_id = 'unknown'  # Fallback para identificación fallida
                 # Para VERIFICACIÓN: final_user_id ya tiene session.user_id correcto
                 
-                # ✅ GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
+                # GUARDAR INTENTO DE AUTENTICACIÓN EN HISTORIAL
                 attempt = AuthenticationAttempt(
                     attempt_id=str(uuid.uuid4()),
                     user_id=auth_result.user_id or auth_result.matched_user_id or "unknown",
@@ -2352,9 +2352,9 @@ class RealAuthenticationSystem:
 
                 # Guardar en base de datos
                 self.database.store_authentication_attempt(attempt)
-                logger.info(f"✅ Intento de autenticación guardado: {attempt.attempt_id}")
+                logger.info(f"Intento de autenticación guardado: {attempt.attempt_id}")
 
-                # 🔧 ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
+                # ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
                 if session.callback_url and session.session_token:
                     try:
                         logger.info(f"📤 Enviando resultado de autenticación al Plugin")
@@ -2381,26 +2381,26 @@ class RealAuthenticationSystem:
                             )
                             
                             if success_webhook:
-                                logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+                                logger.info(f"Resultado enviado exitosamente al Plugin")
                             else:
-                                logger.warning(f"⚠️ No se pudo enviar resultado al Plugin")
+                                logger.warning(f"No se pudo enviar resultado al Plugin")
                         else:
-                            logger.warning(f"⚠️ No se pudo obtener email del usuario {final_user_id}")
+                            logger.warning(f"No se pudo obtener email del usuario {final_user_id}")
                             
                     except Exception as e:
-                        logger.error(f"❌ Error enviando resultado al Plugin: {e}")
+                        logger.error(f"Error enviando resultado al Plugin: {e}")
                         # No fallar la autenticación si falla el envío al Plugin
                         
                 self._complete_real_authentication(session, final_status)
 
-                # ✅ MARCAR COMO COMPLETADO
+                # MARCAR COMO COMPLETADO
                 response['session_completed'] = True
                 response['final_status'] = final_status.value
                 
-                # ✅ LOG PARA CONFIRMAR
-                logger.info(f"✅ Resultado incluido en response - success={auth_result.success}")
+                # LOG PARA CONFIRMAR
+                logger.info(f"Resultado incluido en response - success={auth_result.success}")
 
-            return response  # ✅ Retornar ANTES de que se cierre la sesión
+            return response  # Retornar ANTES de que se cierre la sesión
                         
         except Exception as e:
             logger.error(f"Error procesando frame de autenticación REAL: {e}")
@@ -2463,7 +2463,7 @@ class RealAuthenticationSystem:
             
             session.current_phase = AuthenticationPhase.COMPLETED
             
-            # ✅ GUARDAR RESULTADO EN SESIÓN PARA FEEDBACK
+            # GUARDAR RESULTADO EN SESIÓN PARA FEEDBACK
             session.last_auth_result = result
             
             return result
@@ -2529,20 +2529,20 @@ class RealAuthenticationSystem:
                 )
             logger.info(f"Realizando verificación 1:1 para usuario {session.user_id}")
             
-            # ✅ OBTENER TEMPLATES DEL USUARIO
+            # OBTENER TEMPLATES DEL USUARIO
             user_templates = self.database.list_user_templates(session.user_id)
             
             if not user_templates:
                 logger.error(f"No hay templates para usuario {session.user_id}")
                 return self._create_failed_auth_result(session, "No hay templates de referencia para el usuario")
             
-            logger.info(f"📊 Templates encontrados para usuario {session.user_id}: {len(user_templates)}")
+            logger.info(f"Templates encontrados para usuario {session.user_id}: {len(user_templates)}")
             
-            # ✅ OBTENER REFERENCIAS A REDES GLOBALES - CORRECCIÓN CRÍTICA
+            # OBTENER REFERENCIAS A REDES GLOBALES - CORRECCIÓN CRÍTICA
             anatomical_network = get_real_siamese_anatomical_network()
             dynamic_network = get_real_siamese_dynamic_network()
             
-            logger.info(f"🧠 Referencias a redes obtenidas:")
+            logger.info(f"Referencias a redes obtenidas:")
             logger.info(f"  - Red anatómica disponible: {anatomical_network is not None}")
             logger.info(f"  - Red anatómica entrenada: {anatomical_network.is_trained if anatomical_network else False}")
             logger.info(f"  - Red anatómica base_network: {anatomical_network.base_network is not None if anatomical_network else False}")
@@ -2550,62 +2550,62 @@ class RealAuthenticationSystem:
             logger.info(f"  - Red dinámica entrenada: {dynamic_network.is_trained if dynamic_network else False}")
             logger.info(f"  - Red dinámica base_network: {dynamic_network.base_network is not None if dynamic_network else False}")
             
-            # ✅ SEPARAR TEMPLATES POR MODALIDAD
+            # SEPARAR TEMPLATES POR MODALIDAD
             anatomical_refs = []
             dynamic_refs = []
             templates_processed = 0
             
             for i, template in enumerate(user_templates):
                 try:
-                    logger.info(f"🔍 Procesando template {i+1}/{len(user_templates)}: {template.template_id[:30]}...")
+                    logger.info(f"Procesando template {i+1}/{len(user_templates)}: {template.template_id[:30]}...")
                     
                     template_processed_by_any_method = False
                     
-                    # ✅ MÉTODO 1: Templates con embeddings separados (formato nuevo)
+                    # MÉTODO 1: Templates con embeddings separados (formato nuevo)
                     if hasattr(template, 'anatomical_embedding') and template.anatomical_embedding is not None:
                         anatomical_refs.append(template.anatomical_embedding)
-                        logger.info(f"  ✅ Embedding anatómico agregado (método 1)")
+                        logger.info(f"  Embedding anatómico agregado (método 1)")
                         templates_processed += 1
                         template_processed_by_any_method = True
                         
                     if hasattr(template, 'dynamic_embedding') and template.dynamic_embedding is not None:
                         dynamic_refs.append(template.dynamic_embedding)
-                        logger.info(f"  ✅ Embedding dinámico agregado (método 1)")
+                        logger.info(f"  Embedding dinámico agregado (método 1)")
                         templates_processed += 1
                         template_processed_by_any_method = True
                     
-                    # ✅ MÉTODO 2: Templates con template_data
+                    # MÉTODO 2: Templates con template_data
                     if not template_processed_by_any_method and hasattr(template, 'template_data') and template.template_data is not None:
                         template_type = getattr(template, 'template_type', None)
                         
                         if template_type == TemplateType.ANATOMICAL:
                             anatomical_refs.append(template.template_data)
-                            logger.info(f"  ✅ Template anatómico agregado (método 2)")
+                            logger.info(f"  Template anatómico agregado (método 2)")
                             templates_processed += 1
                             template_processed_by_any_method = True
                             
                         elif template_type == TemplateType.DYNAMIC:
                             dynamic_refs.append(template.template_data)
-                            logger.info(f"  ✅ Template dinámico agregado (método 2)")
+                            logger.info(f"  Template dinámico agregado (método 2)")
                             templates_processed += 1
                             template_processed_by_any_method = True
                     
-                    # ✅ MÉTODO 3: Templates Bootstrap - CONVERSIÓN CON MÉTODOS CORRECTOS
+                    # MÉTODO 3: Templates Bootstrap - CONVERSIÓN CON MÉTODOS CORRECTOS
                     if not template_processed_by_any_method:
                         metadata = getattr(template, 'metadata', {})
                         bootstrap_mode = metadata.get('bootstrap_mode', False)
                         
                         if bootstrap_mode:
-                            # ✅ SUB-MÉTODO 3A: Bootstrap Anatómico (bootstrap_features)
+                            # SUB-MÉTODO 3A: Bootstrap Anatómico (bootstrap_features)
                             bootstrap_features = metadata.get('bootstrap_features', None)
                             if bootstrap_features:
-                                logger.info(f"  🔧 Template Bootstrap anatómico detectado: {len(bootstrap_features)} características")
+                                logger.info(f"  Template Bootstrap anatómico detectado: {len(bootstrap_features)} características")
                                 
                                 try:
                                     if isinstance(bootstrap_features, list):
                                         bootstrap_features = np.array(bootstrap_features, dtype=np.float32)
                                     
-                                    # ✅ CONVERSIÓN CON MÉTODO CORRECTO: base_network.predict()
+                                    # CONVERSIÓN CON MÉTODO CORRECTO: base_network.predict()
                                     if (anatomical_network and 
                                         anatomical_network.is_trained and 
                                         anatomical_network.base_network is not None):
@@ -2614,7 +2614,7 @@ class RealAuthenticationSystem:
                                         
                                         # Verificar dimensiones
                                         if features_array.shape[1] != anatomical_network.input_dim:
-                                            logger.error(f"  ❌ Dimensión incorrecta: {features_array.shape[1]} != {anatomical_network.input_dim}")
+                                            logger.error(f"  Dimensión incorrecta: {features_array.shape[1]} != {anatomical_network.input_dim}")
                                             continue
                                         
                                         # Generar embedding usando red base entrenada
@@ -2626,32 +2626,32 @@ class RealAuthenticationSystem:
                                             not np.allclose(bootstrap_embedding, 0.0, atol=1e-6)):
                                             
                                             anatomical_refs.append(bootstrap_embedding)
-                                            logger.info(f"  ✅ Bootstrap anatómico convertido a embedding (180→128 dim)")
+                                            logger.info(f"  Bootstrap anatómico convertido a embedding (180→128 dim)")
                                             logger.info(f"      Embedding norm: {np.linalg.norm(bootstrap_embedding):.4f}")
                                             templates_processed += 1
                                             template_processed_by_any_method = True
                                         else:
-                                            logger.error(f"  ❌ Embedding anatómico generado es inválido")
+                                            logger.error(f"  Embedding anatómico generado es inválido")
                                             logger.error(f"      Contains NaN: {np.any(np.isnan(bootstrap_embedding)) if bootstrap_embedding is not None else 'None'}")
                                             logger.error(f"      Is zero vector: {np.allclose(bootstrap_embedding, 0.0) if bootstrap_embedding is not None else 'None'}")
                                     else:
-                                        logger.error(f"  ❌ Red anatómica no disponible para convertir Bootstrap")
+                                        logger.error(f"  Red anatómica no disponible para convertir Bootstrap")
                                         logger.error(f"      - Red disponible: {anatomical_network is not None}")
                                         logger.error(f"      - Red entrenada: {anatomical_network.is_trained if anatomical_network else False}")
                                         logger.error(f"      - Base network: {anatomical_network.base_network is not None if anatomical_network else False}")
                                         
                                 except Exception as conv_error:
-                                    logger.error(f"  ❌ Error convirtiendo Bootstrap anatómico: {conv_error}")
+                                    logger.error(f"  Error convirtiendo Bootstrap anatómico: {conv_error}")
                                     import traceback
                                     logger.error(f"      Traceback: {traceback.format_exc()}")
                             
-                            # ✅ SUB-MÉTODO 3B: Bootstrap Dinámico (temporal_sequence) - CORREGIDO
+                            # SUB-MÉTODO 3B: Bootstrap Dinámico (temporal_sequence) - CORREGIDO
                             elif not template_processed_by_any_method:
                                 temporal_sequence = metadata.get('temporal_sequence', None)
                                 has_temporal_data = metadata.get('has_temporal_data', False)
                                 
                                 if temporal_sequence and has_temporal_data:
-                                    logger.info(f"  🔧 Template Bootstrap dinámico detectado: secuencia temporal")
+                                    logger.info(f"  Template Bootstrap dinámico detectado: secuencia temporal")
                                     
                                     try:
                                         if isinstance(temporal_sequence, list):
@@ -2659,7 +2659,7 @@ class RealAuthenticationSystem:
                                         
                                         logger.info(f"      Secuencia shape: {temporal_sequence.shape}")
                                         
-                                        # ✅ CONVERSIÓN CON TEMPORAL_SEQUENCE
+                                        # CONVERSIÓN CON TEMPORAL_SEQUENCE
                                         if (dynamic_network and 
                                             dynamic_network.is_trained and 
                                             dynamic_network.base_network is not None):
@@ -2697,72 +2697,72 @@ class RealAuthenticationSystem:
                                                 not np.allclose(bootstrap_dynamic_embedding, 0.0, atol=1e-6)):
                                                 
                                                 dynamic_refs.append(bootstrap_dynamic_embedding)
-                                                logger.info(f"  ✅ Bootstrap dinámico convertido a embedding")
+                                                logger.info(f"  Bootstrap dinámico convertido a embedding")
                                                 logger.info(f"      Embedding norm: {np.linalg.norm(bootstrap_dynamic_embedding):.4f}")
                                                 templates_processed += 1
                                                 template_processed_by_any_method = True
                                             else:
-                                                logger.error(f"  ❌ Embedding dinámico generado es inválido")
+                                                logger.error(f"  Embedding dinámico generado es inválido")
                                                 logger.error(f"      Contains NaN: {np.any(np.isnan(bootstrap_dynamic_embedding)) if bootstrap_dynamic_embedding is not None else 'None'}")
                                                 logger.error(f"      Is zero vector: {np.allclose(bootstrap_dynamic_embedding, 0.0) if bootstrap_dynamic_embedding is not None else 'None'}")
                                         else:
-                                            logger.error(f"  ❌ Red dinámica no disponible para convertir Bootstrap")
+                                            logger.error(f"  Red dinámica no disponible para convertir Bootstrap")
                                             logger.error(f"      - Red disponible: {dynamic_network is not None}")
                                             logger.error(f"      - Red entrenada: {dynamic_network.is_trained if dynamic_network else False}")
                                             logger.error(f"      - Base network: {dynamic_network.base_network is not None if dynamic_network else False}")
                                             
                                     except Exception as conv_error:
-                                        logger.error(f"  ❌ Error convirtiendo Bootstrap dinámico: {conv_error}")
+                                        logger.error(f"  Error convirtiendo Bootstrap dinámico: {conv_error}")
                                         import traceback
                                         logger.error(f"      Traceback: {traceback.format_exc()}")
                     
-                    # ✅ MÉTODO 4: Fallback con modality
+                    # MÉTODO 4: Fallback con modality
                     if (not template_processed_by_any_method and 
                         hasattr(template, 'template_data') and template.template_data is not None and
                         hasattr(template, 'modality')):
                         
                         if template.modality == 'anatomical':
                             anatomical_refs.append(template.template_data)
-                            logger.info(f"  ✅ Template anatómico agregado (método 4 - modality)")
+                            logger.info(f"  Template anatómico agregado (método 4 - modality)")
                             templates_processed += 1
                             template_processed_by_any_method = True
                             
                         elif template.modality == 'dynamic':
                             dynamic_refs.append(template.template_data)
-                            logger.info(f"  ✅ Template dinámico agregado (método 4 - modality)")
+                            logger.info(f"  Template dinámico agregado (método 4 - modality)")
                             templates_processed += 1
                             template_processed_by_any_method = True
                     
-                    # ✅ REPORTE FINAL
+                    # REPORTE FINAL
                     if not template_processed_by_any_method:
-                        logger.info(f"  ⚠️ Template sin datos utilizables")
+                        logger.info(f"  Template sin datos utilizables")
                         
                 except Exception as template_error:
-                    logger.error(f"❌ Error procesando template {i+1}: {template_error}")
+                    logger.error(f"Error procesando template {i+1}: {template_error}")
                     import traceback
                     logger.error(f"   Traceback: {traceback.format_exc()}")
                     continue
             
-            logger.info(f"✅ RESUMEN DE PROCESAMIENTO:")
-            logger.info(f"  📊 Templates procesados: {templates_processed}/{len(user_templates)}")
-            logger.info(f"  🧠 Referencias anatómicas: {len(anatomical_refs)}")
-            logger.info(f"  🔄 Referencias dinámicas: {len(dynamic_refs)}")
-            logger.info(f"  📈 Total referencias: {len(anatomical_refs) + len(dynamic_refs)}")
+            logger.info(f"RESUMEN DE PROCESAMIENTO:")
+            logger.info(f"  Templates procesados: {templates_processed}/{len(user_templates)}")
+            logger.info(f"  Referencias anatómicas: {len(anatomical_refs)}")
+            logger.info(f"  Referencias dinámicas: {len(dynamic_refs)}")
+            logger.info(f"  Total referencias: {len(anatomical_refs) + len(dynamic_refs)}")
             
-            # ✅ VERIFICAR QUE TENEMOS TEMPLATES UTILIZABLES
+            # VERIFICAR QUE TENEMOS TEMPLATES UTILIZABLES
             if not anatomical_refs and not dynamic_refs:
-                logger.error("❌ CRÍTICO: No se pudieron extraer embeddings de ningún template")
-                logger.error("🔍 DEBUG: Verificar formato de templates en la base de datos")
+                logger.error("CRÍTICO: No se pudieron extraer embeddings de ningún template")
+                logger.error("DEBUG: Verificar formato de templates en la base de datos")
                 
                 # Diagnóstico adicional
                 if user_templates:
                     sample_template = user_templates[0]
-                    logger.error(f"🔍 DEBUG: Ejemplo de template - Tipo: {type(sample_template)}")
-                    logger.error(f"🔍 DEBUG: Atributos del template: {[attr for attr in dir(sample_template) if not attr.startswith('_')]}")
+                    logger.error(f"DEBUG: Ejemplo de template - Tipo: {type(sample_template)}")
+                    logger.error(f"DEBUG: Atributos del template: {[attr for attr in dir(sample_template) if not attr.startswith('_')]}")
                     
                 return self._create_failed_auth_result(session, "Error: No se pudieron procesar los templates del usuario")
             
-            # ✅ CREAR SCORES INDIVIDUALES CORRECTOS
+            # CREAR SCORES INDIVIDUALES CORRECTOS
             individual_scores = RealIndividualScores(
                 anatomical_score=0.0,
                 dynamic_score=0.0,
@@ -2780,9 +2780,9 @@ class RealAuthenticationSystem:
                 }
             )
             
-            # ✅ CALCULAR SCORES ANATÓMICOS
+            # CALCULAR SCORES ANATÓMICOS
             if anatomical_emb is not None and anatomical_refs:
-                logger.info(f"🧠 Calculando similitudes anatómicas con {len(anatomical_refs)} referencias...")
+                logger.info(f"Calculando similitudes anatómicas con {len(anatomical_refs)} referencias...")
                 anatomical_similarities = []
                 
                 for j, ref_emb in enumerate(anatomical_refs):
@@ -2793,47 +2793,47 @@ class RealAuthenticationSystem:
                         
                         # Verificar dimensionalidad antes de calcular similitud
                         if anatomical_emb.shape[0] != ref_emb.shape[0]:
-                            logger.error(f"  ❌ Dimensiones incompatibles: consulta={anatomical_emb.shape[0]}, ref={ref_emb.shape[0]}")
+                            logger.error(f"  Dimensiones incompatibles: consulta={anatomical_emb.shape[0]}, ref={ref_emb.shape[0]}")
                             continue
                         
                         # Verificar que no hay NaN o infinitos
                         if np.any(np.isnan(ref_emb)) or np.any(np.isinf(ref_emb)):
-                            logger.error(f"  ❌ Template de referencia {j+1} contiene NaN o infinitos")
+                            logger.error(f"  Template de referencia {j+1} contiene NaN o infinitos")
                             continue
                             
                         similarity = self._calculate_real_similarity(anatomical_emb, ref_emb)
                         anatomical_similarities.append(similarity)
-                        logger.info(f"  📊 Similitud anatómica {j+1}: {similarity:.4f}")
+                        logger.info(f"  Similitud anatómica {j+1}: {similarity:.4f}")
                     except Exception as sim_error:
-                        logger.error(f"❌ Error calculando similitud anatómica {j+1}: {sim_error}")
+                        logger.error(f"Error calculando similitud anatómica {j+1}: {sim_error}")
                         continue
                 
                 #if anatomical_similarities:
                     #individual_scores.anatomical_score = np.max(anatomical_similarities)
                     #individual_scores.anatomical_confidence = np.mean(anatomical_similarities)
-                    #logger.info(f"✅ Score anatómico FINAL: {individual_scores.anatomical_score:.4f}")
-                    #logger.info(f"✅ Confianza anatómica: {individual_scores.anatomical_confidence:.4f}")
+                    #logger.info(f"Score anatómico FINAL: {individual_scores.anatomical_score:.4f}")
+                    #logger.info(f"Confianza anatómica: {individual_scores.anatomical_confidence:.4f}")
                 if anatomical_similarities:
-                    # ✅ CAMBIO: De MAX a VOTING
+                    # CAMBIO: De MAX a VOTING
                     individual_scores.anatomical_score = calculate_score_with_voting(
                         anatomical_similarities,
                         vote_threshold=0.85,
                         min_vote_ratio=0.5
                     )
                     individual_scores.anatomical_confidence = np.mean(anatomical_similarities)
-                    logger.info(f"  ✅ Score anatómico FINAL: {individual_scores.anatomical_score:.4f}")
-                    logger.info(f"  ✅ Confianza anatómica: {individual_scores.anatomical_confidence:.4f}")
+                    logger.info(f"  Score anatómico FINAL: {individual_scores.anatomical_score:.4f}")
+                    logger.info(f"  Confianza anatómica: {individual_scores.anatomical_confidence:.4f}")
                 else:
-                    logger.error("❌ No se pudieron calcular similitudes anatómicas válidas")
+                    logger.error("No se pudieron calcular similitudes anatómicas válidas")
             else:
                 if anatomical_emb is None:
-                    logger.info("ℹ️ No hay embedding anatómico de consulta")
+                    logger.info("No hay embedding anatómico de consulta")
                 if not anatomical_refs:
-                    logger.info("ℹ️ No hay referencias anatómicas")
+                    logger.info("No hay referencias anatómicas")
             
-            # ✅ CALCULAR SCORES DINÁMICOS
+            # CALCULAR SCORES DINÁMICOS
             if dynamic_emb is not None and dynamic_refs:
-                logger.info(f"🔄 Calculando similitudes dinámicas con {len(dynamic_refs)} referencias...")
+                logger.info(f"Calculando similitudes dinámicas con {len(dynamic_refs)} referencias...")
                 dynamic_similarities = []
                 
                 for j, ref_emb in enumerate(dynamic_refs):
@@ -2844,49 +2844,49 @@ class RealAuthenticationSystem:
                         
                         # Verificar dimensionalidad antes de calcular similitud
                         if dynamic_emb.shape[0] != ref_emb.shape[0]:
-                            logger.error(f"  ❌ Dimensiones incompatibles: consulta={dynamic_emb.shape[0]}, ref={ref_emb.shape[0]}")
+                            logger.error(f"  Dimensiones incompatibles: consulta={dynamic_emb.shape[0]}, ref={ref_emb.shape[0]}")
                             continue
                         
                         # Verificar que no hay NaN o infinitos
                         if np.any(np.isnan(ref_emb)) or np.any(np.isinf(ref_emb)):
-                            logger.error(f"  ❌ Template de referencia {j+1} contiene NaN o infinitos")
+                            logger.error(f"  Template de referencia {j+1} contiene NaN o infinitos")
                             continue
                             
                         similarity = self._calculate_real_similarity(dynamic_emb, ref_emb)
                         dynamic_similarities.append(similarity)
-                        logger.info(f"  📊 Similitud dinámica {j+1}: {similarity:.4f}")
+                        logger.info(f"  Similitud dinámica {j+1}: {similarity:.4f}")
                     except Exception as sim_error:
-                        logger.error(f"❌ Error calculando similitud dinámica {j+1}: {sim_error}")
+                        logger.error(f"Error calculando similitud dinámica {j+1}: {sim_error}")
                         continue
                 
                 #if dynamic_similarities:
                     #individual_scores.dynamic_score = np.max(dynamic_similarities)
                     #individual_scores.dynamic_confidence = np.mean(dynamic_similarities)
-                    #logger.info(f"✅ Score dinámico FINAL: {individual_scores.dynamic_score:.4f}")
-                    #logger.info(f"✅ Confianza dinámica: {individual_scores.dynamic_confidence:.4f}")
+                    #logger.info(f"Score dinámico FINAL: {individual_scores.dynamic_score:.4f}")
+                    #logger.info(f"Confianza dinámica: {individual_scores.dynamic_confidence:.4f}")
                 if dynamic_similarities:
-                    # ✅ CAMBIO: De MAX a VOTING
+                    # CAMBIO: De MAX a VOTING
                     individual_scores.dynamic_score = calculate_score_with_voting(
                         dynamic_similarities,
                         vote_threshold=0.85,
                         min_vote_ratio=0.5
                     )
                     individual_scores.dynamic_confidence = np.mean(dynamic_similarities)
-                    logger.info(f"  ✅ Score dinámico FINAL: {individual_scores.dynamic_score:.4f}")
-                    logger.info(f"  ✅ Confianza dinámica: {individual_scores.dynamic_confidence:.4f}")
+                    logger.info(f"  Score dinámico FINAL: {individual_scores.dynamic_score:.4f}")
+                    logger.info(f"  Confianza dinámica: {individual_scores.dynamic_confidence:.4f}")
                 else:
-                    logger.error("❌ No se pudieron calcular similitudes dinámicas válidas")
+                    logger.error("No se pudieron calcular similitudes dinámicas válidas")
             else:
                 if dynamic_emb is None:
-                    logger.info("ℹ️ No hay embedding dinámico de consulta")
+                    logger.info("No hay embedding dinámico de consulta")
                 if not dynamic_refs:
-                    logger.info("ℹ️ No hay referencias dinámicas")
+                    logger.info("No hay referencias dinámicas")
             
-            # ✅ FUSIÓN DE SCORES
+            # FUSIÓN DE SCORES
             logger.info("🔗 Iniciando fusión de scores...")
             fused_score = self.fusion_system.fuse_real_scores(individual_scores)
-            logger.info(f"✅ Score fusionado: {fused_score.fused_score:.4f}")
-            logger.info(f"✅ Confianza fusionada: {fused_score.confidence:.4f}")
+            logger.info(f"Score fusionado: {fused_score.fused_score:.4f}")
+            logger.info(f"Confianza fusionada: {fused_score.confidence:.4f}")
             
             # return RealAuthenticationResult(
             #     attempt_id=session.attempt_id,
@@ -2944,7 +2944,7 @@ class RealAuthenticationSystem:
                         
                         result.risk_factors.append(f"Cuenta bloqueada por {settings.LOCKOUT_DURATION_MINUTES} minutos")
                         
-                        # ✅ ACTUALIZAR RESULTADO CON INFORMACIÓN DE BLOQUEO
+                        # ACTUALIZAR RESULTADO CON INFORMACIÓN DE BLOQUEO
                         from datetime import datetime
                         lockout_datetime = datetime.fromtimestamp(lockout_until).isoformat()
                         result.is_locked = True
@@ -2983,9 +2983,9 @@ class RealAuthenticationSystem:
             return result
             
         except Exception as e:
-            logger.error(f"❌ ERROR CRÍTICO en verificación: {e}")
+            logger.error(f"ERROR CRÍTICO en verificación: {e}")
             import traceback
-            logger.error(f"❌ Traceback completo: {traceback.format_exc()}")
+            logger.error(f"Traceback completo: {traceback.format_exc()}")
             return self._create_failed_auth_result(session, f"Error crítico en verificación: {str(e)}")
 
     
@@ -3032,13 +3032,13 @@ class RealAuthenticationSystem:
             captured_sequence = getattr(session, 'gesture_sequence_captured', [])
             
             logger.info(f"")
-            logger.info(f"📋 PASO 1: SECUENCIA CAPTURADA")
+            logger.info(f"PASO 1: SECUENCIA CAPTURADA")
             logger.info(f"   Gestos detectados: {captured_sequence}")
             logger.info(f"   Total gestos: {len(captured_sequence)}")
             
             # Validar que tenemos secuencia completa
             if not captured_sequence or len(captured_sequence) < 3:
-                logger.error(f"❌ Secuencia incompleta: se necesitan 3 gestos, solo hay {len(captured_sequence)}")
+                logger.error(f"Secuencia incompleta: se necesitan 3 gestos, solo hay {len(captured_sequence)}")
                 return RealAuthenticationResult(
                     attempt_id=getattr(session, 'attempt_id', str(uuid.uuid4())),
                     success=False,
@@ -3074,7 +3074,7 @@ class RealAuthenticationSystem:
             
             if not matching_users:
                 logger.info(f"")
-                logger.info(f"❌ IDENTIFICACIÓN FALLIDA: FILTRADO POR SECUENCIA")
+                logger.info(f"IDENTIFICACIÓN FALLIDA: FILTRADO POR SECUENCIA")
                 logger.info(f"   Secuencia buscada: {target_sequence}")
                 logger.info(f"   Resultado: Ningún usuario tiene esa secuencia registrada")
                 logger.info(f"   Decisión: NO IDENTIFICADO")
@@ -3099,7 +3099,7 @@ class RealAuthenticationSystem:
                 )
             
             logger.info(f"")
-            logger.info(f"✅ FILTRADO COMPLETADO: {len(matching_users)} CANDIDATO(S) ENCONTRADO(S)")
+            logger.info(f"FILTRADO COMPLETADO: {len(matching_users)} CANDIDATO(S) ENCONTRADO(S)")
             for idx, user in enumerate(matching_users, 1):
                 logger.info(f"   {idx}. {user['user_id']} ({user['username']}) - Secuencia: {user['sequence']}")
             
@@ -3137,7 +3137,7 @@ class RealAuthenticationSystem:
                 
                 logger.info(f"")
                 logger.info(f"═══════════════════════════════════════════════════════════════")
-                logger.info(f"🔐 CANDIDATO {idx}/{len(matching_users)}: {user_id} ({username})")
+                logger.info(f"CANDIDATO {idx}/{len(matching_users)}: {user_id} ({username})")
                 logger.info(f"═══════════════════════════════════════════════════════════════")
                 
                 try:
@@ -3160,24 +3160,24 @@ class RealAuthenticationSystem:
                     is_verified = verification_result.fused_score >= verification_threshold
                     
                     logger.info(f"")
-                    logger.info(f"   📊 RESULTADOS DE VERIFICACIÓN:")
+                    logger.info(f"   RESULTADOS DE VERIFICACIÓN:")
                     logger.info(f"      Score anatómico: {verification_result.anatomical_score:.4f}")
                     logger.info(f"      Score dinámico: {verification_result.dynamic_score:.4f}")
                     logger.info(f"      Score fusionado: {verification_result.fused_score:.4f}")
                     logger.info(f"      Confianza: {verification_result.confidence:.4f}")
                     logger.info(f"      Umbral requerido: {verification_threshold:.4f}")
-                    logger.info(f"      Decisión: {'✅ VERIFICADO' if is_verified else '❌ RECHAZADO'}")
+                    logger.info(f"      Decisión: {'VERIFICADO' if is_verified else 'RECHAZADO'}")
                     
                     # Actualizar mejor resultado si aplica
                     if is_verified and verification_result.fused_score > best_score:
                         best_verification_result = verification_result
                         best_score = verification_result.fused_score
                         best_user_id = user_id
-                        logger.info(f"      ⭐ MEJOR CANDIDATO ACTUALIZADO")
+                        logger.info(f"      MEJOR CANDIDATO ACTUALIZADO")
                         logger.info(f"         Nuevo mejor score: {best_score:.4f}")
                     
                 except Exception as candidate_error:
-                    logger.error(f"   ❌ Error verificando candidato {user_id}: {candidate_error}")
+                    logger.error(f"   Error verificando candidato {user_id}: {candidate_error}")
                     import traceback
                     logger.error(f"   Traceback: {traceback.format_exc()}")
                     continue
@@ -3191,7 +3191,7 @@ class RealAuthenticationSystem:
             logger.info(f"╚══════════════════════════════════════════════════════════════╝")
             
             logger.info(f"")
-            logger.info(f"📊 RESUMEN DE VERIFICACIONES:")
+            logger.info(f"RESUMEN DE VERIFICACIONES:")
             logger.info(f"   Total candidatos procesados: {len(matching_users)}")
             logger.info(f"   Mejor resultado: {best_user_id if best_verification_result else 'NINGUNO'}")
             if best_verification_result:
@@ -3206,7 +3206,7 @@ class RealAuthenticationSystem:
                 
                 logger.info(f"")
                 logger.info(f"╔══════════════════════════════════════════════════════════════╗")
-                logger.info(f"║              ✅ IDENTIFICACIÓN EXITOSA                      ║")
+                logger.info(f"║              IDENTIFICACIÓN EXITOSA                      ║")
                 logger.info(f"╚══════════════════════════════════════════════════════════════╝")
                 logger.info(f"")
                 logger.info(f"🎉 Usuario identificado: {best_user_id} ({matched_username})")
@@ -3245,7 +3245,7 @@ class RealAuthenticationSystem:
             else:
                 logger.info(f"")
                 logger.info(f"╔══════════════════════════════════════════════════════════════╗")
-                logger.info(f"║              ❌ IDENTIFICACIÓN FALLIDA                      ║")
+                logger.info(f"║              IDENTIFICACIÓN FALLIDA                      ║")
                 logger.info(f"╚══════════════════════════════════════════════════════════════╝")
                 logger.info(f"")
                 logger.info(f"   Razón: Ningún candidato pasó la verificación biométrica")
@@ -3276,7 +3276,7 @@ class RealAuthenticationSystem:
         except Exception as e:
             logger.error(f"")
             logger.error(f"╔══════════════════════════════════════════════════════════════╗")
-            logger.error(f"║           ❌ ERROR CRÍTICO EN IDENTIFICACIÓN                ║")
+            logger.error(f"║           ERROR CRÍTICO EN IDENTIFICACIÓN                ║")
             logger.error(f"╚══════════════════════════════════════════════════════════════╝")
             logger.error(f"")
             logger.error(f"Error: {e}")
@@ -3315,7 +3315,7 @@ class RealAuthenticationSystem:
             Lista de diccionarios con user_id, username, sequence de usuarios coincidentes
         """
         try:
-            logger.info(f"🔍 Buscando usuarios con secuencia: {target_sequence}")
+            logger.info(f"Buscando usuarios con secuencia: {target_sequence}")
             
             matching_users = []
             
@@ -3342,25 +3342,25 @@ class RealAuthenticationSystem:
                                 'username': getattr(user_profile, 'username', user_profile.user_id),
                                 'sequence': user_sequence
                             })
-                            logger.info(f"      ✅ COINCIDENCIA ENCONTRADA")
+                            logger.info(f"      COINCIDENCIA ENCONTRADA")
                         else:
-                            logger.info(f"      ❌ No coincide")
+                            logger.info(f"      No coincide")
                     else:
                         logger.info(f"   Usuario {user_profile.user_id}: Sin secuencia válida (tiene {len(user_sequence) if user_sequence else 0} gestos)")
                         
                 except Exception as user_error:
-                    logger.warning(f"   ⚠️ Error procesando usuario {getattr(user_profile, 'user_id', 'unknown')}: {user_error}")
+                    logger.warning(f"   Error procesando usuario {getattr(user_profile, 'user_id', 'unknown')}: {user_error}")
                     continue
             
             logger.info(f"")
-            logger.info(f"📊 RESULTADO DE BÚSQUEDA:")
+            logger.info(f"RESULTADO DE BÚSQUEDA:")
             logger.info(f"   Usuarios totales: {len(all_users)}")
             logger.info(f"   Coincidencias encontradas: {len(matching_users)}")
             
             return matching_users
             
         except Exception as e:
-            logger.error(f"❌ Error buscando usuarios con secuencia: {e}")
+            logger.error(f"Error buscando usuarios con secuencia: {e}")
             import traceback
             logger.error(traceback.format_exc())
             return []
@@ -3426,17 +3426,17 @@ class RealAuthenticationSystem:
             else:
                 logger.info(f"Autenticación fallida - Razón: {final_status.value}")
             
-            # # ✅ GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
+            # # GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
             # if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
             #     try:
             #         system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
                     
-            #         # ✅ OBTENER EMAIL Y USERNAME DEL USUARIO
+            #         # OBTENER EMAIL Y USERNAME DEL USUARIO
             #         user_profile = self.database.get_user(session.user_id)
             #         user_email = user_profile.email if user_profile else "unknown@example.com"
             #         username = user_profile.username if user_profile else session.user_id
                     
-            #         # ✅ EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
+            #         # EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
             #         anatomical_score = 0.0
             #         dynamic_score = 0.0
             #         fused_score = 0.0
@@ -3460,7 +3460,7 @@ class RealAuthenticationSystem:
             #         feedback_data = self.feedback_service.save_authentication_attempt(
             #             session_id=session.attempt_id,
             #             user_id=session.user_id,
-            #             username=username,  # ✅ Username real
+            #             username=username,  # Username real
             #             mode='verification' if session.mode == AuthenticationMode.VERIFICATION else 'identification',
             #             system_decision=system_decision,
             #             confidence=confidence,
@@ -3476,17 +3476,17 @@ class RealAuthenticationSystem:
             #         # Guardar token de feedback en la sesión
             #         session.feedback_token = feedback_data['feedback_token']
                     
-            #         logger.info(f"✅ Intento guardado en Supabase - Token: {feedback_data['feedback_token']}")
+            #         logger.info(f"Intento guardado en Supabase - Token: {feedback_data['feedback_token']}")
                     
             #     except Exception as e:
-            #         logger.error(f"⚠️ Error guardando intento en Supabase: {e}")
+            #         logger.error(f"Error guardando intento en Supabase: {e}")
             #         # No fallar la autenticación si falla el guardado
-            # ✅ GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
+            # GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
             if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
                 try:
                     system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
                     
-                    # ✅ EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
+                    # EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
                     anatomical_score = 0.0
                     dynamic_score = 0.0
                     fused_score = 0.0
@@ -3515,7 +3515,7 @@ class RealAuthenticationSystem:
                     if not gestures_captured and hasattr(session, 'gesture_sequence_captured'):
                         gestures_captured = session.gesture_sequence_captured
                     
-                    # ✅ USAR SERVICIO CORRECTO SEGÚN MODO
+                    # USAR SERVICIO CORRECTO SEGÚN MODO
                     if session.mode == AuthenticationMode.VERIFICATION:
                         # ========================================
                         # VERIFICACIÓN 1:1 → authentication_attempts
@@ -3524,7 +3524,7 @@ class RealAuthenticationSystem:
                         user_email = user_profile.email if user_profile else "unknown@example.com"
                         username = user_profile.username if user_profile else session.user_id
                         
-                        logger.info(f"📊 Guardando VERIFICACIÓN: user={session.user_id}, decision={system_decision}")
+                        logger.info(f"Guardando VERIFICACIÓN: user={session.user_id}, decision={system_decision}")
                         
                         feedback_data = self.feedback_service.save_authentication_attempt(
                             session_id=session.attempt_id,
@@ -3544,7 +3544,7 @@ class RealAuthenticationSystem:
                         
                         if feedback_data and 'feedback_token' in feedback_data:
                             session.feedback_token = feedback_data['feedback_token']
-                            logger.info(f"✅ Verificación guardada con feedback_token: {feedback_data['feedback_token']}")
+                            logger.info(f"Verificación guardada con feedback_token: {feedback_data['feedback_token']}")
                     
                     elif session.mode == AuthenticationMode.IDENTIFICATION:
                         # ========================================
@@ -3563,7 +3563,7 @@ class RealAuthenticationSystem:
                                     username = user_profile.username
                                     user_email = user_profile.email
                         
-                        logger.info(f"📊 Guardando IDENTIFICACIÓN: user={identified_user_id or 'unknown'}, decision={system_decision}")
+                        logger.info(f"Guardando IDENTIFICACIÓN: user={identified_user_id or 'unknown'}, decision={system_decision}")
                         
                         identification_data = self.identification_service.save_identification_attempt(
                             session_id=session.attempt_id,
@@ -3583,10 +3583,10 @@ class RealAuthenticationSystem:
                         )
                         
                         if identification_data:
-                            logger.info(f"✅ Identificación guardada: {identification_data['session_id']}")
+                            logger.info(f"Identificación guardada: {identification_data['session_id']}")
                     
                 except Exception as e:
-                    logger.error(f"❌ Error guardando intento de autenticación: {str(e)}")
+                    logger.error(f"Error guardando intento de autenticación: {str(e)}")
             
             
         except Exception as e:
@@ -3685,10 +3685,10 @@ class RealAuthenticationSystem:
         Procesa un frame para una sesión de enrollment.
         """
         try:
-            # ✅ CAMBIAR ESTA LÍNEA:
+            # CAMBIAR ESTA LÍNEA:
             # return self.enrollment_system.process_enrollment_frame(session_id)
             
-            # ✅ POR ESTE CÓDIGO COMPLETO:
+            # POR ESTE CÓDIGO COMPLETO:
             if session_id not in self.enrollment_system.active_sessions:
                 return {'error': 'Sesión no encontrada', 'is_real': True}
             
@@ -3701,7 +3701,7 @@ class RealAuthenticationSystem:
                     'status': session.status.value
                 }
             
-            # ✅ PROCESAR FRAME CON FEEDBACK VISUAL INTEGRADO
+            # PROCESAR FRAME CON FEEDBACK VISUAL INTEGRADO
             sample, visual_feedback = self._process_frame_with_feedback(session)
             
             # Información básica del estado
@@ -3720,8 +3720,8 @@ class RealAuthenticationSystem:
                 'sample_captured': sample is not None,
                 'is_real_processing': True,
                 'no_simulation': True,
-                'bootstrap_mode': self.enrollment_system.bootstrap_mode,  # ✅ NUEVO
-                'visual_feedback': visual_feedback      # ✅ NUEVO
+                'bootstrap_mode': self.enrollment_system.bootstrap_mode,  # NUEVO
+                'visual_feedback': visual_feedback      # NUEVO
             }
             
             # Agregar información de muestra si se capturó
@@ -3734,7 +3734,7 @@ class RealAuthenticationSystem:
                     'anatomical_embedding_generated': sample.anatomical_embedding is not None,
                     'dynamic_embedding_generated': sample.dynamic_embedding is not None,
                     'sample_validation_errors': sample.validation_errors,
-                    'is_bootstrap_sample': getattr(sample, 'is_bootstrap', self.enrollment_system.bootstrap_mode)  # ✅ NUEVO
+                    'is_bootstrap_sample': getattr(sample, 'is_bootstrap', self.enrollment_system.bootstrap_mode)  # NUEVO
                 })
                 
                 # Actualizar estadísticas
@@ -3750,7 +3750,7 @@ class RealAuthenticationSystem:
                 info['session_completed'] = True
                 info['final_status'] = session.status.value
                 
-                # ✅ NUEVO: Si completamos bootstrap, verificar entrenamiento
+                # NUEVO: Si completamos bootstrap, verificar entrenamiento
                 if session.status == EnrollmentStatus.COMPLETED and self.enrollment_system.bootstrap_mode:
                     training_attempted = self.enrollment_system._attempt_bootstrap_training()
                     info['bootstrap_training_attempted'] = training_attempted

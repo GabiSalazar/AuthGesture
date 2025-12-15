@@ -83,7 +83,7 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
     try:
         database = get_biometric_database()
         
-        # ✅ VERIFICAR QUE EL USUARIO EXISTE (método correcto)
+        # VERIFICAR QUE EL USUARIO EXISTE (método correcto)
         user_profile = database.get_user(request.user_id)
         if not user_profile:
             raise HTTPException(
@@ -91,20 +91,20 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
                 detail=f"Usuario {request.user_id} no encontrado"
             )
         
-        # ✅ VERIFICAR SI YA TIENE UN PERFIL DE PERSONALIDAD
+        # VERIFICAR SI YA TIENE UN PERFIL DE PERSONALIDAD
         if database.has_personality_profile(request.user_id):
             raise HTTPException(
                 status_code=400,
                 detail="Este usuario ya completó el cuestionario de personalidad"
             )
         
-        # ✅ CREAR PERFIL DE PERSONALIDAD
+        # CREAR PERFIL DE PERSONALIDAD
         personality_profile = PersonalityProfile.from_responses(
             user_id=request.user_id,
             responses=request.responses
         )
         
-        # ✅ GUARDAR EN LA BASE DE DATOS
+        # GUARDAR EN LA BASE DE DATOS
         success = database.store_personality_profile(personality_profile)
         
         if not success:
@@ -113,7 +113,7 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
                 detail="Error guardando el perfil de personalidad"
             )
         
-        # logger.info(f"✅ Cuestionario de personalidad guardado para usuario: {request.user_id}")
+        # logger.info(f"Cuestionario de personalidad guardado para usuario: {request.user_id}")
         # logger.info(f"   Respuestas: {personality_profile.raw_responses}")
         
         # return PersonalityQuestionnaireResponse(
@@ -123,10 +123,10 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
         #     raw_responses=personality_profile.raw_responses
         # )
         
-        logger.info(f"✅ Cuestionario de personalidad guardado para usuario: {request.user_id}")
+        logger.info(f"Cuestionario de personalidad guardado para usuario: {request.user_id}")
         logger.info(f"   Respuestas: {personality_profile.raw_responses}")
         
-        # 🔧 ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
+        # ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
         try:
             # Buscar sesión de enrollment activa para obtener callback_url
             manager = get_system_manager()
@@ -166,14 +166,14 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
                     )
                 
                 if success:
-                    logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+                    logger.info(f"Resultado enviado exitosamente al Plugin")
                 else:
-                    logger.warning(f"⚠️ No se pudo enviar resultado al Plugin")
+                    logger.warning(f"NONo se pudo enviar resultado al Plugin")
             else:
-                logger.info(f"ℹ️ No hay callback_url configurado - No se envía al Plugin")
+                logger.info(f"No hay callback_url configurado - No se envía al Plugin")
                 
         except Exception as e:
-            logger.error(f"❌ Error enviando resultado al Plugin: {e}")
+            logger.error(f"Error enviando resultado al Plugin: {e}")
             # No fallar el guardado si falla el envío al Plugin
         
         return PersonalityQuestionnaireResponse(
@@ -209,7 +209,7 @@ async def get_personality_profile(user_id: str):
     try:
         database = get_biometric_database()
         
-        # ✅ VERIFICAR QUE EL USUARIO EXISTE (método correcto)
+        # VERIFICAR QUE EL USUARIO EXISTE (método correcto)
         user_profile = database.get_user(user_id)
         if not user_profile:
             raise HTTPException(
@@ -217,7 +217,7 @@ async def get_personality_profile(user_id: str):
                 detail=f"Usuario {user_id} no encontrado"
             )
         
-        # ✅ OBTENER PERFIL DE PERSONALIDAD
+        # OBTENER PERFIL DE PERSONALIDAD
         personality_profile = database.get_personality_profile(user_id)
         
         if personality_profile:
@@ -259,7 +259,7 @@ async def check_personality_profile(user_id: str):
     try:
         database = get_biometric_database()
         
-        # ✅ VERIFICAR EXISTENCIA DEL PERFIL
+        # VERIFICAR EXISTENCIA DEL PERFIL
         has_profile = database.has_personality_profile(user_id)
         
         return PersonalityCheckResponse(
@@ -294,7 +294,7 @@ async def personality_health_check():
             "status": "healthy",
             "module": "Personality Profiles",
             "initialized": True,
-            "message": "✅ Módulo de personalidad funcionando correctamente",
+            "message": "Módulo de personalidad funcionando correctamente",
             "storage_path": str(personality_dir),
             "directory_exists": personality_dir.exists()
         }

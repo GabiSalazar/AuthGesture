@@ -140,7 +140,7 @@ class ForgotSequenceService:
             verification.verification_date = datetime.now().isoformat()
             self.email_service._save_verification(verification)
             
-            logger.info(f"✅ Código verificado: {verification.email}")
+            logger.info(f"Código verificado: {verification.email}")
             
             return {
                 'success': True,
@@ -206,7 +206,7 @@ class ForgotSequenceService:
                     'message': 'Error al reenviar el código'
                 }
             
-            logger.info(f"✅ Código reenviado a: {email}")
+            logger.info(f"Código reenviado a: {email}")
             
             return {
                 'success': True,
@@ -214,7 +214,7 @@ class ForgotSequenceService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error reenviando código: {e}")
+            logger.error(f"Error reenviando código: {e}")
             return {
                 'success': False,
                 'message': 'Error al reenviar código'
@@ -245,7 +245,7 @@ class ForgotSequenceService:
         """
         try:
             print("=" * 80)
-            print(f"🔄 INICIANDO RE-ENROLLMENT")
+            print(f"INICIANDO RE-ENROLLMENT")
             print("=" * 80)
             print(f"Usuario a desactivar: {user_id}")
             logger.info(f"Iniciando proceso de re-registro para: {user_id}")
@@ -257,14 +257,14 @@ class ForgotSequenceService:
             )
             
             if not result['success']:
-                print(f"❌ ERROR: No se pudo desactivar usuario {user_id}")
+                print(f"ERROR: No se pudo desactivar usuario {user_id}")
                 logger.error(f"Error desactivando usuario {user_id}")
                 return {
                     'success': False,
                     'message': 'Error desactivando usuario'
                 }
             
-            print(f"✅ Usuario desactivado exitosamente:")
+            print(f"Usuario desactivado exitosamente:")
             print(f"   ID original: {result['original_user_id']}")
             print(f"   ID inactivo: {result['new_inactive_id']}")
             logger.info(f"Usuario desactivado: {user_id} -> {result['new_inactive_id']}")
@@ -275,16 +275,16 @@ class ForgotSequenceService:
             if result.get('personality_profile'):
                 try:
                     personality_profile_dict = result['personality_profile'].to_dict()
-                    print(f"✅ Perfil de personalidad obtenido para reutilizar")
+                    print(f"Perfil de personalidad obtenido para reutilizar")
                     logger.info(f"Perfil de personalidad obtenido para reutilizar")
                 except Exception as e:
-                    print(f"⚠️ Error convirtiendo perfil de personalidad: {e}")
+                    print(f"Error convirtiendo perfil de personalidad: {e}")
                     logger.warning(f"Error convirtiendo perfil de personalidad a dict: {e}")
             else:
-                print(f"ℹ️ No hay perfil de personalidad para reutilizar")
+                print(f"No hay perfil de personalidad para reutilizar")
             
             print("=" * 80)
-            print(f"✅ RE-ENROLLMENT PREPARADO")
+            print(f"RE-ENROLLMENT PREPARADO")
             print("=" * 80)
             print(f"ID que se reutilizará: {result['original_user_id']}")
             print(f"Email: {result['user_data'].get('email')}")
@@ -296,21 +296,21 @@ class ForgotSequenceService:
             return {
                 'success': True,
                 'message': 'Usuario desactivado. Listo para re-registro',
-                'original_user_id': result['original_user_id'],  # ✅ ID que se reutilizará
+                'original_user_id': result['original_user_id'],  # ID que se reutilizará
                 'user_data': result['user_data'],  # email, phone, age, gender, username, gesture_sequence
                 'personality_profile': personality_profile_dict,  # Perfil a reutilizar
                 'reuse_personality': personality_profile_dict is not None
             }
             
         except ValueError as e:
-            print(f"❌ ERROR DE VALIDACIÓN: {e}")
+            print(f"ERROR DE VALIDACIÓN: {e}")
             logger.error(f"Error de validación en reenrollment: {e}")
             return {
                 'success': False,
                 'message': str(e)
             }
         except Exception as e:
-            print(f"❌ ERROR CRÍTICO: {e}")
+            print(f"ERROR CRÍTICO: {e}")
             logger.error(f"Error iniciando reenrollment: {e}")
             import traceback
             print(f"Traceback:")

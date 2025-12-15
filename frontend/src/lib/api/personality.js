@@ -22,11 +22,11 @@ export const personalityApi = {
         responses: responses
       })
       
-      console.log('✅ Cuestionario guardado:', data)
+      console.log('Cuestionario guardado:', data)
       return data
       
     } catch (error) {
-      console.error('❌ Error enviando cuestionario:', error)
+      console.error('Error enviando cuestionario:', error)
       console.error('   Detalle:', error.response?.data?.detail)
       throw error
     }
@@ -44,11 +44,11 @@ export const personalityApi = {
       
       const { data } = await apiClient.get(`/personality/profile/${userId}`)
       
-      console.log('✅ Perfil obtenido:', data)
+      console.log('Perfil obtenido:', data)
       return data
       
     } catch (error) {
-      console.error('❌ Error obteniendo perfil:', error)
+      console.error('Error obteniendo perfil:', error)
       throw error
     }
   },
@@ -61,15 +61,15 @@ export const personalityApi = {
    */
   checkProfile: async (userId) => {
     try {
-      console.log('🔍 Verificando perfil de personalidad:', userId)
+      console.log('Verificando perfil de personalidad:', userId)
       
       const { data } = await apiClient.get(`/personality/check/${userId}`)
       
-      console.log('✅ Verificación:', data)
+      console.log('Verificación:', data)
       return data
       
     } catch (error) {
-      console.error('❌ Error verificando perfil:', error)
+      console.error('Error verificando perfil:', error)
       throw error
     }
   },
@@ -84,7 +84,7 @@ export const personalityApi = {
       const { data } = await apiClient.get('/personality/health')
       return data
     } catch (error) {
-      console.error('❌ Error en health check:', error)
+      console.error('Error en health check:', error)
       throw error
     }
   }

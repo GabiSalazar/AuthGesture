@@ -249,11 +249,11 @@ class ReferenceAreaManager:
             self._draw_area_corners(frame, coords, color)
             self._draw_instruction_text(frame, current_gesture, coords)
             
-            return frame  # ✅ CORRECCIÓN
+            return frame  # CORRECCIÓN
             
         except Exception as e:
             logger.error(f"Error dibujando área de referencia: {e}", exc_info=True)
-            return frame  # ✅ CORRECCIÓN
+            return frame  # CORRECCIÓN
     
     def _draw_area_corners(self, frame: np.ndarray, coords: AreaCoordinates, color: Tuple[int, int, int]):
         """Dibuja las esquinas del área de referencia."""

@@ -128,7 +128,7 @@
 2025-11-29 15:36:58,337 - biometric_gesture_system - INFO - [authentication_system.py:1336] -   - Frames procesados: 0
 2025-11-29 15:36:58,337 - biometric_gesture_system - INFO - [authentication_system.py:1337] -   - Gestos capturados: 0
 2025-11-29 15:36:58,337 - biometric_gesture_system - INFO - [authentication_system.py:2914] - Sesión de autenticación 04ec3f4f-2b94-4ce1-bbbe-9f203bccac99 cancelada
-2025-11-29 15:37:05,391 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 15
+2025-11-29 15:37:05,391 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 15
 2025-11-29 15:37:05,391 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:37:05,391 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:37:05,393 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)

@@ -85,58 +85,58 @@ Traceback (most recent call last):
                          ^^^^^^^^^^^^^^^^^^^^^^^
 NameError: name 'get_score_fusion_system' is not defined
 2025-11-04 19:09:35,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:09:35,675 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:09:35,675 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:09:40,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:09:40,675 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:09:40,675 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:09:46,985 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:09:46,985 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:09:46,985 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:09:51,731 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:09:51,731 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:09:51,731 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:09:56,670 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:09:56,670 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:09:56,670 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:01,674 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:01,674 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:01,674 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:06,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:06,676 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:06,676 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:22,765 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:22,765 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:22,765 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:23,680 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:23,680 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:23,680 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:28,691 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:28,691 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:28,691 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:34,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:34,680 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:34,680 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:39,672 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:39,673 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:39,673 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:44,676 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:44,677 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:44,677 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:49,675 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:49,676 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:49,676 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:10:54,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:10:54,680 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:10:54,680 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:00,682 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:00,682 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:00,682 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:19,686 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:19,686 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:19,686 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:25,684 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:25,684 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:25,684 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:26,680 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:26,680 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:26,680 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:27,697 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:27,697 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:27,697 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:33,995 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:33,995 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:33,995 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:38,677 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:38,677 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:38,677 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:38,689 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:38,689 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:38,689 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:44,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:44,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:44,679 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:49,985 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:49,985 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:49,985 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:54,679 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:54,680 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:54,680 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:11:59,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:11:59,678 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:11:59,678 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa
 2025-11-04 19:12:04,678 - biometric_gesture_system - INFO - [system_manager.py:742] - ⚠️ No hay tracking previo - Asumiendo bootstrap
-2025-11-04 19:12:04,679 - biometric_gesture_system - INFO - [system_manager.py:753] - 🆕 Usuario pendiente: aa
+2025-11-04 19:12:04,679 - biometric_gesture_system - INFO - [system_manager.py:753] - Usuario pendiente: aa

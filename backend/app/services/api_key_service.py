@@ -56,7 +56,7 @@ class APIKeyService:
                 'is_active': False
             }).eq('is_active', True).execute()
             
-            logger.info("🔄 Claves anteriores desactivadas")
+            logger.info("Claves anteriores desactivadas")
             
             # 2. Generar nueva clave
             new_key = self.generate_api_key()
@@ -72,7 +72,7 @@ class APIKeyService:
             
             result = self.client.table(self.table_name).insert(data).execute()
             
-            logger.info(f"✅ Nueva API Key generada: {new_key[:20]}...")
+            logger.info(f"Nueva API Key generada: {new_key[:20]}...")
             
             return {
                 'id': result.data[0]['id'],
@@ -82,7 +82,7 @@ class APIKeyService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error creando API Key: {e}")
+            logger.error(f"Error creando API Key: {e}")
             raise
     
     def get_current_api_key(self) -> Optional[Dict[str, Any]]:
@@ -106,7 +106,7 @@ class APIKeyService:
             return None
             
         except Exception as e:
-            logger.error(f"❌ Error obteniendo API Key: {e}")
+            logger.error(f"Error obteniendo API Key: {e}")
             return None
     
     def validate_api_key(self, api_key: str) -> bool:
@@ -141,14 +141,14 @@ class APIKeyService:
                     .eq('id', key_data['id'])\
                     .execute()
                 
-                logger.info(f"✅ API Key válida - Usos: {key_data['usage_count'] + 1}")
+                logger.info(f"API Key válida - Usos: {key_data['usage_count'] + 1}")
                 return True
             
-            logger.warning(f"⚠️ API Key inválida o inactiva")
+            logger.warning(f"API Key inválida o inactiva")
             return False
             
         except Exception as e:
-            logger.error(f"❌ Error validando API Key: {e}")
+            logger.error(f"Error validando API Key: {e}")
             return False
     
     def regenerate_api_key(self, created_by: str = "admin") -> Dict[str, Any]:
@@ -162,7 +162,7 @@ class APIKeyService:
         Returns:
             Diccionario con nueva API Key
         """
-        logger.info("🔄 Regenerando API Key...")
+        logger.info("Regenerando API Key...")
         return self.create_new_api_key(created_by)
     
     def get_api_key_stats(self) -> Dict[str, Any]:
@@ -192,7 +192,7 @@ class APIKeyService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error obteniendo estadísticas: {e}")
+            logger.error(f"Error obteniendo estadísticas: {e}")
             return {
                 'has_active_key': False,
                 'error': str(e)
@@ -214,6 +214,6 @@ def get_api_key_service() -> APIKeyService:
     
     if _api_key_service is None:
         _api_key_service = APIKeyService()
-        logger.info("✅ APIKeyService inicializado")
+        logger.info("APIKeyService inicializado")
     
     return _api_key_service

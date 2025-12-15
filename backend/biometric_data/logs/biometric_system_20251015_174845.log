@@ -28,7 +28,7 @@
 2025-10-15 17:48:45,911 - biometric_gesture_system - INFO - [system_manager.py:102] - === INICIANDO INICIALIZACIÓN DEL SISTEMA ===
 2025-10-15 17:48:46,905 - biometric_gesture_system - INFO - [system_manager.py:157] - ✅ Base de datos inicializada
 2025-10-15 17:48:46,905 - biometric_gesture_system - INFO - [system_manager.py:110] - ✅ Nivel 1: Base de datos inicializada
-2025-10-15 17:48:46,906 - biometric_gesture_system - INFO - [system_manager.py:117] - 📊 Usuarios en base de datos: 1
+2025-10-15 17:48:46,906 - biometric_gesture_system - INFO - [system_manager.py:117] - Usuarios en base de datos: 1
 2025-10-15 17:48:46,906 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.samples_per_gesture, usando default: 8
 2025-10-15 17:48:46,906 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_confidence, usando default: 0.65
 2025-10-15 17:48:46,906 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_stability_frames, usando default: 8
@@ -54,8 +54,8 @@
 2025-10-15 17:48:59,533 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.feature_preprocessing, usando default: {'anatomical_normalization': 'robust', 'dynamic_normalization': 'standard', 'normalize_per_user': False, 'balancing_method': 'balanced_subsample', 'target_balance_ratio': 1.0, 'augmentation_strategy': 'moderate', 'augmentation_factor': 1.5, 'cv_folds': 5, 'cv_strategy': 'stratified_user', 'test_size': 0.2, 'validation_size': 0.2, 'outlier_threshold': 3.0, 'min_samples_per_user': 5, 'feature_selection': False, 'variance_threshold': 0.01, 'cache_transformations': True, 'parallel_processing': False, 'random_state': 42, 'stratify_by_user': True}
 2025-10-15 17:48:59,534 - biometric_gesture_system - INFO - [system_manager.py:167] - ✅ Sistema de enrollment inicializado
 2025-10-15 17:48:59,534 - biometric_gesture_system - INFO - [system_manager.py:126] - ✅ Nivel 2: Sistema de enrollment inicializado
-2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:197] - 📊 Estado de redes:
+2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:197] - Estado de redes:
 2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:198] -   - Anatómica: ❌
 2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:199] -   - Dinámica: ❌
-2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:143] - 📝 Redes necesitan entrenamiento
+2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:143] - Redes necesitan entrenamiento
 2025-10-15 17:48:59,535 - biometric_gesture_system - INFO - [system_manager.py:145] - === SISTEMA INICIALIZADO CORRECTAMENTE ===

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useCallback, useState } from 'react'
 import { Camera, CameraOff } from 'lucide-react'
 import { Button } from '../ui'
 

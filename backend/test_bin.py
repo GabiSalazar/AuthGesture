@@ -8,9 +8,9 @@ from pathlib import Path
 
 bin_file = Path(r"C:\Users\USER\Documents\biometric-gesture-system\backend\biometric_data\templates\2020_dynamic_1762270110832_303ba5e0.bin")
 
-print(f"📂 Archivo: {bin_file}")
-print(f"📦 Tamaño: {bin_file.stat().st_size} bytes")
-print(f"✅ Existe: {bin_file.exists()}")
+print(f"Archivo: {bin_file}")
+print(f"Tamaño: {bin_file.stat().st_size} bytes")
+print(f"Existe: {bin_file.exists()}")
 print()
 
 # Leer y deserializar
@@ -27,42 +27,42 @@ print()
 if isinstance(data, dict):
     # Verificar si es formato nuevo
     if 'embeddings' in data:
-        print("✅ FORMATO NUEVO DETECTADO")
+        print("FORMATO NUEVO DETECTADO")
         print()
-        print("📋 METADATA:")
+        print("METADATA:")
         for key, value in data.get('metadata', {}).items():
             print(f"   {key}: {value}")
         print()
         
-        print("🧠 EMBEDDINGS:")
+        print("EMBEDDINGS:")
         embeddings = data['embeddings']
         for key, emb in embeddings.items():
             print(f"\n   {key}:")
             if emb is None:
-                print(f"      ❌ None")
+                print(f"      None")
             elif isinstance(emb, np.ndarray):
-                print(f"      ✅ Shape: {emb.shape}")
-                print(f"      ✅ Dtype: {emb.dtype}")
-                print(f"      ✅ Norma: {np.linalg.norm(emb):.6f}")
-                print(f"      ✅ Min: {emb.min():.6f}")
-                print(f"      ✅ Max: {emb.max():.6f}")
-                print(f"      📊 Primeros 5 valores: {emb[:5]}")
+                print(f"      Shape: {emb.shape}")
+                print(f"      Dtype: {emb.dtype}")
+                print(f"      Norma: {np.linalg.norm(emb):.6f}")
+                print(f"      Min: {emb.min():.6f}")
+                print(f"      Max: {emb.max():.6f}")
+                print(f"      Primeros 5 valores: {emb[:5]}")
             else:
-                print(f"      ⚠️ Tipo: {type(emb)}")
+                print(f"      Tipo: {type(emb)}")
     else:
-        print("ℹ️ FORMATO LEGACY (sin metadata)")
+        print("FORMATO LEGACY (sin metadata)")
         print()
         for key, emb in data.items():
             print(f"\n   {key}:")
             if emb is None:
-                print(f"      ❌ None")
+                print(f"      None")
             elif isinstance(emb, np.ndarray):
-                print(f"      ✅ Shape: {emb.shape}")
-                print(f"      ✅ Dtype: {emb.dtype}")
-                print(f"      ✅ Norma: {np.linalg.norm(emb):.6f}")
-                print(f"      📊 Primeros 5 valores: {emb[:5]}")
+                print(f"      Shape: {emb.shape}")
+                print(f"      Dtype: {emb.dtype}")
+                print(f"      Norma: {np.linalg.norm(emb):.6f}")
+                print(f"      Primeros 5 valores: {emb[:5]}")
             else:
-                print(f"      ⚠️ Tipo: {type(emb)}")
+                print(f"      Tipo: {type(emb)}")
 
 print()
 print("="*60)

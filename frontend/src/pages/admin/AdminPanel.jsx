@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Card, CardContent } from '../../components/ui'
 import {
   LayoutDashboard,
   Users,
@@ -9,7 +8,9 @@ import {
   LogOut,
   Menu,
   X,
-  Shield
+  Shield,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react'
 
 // Importar secciones
@@ -22,6 +23,7 @@ import AuthenticationLogs from './sections/AuthenticationLogs'
 export default function AdminPanel() {
   const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState('dashboard')
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Obtener username desde sessionStorage
@@ -81,133 +83,256 @@ export default function AdminPanel() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Header con Logo + Tabs + Info Admin + Salir */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            
-            {/* Logo + Título */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              <img src="/logo.png" alt="Logo" className="h-8 w-8 sm:h-10 sm:w-10 object-contain" />
-              <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold text-gray-900">AUTH-GESTURE</h1>
-                <p className="text-xs text-gray-500">Panel de Administración</p>
-              </div>
-              <div className="sm:hidden">
-                <h1 className="text-base font-bold text-gray-900">Admin</h1>
-              </div>
-            </div>
-
-            {/* Desktop Tabs - Ocultos en móvil */}
-            <div className="hidden lg:flex gap-1">
-              {tabs.map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`
-                      flex items-center gap-2 px-4 xl:px-6 py-3 sm:py-4 text-sm font-medium whitespace-nowrap
-                      border-b-2 transition-all
-                      ${isActive
-                        ? 'border-blue-500 text-blue-600 bg-blue-50'
-                        : 'border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-                      }
-                    `}
-                  >
-                    <Icon className="w-4 h-4" />
-                    <span className="hidden xl:inline">{tab.name}</span>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Sección derecha: Info Admin + Botones */}
-            <div className="flex items-center gap-2 sm:gap-4">
-              {/* Info del Admin - Visible en desktop */}
-              <div className="hidden md:flex items-center gap-3 px-3 py-1.5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
-                  <span className="text-white text-sm font-bold">
-                    {adminUsername.charAt(0).toUpperCase()}
-                  </span>
+    <div className="fixed inset-0 flex bg-gray-50">
+      
+      {/* ========================================
+          SIDEBAR LATERAL (DESKTOP)
+      ======================================== */}
+      <div 
+        className={`hidden lg:flex flex-col transition-all duration-300 ${
+          sidebarCollapsed ? 'w-20' : 'w-64'
+        }`}
+        style={{ backgroundColor: '#00ACC1' }}
+      >
+        {/* Logo y título - arriba */}
+        <div className="p-6 border-b border-white/20">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                className="h-10 w-10 brightness-0 invert" 
+              />
+              {!sidebarCollapsed && (
+                <div>
+                  <h1 className="text-lg font-black uppercase tracking-tight text-white">
+                    Auth-Gesture
+                  </h1>
+                  <p className="text-xs text-white/80 font-medium">
+                    Admin Panel
+                  </p>
                 </div>
-                <div className="hidden lg:block">
-                  <p className="text-sm font-semibold text-gray-900">{adminUsername}</p>
-                  <p className="text-xs text-gray-500">Administrador</p>
-                </div>
-              </div>
-
-              {/* Botón menú móvil */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
-              >
-                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </button>
-
-              {/* Botón Salir con confirmación */}
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-all shadow-sm hover:shadow"
-                title="Cerrar sesión"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Salir</span>
-              </button>
+              )}
             </div>
           </div>
+        </div>
 
-          {/* Mobile Menu Dropdown */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden pb-4 space-y-1 border-t border-gray-100 pt-4">
-              {/* Info del admin en móvil */}
-              <div className="flex items-center gap-3 px-4 py-3 mb-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-100">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-sm">
-                  <span className="text-white font-bold">
-                    {adminUsername.charAt(0).toUpperCase()}
-                  </span>
+        {/* Navegación - centro */}
+        <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
+          {tabs.map((tab) => {
+            const Icon = tab.icon
+            const isActive = activeTab === tab.id
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`
+                  w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold
+                  transition-all duration-200
+                  ${isActive
+                    ? 'bg-white text-cyan-600 shadow-lg'
+                    : 'text-white hover:bg-white/10'
+                  }
+                `}
+                title={sidebarCollapsed ? tab.name : ''}
+              >
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                {!sidebarCollapsed && <span>{tab.name}</span>}
+              </button>
+            )
+          })}
+        </nav>
+
+        {/* Info admin y logout - abajo */}
+        <div className="border-t border-white/20">
+          {/* Info del admin */}
+          {!sidebarCollapsed && (
+            <div className="p-4 border-b border-white/20">
+              <div className="flex items-center gap-3">
+                <div 
+                  className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-cyan-600"
+                  style={{ backgroundColor: 'white' }}
+                >
+                  {adminUsername.charAt(0).toUpperCase()}
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">{adminUsername}</p>
-                  <p className="text-xs text-gray-500">Administrador</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-bold text-white truncate">
+                    {adminUsername}
+                  </p>
+                  <p className="text-xs text-white/80">
+                    Administrador
+                  </p>
                 </div>
               </div>
-
-              {/* Tabs en móvil */}
-              {tabs.map((tab) => {
-                const Icon = tab.icon
-                const isActive = activeTab === tab.id
-
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => handleTabChange(tab.id)}
-                    className={`
-                      w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium
-                      transition-all
-                      ${isActive
-                        ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-500'
-                        : 'text-gray-600 hover:bg-gray-50'
-                      }
-                    `}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {tab.name}
-                  </button>
-                )
-              })}
             </div>
           )}
+
+          {/* Botón logout */}
+          <button
+            onClick={handleLogout}
+            className={`
+              w-full flex items-center gap-3 px-4 py-4 text-sm font-semibold
+              text-white hover:bg-red-500/20 transition-all
+              ${sidebarCollapsed ? 'justify-center' : ''}
+            `}
+            title={sidebarCollapsed ? 'Cerrar sesión' : ''}
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            {!sidebarCollapsed && <span>Cerrar Sesión</span>}
+          </button>
+
+          {/* Botón collapse/expand */}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="w-full p-3 flex items-center justify-center text-white hover:bg-white/10 transition-all border-t border-white/20"
+          >
+            {sidebarCollapsed ? (
+              <ChevronRight className="w-5 h-5" />
+            ) : (
+              <ChevronLeft className="w-5 h-5" />
+            )}
+          </button>
         </div>
       </div>
 
-      {/* Contenido de la sección activa */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        {ActiveComponent && <ActiveComponent />}
+      {/* ========================================
+          CONTENIDO PRINCIPAL
+      ======================================== */}
+      <div className="flex-1 flex flex-col overflow-hidden">
+        
+        {/* Header superior (móvil y desktop) */}
+    
+          {/* Título de sección activa */}
+          <div className="flex items-center gap-3">
+            {/* Botón menú móvil */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            >
+              <Menu className="w-5 h-5 text-gray-600" />
+            </button>
+
+            {/* Logo móvil */}
+            <div className="lg:hidden flex items-center gap-2">
+              <img 
+                src="/logo.png" 
+                alt="Logo" 
+                className="h-8 w-8" 
+              />
+              <span className="text-base font-black uppercase tracking-tight bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                Admin
+              </span>
+            </div>
+          </div>
+
+        {/* Área de contenido scrollable */}
+        <div className="flex-1 overflow-y-auto p-4 lg:p-8">
+          {ActiveComponent && <ActiveComponent />}
+        </div>
       </div>
+
+      {/* ========================================
+          SIDEBAR MÓVIL (OVERLAY)
+      ======================================== */}
+      {mobileMenuOpen && (
+        <>
+          {/* Overlay oscuro */}
+          <div 
+            className="lg:hidden fixed inset-0 bg-black/50 z-40"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Sidebar móvil */}
+          <div 
+            className="lg:hidden fixed inset-y-0 left-0 w-72 z-50 flex flex-col shadow-2xl"
+            style={{ backgroundColor: '#00ACC1' }}
+          >
+            {/* Header móvil */}
+            <div className="p-6 border-b border-white/20 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/logo.png" 
+                  alt="Logo" 
+                  className="h-10 w-10 brightness-0 invert" 
+                />
+                <div>
+                  <h1 className="text-lg font-black uppercase tracking-tight text-white">
+                    Auth-Gesture
+                  </h1>
+                  <p className="text-xs text-white/80 font-medium">
+                    Admin Panel
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
+            {/* Navegación móvil */}
+            <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
+              {tabs.map((tab) => {
+                const Icon = tab.icon
+                const isActive = activeTab === tab.id
+
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => handleTabChange(tab.id)}
+                    className={`
+                      w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold
+                      transition-all duration-200
+                      ${isActive
+                        ? 'bg-white text-cyan-600 shadow-lg'
+                        : 'text-white hover:bg-white/10'
+                      }
+                    `}
+                  >
+                    <Icon className="w-5 h-5 flex-shrink-0" />
+                    <span>{tab.name}</span>
+                  </button>
+                )
+              })}
+            </nav>
+
+            {/* Footer móvil */}
+            <div className="border-t border-white/20">
+              {/* Info admin */}
+              <div className="p-4 border-b border-white/20">
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-cyan-600"
+                    style={{ backgroundColor: 'white' }}
+                  >
+                    {adminUsername.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-white">
+                      {adminUsername}
+                    </p>
+                    <p className="text-xs text-white/80">
+                      Administrador
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botón logout */}
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 px-4 py-4 text-sm font-semibold text-white hover:bg-red-500/20 transition-all"
+              >
+                <LogOut className="w-5 h-5 flex-shrink-0" />
+                <span>Cerrar Sesión</span>
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

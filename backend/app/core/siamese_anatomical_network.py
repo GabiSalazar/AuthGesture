@@ -244,7 +244,7 @@ class RealSiameseAnatomicalNetwork:
                 logger.error(f"Insuficientes usuarios: {len(real_users)} < 2")
                 return False
             
-            logger.info(f"📊 Usuarios encontrados: {len(real_users)}")
+            logger.info(f"Usuarios encontrados: {len(real_users)}")
             
             # Limpiar muestras existentes
             self.real_training_samples.clear()
@@ -254,7 +254,7 @@ class RealSiameseAnatomicalNetwork:
             
             for user in real_users:
                 try:
-                    logger.info(f"📂 Procesando usuario: {user.username} ({user.user_id})")
+                    logger.info(f"Procesando usuario: {user.username} ({user.user_id})")
                     
                     # Obtener todos los templates del usuario
                     user_templates_list = []
@@ -263,10 +263,10 @@ class RealSiameseAnatomicalNetwork:
                             user_templates_list.append(template)
                     
                     if not user_templates_list:
-                        logger.info(f"   ⚠️ Usuario {user.user_id} sin templates")
+                        logger.info(f"   Usuario {user.user_id} sin templates")
                         continue
                     
-                    logger.info(f"   📊 Templates encontrados: {len(user_templates_list)}")
+                    logger.info(f"   Templates encontrados: {len(user_templates_list)}")
                     
                     # Filtrar templates anatómicos
                     anatomical_templates = []
@@ -281,8 +281,8 @@ class RealSiameseAnatomicalNetwork:
                         elif 'dynamic' in template_type_str.lower():
                             dynamic_templates.append(template)
                             
-                    logger.info(f"   📊 Templates anatómicos: {len(anatomical_templates)}")
-                    logger.info(f"   📊 Templates dinámicos: {len(dynamic_templates)} (omitidos - red anatómica)")
+                    logger.info(f"   Templates anatómicos: {len(anatomical_templates)}")
+                    logger.info(f"   Templates dinámicos: {len(dynamic_templates)} (omitidos - red anatómica)")
 
                     
                     # Procesar templates anatómicos
@@ -324,7 +324,7 @@ class RealSiameseAnatomicalNetwork:
                                         user_anatomical_samples.append(anatomical_sample)
                         
                         except Exception as e:
-                            logger.error(f"   ❌ Error procesando template {template.template_id}: {e}")
+                            logger.error(f"   Error procesando template {template.template_id}: {e}")
                             continue
                     
                     # Validar usuario con datos suficientes
@@ -343,13 +343,13 @@ class RealSiameseAnatomicalNetwork:
                                 gesture_counts[gesture_name] = 0
                             gesture_counts[gesture_name] += 1
                             
-                        logger.info(f"✅ Usuario anatómico válido: {user.username}")
-                        logger.info(f"   📊 Muestras anatómicas: {len(user_anatomical_samples)}")
-                        logger.info(f"   🎯 Gestos únicos: {len(gesture_counts)}")
+                        logger.info(f"Usuario anatómico válido: {user.username}")
+                        logger.info(f"   Muestras anatómicas: {len(user_anatomical_samples)}")
+                        logger.info(f"   Gestos únicos: {len(gesture_counts)}")
                         for gesture, count in gesture_counts.items():
                             logger.info(f"      • {gesture}: {count} muestras anatómicas")
                     else:
-                        logger.warning(f"   ⚠️ Usuario {user.user_id} con pocas muestras anatómicas: {len(user_anatomical_samples)} < {min_anatomical_samples}")
+                        logger.warning(f"   Usuario {user.user_id} con pocas muestras anatómicas: {len(user_anatomical_samples)} < {min_anatomical_samples}")
                     
                 except Exception as e:
                     logger.error(f"Error procesando usuario {user.user_id}: {e}")
@@ -360,11 +360,11 @@ class RealSiameseAnatomicalNetwork:
             min_total_samples = 6
             
             if users_with_sufficient_data < min_users_required:
-                logger.error("❌ USUARIOS INSUFICIENTES PARA ENTRENAMIENTO")
+                logger.error("USUARIOS INSUFICIENTES PARA ENTRENAMIENTO")
                 return False
             
             if total_samples_loaded < min_total_samples:
-                logger.error("❌ MUESTRAS ANATÓMICAS INSUFICIENTES")
+                logger.error("MUESTRAS ANATÓMICAS INSUFICIENTES")
                 return False
             
             logger.info(f"Total muestras cargadas: {len(self.real_training_samples)} (sin dividir)")
@@ -373,11 +373,11 @@ class RealSiameseAnatomicalNetwork:
             self.users_trained_count = users_with_sufficient_data
             
             logger.info("=" * 60)
-            logger.info("✅ DATOS ANATÓMICOS REALES CARGADOS")
+            logger.info("DATOS ANATÓMICOS REALES CARGADOS")
             logger.info("=" * 60)
-            logger.info(f"👥 Usuarios: {users_with_sufficient_data}")
-            logger.info(f"🧬 Total muestras: {total_samples_loaded}")
-            logger.info(f"📊 Promedio por usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
+            logger.info(f"Usuarios: {users_with_sufficient_data}")
+            logger.info(f"Total muestras: {total_samples_loaded}")
+            logger.info(f"Promedio por usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
             logger.info("=" * 60)
             
             # Estadísticas detalladas por gesto
@@ -389,7 +389,7 @@ class RealSiameseAnatomicalNetwork:
                     gesture_stats[gesture_name] = 0
                 gesture_stats[gesture_name] += 1
             
-            logger.info(f"📈 DISTRIBUCIÓN POR GESTO:")
+            logger.info(f"DISTRIBUCIÓN POR GESTO:")
             for gesture, count in gesture_stats.items():
                 logger.info(f"   • {gesture}: {count} muestras anatómicas")
             
@@ -400,19 +400,19 @@ class RealSiameseAnatomicalNetwork:
                     user_stats[sample.user_id] = 0
                 user_stats[sample.user_id] += 1
             
-            logger.info(f"📈 DISTRIBUCIÓN POR USUARIO:")
+            logger.info(f"DISTRIBUCIÓN POR USUARIO:")
             for user_id, count in user_stats.items():
                 user_name = next((u.username for u in real_users if u.user_id == user_id), user_id)
                 logger.info(f"   • {user_name} ({user_id}): {count} muestras")
 
-            # ✅ CORRECCIÓN: Actualizar contador de usuarios entrenados
+            # CORRECCIÓN: Actualizar contador de usuarios entrenados
             self.users_trained_count = len(user_stats)
-            logger.info(f"📊 Usuarios con datos suficientes registrados: {self.users_trained_count}")
+            logger.info(f"Usuarios con datos suficientes registrados: {self.users_trained_count}")
             
             return True
             
         except Exception as e:
-            logger.error(f"❌ ERROR CARGANDO DATOS: {e}")
+            logger.error(f"ERROR CARGANDO DATOS: {e}")
             return False
         
     def validate_real_data_quality(self) -> bool:
@@ -1592,8 +1592,8 @@ def get_real_siamese_anatomical_network(embedding_dim: int = 64,
                     _real_siamese_anatomical_instance.siamese_model.load_weights(str(model_path))
                     _real_siamese_anatomical_instance.is_trained = True
                     
-                    logger.info(f"✅ Red anatómica cargada: {model_path}")
-                    logger.info(f"✅ Estado: is_trained = {_real_siamese_anatomical_instance.is_trained}")
+                    logger.info(f"Red anatómica cargada: {model_path}")
+                    logger.info(f"Estado: is_trained = {_real_siamese_anatomical_instance.is_trained}")
                     
                 except Exception as load_error:
                     logger.warning(f"Error cargando modelo: {load_error}")

@@ -1,24 +1,12 @@
 import { useState, useEffect } from 'react'
 import { adminApi } from '../../../lib/api/admin'
 import {
-  Dialog,
-  DialogHeader,
-  DialogTitle,
-  DialogContent,
-  DialogFooter,
-  DialogClose,
-  Button,
-  Input,
-  Select,
-  Badge,
-  Alert
-} from '../../../components/ui'
-import {
   Edit2,
   Save,
   X,
   AlertCircle,
-  CheckCircle
+  CheckCircle,
+  User
 } from 'lucide-react'
 
 export default function EditUserModal({ user, open, onClose, onSuccess }) {
@@ -242,209 +230,441 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
     }
   }
 
-  if (!user) return null
+  if (!open || !user) return null
 
   return (
-    <Dialog open={open} onClose={onClose} size="lg">
-      <DialogHeader>
-        <DialogTitle className="flex items-center gap-2">
-          <Edit2 className="w-5 h-5" />
-          Editar Usuario
-        </DialogTitle>
-        <DialogClose onClose={onClose} />
-      </DialogHeader>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
 
-      <form onSubmit={handleSubmit}>
-        <DialogContent>
-          <div className="space-y-6">
-            {/* Mensajes de éxito/error */}
-            {successMessage && (
-              <Alert variant="success" className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" />
-                {successMessage}
-              </Alert>
-            )}
-
-            {errorMessage && (
-              <Alert variant="danger" className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4" />
-                {errorMessage}
-              </Alert>
-            )}
-
-            {/* User ID (no editable) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                User ID
-              </label>
-              <div className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-gray-600 font-mono text-sm">
-                {user.user_id}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">El ID de usuario no puede ser modificado</p>
+      {/* Modal */}
+      <div 
+        className="relative bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-hidden border-2"
+        style={{ borderColor: '#E0F2FE' }}
+      >
+        {/* Header */}
+        <div 
+          className="flex items-center justify-between px-6 py-4 border-b-2"
+          style={{ 
+            borderColor: '#E0F2FE',
+            background: 'linear-gradient(to right, #F4FCFF, #ECFEFF)'
+          }}
+        >
+          <div className="flex items-center gap-3">
+            <div 
+              className="p-2 rounded-xl"
+              style={{ backgroundColor: '#05A8F9' }}
+            >
+              <Edit2 className="w-6 h-6 text-white" />
             </div>
+            <h2 className="text-xl font-bold text-gray-900">
+              Editar Usuario
+            </h2>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg transition-colors hover:bg-white/50"
+            disabled={loading}
+          >
+            <X className="w-5 h-5 text-gray-600" />
+          </button>
+        </div>
 
-            {/* Nombre completo */}
-            <Input
-              label="Nombre Completo"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              error={errors.username}
-              placeholder="Ej: Juan Pérez"
-              required
-            />
-
-            {/* Email */}
-            <Input
-              label="Email"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-              placeholder="ejemplo@email.com"
-              required
-            />
-
-            {/* Teléfono */}
-            <Input
-              label="Teléfono"
-              name="phone_number"
-              value={formData.phone_number}
-              onChange={handleChange}
-              error={errors.phone_number}
-              placeholder="987654321"
-              required
-            />
-
-            {/* Edad y Género en la misma fila */}
-            <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Edad"
-                name="age"
-                type="number"
-                value={formData.age}
-                onChange={handleChange}
-                error={errors.age}
-                placeholder="25"
-                min="5"
-                max="80"
-                required
-              />
-
-              <Select
-                label="Género"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-                error={errors.gender}
-                required
-              >
-                <option value="">Seleccionar...</option>
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-              </Select>
-            </div>
-
-            {/* Secuencia de gestos */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Secuencia de Gestos
-              </label>
-              <p className="text-xs text-gray-500 mb-3">
-                Selecciona 3 gestos en el orden deseado ({formData.gesture_sequence.length}/3 seleccionados)
-              </p>
-
-              {/* Gestos seleccionados */}
-              {formData.gesture_sequence.length > 0 && (
-                <div className="flex gap-2 mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                  {formData.gesture_sequence.map((gesture, idx) => {
-                    const gestureData = availableGestures.find(g => g.value === gesture)
-                    return (
-                      <div key={idx} className="flex flex-col items-center">
-                        <div className="text-3xl mb-1">{gestureData?.emoji}</div>
-                        <Badge variant="primary" size="sm">#{idx + 1}</Badge>
-                      </div>
-                    )
-                  })}
+        {/* Content */}
+        <form onSubmit={handleSubmit}>
+          <div className="overflow-y-auto max-h-[calc(90vh-180px)] p-6">
+            <div className="space-y-6">
+              
+              {/* Mensajes de éxito/error */}
+              {successMessage && (
+                <div 
+                  className="flex items-center gap-3 p-4 rounded-xl border-2"
+                  style={{ 
+                    backgroundColor: '#F0FDF4',
+                    borderColor: '#86EFAC'
+                  }}
+                >
+                  <CheckCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#10B981' }} />
+                  <p className="text-sm font-medium" style={{ color: '#065F46' }}>
+                    {successMessage}
+                  </p>
                 </div>
               )}
 
-              {/* Selector de gestos */}
-              <div className="grid grid-cols-4 gap-2">
-                {availableGestures.map((gesture) => {
-                  const isSelected = formData.gesture_sequence.includes(gesture.value)
-                  const position = formData.gesture_sequence.indexOf(gesture.value)
+              {errorMessage && (
+                <div 
+                  className="flex items-center gap-3 p-4 rounded-xl border-2"
+                  style={{ 
+                    backgroundColor: '#FEF2F2',
+                    borderColor: '#FCA5A5'
+                  }}
+                >
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" style={{ color: '#EF4444' }} />
+                  <p className="text-sm font-medium" style={{ color: '#991B1B' }}>
+                    {errorMessage}
+                  </p>
+                </div>
+              )}
 
-                  return (
-                    <button
-                      key={gesture.value}
-                      type="button"
-                      onClick={() => handleGestureToggle(gesture.value)}
-                      disabled={!isSelected && formData.gesture_sequence.length >= 3}
-                      className={`
-                        relative p-3 border-2 rounded-lg transition-all
-                        ${isSelected
-                          ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
-                          : 'border-gray-300 bg-white hover:border-gray-400'
-                        }
-                        ${!isSelected && formData.gesture_sequence.length >= 3
-                          ? 'opacity-50 cursor-not-allowed'
-                          : 'cursor-pointer'
-                        }
-                      `}
-                    >
-                      <div className="text-3xl mb-1">{gesture.emoji}</div>
-                      <div className="text-xs text-gray-600 text-center">
-                        {gesture.label}
-                      </div>
-                      {isSelected && (
-                        <div className="absolute top-1 right-1">
-                          <Badge variant="primary" size="sm">
-                            {position + 1}
-                          </Badge>
-                        </div>
-                      )}
-                    </button>
-                  )
-                })}
+              {/* User ID (no editable) */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  User ID
+                </label>
+                <div 
+                  className="px-4 py-3 rounded-xl border-2 text-gray-600 font-mono text-sm"
+                  style={{ backgroundColor: '#F9FAFB', borderColor: '#E5E7EB' }}
+                >
+                  {user.user_id}
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  El ID de usuario no puede ser modificado
+                </p>
               </div>
 
-              {errors.gesture_sequence && (
-                <p className="text-sm text-red-600 mt-2">{errors.gesture_sequence}</p>
-              )}
+              {/* Nombre completo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre Completo <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleChange}
+                  placeholder="Ej: Juan Pérez"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
+                  style={{ 
+                    borderColor: errors.username ? '#FCA5A5' : '#E0F2FE',
+                    backgroundColor: errors.username ? '#FEF2F2' : 'white'
+                  }}
+                  onFocus={(e) => {
+                    if (!errors.username) {
+                      e.target.style.borderColor = '#05A8F9'
+                      e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                    }
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.username ? '#FCA5A5' : '#E0F2FE'
+                    e.target.style.boxShadow = 'none'
+                  }}
+                />
+                {errors.username && (
+                  <p className="text-sm text-red-600 mt-1">{errors.username}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="ejemplo@email.com"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
+                  style={{ 
+                    borderColor: errors.email ? '#FCA5A5' : '#E0F2FE',
+                    backgroundColor: errors.email ? '#FEF2F2' : 'white'
+                  }}
+                  onFocus={(e) => {
+                    if (!errors.email) {
+                      e.target.style.borderColor = '#05A8F9'
+                      e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                    }
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.email ? '#FCA5A5' : '#E0F2FE'
+                    e.target.style.boxShadow = 'none'
+                  }}
+                />
+                {errors.email && (
+                  <p className="text-sm text-red-600 mt-1">{errors.email}</p>
+                )}
+              </div>
+
+              {/* Teléfono */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Teléfono <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="phone_number"
+                  value={formData.phone_number}
+                  onChange={handleChange}
+                  placeholder="987654321"
+                  required
+                  className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
+                  style={{ 
+                    borderColor: errors.phone_number ? '#FCA5A5' : '#E0F2FE',
+                    backgroundColor: errors.phone_number ? '#FEF2F2' : 'white'
+                  }}
+                  onFocus={(e) => {
+                    if (!errors.phone_number) {
+                      e.target.style.borderColor = '#05A8F9'
+                      e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                    }
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = errors.phone_number ? '#FCA5A5' : '#E0F2FE'
+                    e.target.style.boxShadow = 'none'
+                  }}
+                />
+                {errors.phone_number && (
+                  <p className="text-sm text-red-600 mt-1">{errors.phone_number}</p>
+                )}
+              </div>
+
+              {/* Edad y Género en la misma fila */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Edad */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Edad <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="number"
+                    name="age"
+                    value={formData.age}
+                    onChange={handleChange}
+                    placeholder="25"
+                    min="5"
+                    max="80"
+                    required
+                    className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
+                    style={{ 
+                      borderColor: errors.age ? '#FCA5A5' : '#E0F2FE',
+                      backgroundColor: errors.age ? '#FEF2F2' : 'white'
+                    }}
+                    onFocus={(e) => {
+                      if (!errors.age) {
+                        e.target.style.borderColor = '#05A8F9'
+                        e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                      }
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = errors.age ? '#FCA5A5' : '#E0F2FE'
+                      e.target.style.boxShadow = 'none'
+                    }}
+                  />
+                  {errors.age && (
+                    <p className="text-sm text-red-600 mt-1">{errors.age}</p>
+                  )}
+                </div>
+
+                {/* Género */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Género <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
+                    style={{ 
+                      borderColor: errors.gender ? '#FCA5A5' : '#E0F2FE',
+                      backgroundColor: errors.gender ? '#FEF2F2' : 'white'
+                    }}
+                    onFocus={(e) => {
+                      if (!errors.gender) {
+                        e.target.style.borderColor = '#05A8F9'
+                        e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                      }
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = errors.gender ? '#FCA5A5' : '#E0F2FE'
+                      e.target.style.boxShadow = 'none'
+                    }}
+                  >
+                    <option value="">Seleccionar...</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                  </select>
+                  {errors.gender && (
+                    <p className="text-sm text-red-600 mt-1">{errors.gender}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Secuencia de gestos */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Secuencia de Gestos <span className="text-red-500">*</span>
+                </label>
+                <p className="text-xs text-gray-500 mb-3">
+                  Selecciona 3 gestos en el orden deseado ({formData.gesture_sequence.length}/3 seleccionados)
+                </p>
+
+                {/* Gestos seleccionados */}
+                {formData.gesture_sequence.length > 0 && (
+                  <div 
+                    className="flex gap-4 mb-4 p-4 rounded-xl border-2"
+                    style={{ 
+                      backgroundColor: '#F4FCFF',
+                      borderColor: '#E0F2FE'
+                    }}
+                  >
+                    {formData.gesture_sequence.map((gesture, idx) => {
+                      const gestureData = availableGestures.find(g => g.value === gesture)
+                      return (
+                        <div key={idx} className="flex flex-col items-center gap-2">
+                          <div className="text-4xl">{gestureData?.emoji}</div>
+                          <span 
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+                            style={{ backgroundColor: '#05A8F9', color: 'white' }}
+                          >
+                            #{idx + 1}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
+
+                {/* Selector de gestos */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {availableGestures.map((gesture) => {
+                    const isSelected = formData.gesture_sequence.includes(gesture.value)
+                    const position = formData.gesture_sequence.indexOf(gesture.value)
+                    const isDisabled = !isSelected && formData.gesture_sequence.length >= 3
+
+                    return (
+                      <button
+                        key={gesture.value}
+                        type="button"
+                        onClick={() => handleGestureToggle(gesture.value)}
+                        disabled={isDisabled}
+                        className="relative p-4 rounded-xl border-2 transition-all duration-300"
+                        style={{
+                          borderColor: isSelected ? '#05A8F9' : '#E0F2FE',
+                          backgroundColor: isSelected ? '#F4FCFF' : 'white',
+                          opacity: isDisabled ? 0.5 : 1,
+                          cursor: isDisabled ? 'not-allowed' : 'pointer',
+                          boxShadow: isSelected ? '0 0 0 3px rgba(5, 168, 249, 0.1)' : 'none'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!isDisabled && !isSelected) {
+                            e.currentTarget.style.borderColor = '#6FBFDE'
+                            e.currentTarget.style.transform = 'scale(1.05)'
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isDisabled && !isSelected) {
+                            e.currentTarget.style.borderColor = '#E0F2FE'
+                            e.currentTarget.style.transform = 'scale(1)'
+                          }
+                        }}
+                      >
+                        <div className="text-3xl mb-2">{gesture.emoji}</div>
+                        <div className="text-xs text-gray-600 text-center font-medium">
+                          {gesture.label}
+                        </div>
+                        {isSelected && (
+                          <div className="absolute top-2 right-2">
+                            <span 
+                              className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold"
+                              style={{ backgroundColor: '#05A8F9', color: 'white' }}
+                            >
+                              {position + 1}
+                            </span>
+                          </div>
+                        )}
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {errors.gesture_sequence && (
+                  <p className="text-sm text-red-600 mt-2">{errors.gesture_sequence}</p>
+                )}
+              </div>
             </div>
           </div>
-        </DialogContent>
 
-        <DialogFooter>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={loading}
+          {/* Footer */}
+          <div 
+            className="flex items-center justify-end gap-3 px-6 py-4 border-t-2"
+            style={{ borderColor: '#E0F2FE', backgroundColor: '#F9FAFB' }}
           >
-            <X className="w-4 h-4 mr-2" />
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            disabled={loading || Object.keys(errors).length > 0}
-          >
-            {loading ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                Guardando...
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 mr-2" />
-                Guardar Cambios
-              </>
-            )}
-          </Button>
-        </DialogFooter>
-      </form>
-    </Dialog>
+            <button
+              type="button"
+              onClick={onClose}
+              disabled={loading}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 border-2"
+              style={{
+                backgroundColor: 'white',
+                borderColor: '#E0F2FE',
+                color: '#6B7280'
+              }}
+              onMouseEnter={(e) => {
+                if (!loading) {
+                  e.currentTarget.style.backgroundColor = '#F9FAFB'
+                  e.currentTarget.style.borderColor = '#9CA3AF'
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white'
+                e.currentTarget.style.borderColor = '#E0F2FE'
+              }}
+            >
+              <X className="w-4 h-4" />
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading || Object.keys(errors).length > 0}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 text-white"
+              style={{
+                background: loading || Object.keys(errors).length > 0
+                  ? '#9CA3AF'
+                  : 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                boxShadow: loading || Object.keys(errors).length > 0
+                  ? 'none'
+                  : '0 4px 12px 0 rgba(0, 184, 212, 0.4)',
+                cursor: loading || Object.keys(errors).length > 0 ? 'not-allowed' : 'pointer',
+                opacity: loading || Object.keys(errors).length > 0 ? 0.6 : 1
+              }}
+              onMouseEnter={(e) => {
+                if (!loading && Object.keys(errors).length === 0) {
+                  e.currentTarget.style.transform = 'scale(1.05)'
+                  e.currentTarget.style.boxShadow = '0 8px 20px 0 rgba(0, 184, 212, 0.5)'
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+                e.currentTarget.style.boxShadow = loading || Object.keys(errors).length > 0
+                  ? 'none'
+                  : '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+              }}
+            >
+              {loading ? (
+                <>
+                  <div 
+                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
+                  />
+                  Guardando...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Guardar Cambios
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   )
 }

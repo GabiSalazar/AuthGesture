@@ -96,7 +96,7 @@ async def check_user_exists(
         # Validar API Key
         await validate_api_key(authorization)
         
-        logger.info(f"🔍 Verificando usuario con email: {request.email}")
+        logger.info(f"Verificando usuario con email: {request.email}")
         logger.info(f"   Session Token: {request.session_token}")
         logger.info(f"   Action: {request.action}")
         
@@ -111,13 +111,13 @@ async def check_user_exists(
         exists = not is_unique
         
         if exists:
-            logger.info(f"✅ Usuario EXISTE con email: {request.email}")
+            logger.info(f" Usuario EXISTE con email: {request.email}")
             return CheckUserResponse(
                 exists=True,
                 message=f"Usuario con email {request.email} ya está registrado"
             )
         else:
-            logger.info(f"✅ Usuario NO EXISTE con email: {request.email}")
+            logger.info(f" Usuario NO EXISTE con email: {request.email}")
             return CheckUserResponse(
                 exists=False,
                 message=f"Email {request.email} disponible para registro"
@@ -128,7 +128,7 @@ async def check_user_exists(
         raise
     
     except Exception as e:
-        logger.error(f"❌ Error verificando usuario: {e}")
+        logger.error(f"Error verificando usuario: {e}")
         raise HTTPException(
             status_code=500,
             detail=f"Error interno del servidor: {str(e)}"
@@ -191,7 +191,7 @@ async def authenticate_start(
         # Validar API Key
         await validate_api_key(authorization)
         
-        logger.info(f"🔐 Iniciando autenticación para email: {request.email}")
+        logger.info(f"Iniciando autenticación para email: {request.email}")
         logger.info(f"   Session Token: {request.session_token}")
         logger.info(f"   Callback URL: {request.callback_url}")
         logger.info(f"   Action: {request.action}")
@@ -214,7 +214,7 @@ async def authenticate_start(
                 break
         
         if not user_profile:
-            logger.warning(f"⚠️ Usuario no encontrado con email: {request.email}")
+            logger.warning(f"NOUsuario no encontrado con email: {request.email}")
             raise HTTPException(
                 status_code=404,
                 detail=f"Usuario con email {request.email} no está registrado en el sistema biométrico"
@@ -235,7 +235,7 @@ async def authenticate_start(
             "status": "pending"
         }
         
-        logger.info(f"✅ Solicitud de autenticación guardada - Request ID: {request_id}")
+        logger.info(f" Solicitud de autenticación guardada - Request ID: {request_id}")
         logger.info(f"   Usuario: {user_profile.username} ({user_profile.user_id})")
         
         return AuthenticateStartResponse(
@@ -249,7 +249,7 @@ async def authenticate_start(
         raise
     
     except Exception as e:
-        logger.error(f"❌ Error iniciando autenticación: {e}")
+        logger.error(f"Error iniciando autenticación: {e}")
         import traceback
         logger.error(traceback.format_exc())
         raise HTTPException(
@@ -284,7 +284,7 @@ def complete_auth_request(request_id: str):
     """
     if request_id in _pending_auth_requests:
         del _pending_auth_requests[request_id]
-        logger.info(f"✅ Solicitud {request_id} completada y eliminada")
+        logger.info(f" Solicitud {request_id} completada y eliminada")
         
 
 @router.get("/health")
@@ -294,5 +294,5 @@ async def biometric_plugin_health():
         "status": "healthy",
         "module": "Biometric Plugin Communication",
         "initialized": True,
-        "message": "✅ Endpoints para Plugin disponibles"
+        "message": " Endpoints para Plugin disponibles"
     }

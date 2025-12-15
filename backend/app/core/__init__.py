@@ -160,7 +160,7 @@ from app.core.enrollment_system import (
     EnrollmentSystem
 )
 
-# ✅ Módulo 15: Authentication System
+#  Módulo 15: Authentication System
 from app.core.authentication_system import (
     RealAuthenticationSystem,
     RealAuthenticationPipeline,
@@ -295,7 +295,7 @@ __all__ = [
     'get_enrollment_system',
     'EnrollmentSystem',
     
-    # ✅ Authentication System
+    #  Authentication System
     'RealAuthenticationSystem',
     'RealAuthenticationPipeline',
     'RealAuthenticationAttempt',
@@ -319,7 +319,7 @@ __all__ = [
 # Mensaje de confirmación
 import logging
 logger = logging.getLogger(__name__)
-logger.info(f"✅ Core Biometric System v{__version__} inicializado")
-logger.info(f"✅ 15 módulos principales + 2 auxiliares cargados")
-logger.info(f"✅ Enrollment System (Módulo 14) integrado")
-logger.info(f"✅ Authentication System (Módulo 15) integrado")
+logger.info(f" Core Biometric System v{__version__} inicializado")
+logger.info(f" 15 módulos principales + 2 auxiliares cargados")
+logger.info(f" Enrollment System (Módulo 14) integrado")
+logger.info(f" Authentication System (Módulo 15) integrado")

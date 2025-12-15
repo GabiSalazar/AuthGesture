@@ -37,7 +37,7 @@ async def score_fusion_health_check():
             "status": "healthy",
             "module": "Score Fusion System",
             "initialized": True,
-            "message": "✅ Módulo 12 cargado correctamente",
+            "message": "Módulo 12 cargado correctamente",
             "sklearn_available": True,
             "is_trained": fusion_system.is_trained,
             "is_calibrated": fusion_system.is_calibrated,

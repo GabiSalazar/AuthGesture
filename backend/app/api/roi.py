@@ -34,7 +34,7 @@ async def roi_health_check():
             "status": "healthy",
             "module": "ROI Normalization System",
             "initialized": True,
-            "message": "✅ Módulo 0 cargado correctamente"
+            "message": "Módulo 0 cargado correctamente"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en ROI System: {str(e)}")

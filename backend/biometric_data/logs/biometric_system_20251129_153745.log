@@ -123,14 +123,14 @@
 2025-11-29 15:40:46,925 - biometric_gesture_system - INFO - [authentication_system.py:1654] -   - Templates disponibles: 40
 2025-11-29 15:40:47,156 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 9b15bd77-793f-4a05-a58e-a68b03ba9763
 2025-11-29 15:41:23,687 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 9b15bd77-793f-4a05-a58e-a68b03ba9763
-2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1378] - 🧹 Limpiando sesión 9b15bd77-793f-4a05-a58e-a68b03ba9763 por timeout_total
+2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1378] - Limpiando sesión 9b15bd77-793f-4a05-a58e-a68b03ba9763 por timeout_total
 2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1334] - Sesión cerrada: 9b15bd77-793f-4a05-a58e-a68b03ba9763 - Estado: timeout
 2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1335] -   - Duración: 62.8s
 2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1336] -   - Frames procesados: 0
 2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1337] -   - Gestos capturados: 0
 2025-11-29 15:41:49,691 - biometric_gesture_system - INFO - [authentication_system.py:1382] - Sesiones limpiadas: 1
 2025-11-29 15:42:50,484 - biometric_gesture_system - ERROR - [authentication_system.py:2909] - Sesión 9b15bd77-793f-4a05-a58e-a68b03ba9763 no encontrada para cancelar
-2025-11-29 15:42:58,756 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 15
+2025-11-29 15:42:58,756 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 15
 2025-11-29 15:42:58,756 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:42:58,756 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:42:58,756 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)

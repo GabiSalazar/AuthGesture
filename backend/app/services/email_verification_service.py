@@ -81,7 +81,7 @@ class EmailVerificationService:
                 .insert(data)\
                 .execute()
             
-            logger.info(f"✅ Verificación creada para {email}")
+            logger.info(f"Verificación creada para {email}")
             logger.info(f"   OTP: {otp_code}")
             logger.info(f"   Expira: {expires_at}")
             
@@ -155,7 +155,7 @@ class EmailVerificationService:
                     'error': f'Código incorrecto. Te quedan {remaining} intentos.'
                 }
             
-            # ✅ CÓDIGO CORRECTO
+            # CÓDIGO CORRECTO
             # Marcar como verificado
             self.supabase_client.table('email_verifications')\
                 .update({
@@ -171,7 +171,7 @@ class EmailVerificationService:
                 .eq('user_id', verification['user_id'])\
                 .execute()
             
-            logger.info(f"✅ Email verificado exitosamente: {email}")
+            logger.info(f"Email verificado exitosamente: {email}")
             
             return {
                 'success': True,

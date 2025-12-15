@@ -586,18 +586,18 @@ class BiometricDatabase:
         """
         self.logger = get_logger()
         
-        # ✅ CONFIGURACIÓN
+        # CONFIGURACIÓN
         self.config = self._load_database_config()
         
-        # ✅ CLIENTE SUPABASE
+        # CLIENTE SUPABASE
         self.supabase = get_supabase_client()
-        print(f"✅ Cliente Supabase conectado")
+        print(f"Cliente Supabase conectado")
         
-        # ✅ DICCIONARIOS EN MEMORIA
+        # DICCIONARIOS EN MEMORIA
         self.users: Dict[str, UserProfile] = {}
         self.templates: Dict[str, BiometricTemplate] = {}
         
-        # ✅ ÍNDICES VECTORIALES (EN MEMORIA)
+        # ÍNDICES VECTORIALES (EN MEMORIA)
         self.anatomical_index = VectorIndex(
             embedding_dim=64,
             strategy=SearchStrategy(self.config['search_strategy'])
@@ -607,15 +607,15 @@ class BiometricDatabase:
             strategy=SearchStrategy(self.config['search_strategy'])
         )
         
-        # ✅ LOCK Y CACHE
+        # LOCK Y CACHE
         self.lock = threading.RLock()
         self.cache = {}
         self.stats = DatabaseStats()
         
-        # ✅ CARGAR DATOS DESDE SUPABASE
+        # CARGAR DATOS DESDE SUPABASE
         self._load_database()
         
-        print(f"✅ BiometricDatabase inicializada con Supabase")
+        print(f"BiometricDatabase inicializada con Supabase")
     
     # ========================================================================
     # MÉTODOS DE CONFIGURACIÓN
@@ -637,8 +637,8 @@ class BiometricDatabase:
         config['encryption_enabled'] = False
         config['debug_mode'] = True
         
-        print(f"🔧 CONFIG: Encriptación = {config['encryption_enabled']}")
-        print(f"🔧 CONFIG: Debug mode = {config['debug_mode']}")
+        print(f"CONFIG: Encriptación = {config['encryption_enabled']}")
+        print(f"CONFIG: Debug mode = {config['debug_mode']}")
         
         return config
     
@@ -652,10 +652,10 @@ class BiometricDatabase:
             users_loaded = 0
             templates_loaded = 0
             
-            print("🔄 Iniciando carga desde Supabase...")
+            print("Iniciando carga desde Supabase...")
             
-            # ✅ CARGAR USUARIOS
-            print("📁 Cargando usuarios...")
+            # CARGAR USUARIOS
+            print("Cargando usuarios...")
             try:
                 users_response = self.supabase.table('users').select('*').execute()
                 
@@ -709,17 +709,17 @@ class BiometricDatabase:
                         self.users[user_profile.user_id] = user_profile
                         users_loaded += 1
                         
-                        print(f"✅ Usuario cargado: {user_profile.username} ({user_profile.user_id})")
+                        print(f"Usuario cargado: {user_profile.username} ({user_profile.user_id})")
                         
                     except Exception as user_error:
-                        logger.error(f"❌ Error cargando usuario: {user_error}")
+                        logger.error(f"Error cargando usuario: {user_error}")
                         continue
                         
             except Exception as users_error:
-                logger.error(f"❌ Error cargando usuarios: {users_error}")
+                logger.error(f"Error cargando usuarios: {users_error}")
             
-            # ✅ CARGAR TEMPLATES
-            print("📁 Cargando templates...")
+            # CARGAR TEMPLATES
+            print("Cargando templates...")
             try:
                 templates_response = self.supabase.table('biometric_templates').select('*').execute()
                 
@@ -795,36 +795,36 @@ class BiometricDatabase:
                                 template.user_id
                             )
                         
-                        print(f"✅ Template cargado: {template.template_id} ({template.gesture_name})")
+                        print(f"Template cargado: {template.template_id} ({template.gesture_name})")
                         
                     except Exception as template_error:
-                        logger.error(f"❌ Error cargando template: {template_error}")
+                        logger.error(f"Error cargando template: {template_error}")
                         continue
                         
             except Exception as templates_error:
-                logger.error(f"❌ Error cargando templates: {templates_error}")
+                logger.error(f"Error cargando templates: {templates_error}")
             
-            # ✅ CONSTRUIR ÍNDICES
+            # CONSTRUIR ÍNDICES
             print("🔨 Construyendo índices vectoriales...")
             self.anatomical_index.build_index()
             self.dynamic_index.build_index()
             
-            # ✅ ACTUALIZAR ESTADÍSTICAS
+            # ACTUALIZAR ESTADÍSTICAS
             self.stats.total_users = users_loaded
             self.stats.total_templates = templates_loaded
             self._update_stats()
             
             print("=" * 60)
-            print("✅ CARGA COMPLETADA")
+            print("CARGA COMPLETADA")
             print("=" * 60)
-            print(f"👥 USUARIOS: {users_loaded}")
-            print(f"🧬 TEMPLATES: {templates_loaded}")
+            print(f"USUARIOS: {users_loaded}")
+            print(f"TEMPLATES: {templates_loaded}")
             print("=" * 60)
             
             return True
             
         except Exception as e:
-            logger.error(f"❌ ERROR CRÍTICO CARGANDO BD: {e}")
+            logger.error(f"ERROR CRÍTICO CARGANDO BD: {e}")
             import traceback
             logger.error(f"Traceback: {traceback.format_exc()}")
             return False
@@ -847,7 +847,7 @@ class BiometricDatabase:
     #             is_unique = len(response.data) == 0
                 
     #             if not is_unique:
-    #                 logger.info(f"❌ Email {email} ya registrado")
+    #                 logger.info(f"Email {email} ya registrado")
                 
     #             return is_unique
                 
@@ -891,7 +891,7 @@ class BiometricDatabase:
     #             is_unique = len(response.data) == 0
                 
     #             if not is_unique:
-    #                 logger.info(f"❌ Teléfono {phone_number} ya registrado")
+    #                 logger.info(f"Teléfono {phone_number} ya registrado")
                 
     #             return is_unique
                 
@@ -936,7 +936,7 @@ class BiometricDatabase:
             unique_suffix = uuid.uuid4().hex[:8]
             user_id = f"user_{clean_name}_{timestamp}_{unique_suffix}"
         
-        logger.info(f"✅ ID generado: {user_id}")
+        logger.info(f"ID generado: {user_id}")
         return user_id
     
     def get_user_by_email(self, email: str, active_only: bool = True) -> Optional[UserProfile]:
@@ -1014,14 +1014,14 @@ class BiometricDatabase:
     #                 'deactivated_at': datetime.now().isoformat()
     #             }
                 
-    #             # ✅ Solo actualiza users, CASCADE hace el resto automáticamente
+    #             # Solo actualiza users, CASCADE hace el resto automáticamente
     #             self.supabase.table('users').update({
     #                 'user_id': new_inactive_id,
     #                 'is_active': False,
     #                 'metadata': new_metadata
     #             }).eq('user_id', user_id).execute()
                 
-    #             logger.info(f"✅ Usuario desactivado: {user_id} -> {new_inactive_id}")
+    #             logger.info(f"Usuario desactivado: {user_id} -> {new_inactive_id}")
                 
     #             # Actualizar cache local
     #             if user_id in self.users:
@@ -1060,7 +1060,7 @@ class BiometricDatabase:
         try:
             with self.lock:
                 print("=" * 80)
-                print(f"🔄 INICIANDO DEACTIVATE_USER_AND_RENAME")
+                print(f"INICIANDO DEACTIVATE_USER_AND_RENAME")
                 print(f"   User ID original: {user_id}")
                 print("=" * 80)
                 
@@ -1068,12 +1068,12 @@ class BiometricDatabase:
                 if not user:
                     raise ValueError(f"Usuario {user_id} no encontrado")
                 
-                print(f"✅ Usuario encontrado en memoria: {user.username}")
+                print(f"Usuario encontrado en memoria: {user.username}")
                 
                 timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
                 new_inactive_id = f"{user_id}_inactive_{timestamp}"
                 
-                print(f"📝 Nuevo ID inactivo: {new_inactive_id}")
+                print(f"Nuevo ID inactivo: {new_inactive_id}")
                 
                 new_metadata = {
                     **user.metadata,
@@ -1082,21 +1082,21 @@ class BiometricDatabase:
                     'deactivated_at': datetime.now().isoformat()
                 }
                 
-                print(f"📊 Metadata actualizado: {new_metadata}")
+                print(f"Metadata actualizado: {new_metadata}")
                 
-                # ✅ VERIFICAR QUE EL USUARIO EXISTE EN SUPABASE ANTES DEL UPDATE
-                print(f"\n🔍 Verificando usuario en Supabase...")
+                # VERIFICAR QUE EL USUARIO EXISTE EN SUPABASE ANTES DEL UPDATE
+                print(f"\nVerificando usuario en Supabase...")
                 check = self.supabase.table('users').select('id, user_id, is_active').eq('user_id', user_id).execute()
                 print(f"   Resultado verificación: {check.data}")
                 
                 if not check.data:
                     raise ValueError(f"Usuario {user_id} no existe en Supabase")
                 
-                print(f"✅ Usuario confirmado en Supabase")
+                print(f"Usuario confirmado en Supabase")
                 print(f"   ID interno Supabase: {check.data[0]['id']}")
                 
-                # ✅ EJECUTAR UPDATE
-                print(f"\n🔄 EJECUTANDO UPDATE...")
+                # EJECUTAR UPDATE
+                print(f"\nEJECUTANDO UPDATE...")
                 print(f"   Cambiando user_id: {user_id} -> {new_inactive_id}")
                 print(f"   Cambiando is_active: True -> False")
                 
@@ -1108,20 +1108,20 @@ class BiometricDatabase:
                         'updated_at': datetime.now().isoformat()
                     }).eq('user_id', user_id).execute()
                     
-                    print(f"\n📊 RESULTADO DEL UPDATE:")
+                    print(f"\nRESULTADO DEL UPDATE:")
                     print(f"   Status code: {getattr(result, 'status_code', 'N/A')}")
                     print(f"   Data: {result.data}")
                     print(f"   Count: {getattr(result, 'count', 'N/A')}")
                     
                     if result.data:
-                        print(f"✅ UPDATE EXITOSO - {len(result.data)} registro(s) afectado(s)")
+                        print(f"UPDATE EXITOSO - {len(result.data)} registro(s) afectado(s)")
                         print(f"   Nuevo user_id en BD: {result.data[0].get('user_id')}")
                     else:
-                        print(f"❌ UPDATE FALLÓ - No se afectaron registros")
+                        print(f"UPDATE FALLÓ - No se afectaron registros")
                         raise Exception("UPDATE no afectó ningún registro")
                     
                 except Exception as update_error:
-                    print(f"\n❌ EXCEPCIÓN EN UPDATE:")
+                    print(f"\nEXCEPCIÓN EN UPDATE:")
                     print(f"   Error: {update_error}")
                     print(f"   Tipo: {type(update_error)}")
                     print(f"   Traceback:")
@@ -1129,14 +1129,14 @@ class BiometricDatabase:
                     raise
                 
                 # VERIFICAR QUE EL CAMBIO SE APLICÓ
-                print(f"\n🔍 Verificando cambio en Supabase...")
+                print(f"\nVerificando cambio en Supabase...")
                 verify = self.supabase.table('users').select('user_id, is_active').eq('user_id', new_inactive_id).execute()
                 print(f"   Búsqueda por nuevo ID: {verify.data}")
                 
                 verify_old = self.supabase.table('users').select('user_id, is_active').eq('user_id', user_id).execute()
                 print(f"   Búsqueda por ID original: {verify_old.data}")
                 
-                logger.info(f"✅ Usuario renombrado: {user_id} -> {new_inactive_id}")
+                logger.info(f"Usuario renombrado: {user_id} -> {new_inactive_id}")
                 
                 # Actualizar cache local
                 if user_id in self.users:
@@ -1149,7 +1149,7 @@ class BiometricDatabase:
                     logger.warning(f"No se pudo obtener perfil de personalidad: {e}")
                 
                 print("=" * 80)
-                print(f"✅ DEACTIVATE_USER_AND_RENAME COMPLETADO")
+                print(f"DEACTIVATE_USER_AND_RENAME COMPLETADO")
                 print("=" * 80)
                 
                 return {
@@ -1169,7 +1169,7 @@ class BiometricDatabase:
                 
         except Exception as e:
             print("=" * 80)
-            print(f"❌ ERROR EN DEACTIVATE_USER_AND_RENAME")
+            print(f"ERROR EN DEACTIVATE_USER_AND_RENAME")
             print(f"   Error: {e}")
             print(f"   Traceback:")
             traceback.print_exc()
@@ -1217,14 +1217,14 @@ class BiometricDatabase:
                 
                 old_user_id = inactive_user['user_id']
                 
-                logger.info(f"🔄 Reactivando usuario: {old_user_id} → {original_user_id}")
+                logger.info(f"Reactivando usuario: {old_user_id} → {original_user_id}")
                 
                 # Actualizar metadata
                 new_metadata = inactive_user.get('metadata', {})
                 new_metadata['reactivated_at'] = datetime.now().isoformat()
                 new_metadata['reactivation_count'] = new_metadata.get('reactivation_count', 0) + 1
                 
-                # ✅ UPDATE en Supabase: renombrar y reactivar
+                # UPDATE en Supabase: renombrar y reactivar
                 self.supabase.table('users').update({
                     'user_id': original_user_id,
                     'is_active': True,
@@ -1235,7 +1235,7 @@ class BiometricDatabase:
                     'metadata': new_metadata
                 }).eq('user_id', old_user_id).execute()
                 
-                logger.info(f"✅ Usuario reactivado exitosamente: {original_user_id}")
+                logger.info(f"Usuario reactivado exitosamente: {original_user_id}")
                 
                 # Actualizar cache local si existe
                 if old_user_id in self.users:
@@ -1254,7 +1254,7 @@ class BiometricDatabase:
                 return True
                 
         except Exception as e:
-            logger.error(f"❌ Error reactivando usuario {original_user_id}: {e}")
+            logger.error(f"Error reactivando usuario {original_user_id}: {e}")
             logger.error(f"Traceback: {traceback.format_exc()}")
             return False
     
@@ -1445,7 +1445,7 @@ class BiometricDatabase:
                     logger.error(f"Usuario {user_id} no existe")
                     return False
                 
-                # ✅ ELIMINAR EN SUPABASE (CASCADE automático)
+                # ELIMINAR EN SUPABASE (CASCADE automático)
                 self.supabase.table('users').delete().eq('user_id', user_id).execute()
                 
                 # Eliminar templates del índice en memoria
@@ -1685,14 +1685,14 @@ class BiometricDatabase:
                     self._save_template(template)
                     print(f"Template guardado en Supabase")
                 except Exception as e:
-                    print(f"❌ ERROR guardando template: {e}")
+                    print(f"ERROR guardando template: {e}")
                     return False
                                     
                 try:
                     self._save_user(user_profile)
                     print(f"Usuario actualizado en Supabase")
                 except Exception as e:
-                    print(f"❌ ERROR guardando usuario: {e}")
+                    print(f"ERROR guardando usuario: {e}")
                     return False
                 
                 # Actualizar estadísticas
@@ -1714,11 +1714,11 @@ class BiometricDatabase:
                 except Exception as e:
                     print(f"Error reconstruyendo índices: {e}")
                 
-                print(f"✅ Template {template.template_id} almacenado")
+                print(f"Template {template.template_id} almacenado")
                 return True
                 
         except Exception as e:
-            logger.error(f"❌ Error almacenando template: {e}")
+            logger.error(f"Error almacenando template: {e}")
             import traceback
             logger.error(f"Traceback: {traceback.format_exc()}")
             return False
@@ -1833,7 +1833,7 @@ class BiometricDatabase:
                     user_profile.updated_at = time.time()
                     self._save_user(user_profile)
                 
-                # ✅ ELIMINAR DE SUPABASE
+                # ELIMINAR DE SUPABASE
                 self.supabase.table('biometric_templates').delete().eq('template_id', template_id).execute()
                 
                 self.stats.total_templates -= 1
@@ -1979,7 +1979,7 @@ class BiometricDatabase:
                     'metadata': attempt.metadata
                 }
                 
-                # ✅ INSERTAR EN SUPABASE
+                # INSERTAR EN SUPABASE
                 self.supabase.table('authentication_attempts').insert(attempt_data).execute()
                 
                 logger.info(f"Intento de autenticación guardado: {attempt.attempt_id}")
@@ -1992,7 +1992,7 @@ class BiometricDatabase:
     def get_user_auth_attempts(self, user_id: str, limit: Optional[int] = None) -> List[AuthenticationAttempt]:
         """Obtiene intentos de autenticación de un usuario desde Supabase."""
         try:
-            # ✅ QUERY SUPABASE
+            # QUERY SUPABASE
             query = self.supabase.table('authentication_attempts').select('*').eq('user_id', user_id).order('timestamp', desc=True)
             
             if limit:
@@ -2033,11 +2033,11 @@ class BiometricDatabase:
         """Obtiene TODOS los intentos de autenticación del sistema (estructura REAL)."""
         try:
             print("\n" + "=" * 80)
-            print("🔍 DEBUG: get_all_auth_attempts() INICIADO")
+            print("DEBUG: get_all_auth_attempts() INICIADO")
             print("=" * 80)
             
-            # ✅ QUERY DIRECTA A SUPABASE CON ESTRUCTURA REAL
-            print(f"📊 Creando query a tabla 'authentication_attempts'...")
+            # QUERY DIRECTA A SUPABASE CON ESTRUCTURA REAL
+            print(f"Creando query a tabla 'authentication_attempts'...")
             print(f"   Limit: {limit}")
             
             query = self.supabase.table('authentication_attempts')\
@@ -2047,19 +2047,19 @@ class BiometricDatabase:
             if limit:
                 query = query.limit(limit)
             
-            print(f"🔄 Ejecutando query en Supabase...")
+            print(f"Ejecutando query en Supabase...")
             response = query.execute()
             
-            print(f"✅ Query ejecutada exitosamente")
-            print(f"📊 Total de registros obtenidos: {len(response.data)}")
+            print(f"Query ejecutada exitosamente")
+            print(f"Total de registros obtenidos: {len(response.data)}")
             
             if len(response.data) == 0:
-                print("⚠️ NO SE ENCONTRARON REGISTROS EN LA TABLA")
+                print("NO SE ENCONTRARON REGISTROS EN LA TABLA")
                 print("=" * 80 + "\n")
                 return []
             
             # Mostrar primer registro
-            print(f"\n📝 PRIMER REGISTRO (ejemplo):")
+            print(f"\nPRIMER REGISTRO (ejemplo):")
             first = response.data[0]
             print(f"   id: {first.get('id')}")
             print(f"   user_id: {first.get('user_id')}")
@@ -2081,18 +2081,18 @@ class BiometricDatabase:
                     elif timestamp is None:
                         timestamp = time.time()
                     
-                    # ✅ MAPEAR ESTRUCTURA REAL DE SUPABASE
+                    # MAPEAR ESTRUCTURA REAL DE SUPABASE
                     attempt_id = str(data.get('id', f"attempt_{idx}_{int(time.time())}"))
                     auth_type = data.get('mode', 'unknown')
                     result = 'success' if data.get('system_decision') == 'authenticated' else 'failed'
                     
-                    # ✅ EXTRAER SCORES DIRECTAMENTE DE LAS COLUMNAS
+                    # EXTRAER SCORES DIRECTAMENTE DE LAS COLUMNAS
                     anatomical_score = float(data.get('anatomical_score', 0.0))
                     dynamic_score = float(data.get('dynamic_score', 0.0))
                     fused_score = float(data.get('fused_score', 0.0))
                     confidence = float(data.get('confidence', fused_score))
                     
-                    # ✅ EXTRAER GESTOS
+                    # EXTRAER GESTOS
                     gestures_captured = data.get('gestures_captured', [])
                     
                     attempts.append(AuthenticationAttempt(
@@ -2119,23 +2119,23 @@ class BiometricDatabase:
                     ))
                     
                 except Exception as item_error:
-                    print(f"⚠️ Error procesando registro {idx}: {item_error}")
+                    print(f"Error procesando registro {idx}: {item_error}")
                     import traceback
                     traceback.print_exc()
                     continue
             
-            print(f"\n✅ TOTAL PROCESADO: {len(attempts)} intentos")
+            print(f"\nTOTAL PROCESADO: {len(attempts)} intentos")
             print("=" * 80 + "\n")
             
-            logger.info(f"✅ Total de intentos procesados correctamente: {len(attempts)}")
+            logger.info(f"Total de intentos procesados correctamente: {len(attempts)}")
             return attempts
             
         except Exception as e:
             print("\n" + "=" * 80)
-            print(f"❌ ERROR EN get_all_auth_attempts()")
+            print(f"ERROR EN get_all_auth_attempts()")
             print(f"   Error: {e}")
             print("=" * 80 + "\n")
-            logger.error(f"❌ Error obteniendo todos los intentos: {e}")
+            logger.error(f"Error obteniendo todos los intentos: {e}")
             import traceback
             traceback.print_exc()
             return []
@@ -2181,7 +2181,7 @@ class BiometricDatabase:
             Lista de AuthenticationAttempt con intentos de identificación
         """
         try:
-            logger.info(f"📊 Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
+            logger.info(f"Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
             
             # Query a tabla identification_attempts
             response = self.supabase.table('identification_attempts')\
@@ -2194,7 +2194,7 @@ class BiometricDatabase:
                 logger.info("No se encontraron intentos de identificación")
                 return []
             
-            logger.info(f"✅ Se recuperaron {len(response.data)} intentos de identificación")
+            logger.info(f"Se recuperaron {len(response.data)} intentos de identificación")
             
             # Convertir a AuthenticationAttempt
             attempts = []
@@ -2241,11 +2241,11 @@ class BiometricDatabase:
                     logger.error(f"Error procesando intento de identificación: {e}")
                     continue
             
-            logger.info(f"✅ Procesados {len(attempts)} intentos de identificación")
+            logger.info(f"Procesados {len(attempts)} intentos de identificación")
             return attempts
             
         except Exception as e:
-            logger.error(f"❌ Error recuperando intentos de identificación: {e}")
+            logger.error(f"Error recuperando intentos de identificación: {e}")
             import traceback
             logger.error(traceback.format_exc())
             return []
@@ -2258,10 +2258,10 @@ class BiometricDatabase:
         try:
             profile_data = profile.to_dict()
             
-            # ✅ UPSERT EN SUPABASE
+            # UPSERT EN SUPABASE
             self.supabase.table('personality_profiles').upsert(profile_data, on_conflict='user_id').execute()
             
-            logger.info(f"✅ Perfil de personalidad guardado: {profile.user_id}")
+            logger.info(f"Perfil de personalidad guardado: {profile.user_id}")
             
             return True
             
@@ -2308,7 +2308,7 @@ class BiometricDatabase:
         try:
             with self.lock:
                 if user_id not in self.users:
-                    print(f"🆕 Usuario {user_id} no existe - Creando automáticamente")
+                    print(f"Usuario {user_id} no existe - Creando automáticamente")
                     
                     username = "Usuario Bootstrap"
                     if sample_metadata and 'session_username' in sample_metadata:
@@ -2322,7 +2322,7 @@ class BiometricDatabase:
                     gender = sample_metadata.get('gender')
     
                     if not all([email, phone_number, age, gender]):
-                        error_msg = f"❌ ERROR CRÍTICO: Usuario {user_id} sin datos completos"
+                        error_msg = f"ERROR CRÍTICO: Usuario {user_id} sin datos completos"
                         print(error_msg)
                         raise ValueError("Datos obligatorios faltantes en enrollment bootstrap")
                     
@@ -2344,7 +2344,7 @@ class BiometricDatabase:
                     self.users[user_id] = user_profile
                     self._save_user(user_profile)
                     
-                    print(f"✅ Usuario {user_id} creado automáticamente")
+                    print(f"Usuario {user_id} creado automáticamente")
                 
                 if anatomical_features is None:
                     logger.error("Se requieren características anatómicas en Bootstrap")
@@ -2395,7 +2395,7 @@ class BiometricDatabase:
                         data_source_found = sample_metadata.get('data_source', 'real_enrollment_capture')
                         is_real_temporal = True
                         
-                        print(f"✅ Secuencia temporal REAL encontrada: {temporal_sequence.shape}")
+                        print(f"Secuencia temporal REAL encontrada: {temporal_sequence.shape}")
                     
                     # CREAR TEMPLATE DINÁMICO SI HAY SECUENCIA
                     if temporal_sequence is not None and len(temporal_sequence) >= 5:
@@ -2429,12 +2429,12 @@ class BiometricDatabase:
                         
                         self._save_template_bootstrap(dynamic_template)
                         
-                        print(f"✅ Template dinámico bootstrap creado: {dynamic_template_id}")
+                        print(f"Template dinámico bootstrap creado: {dynamic_template_id}")
                         
                         anatomical_template.metadata['paired_dynamic_template'] = dynamic_template_id
                         
                 except Exception as e:
-                    logger.error(f"❌ Error en extracción de datos temporales: {e}")
+                    logger.error(f"Error en extracción de datos temporales: {e}")
                     dynamic_template_id = None
                 
                 # GUARDAR TEMPLATE ANATÓMICO
@@ -2466,12 +2466,12 @@ class BiometricDatabase:
                 
                 self._update_stats()
                 
-                print(f"🎯 BOOTSTRAP COMPLETO: {templates_created} templates")
+                print(f"BOOTSTRAP COMPLETO: {templates_created} templates")
                 
                 return anatomical_template_id
                 
         except Exception as e:
-            logger.error(f"❌ Error Bootstrap: {e}")
+            logger.error(f"Error Bootstrap: {e}")
             return None
     
     def convert_bootstrap_to_full_templates(self, siamese_anatomical_network, siamese_dynamic_network=None):
@@ -2527,7 +2527,7 @@ class BiometricDatabase:
                 
                 self._update_stats()
                 
-                print(f"✅ Convertidos {converted_count}/{len(bootstrap_templates)} templates Bootstrap")
+                print(f"Convertidos {converted_count}/{len(bootstrap_templates)} templates Bootstrap")
                 
                 return converted_count
                 
@@ -2580,7 +2580,7 @@ class BiometricDatabase:
     # def _save_user(self, user_profile: UserProfile):
     #     """Guarda perfil de usuario en Supabase."""
     #     try:
-    #         print(f"🔍 Guardando usuario en Supabase: {user_profile.user_id}")
+    #         print(f"Guardando usuario en Supabase: {user_profile.user_id}")
             
     #         # Convertir timestamps a ISO format
     #         created_at = datetime.fromtimestamp(user_profile.created_at).isoformat()
@@ -2622,13 +2622,13 @@ class BiometricDatabase:
     #             'metadata': user_profile.metadata
     #         }
             
-    #         # ✅ UPSERT EN SUPABASE
+    #         # UPSERT EN SUPABASE
     #         result = self.supabase.table('users').upsert(user_data, on_conflict='user_id').execute()
             
-    #         print(f"✅ Usuario guardado en Supabase: {user_profile.user_id}")
+    #         print(f"Usuario guardado en Supabase: {user_profile.user_id}")
             
     #     except Exception as e:
-    #         print(f"❌ ERROR guardando usuario en Supabase: {e}")
+    #         print(f"ERROR guardando usuario en Supabase: {e}")
     #         import traceback
     #         traceback.print_exc()
     #         logger.error(f"Error guardando usuario: {e}")
@@ -2636,7 +2636,7 @@ class BiometricDatabase:
     def _save_user(self, user_profile: UserProfile):
         """Guarda perfil de usuario en Supabase - CORREGIDO para re-enrollment."""
         try:
-            print(f"🔍 Guardando usuario en Supabase: {user_profile.user_id}")
+            print(f"Guardando usuario en Supabase: {user_profile.user_id}")
             
             # Convertir timestamps a ISO format
             created_at = datetime.fromtimestamp(user_profile.created_at).isoformat()
@@ -2678,7 +2678,7 @@ class BiometricDatabase:
                 'metadata': user_profile.metadata
             }
             
-            # ✅ VERIFICAR SI USUARIO EXISTE (evita sobrescritura en re-enrollment)
+            # VERIFICAR SI USUARIO EXISTE (evita sobrescritura en re-enrollment)
             existing = self.supabase.table('users')\
                 .select('id')\
                 .eq('user_id', user_profile.user_id)\
@@ -2691,24 +2691,24 @@ class BiometricDatabase:
                     .update(user_data)\
                     .eq('user_id', user_profile.user_id)\
                     .execute()
-                print(f"✅ Usuario actualizado en Supabase: {user_profile.user_id}")
+                print(f"Usuario actualizado en Supabase: {user_profile.user_id}")
             else:
                 # Usuario NO existe → INSERT (crea nuevo registro)
                 print(f"   Usuario nuevo, insertando...")
                 self.supabase.table('users')\
                     .insert(user_data)\
                     .execute()
-                print(f"✅ Usuario insertado en Supabase: {user_profile.user_id}")
+                print(f"Usuario insertado en Supabase: {user_profile.user_id}")
             
         except Exception as e:
-            print(f"❌ ERROR guardando usuario en Supabase: {e}")
+            print(f"ERROR guardando usuario en Supabase: {e}")
             import traceback
             traceback.print_exc()
             logger.error(f"Error guardando usuario: {e}")
     def _save_template(self, template: BiometricTemplate):
         """Guarda template en Supabase."""
         try:
-            print(f"🔍 Guardando template en Supabase: {template.template_id}")
+            print(f"Guardando template en Supabase: {template.template_id}")
             
             # Convertir timestamps
             created_at = datetime.fromtimestamp(template.created_at).isoformat()
@@ -2736,13 +2736,13 @@ class BiometricDatabase:
                 'metadata': getattr(template, 'metadata', {})
             }
             
-            # ✅ UPSERT EN SUPABASE
+            # UPSERT EN SUPABASE
             result = self.supabase.table('biometric_templates').upsert(template_data, on_conflict='template_id').execute()
             
-            print(f"✅ Template guardado en Supabase: {template.template_id}")
+            print(f"Template guardado en Supabase: {template.template_id}")
             
         except Exception as e:
-            print(f"❌ ERROR guardando template en Supabase: {e}")
+            print(f"ERROR guardando template en Supabase: {e}")
             import traceback
             traceback.print_exc()
             raise
@@ -2750,15 +2750,15 @@ class BiometricDatabase:
     def _save_template_bootstrap(self, template: BiometricTemplate):
         """Guarda template Bootstrap en Supabase (sin embeddings)."""
         try:
-            print(f"🔍 Guardando Bootstrap en Supabase: {template.template_id}")
+            print(f"Guardando Bootstrap en Supabase: {template.template_id}")
             
             # Igual que _save_template, pero los embeddings ya son None
             self._save_template(template)
             
-            print(f"✅ Bootstrap guardado en Supabase: {template.template_id}")
+            print(f"Bootstrap guardado en Supabase: {template.template_id}")
                 
         except Exception as e:
-            print(f"❌ ERROR guardando Bootstrap en Supabase: {e}")
+            print(f"ERROR guardando Bootstrap en Supabase: {e}")
             import traceback
             traceback.print_exc()
             logger.error(f"Error guardando Bootstrap: {e}")

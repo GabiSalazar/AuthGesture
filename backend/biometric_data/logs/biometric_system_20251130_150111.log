@@ -1611,7 +1611,7 @@
 2025-11-30 15:02:27,715 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Confianza inicial: 0.998
 2025-11-30 15:02:27,715 - biometric_gesture_system - INFO - [authentication_system.py:889] - AUTH: ✅ Usando landmarks del frame ORIGINAL
 2025-11-30 15:02:27,715 - biometric_gesture_system - INFO - [authentication_system.py:926] - AUTH: Calidad insuficiente: 86.840
-2025-11-30 15:02:27,872 - biometric_gesture_system - INFO - [authentication_system.py:1641] - 🧹 Limpiando sesión 4d57f41f-87cc-4025-b419-159aae294f78 por timeout_total
+2025-11-30 15:02:27,872 - biometric_gesture_system - INFO - [authentication_system.py:1641] - Limpiando sesión 4d57f41f-87cc-4025-b419-159aae294f78 por timeout_total
 2025-11-30 15:02:27,873 - biometric_gesture_system - INFO - [authentication_system.py:1597] - Sesión cerrada: 4d57f41f-87cc-4025-b419-159aae294f78 - Estado: timeout
 2025-11-30 15:02:27,873 - biometric_gesture_system - INFO - [authentication_system.py:1598] -   - Duración: 45.1s
 2025-11-30 15:02:27,873 - biometric_gesture_system - INFO - [authentication_system.py:1599] -   - Frames procesados: 218
@@ -2977,14 +2977,14 @@
 2025-11-30 15:03:25,756 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Confianza inicial: 0.986
 2025-11-30 15:03:25,756 - biometric_gesture_system - INFO - [authentication_system.py:889] - AUTH: ✅ Usando landmarks del frame ORIGINAL
 2025-11-30 15:03:25,756 - biometric_gesture_system - INFO - [authentication_system.py:926] - AUTH: Calidad insuficiente: 71.943
-2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1641] - 🧹 Limpiando sesión 073dd236-c987-4b0b-ab7d-f96841de7b1f por timeout_total
+2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1641] - Limpiando sesión 073dd236-c987-4b0b-ab7d-f96841de7b1f por timeout_total
 2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1597] - Sesión cerrada: 073dd236-c987-4b0b-ab7d-f96841de7b1f - Estado: timeout
 2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1598] -   - Duración: 45.1s
 2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1599] -   - Frames procesados: 210
 2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1600] -   - Gestos capturados: 2
 2025-11-30 15:03:25,900 - biometric_gesture_system - INFO - [authentication_system.py:1645] - Sesiones limpiadas: 1
 2025-11-30 15:05:26,050 - biometric_gesture_system - ERROR - [authentication_system.py:3498] - Sesión 073dd236-c987-4b0b-ab7d-f96841de7b1f no encontrada para cancelar
-2025-11-30 15:10:35,624 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 8
+2025-11-30 15:10:35,624 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 8
 2025-11-30 15:10:35,624 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-30 15:10:35,634 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-30 15:10:35,634 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)

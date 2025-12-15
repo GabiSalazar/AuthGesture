@@ -413,7 +413,7 @@ class QualityValidator:
                 gesture_valid = (detected_gesture == target_gesture and 
                                gesture_confidence >= self.thresholds['gesture_confidence'])
             
-            logger.debug(f"🎯 GESTO DEBUG: Detectado='{detected_gesture}', Esperado='{target_gesture}', Confianza={gesture_confidence:.3f}, Umbral= {self.thresholds['gesture_confidence']:.3f}, Válido={gesture_valid}")
+            logger.debug(f"GESTO DEBUG: Detectado='{detected_gesture}', Esperado='{target_gesture}', Confianza={gesture_confidence:.3f}, Umbral= {self.thresholds['gesture_confidence']:.3f}, Válido={gesture_valid}")
             
             # 7. Verificar extensión
             extension_valid = self.check_hand_extension(hand_landmarks, target_gesture)

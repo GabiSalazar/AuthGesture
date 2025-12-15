@@ -46,14 +46,14 @@ async def mediapipe_health_check():
                 "status": "error",
                 "module": "MediaPipe Processor",
                 "initialized": False,
-                "message": "❌ MediaPipe no disponible (modelo no encontrado)"
+                "message": "MediaPipe no disponible (modelo no encontrado)"
             }
         
         return {
             "status": "healthy",
             "module": "MediaPipe Processor",
             "initialized": processor.is_initialized,
-            "message": "✅ Módulo 3 cargado correctamente",
+            "message": "Módulo 3 cargado correctamente",
             "gestures_count": len(processor.available_gestures)
         }
     except Exception as e:
@@ -252,7 +252,7 @@ async def get_model_info():
                 "model_path": "Unknown",
                 "model_exists": False,
                 "download_url": "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/latest/gesture_recognizer.task",
-                "message": "❌ Modelo no encontrado. Descárgalo del URL proporcionado."
+                "message": "Modelo no encontrado. Descárgalo del URL proporcionado."
             }
         
         import os
@@ -264,7 +264,7 @@ async def get_model_info():
             "model_path": processor.model_path,
             "model_exists": model_exists,
             "model_size_mb": round(model_size / (1024 * 1024), 2) if model_exists else 0,
-            "message": "✅ Modelo cargado correctamente" if model_exists else "❌ Modelo no encontrado"
+            "message": "Modelo cargado correctamente" if model_exists else "Modelo no encontrado"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")

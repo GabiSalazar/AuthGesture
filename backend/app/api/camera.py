@@ -38,7 +38,7 @@ async def camera_health_check():
                 "status": "error",
                 "module": "Camera Manager",
                 "initialized": False,
-                "message": "❌ Cámara no disponible"
+                "message": "Cámara no disponible"
             }
         
         is_healthy = camera_mgr.check_camera_health()
@@ -48,7 +48,7 @@ async def camera_health_check():
             "module": "Camera Manager",
             "initialized": camera_mgr.is_initialized,
             "healthy": is_healthy,
-            "message": "✅ Módulo 2 cargado correctamente" if is_healthy else "⚠️ Cámara con problemas"
+            "message": "Módulo 2 cargado correctamente" if is_healthy else "NOCámara con problemas"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en Camera Manager: {str(e)}")

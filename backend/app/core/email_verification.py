@@ -76,9 +76,9 @@
         
 #         self.sg_client = SendGridAPIClient(self.api_key)
         
-#         print("✅ EmailVerificationSystem inicializado")
-#         print(f"📧 Email desde: {self.from_email}")
-#         print(f"⏱️  Expiración: {self.expiry_minutes} minutos")
+#         print("EmailVerificationSystem inicializado")
+#         print(f"Email desde: {self.from_email}")
+#         print(f" Expiración: {self.expiry_minutes} minutos")
     
 #     # ========================================================================
 #     # GENERACIÓN DE TOKENS
@@ -116,7 +116,7 @@
 #         # Guardar en archivo
 #         self._save_verification(verification)
         
-#         print(f"✅ Código generado para {user_id}: {code}")
+#         print(f"Código generado para {user_id}: {code}")
 #         return verification
     
 #     # ========================================================================
@@ -161,15 +161,15 @@
 #             response = self.sg_client.send(message)
             
 #             if response.status_code in [200, 201, 202]:
-#                 print(f"✅ Email enviado exitosamente a {email}")
+#                 print(f"Email enviado exitosamente a {email}")
 #                 print(f"🔑 Código de verificación: {verification_code}")
 #                 return True
 #             else:
-#                 print(f"❌ Error enviando email: {response.status_code}")
+#                 print(f"Error enviando email: {response.status_code}")
 #                 return False
                 
 #         except Exception as e:
-#             print(f"❌ Error en send_verification_email: {e}")
+#             print(f"Error en send_verification_email: {e}")
 #             return False
     
 #     # ========================================================================
@@ -228,7 +228,7 @@
 #             # Guardar cambios
 #             self._save_verification(verification)
             
-#             print(f"✅ Email verificado exitosamente: {verification.email}")
+#             print(f"Email verificado exitosamente: {verification.email}")
             
 #             return EmailVerificationResult(
 #                 success=True,
@@ -238,7 +238,7 @@
 #             )
             
 #         except Exception as e:
-#             print(f"❌ Error verificando token: {e}")
+#             print(f"Error verificando token: {e}")
 #             return EmailVerificationResult(
 #                 success=False,
 #                 message=f"Error verificando token: {str(e)}"
@@ -486,7 +486,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
 from dotenv import load_dotenv
 
-# ✅ IMPORTAR CLIENTE SUPABASE
+# IMPORTAR CLIENTE SUPABASE
 from app.core.supabase_client import get_supabase_client
 
 # Cargar variables de entorno
@@ -540,7 +540,7 @@ class EmailVerificationSystem:
         self.backend_url = os.getenv('BACKEND_URL', 'http://localhost:8000')
         self.expiry_minutes = int(os.getenv('EMAIL_VERIFICATION_EXPIRY_MINUTES', '30'))
         
-        # ✅ CLIENTE SUPABASE (reemplaza filesystem)
+        # CLIENTE SUPABASE (reemplaza filesystem)
         self.supabase = get_supabase_client()
         
         # Cliente SendGrid
@@ -549,9 +549,9 @@ class EmailVerificationSystem:
         
         self.sg_client = SendGridAPIClient(self.api_key)
         
-        print("✅ EmailVerificationSystem inicializado con Supabase")
-        print(f"📧 Email desde: {self.from_email}")
-        print(f"⏱️  Expiración: {self.expiry_minutes} minutos")
+        print("EmailVerificationSystem inicializado con Supabase")
+        print(f"Email desde: {self.from_email}")
+        print(f" Expiración: {self.expiry_minutes} minutos")
     
     # ========================================================================
     # GENERACIÓN DE TOKENS
@@ -586,10 +586,10 @@ class EmailVerificationSystem:
             verified=False
         )
         
-        # ✅ GUARDAR EN SUPABASE
+        # GUARDAR EN SUPABASE
         self._save_verification(verification)
         
-        print(f"✅ Código generado para {user_id}: {code}")
+        print(f"Código generado para {user_id}: {code}")
         return verification
     
     # ========================================================================
@@ -634,15 +634,15 @@ class EmailVerificationSystem:
             response = self.sg_client.send(message)
             
             if response.status_code in [200, 201, 202]:
-                print(f"✅ Email enviado exitosamente a {email}")
+                print(f"Email enviado exitosamente a {email}")
                 print(f"🔑 Código de verificación: {verification_code}")
                 return True
             else:
-                print(f"❌ Error enviando email: {response.status_code}")
+                print(f"Error enviando email: {response.status_code}")
                 return False
                 
         except Exception as e:
-            print(f"❌ Error en send_verification_email: {e}")
+            print(f"Error en send_verification_email: {e}")
             return False
     
     # ========================================================================
@@ -660,7 +660,7 @@ class EmailVerificationSystem:
             EmailVerificationResult con resultado
         """
         try:
-            # ✅ BUSCAR TOKEN EN SUPABASE
+            # BUSCAR TOKEN EN SUPABASE
             verification = self._find_verification_by_token(token)
             
             if not verification:
@@ -698,10 +698,10 @@ class EmailVerificationSystem:
             verification.verification_date = datetime.now().isoformat()
             verification.attempts += 1
             
-            # ✅ GUARDAR CAMBIOS EN SUPABASE
+            # GUARDAR CAMBIOS EN SUPABASE
             self._save_verification(verification)
             
-            print(f"✅ Email verificado exitosamente: {verification.email}")
+            print(f"Email verificado exitosamente: {verification.email}")
             
             return EmailVerificationResult(
                 success=True,
@@ -711,7 +711,7 @@ class EmailVerificationSystem:
             )
             
         except Exception as e:
-            print(f"❌ Error verificando token: {e}")
+            print(f"Error verificando token: {e}")
             return EmailVerificationResult(
                 success=False,
                 message=f"Error verificando token: {str(e)}"
@@ -876,7 +876,7 @@ class EmailVerificationSystem:
         return html
     
     # ========================================================================
-    # ✅ PERSISTENCIA CON SUPABASE (REEMPLAZÓ FILESYSTEM)
+    # PERSISTENCIA CON SUPABASE (REEMPLAZÓ FILESYSTEM)
     # ========================================================================
     
     # def _save_verification(self, verification: EmailVerificationToken):
@@ -894,16 +894,16 @@ class EmailVerificationSystem:
     #             'max_attempts': verification.max_attempts
     #         }
             
-    #         # ✅ UPSERT EN SUPABASE
+    #         # UPSERT EN SUPABASE
     #         self.supabase.table('email_verifications').upsert(
     #             verification_data,
     #             on_conflict='user_id'
     #         ).execute()
             
-    #         print(f"✅ Verificación guardada en Supabase para {verification.user_id}")
+    #         print(f"Verificación guardada en Supabase para {verification.user_id}")
             
     #     except Exception as e:
-    #         print(f"❌ Error guardando verificación en Supabase: {e}")
+    #         print(f"Error guardando verificación en Supabase: {e}")
     #         raise
     
     def _save_verification(self, verification: EmailVerificationToken):
@@ -934,16 +934,16 @@ class EmailVerificationSystem:
                     .insert(verification_data)\
                     .execute()
             
-            print(f"✅ Verificación guardada en Supabase para {verification.user_id}")
+            print(f"Verificación guardada en Supabase para {verification.user_id}")
             
         except Exception as e:
-            print(f"❌ Error guardando verificación en Supabase: {e}")
+            print(f"Error guardando verificación en Supabase: {e}")
             raise
     
     # def _load_verification(self, user_id: str) -> Optional[EmailVerificationToken]:
     #     """Carga verificación desde Supabase"""
     #     try:
-    #         # ✅ SELECT DESDE SUPABASE
+    #         # SELECT DESDE SUPABASE
     #         response = self.supabase.table('email_verifications').select('*').eq('user_id', user_id).execute()
             
     #         if not response.data:
@@ -964,13 +964,13 @@ class EmailVerificationSystem:
     #         )
             
     #     except Exception as e:
-    #         print(f"❌ Error cargando verificación desde Supabase: {e}")
+    #         print(f"Error cargando verificación desde Supabase: {e}")
     #         return None
     
     def _load_verification(self, user_id: str) -> Optional[EmailVerificationToken]:
         """Carga verificación desde Supabase"""
         try:
-            # ✅ SELECT DESDE SUPABASE - ORDENAR POR MÁS RECIENTE
+            # SELECT DESDE SUPABASE - ORDENAR POR MÁS RECIENTE
             response = self.supabase.table('email_verifications')\
                 .select('*')\
                 .eq('user_id', user_id)\
@@ -996,13 +996,13 @@ class EmailVerificationSystem:
             )
             
         except Exception as e:
-            print(f"❌ Error cargando verificación desde Supabase: {e}")
+            print(f"Error cargando verificación desde Supabase: {e}")
             return None
     
     def _find_verification_by_token(self, token: str) -> Optional[EmailVerificationToken]:
         """Busca verificación por token en Supabase"""
         try:
-            # ✅ SELECT POR TOKEN EN SUPABASE
+            # SELECT POR TOKEN EN SUPABASE
             response = self.supabase.table('email_verifications').select('*').eq('token', token).execute()
             
             if not response.data:
@@ -1023,7 +1023,7 @@ class EmailVerificationSystem:
             )
             
         except Exception as e:
-            print(f"❌ Error buscando token en Supabase: {e}")
+            print(f"Error buscando token en Supabase: {e}")
             return None
     
     def cleanup_expired_verifications(self):
@@ -1031,7 +1031,7 @@ class EmailVerificationSystem:
         try:
             now = datetime.now().isoformat()
             
-            # ✅ DELETE DESDE SUPABASE
+            # DELETE DESDE SUPABASE
             response = self.supabase.table('email_verifications').delete().lt('expires_at', now).eq('verified', False).execute()
             
             count = len(response.data) if response.data else 0
@@ -1040,7 +1040,7 @@ class EmailVerificationSystem:
                 print(f"🗑️  Limpiados {count} tokens expirados desde Supabase")
             
         except Exception as e:
-            print(f"❌ Error limpiando verificaciones en Supabase: {e}")
+            print(f"Error limpiando verificaciones en Supabase: {e}")
 
 
 # ============================================================================

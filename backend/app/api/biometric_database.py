@@ -62,7 +62,7 @@ async def biometric_database_health_check():
             "status": "healthy",
             "module": "Biometric Database",
             "initialized": True,
-            "message": "✅ Módulo 13 cargado correctamente",
+            "message": " Módulo 13 cargado correctamente",
             "total_users": len(db.users),
             "total_templates": len(db.templates),
             "database_path": str(db.db_path),

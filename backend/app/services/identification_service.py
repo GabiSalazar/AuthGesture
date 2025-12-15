@@ -58,7 +58,7 @@ class IdentificationService:
             dict: Datos del intento guardado o None si falla
         """
         try:
-            # ✅ DATOS PARA identification_attempts (SIN feedback)
+            # DATOS PARA identification_attempts (SIN feedback)
             data = {
                 'session_id': session_id,
                 'identified_user_id': identified_user_id,
@@ -77,11 +77,11 @@ class IdentificationService:
                 'timestamp': datetime.now(timezone.utc).isoformat()
             }
             
-            # ✅ INSERTAR EN identification_attempts
+            # INSERTAR EN identification_attempts
             response = self.supabase.table('identification_attempts').insert(data).execute()
             
             logger.info(
-                f"✅ Identificación guardada: session={session_id}, "
+                f"Identificación guardada: session={session_id}, "
                 f"user={identified_user_id or 'unknown'}, decision={system_decision}"
             )
             
@@ -93,7 +93,7 @@ class IdentificationService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error guardando identificación: {str(e)}")
+            logger.error(f"Error guardando identificación: {str(e)}")
             return None
     
     def get_identification_stats(self, user_id: str = None):
@@ -130,7 +130,7 @@ class IdentificationService:
             }
             
         except Exception as e:
-            logger.error(f"❌ Error obteniendo stats de identificación: {str(e)}")
+            logger.error(f"Error obteniendo stats de identificación: {str(e)}")
             return None
     
     def get_user_identifications(self, user_id: str, limit: int = 10):
@@ -155,11 +155,11 @@ class IdentificationService:
             return response.data
             
         except Exception as e:
-            logger.error(f"❌ Error obteniendo identificaciones de usuario: {str(e)}")
+            logger.error(f"Error obteniendo identificaciones de usuario: {str(e)}")
             return []
 
 
-# ✅ INSTANCIA GLOBAL
+# INSTANCIA GLOBAL
 _identification_service = None
 
 def get_identification_service():

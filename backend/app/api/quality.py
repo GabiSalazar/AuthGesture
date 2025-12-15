@@ -45,7 +45,7 @@ async def quality_health_check():
             "status": "healthy",
             "module": "Quality Validator",
             "initialized": True,
-            "message": "✅ Módulo 4 cargado correctamente",
+            "message": "Módulo 4 cargado correctamente",
             "roi_normalization_enabled": validator.use_roi_normalization
         }
     except Exception as e:

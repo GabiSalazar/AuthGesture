@@ -1317,7 +1317,7 @@
 2025-11-30 14:43:31,300 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Confianza inicial: 0.996
 2025-11-30 14:43:31,300 - biometric_gesture_system - INFO - [authentication_system.py:889] - AUTH: ✅ Usando landmarks del frame ORIGINAL
 2025-11-30 14:43:31,300 - biometric_gesture_system - INFO - [authentication_system.py:926] - AUTH: Calidad insuficiente: 96.272
-2025-11-30 14:43:31,427 - biometric_gesture_system - INFO - [authentication_system.py:1641] - 🧹 Limpiando sesión 8ab6e564-d0de-44f9-9c03-1c2504a13fce por timeout_total
+2025-11-30 14:43:31,427 - biometric_gesture_system - INFO - [authentication_system.py:1641] - Limpiando sesión 8ab6e564-d0de-44f9-9c03-1c2504a13fce por timeout_total
 2025-11-30 14:43:31,427 - biometric_gesture_system - INFO - [authentication_system.py:1597] - Sesión cerrada: 8ab6e564-d0de-44f9-9c03-1c2504a13fce - Estado: timeout
 2025-11-30 14:43:31,428 - biometric_gesture_system - INFO - [authentication_system.py:1598] -   - Duración: 45.0s
 2025-11-30 14:43:31,428 - biometric_gesture_system - INFO - [authentication_system.py:1599] -   - Frames procesados: 210

@@ -25,13 +25,13 @@
 2025-10-22 21:17:14,480 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
 2025-10-22 21:17:14,480 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
 2025-10-22 21:17:14,481 - biometric_gesture_system - INFO - [system_manager.py:150] - ================================================================================
-2025-10-22 21:17:14,481 - biometric_gesture_system - INFO - [system_manager.py:151] - 🚀 BiometricSystemManager v2.0.0 Real Edition Iniciado
-2025-10-22 21:17:14,481 - biometric_gesture_system - INFO - [system_manager.py:152] - 🏗️  Arquitectura: 15 Módulos en 4 Capas Funcionales
-2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:153] - 🎯 Características: Redes siamesas, fusión multimodal, templates biométricos
+2025-10-22 21:17:14,481 - biometric_gesture_system - INFO - [system_manager.py:151] - BiometricSystemManager v2.0.0 Real Edition Iniciado
+2025-10-22 21:17:14,481 - biometric_gesture_system - INFO - [system_manager.py:152] - Arquitectura: 15 Módulos en 4 Capas Funcionales
+2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:153] - Características: Redes siamesas, fusión multimodal, templates biométricos
 2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:154] - ================================================================================
 2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:199] - 
 ================================================================================
-2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:200] - 🔧 INICIANDO INICIALIZACIÓN PROGRESIVA
+2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:200] - INICIANDO INICIALIZACIÓN PROGRESIVA
 2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:201] - ================================================================================
 2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:169] - VERIFICANDO MÓDULOS DEL SISTEMA...
 2025-10-22 21:17:14,483 - biometric_gesture_system - INFO - [system_manager.py:170] - ================================================================================
@@ -54,7 +54,7 @@
 ✅ TODOS LOS 15 MÓDULOS DISPONIBLES
 2025-10-22 21:17:14,489 - biometric_gesture_system - INFO - [system_manager.py:190] - ================================================================================
 2025-10-22 21:17:14,489 - biometric_gesture_system - INFO - [system_manager.py:210] - 
-🔧 NIVEL 1: Componentes Básicos
+NIVEL 1: Componentes Básicos
 2025-10-22 21:17:14,489 - biometric_gesture_system - INFO - [system_manager.py:211] - --------------------------------------------------------------------------------
 2025-10-22 21:17:14,489 - biometric_gesture_system - INFO - [system_manager.py:269] - Inicializando Base de Datos...
 2025-10-22 21:17:17,049 - biometric_gesture_system - INFO - [system_manager.py:276] - ✅ Base de datos lista: 1 usuarios
@@ -62,7 +62,7 @@
 2025-10-22 21:17:17,050 - biometric_gesture_system - INFO - [system_manager.py:281] - ✅ Sequence Manager inicializado
 2025-10-22 21:17:17,050 - biometric_gesture_system - INFO - [system_manager.py:216] - ✅ NIVEL 1 COMPLETADO
 
-2025-10-22 21:17:17,050 - biometric_gesture_system - INFO - [system_manager.py:219] - 📊 NIVEL 2: Extractores de Características
+2025-10-22 21:17:17,050 - biometric_gesture_system - INFO - [system_manager.py:219] - NIVEL 2: Extractores de Características
 2025-10-22 21:17:17,050 - biometric_gesture_system - INFO - [system_manager.py:220] - --------------------------------------------------------------------------------
 2025-10-22 21:17:17,052 - biometric_gesture_system - INFO - [system_manager.py:294] - Inicializando Sistema de Enrollment...
 2025-10-22 21:17:17,052 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.samples_per_gesture, usando default: 8

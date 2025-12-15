@@ -75,7 +75,7 @@
 2025-11-21 22:35:06,135 - biometric_gesture_system - INFO - [authentication_system.py:266] - RealSecurityAuditor inicializado para auditoría
 2025-11-21 22:35:06,135 - biometric_gesture_system - INFO - [authentication_system.py:1413] - RealAuthenticationSystem inicializado
 2025-11-21 22:35:06,137 - biometric_gesture_system - INFO - [authentication_system.py:1414] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-11-21 22:35:18,496 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 2
+2025-11-21 22:35:18,496 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 2
 2025-11-21 22:35:18,497 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-21 22:35:18,497 - biometric_gesture_system - INFO - [system_manager.py:728] -    - Gabriela Salazar (ID: user_gabriela_1762882140832_800f8527)
 2025-11-21 22:35:18,497 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)

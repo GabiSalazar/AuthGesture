@@ -55,7 +55,7 @@ class VisualFeedbackManager:
         self.icons = {
             "distance_far": "↔", "distance_close": "↔", "movement": "⚡",
             "stability": "⏱", "gesture": "✋", "confidence": "📊",
-            "area": "📍", "success": "✅", "warning": "⚠", "error": "❌",
+            "area": "📍", "success": "OK", "warning": "⚠", "error": "NO",
             "info": "ℹ", "bootstrap": "🔧", "progress": "📈"
         }
         
@@ -128,7 +128,7 @@ class VisualFeedbackManager:
             if quality_assessment.ready_for_capture:
                 messages.append(FeedbackMessage(
                     "¡PERFECTO! Capturando muestra...",
-                    FeedbackLevel.SUCCESS, 0, "✅", "Mantener posición",
+                    FeedbackLevel.SUCCESS, 0, "OK", "Mantener posición",
                     f"Calidad: {quality_assessment.quality_score:.0f}%"
                 ))
                 logger.info(f"Feedback: LISTO para captura - Calidad: {quality_assessment.quality_score:.0f}%")
@@ -160,7 +160,7 @@ class VisualFeedbackManager:
             
         except Exception as e:
             logger.error(f"ERROR generando feedback: {e}", exc_info=True)
-            return [FeedbackMessage("Error en feedback visual", FeedbackLevel.ERROR, 1, "❌")]
+            return [FeedbackMessage("Error en feedback visual", FeedbackLevel.ERROR, 1, "NO")]
     
     def _get_roi_feedback(self, roi_result) -> Optional[FeedbackMessage]:
         """Genera feedback específico del ROI normalization."""
@@ -170,7 +170,7 @@ class VisualFeedbackManager:
         if roi_result.is_valid:
             return FeedbackMessage(
                 f"ROI válido: {roi_result.roi_width}x{roi_result.roi_height}px",
-                FeedbackLevel.SUCCESS, 5, "✅", "Distancia correcta"
+                FeedbackLevel.SUCCESS, 5, "OK", "Distancia correcta"
             )
         elif hasattr(roi_result, 'distance_status'):
             if roi_result.distance_status.value == "too_far":
@@ -199,7 +199,7 @@ class VisualFeedbackManager:
             )
         elif hand_size.distance_status == "correcta":
             return FeedbackMessage(
-                "Distancia perfecta", FeedbackLevel.SUCCESS, 4, "✅", "Mantener distancia"
+                "Distancia perfecta", FeedbackLevel.SUCCESS, 4, "OK", "Mantener distancia"
             )
         return None
     
@@ -233,7 +233,7 @@ class VisualFeedbackManager:
             )
         else:
             return FeedbackMessage(
-                "Mano estable", FeedbackLevel.SUCCESS, 5, "✅", "Continuar"
+                "Mano estable", FeedbackLevel.SUCCESS, 5, "OK", "Continuar"
             )
     
     def _get_progress_feedback(self, session_info: Dict, assessment) -> Optional[FeedbackMessage]:
@@ -261,7 +261,7 @@ class VisualFeedbackManager:
         except Exception as e:
             logger.error(f"Error generando feedback de progreso: {e}")
             return FeedbackMessage(
-                "Error en progreso", FeedbackLevel.ERROR, 6, "❌", "Reintentar"
+                "Error en progreso", FeedbackLevel.ERROR, 6, "NO", "Reintentar"
             )
         
     def _filter_and_sort_messages(self, messages: List[FeedbackMessage]) -> List[FeedbackMessage]:

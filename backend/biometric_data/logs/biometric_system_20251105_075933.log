@@ -166,7 +166,7 @@
 2025-11-05 08:00:44,737 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 1, Válidos: 1
 2025-11-05 08:00:44,737 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:44,738 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -213,7 +213,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:44,896 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 2, Válidos: 2
 2025-11-05 08:00:44,896 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:44,897 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -260,7 +260,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:45,117 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 3, Válidos: 3
 2025-11-05 08:00:45,117 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:45,118 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:45,118 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:45,118 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:45,119 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:45,119 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:45,120 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -307,7 +307,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:45,317 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 4, Válidos: 4
 2025-11-05 08:00:45,318 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:45,318 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:45,318 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:45,318 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:45,320 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:45,320 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:45,320 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -354,7 +354,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:45,512 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 5, Válidos: 5
 2025-11-05 08:00:45,512 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:45,513 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:45,513 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:45,513 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:45,513 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:45,513 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:45,515 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -401,7 +401,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:45,706 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 6, Válidos: 6
 2025-11-05 08:00:45,706 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:45,706 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:45,707 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:45,707 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:45,707 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:45,707 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:45,708 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -448,7 +448,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:45,913 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 7, Válidos: 7
 2025-11-05 08:00:45,914 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:45,914 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:45,914 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:45,914 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:45,915 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:45,915 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:45,915 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -495,7 +495,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:46,100 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 8, Válidos: 8
 2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:46,101 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:46,102 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -545,7 +545,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:46,300 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 9, Válidos: 9
 2025-11-05 08:00:46,300 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:46,301 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:46,301 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:46,301 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:46,302 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:46,302 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:46,303 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -595,7 +595,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:46,519 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 10, Válidos: 10
 2025-11-05 08:00:46,520 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:46,520 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:46,520 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:46,520 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:46,521 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:46,521 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:46,522 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -642,7 +642,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:46,712 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 11, Válidos: 11
 2025-11-05 08:00:46,713 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:46,713 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:46,713 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:46,713 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:46,715 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:46,715 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:46,715 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -689,7 +689,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:46,925 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 12, Válidos: 12
 2025-11-05 08:00:46,925 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:46,925 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:46,925 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:46,925 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:46,926 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:46,926 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:46,926 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -736,7 +736,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:47,117 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 13, Válidos: 13
 2025-11-05 08:00:47,117 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:47,118 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:47,118 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:47,118 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:47,118 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:47,118 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:47,119 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -786,7 +786,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:47,288 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 14, Válidos: 14
 2025-11-05 08:00:47,288 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:47,288 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:47,288 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:47,288 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:47,289 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:47,289 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:47,289 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -836,7 +836,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:47,504 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 15, Válidos: 15
 2025-11-05 08:00:47,504 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:47,504 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:47,505 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:47,505 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:47,505 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:47,505 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:47,505 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -886,7 +886,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:47,705 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 16, Válidos: 16
 2025-11-05 08:00:47,705 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:47,705 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:47,706 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:47,706 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:47,706 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:47,706 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:47,706 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -936,7 +936,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:47,909 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 17, Válidos: 17
 2025-11-05 08:00:47,909 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:47,910 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:47,911 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:47,911 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:47,911 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:47,911 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:47,911 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -986,7 +986,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:48,113 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 18, Válidos: 18
 2025-11-05 08:00:48,113 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:48,113 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:48,113 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:48,113 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:48,114 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:48,114 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:48,114 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1033,7 +1033,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:48,307 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 19, Válidos: 19
 2025-11-05 08:00:48,308 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:48,308 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:48,308 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:48,308 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:48,309 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:48,309 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:48,309 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1100,7 +1100,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:53,573 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 20, Válidos: 20
 2025-11-05 08:00:53,573 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:53,573 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:53,573 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:53,573 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:53,574 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:53,574 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:53,574 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1147,7 +1147,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 21, Válidos: 21
 2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:53,680 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:53,681 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1194,7 +1194,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:53,789 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 22, Válidos: 22
 2025-11-05 08:00:53,790 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:53,790 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:53,790 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:53,790 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:53,791 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:53,791 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:53,791 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1241,7 +1241,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:53,897 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 23, Válidos: 23
 2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:53,898 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1288,7 +1288,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 24, Válidos: 24
 2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:53,998 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:53,999 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:53,999 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1335,7 +1335,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,091 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 25, Válidos: 25
 2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,092 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1382,7 +1382,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,195 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 26, Válidos: 26
 2025-11-05 08:00:54,195 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,195 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,196 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,196 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,196 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,196 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,196 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1429,7 +1429,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,327 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 27, Válidos: 27
 2025-11-05 08:00:54,329 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,329 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,329 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,329 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,330 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,330 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,330 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1476,7 +1476,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,508 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 28, Válidos: 28
 2025-11-05 08:00:54,509 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,509 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,510 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,510 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,510 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,510 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,510 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1523,7 +1523,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,611 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 29, Válidos: 29
 2025-11-05 08:00:54,611 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,613 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,613 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,613 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,614 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,614 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,614 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1570,7 +1570,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,729 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 30, Válidos: 30
 2025-11-05 08:00:54,729 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,730 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,730 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,730 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,730 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,730 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,731 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1617,7 +1617,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 31, Válidos: 31
 2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:54,919 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:54,920 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1664,7 +1664,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,043 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 32, Válidos: 32
 2025-11-05 08:00:55,043 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,043 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,043 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,043 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,044 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,044 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,044 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1711,7 +1711,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,165 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 33, Válidos: 33
 2025-11-05 08:00:55,165 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,166 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,166 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,166 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,166 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,167 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,167 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1758,7 +1758,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 34, Válidos: 34
 2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,316 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,318 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,318 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1805,7 +1805,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 35, Válidos: 35
 2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,449 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,451 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1852,7 +1852,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,585 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 36, Válidos: 36
 2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,586 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,587 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1899,7 +1899,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,719 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 37, Válidos: 37
 2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,720 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1946,7 +1946,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,852 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 38, Válidos: 38
 2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,853 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -1993,7 +1993,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:55,981 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 39, Válidos: 39
 2025-11-05 08:00:55,982 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:55,982 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:55,982 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:55,982 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:55,982 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:55,983 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:55,983 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2040,7 +2040,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,156 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 40, Válidos: 40
 2025-11-05 08:00:56,157 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,157 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,157 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,157 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,158 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,158 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,158 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2087,7 +2087,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,298 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 41, Válidos: 41
 2025-11-05 08:00:56,298 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,299 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,299 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,299 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,299 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,299 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,300 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2134,7 +2134,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 42, Válidos: 42
 2025-11-05 08:00:56,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,441 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,441 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,441 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,442 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,442 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,442 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2181,7 +2181,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,622 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 43, Válidos: 43
 2025-11-05 08:00:56,622 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,623 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2228,7 +2228,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,753 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 44, Válidos: 44
 2025-11-05 08:00:56,753 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,753 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,753 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,753 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,754 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,754 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,754 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2275,7 +2275,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:56,885 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 45, Válidos: 45
 2025-11-05 08:00:56,885 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:56,885 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:56,887 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:56,887 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:56,887 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:56,887 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:56,888 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2322,7 +2322,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,010 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 46, Válidos: 46
 2025-11-05 08:00:57,011 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,011 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,011 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,011 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,011 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,012 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,012 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2369,7 +2369,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,141 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 47, Válidos: 47
 2025-11-05 08:00:57,141 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,141 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,142 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,142 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,142 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,142 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,142 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2416,7 +2416,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,261 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 48, Válidos: 48
 2025-11-05 08:00:57,261 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,261 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,262 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,262 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,262 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,262 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,262 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2463,7 +2463,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,424 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 49, Válidos: 49
 2025-11-05 08:00:57,425 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,425 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,425 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,425 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,425 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,426 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,426 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2510,7 +2510,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,557 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 50, Válidos: 50
 2025-11-05 08:00:57,557 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,557 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,558 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,558 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,558 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,558 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,558 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2557,7 +2557,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,693 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 51, Válidos: 51
 2025-11-05 08:00:57,693 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,693 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,693 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,693 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,694 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,694 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,694 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2604,7 +2604,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,818 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 52, Válidos: 52
 2025-11-05 08:00:57,818 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,819 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,819 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,819 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,819 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,820 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,820 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2651,7 +2651,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:57,953 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 53, Válidos: 53
 2025-11-05 08:00:57,953 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:57,953 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:57,954 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:57,954 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:57,954 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:57,954 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:57,954 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2698,7 +2698,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:58,079 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 54, Válidos: 54
 2025-11-05 08:00:58,079 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:58,079 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:58,081 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:58,081 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:58,081 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:58,081 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:58,081 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2745,7 +2745,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:58,227 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 55, Válidos: 55
 2025-11-05 08:00:58,227 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:58,228 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2792,7 +2792,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:58,364 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 56, Válidos: 56
 2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:58,365 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE
@@ -2839,7 +2839,7 @@ AttributeError: 'tuple' object has no attribute 'shape'
 2025-11-05 08:00:58,501 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Estadísticas - Total: 57, Válidos: 57
 2025-11-05 08:00:58,502 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI: Success rate: 100.0%
 2025-11-05 08:00:58,502 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
-2025-11-05 08:00:58,502 - biometric_gesture_system - INFO - [authentication_system.py:576] - 🔍 DEBUG ROI GUARDADO:
+2025-11-05 08:00:58,502 - biometric_gesture_system - INFO - [authentication_system.py:576] - DEBUG ROI GUARDADO:
 2025-11-05 08:00:58,503 - biometric_gesture_system - INFO - [authentication_system.py:577] -    - is_valid: True
 2025-11-05 08:00:58,503 - biometric_gesture_system - INFO - [authentication_system.py:578] -    - tiene roi_bbox: False
 2025-11-05 08:00:58,503 - biometric_gesture_system - INFO - [authentication_system.py:579] -    - roi_bbox value: NO EXISTE

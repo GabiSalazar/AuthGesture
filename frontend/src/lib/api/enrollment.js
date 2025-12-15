@@ -23,16 +23,22 @@ export const enrollmentApi = {
   /**
    * Inicia una nueva sesión de enrollment
    */
-  startEnrollment: async (username, email, phoneNumber, age, gender, gestureSequence = null) => {
+  startEnrollment: async (userId, username, email, phoneNumber, age, gender, gestureSequence = null) => {
     try {
-      const { data } = await apiClient.post('/enrollment/start', {
+      const requestBody = {
         username: username,
         email: email,
         phone_number: phoneNumber,
         age: age,
         gender: gender,
         gesture_sequence: gestureSequence
-      })
+      }
+      
+      if (userId) {
+        requestBody.user_id = userId
+      }
+      
+      const { data } = await apiClient.post('/enrollment/start', requestBody)
       return data
     } catch (error) {
       console.error('Error iniciando enrollment:', error)
@@ -123,7 +129,7 @@ export const enrollmentApi = {
 
   resendCode: async (userId, username, email) => {
     try {
-      console.log('🔄 Reenviando código a:', email)
+      console.log('Reenviando código a:', email)
       const response = await fetch('http://localhost:8000/api/email/resend-code', {
         method: 'POST',
         headers: {
@@ -142,10 +148,58 @@ export const enrollmentApi = {
       }
       
       const data = await response.json()
-      console.log('✅ Código reenviado:', data)
+      console.log('Código reenviado:', data)
       return data
     } catch (error) {
-      console.error('❌ Error reenviando código:', error)
+      console.error('Error reenviando código:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Envía OTP sin crear sesión de enrollment
+   * NUEVO: Para verificar email antes de seleccionar gestos
+   */
+  sendOTPOnly: async (email, username) => {
+    try {
+      console.log('Enviando OTP a:', email)
+      const response = await fetch('http://localhost:8000/api/v1/enrollment/send-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          username: username
+        })
+      })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || 'Error enviando OTP')
+      }
+      
+      const data = await response.json()
+      console.log('OTP enviado, user_id:', data.user_id)
+      return data
+    } catch (error) {
+      console.error('Error enviando OTP:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Configura la secuencia de gestos después de verificar el email
+   */
+  configureGestures: async (sessionId, gestureSequence) => {
+    try {
+      const { data } = await apiClient.post('/enrollment/configure-gestures', {
+        session_id: sessionId,
+        gesture_sequence: gestureSequence
+      })
+      return data
+    } catch (error) {
+      console.error('Error configurando gestos:', error)
       throw error
     }
   },

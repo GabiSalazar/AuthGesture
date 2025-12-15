@@ -31,7 +31,7 @@ async def confirm_feedback(
         Página HTML de confirmación
     """
     try:
-        logger.info(f"📧 Feedback recibido - Token: {token[:20]}..., Respuesta: {response}")
+        logger.info(f"Feedback recibido - Token: {token[:20]}..., Respuesta: {response}")
         
         # Validar respuesta
         if response not in ['was_me', 'not_me']:
@@ -46,19 +46,19 @@ async def confirm_feedback(
         # Verificar que el intento existe
         attempt = service.get_attempt_by_token(token)
         if not attempt:
-            logger.warning(f"⚠️ Token no encontrado: {token}")
+            logger.warning(f"NOToken no encontrado: {token}")
             return _generate_error_page("Token inválido o expirado")
         
         # Verificar si ya tiene feedback
         if attempt.get('user_feedback'):
-            logger.info(f"ℹ️ Intento ya tiene feedback: {attempt['user_feedback']}")
+            logger.info(f"Intento ya tiene feedback: {attempt['user_feedback']}")
             return _generate_already_responded_page()
         
         # Actualizar feedback
         success = service.update_user_feedback(token, response)
         
         if success:
-            logger.info(f"✅ Feedback guardado exitosamente")
+            logger.info(f"Feedback guardado exitosamente")
             
             # Determinar tipo de feedback para mensaje personalizado
             was_correct = (
@@ -68,13 +68,13 @@ async def confirm_feedback(
             
             return _generate_success_page(response, was_correct)
         else:
-            logger.error(f"❌ Error guardando feedback")
+            logger.error(f"Error guardando feedback")
             return _generate_error_page("Error al procesar tu respuesta")
             
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"❌ Error procesando feedback: {e}")
+        logger.error(f"Error procesando feedback: {e}")
         return _generate_error_page("Error interno del servidor")
 
 
@@ -90,7 +90,7 @@ async def get_verification_metrics(user_id: Optional[str] = None):
         Diccionario con métricas calculadas
     """
     try:
-        logger.info(f"📊 Calculando métricas - Usuario: {user_id or 'todos'}")
+        logger.info(f"Calculando métricas - Usuario: {user_id or 'todos'}")
         
         service = get_feedback_service()
         metrics = service.calculate_metrics(user_id=user_id)
@@ -102,7 +102,7 @@ async def get_verification_metrics(user_id: Optional[str] = None):
                 'metrics': {}
             }
         
-        logger.info(f"✅ Métricas calculadas: Accuracy={metrics.get('accuracy', 0):.2%}")
+        logger.info(f"Métricas calculadas: Accuracy={metrics.get('accuracy', 0):.2%}")
         
         return {
             'success': True,
@@ -122,7 +122,7 @@ async def get_verification_metrics(user_id: Optional[str] = None):
         }
         
     except Exception as e:
-        logger.error(f"❌ Error calculando métricas: {e}")
+        logger.error(f"Error calculando métricas: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

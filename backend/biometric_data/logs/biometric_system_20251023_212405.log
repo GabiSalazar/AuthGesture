@@ -27,15 +27,15 @@
 2025-10-23 21:24:05,276 - biometric_gesture_system - INFO - [system_manager.py:867] - Creando instancia Singleton de BiometricSystemManager.
 2025-10-23 21:24:05,276 - biometric_gesture_system - INFO - [system_manager.py:105] - Creando nueva instancia de BiometricSystemManager v2.0.1 - Corrected Init
 2025-10-23 21:24:05,276 - biometric_gesture_system - INFO - [system_manager.py:140] - ================================================================================
-2025-10-23 21:24:05,277 - biometric_gesture_system - INFO - [system_manager.py:141] - 🚀 Iniciando BiometricSystemManager v2.0.1 - Corrected Init
+2025-10-23 21:24:05,277 - biometric_gesture_system - INFO - [system_manager.py:141] - Iniciando BiometricSystemManager v2.0.1 - Corrected Init
 2025-10-23 21:24:05,277 - biometric_gesture_system - INFO - [system_manager.py:142] - ================================================================================
 2025-10-23 21:24:05,277 - biometric_gesture_system - INFO - [system_manager.py:149] - BiometricSystemManager __init__ completado (estructura base creada).
 2025-10-23 21:24:05,277 - biometric_gesture_system - INFO - [system_manager.py:174] - 
 ================================================================================
-2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:175] - 🔧 INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
+2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:175] - INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
 2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:176] - ================================================================================
 2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:254] - --------------------------------------------------------------------------------
-2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:255] - 🔧 NIVEL 1: Inicializando Componentes Básicos
+2025-10-23 21:24:05,278 - biometric_gesture_system - INFO - [system_manager.py:255] - NIVEL 1: Inicializando Componentes Básicos
 2025-10-23 21:24:05,279 - biometric_gesture_system - INFO - [system_manager.py:256] - --------------------------------------------------------------------------------
 2025-10-23 21:24:05,279 - biometric_gesture_system - INFO - [system_manager.py:259] - Inicializando ConfigManager...
 2025-10-23 21:24:05,282 - biometric_gesture_system - INFO - [config_manager.py:504] - Validación de configuración: ✓ EXITOSA

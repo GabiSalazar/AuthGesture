@@ -35,7 +35,7 @@ async def config_health_check():
             "initialized": True,
             "config_file": config_mgr.config_file,
             "logging_enabled": config_mgr.logger is not None,
-            "message": "✅ Módulo 1 cargado correctamente"
+            "message": "Módulo 1 cargado correctamente"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en Config Manager: {str(e)}")

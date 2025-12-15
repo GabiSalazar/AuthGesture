@@ -52,7 +52,7 @@ async def reference_area_health_check():
             "status": "healthy",
             "module": "Reference Area Manager",
             "initialized": True,
-            "message": "✅ Módulo 5 cargado correctamente",
+            "message": "Módulo 5 cargado correctamente",
             "use_single_area": area_mgr.use_single_area
         }
     except Exception as e:

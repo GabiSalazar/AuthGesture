@@ -31,16 +31,16 @@ async def get_all_authentication_attempts(
         print("\n🔵 ENDPOINT /all-attempts LLAMADO")
         print(f"   Limit: {limit}, Offset: {offset}")
         
-        # ✅ USAR MÉTODO DIRECTO DE SUPABASE
-        logger.info(f"📊 Obteniendo intentos directamente desde Supabase...")
+        #  USAR MÉTODO DIRECTO DE SUPABASE
+        logger.info(f"Obteniendo intentos directamente desde Supabase...")
         all_attempts = db.get_all_auth_attempts(limit=None)
         
-        print(f"   ✅ Intentos retornados del método: {len(all_attempts)}")
-        logger.info(f"📊 Total de intentos obtenidos: {len(all_attempts)}")
+        print(f"    Intentos retornados del método: {len(all_attempts)}")
+        logger.info(f"Total de intentos obtenidos: {len(all_attempts)}")
         
         # Si no hay intentos, devolver respuesta vacía válida
         if len(all_attempts) == 0:
-            print("   ⚠️ No hay intentos - retornando respuesta vacía")
+            print("   NONo hay intentos - retornando respuesta vacía")
             return {
                 "status": "success",
                 "total_attempts": 0,
@@ -59,7 +59,7 @@ async def get_all_authentication_attempts(
         # Aplicar limit y offset
         paginated_attempts = all_attempts[offset:offset + limit]
         
-        print(f"   📄 Intentos paginados: {len(paginated_attempts)}")
+        print(f"   Intentos paginados: {len(paginated_attempts)}")
         
         # Formatear datos para el frontend
         attempts_data = []
@@ -85,8 +85,8 @@ async def get_all_authentication_attempts(
                 logger.error(f"Error formateando intento: {format_error}")
                 continue
         
-        print(f"   ✅ Intentos formateados: {len(attempts_data)}")
-        logger.info(f"✅ Retornando {len(attempts_data)} intentos formateados")
+        print(f"    Intentos formateados: {len(attempts_data)}")
+        logger.info(f" Retornando {len(attempts_data)} intentos formateados")
         
         return {
             "status": "success",
@@ -101,8 +101,8 @@ async def get_all_authentication_attempts(
         }
         
     except Exception as e:
-        print(f"   ❌ ERROR en endpoint: {e}")
-        logger.error(f"❌ Error obteniendo intentos de autenticación: {e}")
+        print(f"   ERROR en endpoint: {e}")
+        logger.error(f"Error obteniendo intentos de autenticación: {e}")
         import traceback
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
@@ -124,7 +124,7 @@ async def get_authentication_stats():
     try:
         db = get_biometric_database()
         
-        # ✅ USAR MÉTODO DIRECTO
+        #  USAR MÉTODO DIRECTO
         all_attempts = db.get_all_auth_attempts(limit=None)
         
         if len(all_attempts) == 0:
@@ -187,7 +187,7 @@ async def get_authentication_stats():
         }
         
     except Exception as e:
-        logger.error(f"❌ Error calculando estadísticas de autenticación: {e}")
+        logger.error(f"Error calculando estadísticas de autenticación: {e}")
         import traceback
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
@@ -205,10 +205,10 @@ async def get_all_identification_attempts(
     try:
         db = get_biometric_database()
         
-        logger.info(f"📊 Obteniendo intentos de IDENTIFICACIÓN desde Supabase...")
+        logger.info(f"Obteniendo intentos de IDENTIFICACIÓN desde Supabase...")
         all_attempts = db.get_all_identification_attempts(limit=limit)
         
-        logger.info(f"📊 Total de intentos de identificación obtenidos: {len(all_attempts)}")
+        logger.info(f"Total de intentos de identificación obtenidos: {len(all_attempts)}")
         
         if len(all_attempts) == 0:
             return {
@@ -246,7 +246,7 @@ async def get_all_identification_attempts(
                 logger.error(f"Error formateando intento: {format_error}")
                 continue
         
-        logger.info(f"✅ Retornando {len(attempts_data)} intentos de identificación")
+        logger.info(f" Retornando {len(attempts_data)} intentos de identificación")
         
         return {
             "status": "success",
@@ -256,7 +256,7 @@ async def get_all_identification_attempts(
         }
         
     except Exception as e:
-        logger.error(f"❌ Error obteniendo intentos de identificación: {e}")
+        logger.error(f"Error obteniendo intentos de identificación: {e}")
         import traceback
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
@@ -274,7 +274,7 @@ async def get_recent_authentication_attempts(
     try:
         db = get_biometric_database()
         
-        # ✅ USAR MÉTODO DIRECTO
+        #  USAR MÉTODO DIRECTO
         all_attempts = db.get_all_auth_attempts(limit=None)
         
         # Filtrar por resultado si se especifica

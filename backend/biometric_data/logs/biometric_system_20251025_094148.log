@@ -25,13 +25,13 @@
 2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
 2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
 2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [system_manager.py:138] - ================================================================================
-2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [system_manager.py:139] - 🚀 BiometricSystemManager v2.0.0 Real Edition Iniciado
-2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [system_manager.py:140] - 🏗️  Arquitectura: 15 Módulos + Main | 4 Capas Funcionales
-2025-10-25 09:41:48,504 - biometric_gesture_system - INFO - [system_manager.py:141] - 🎯 Características: Redes siamesas, fusión multimodal, templates biométricos
+2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [system_manager.py:139] - BiometricSystemManager v2.0.0 Real Edition Iniciado
+2025-10-25 09:41:48,497 - biometric_gesture_system - INFO - [system_manager.py:140] - Arquitectura: 15 Módulos + Main | 4 Capas Funcionales
+2025-10-25 09:41:48,504 - biometric_gesture_system - INFO - [system_manager.py:141] - Características: Redes siamesas, fusión multimodal, templates biométricos
 2025-10-25 09:41:48,504 - biometric_gesture_system - INFO - [system_manager.py:142] - ================================================================================
 2025-10-25 09:41:48,505 - biometric_gesture_system - INFO - [system_manager.py:194] - 
 ================================================================================
-2025-10-25 09:41:48,505 - biometric_gesture_system - INFO - [system_manager.py:195] - 🔧 INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
+2025-10-25 09:41:48,505 - biometric_gesture_system - INFO - [system_manager.py:195] - INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
 2025-10-25 09:41:48,505 - biometric_gesture_system - INFO - [system_manager.py:196] - ================================================================================
 2025-10-25 09:41:48,506 - biometric_gesture_system - INFO - [system_manager.py:156] - VERIFICANDO MÓDULOS DEL SISTEMA...
 2025-10-25 09:41:48,506 - biometric_gesture_system - INFO - [system_manager.py:157] - ================================================================================
@@ -54,16 +54,16 @@
 ✅ TODOS LOS 15 MÓDULOS DISPONIBLES
 2025-10-25 09:41:48,508 - biometric_gesture_system - INFO - [system_manager.py:182] - ================================================================================
 2025-10-25 09:41:48,508 - biometric_gesture_system - INFO - [system_manager.py:208] - 
-🔧 NIVEL 1: Inicializando Componentes Básicos
+NIVEL 1: Inicializando Componentes Básicos
 2025-10-25 09:41:48,508 - biometric_gesture_system - INFO - [system_manager.py:209] - --------------------------------------------------------------------------------
 2025-10-25 09:41:48,508 - biometric_gesture_system - INFO - [system_manager.py:286] - Inicializando Base de Datos...
 2025-10-25 09:41:49,265 - biometric_gesture_system - INFO - [system_manager.py:296] - ✅ Base de datos lista: 1 usuarios registrados
 2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:216] - ✅ NIVEL 1 COMPLETADO: Componentes básicos listos
 
-2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:221] - 📊 NIVEL 2: Inicializando Extractores de Características
+2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:221] - NIVEL 2: Inicializando Extractores de Características
 2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:222] - --------------------------------------------------------------------------------
 2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:315] - --------------------------------------------------------------------------------
-2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:316] - 📊 NIVEL 2: Inicializando Extractores de Características
+2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:316] - NIVEL 2: Inicializando Extractores de Características
 2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:317] - --------------------------------------------------------------------------------
 2025-10-25 09:41:49,288 - biometric_gesture_system - INFO - [system_manager.py:321] -   ✅ AnatomicalFeaturesExtractor inicializado
 2025-10-25 09:41:49,288 - biometric_gesture_system - ERROR - [system_manager.py:325] - MediaPipeProcessor no está inicializado antes que DynamicFeaturesExtractor.

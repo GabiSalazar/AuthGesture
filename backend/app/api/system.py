@@ -87,14 +87,14 @@ async def get_system_status():
             error_message=status_data.get('error_message')
         )
         
-        print(f"📊 System Status: users={users_count}, trained={networks_trained}, can_train={can_train}")
+        print(f"System Status: users={users_count}, trained={networks_trained}, can_train={can_train}")
         
         return response
         
     except Exception as e:
         import traceback
         error_detail = f"Error obteniendo estado: {str(e)}\n{traceback.format_exc()}"
-        print(f"❌ ERROR en get_system_status: {error_detail}")
+        print(f"ERROR en get_system_status: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
 
@@ -135,7 +135,7 @@ async def get_detailed_system_status():
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"❌ ERROR en get_detailed_system_status: {error_trace}")
+        print(f"ERROR en get_detailed_system_status: {error_trace}")
         return {
             "success": False,
             "error": str(e),
@@ -166,15 +166,15 @@ async def initialize_system():
             }
         
         # Inicializar sistema
-        print("🔄 Inicializando sistema...")
+        print("Inicializando sistema...")
         success = manager.initialize_system()
         
         if not success:
             error_msg = manager.state.error_message or "Error inicializando sistema"
-            print(f"❌ Error en inicialización: {error_msg}")
+            print(f"Error en inicialización: {error_msg}")
             raise HTTPException(status_code=500, detail=error_msg)
         
-        print(f"✅ Sistema inicializado - Nivel: {manager.state.initialization_level.name}")
+        print(f"Sistema inicializado - Nivel: {manager.state.initialization_level.name}")
         
         return {
             "initialized": True,
@@ -192,7 +192,7 @@ async def initialize_system():
     except Exception as e:
         import traceback
         error_detail = f"Error en inicialización: {str(e)}\n{traceback.format_exc()}"
-        print(f"❌ ERROR: {error_detail}")
+        print(f"ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
 
@@ -207,12 +207,12 @@ async def train_networks():
     try:
         manager = get_system_manager()
         
-        print(f"🔄 Iniciando entrenamiento - Usuarios: {manager.state.users_count}")
+        print(f"Iniciando entrenamiento - Usuarios: {manager.state.users_count}")
         
         # Verificar que haya suficientes usuarios
         if manager.state.users_count < 2:
             error_msg = f"Se necesitan al menos 2 usuarios registrados. Actualmente: {manager.state.users_count}"
-            print(f"❌ {error_msg}")
+            print(f"{error_msg}")
             raise HTTPException(status_code=400, detail=error_msg)
         
         # Entrenar redes
@@ -220,10 +220,10 @@ async def train_networks():
         
         if not result.get('success', False):
             error_msg = result.get('message', 'Error entrenando redes')
-            print(f"❌ Error en entrenamiento: {error_msg}")
+            print(f"Error en entrenamiento: {error_msg}")
             raise HTTPException(status_code=500, detail=error_msg)
         
-        print(f"✅ Entrenamiento exitoso")
+        print(f"Entrenamiento exitoso")
         print(f"   - Red anatómica: {result.get('anatomical_trained', False)}")
         print(f"   - Red dinámica: {result.get('dynamic_trained', False)}")
         
@@ -244,7 +244,7 @@ async def train_networks():
     except Exception as e:
         import traceback
         error_detail = f"Error en entrenamiento: {str(e)}\n{traceback.format_exc()}"
-        print(f"❌ ERROR: {error_detail}")
+        print(f"ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
 
@@ -262,12 +262,12 @@ async def retrain_networks(force: bool = False):
     try:
         manager = get_system_manager()
         
-        print(f"🔄 Iniciando REENTRENAMIENTO - Usuarios: {manager.state.users_count}, Force: {force}")
+        print(f"Iniciando REENTRENAMIENTO - Usuarios: {manager.state.users_count}, Force: {force}")
         
         # Verificar que haya suficientes usuarios
         if manager.state.users_count < 2:
             error_msg = f"Se necesitan al menos 2 usuarios. Actualmente: {manager.state.users_count}"
-            print(f"❌ {error_msg}")
+            print(f"{error_msg}")
             raise HTTPException(status_code=400, detail=error_msg)
         
         # Reentrenar (siempre con force=True para reentrenamiento)
@@ -275,10 +275,10 @@ async def retrain_networks(force: bool = False):
         
         if not result.get('success', False):
             error_msg = result.get('message', 'Error reentrenando redes')
-            print(f"❌ Error en reentrenamiento: {error_msg}")
+            print(f"Error en reentrenamiento: {error_msg}")
             raise HTTPException(status_code=500, detail=error_msg)
         
-        print(f"✅ Reentrenamiento exitoso")
+        print(f"Reentrenamiento exitoso")
         print(f"   - Red anatómica: {result.get('anatomical_trained', False)}")
         print(f"   - Red dinámica: {result.get('dynamic_trained', False)}")
         
@@ -299,7 +299,7 @@ async def retrain_networks(force: bool = False):
     except Exception as e:
         import traceback
         error_detail = f"Error en reentrenamiento: {str(e)}\n{traceback.format_exc()}"
-        print(f"❌ ERROR: {error_detail}")
+        print(f"ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
 @router.get("/system/pending-retrain", response_model=PendingRetrainResponse)
@@ -325,7 +325,7 @@ async def get_pending_retrain_users():
         # Obtener usuarios pendientes
         pending_users = manager.get_pending_retrain_users()
         
-        print(f"📊 Usuarios pendientes de reentrenamiento: {len(pending_users)}")
+        print(f"Usuarios pendientes de reentrenamiento: {len(pending_users)}")
         for user in pending_users:
             print(f"   - {user['username']} ({user['user_id']}): {user['total_templates']} templates")
         
@@ -339,7 +339,7 @@ async def get_pending_retrain_users():
     except Exception as e:
         import traceback
         error_detail = f"Error obteniendo usuarios pendientes: {str(e)}\n{traceback.format_exc()}"
-        print(f"❌ ERROR: {error_detail}")
+        print(f"ERROR: {error_detail}")
         raise HTTPException(status_code=500, detail=error_detail)
 
 @router.get("/system/modules")
@@ -366,7 +366,7 @@ async def get_modules_status():
             modules_info["modules_detail"].append({
                 "name": module_name,
                 "loaded": loaded,
-                "status": "✅ Cargado" if loaded else "❌ No cargado"
+                "status": "Cargado" if loaded else "No cargado"
             })
         
         return modules_info
@@ -374,7 +374,7 @@ async def get_modules_status():
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"❌ ERROR en get_modules_status: {error_trace}")
+        print(f"ERROR en get_modules_status: {error_trace}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -409,7 +409,7 @@ async def get_system_statistics():
                 statistics['total_templates'] = total_templates
                 statistics['avg_templates_per_user'] = total_templates / len(users) if users else 0
             except Exception as e:
-                print(f"⚠️ Error calculando estadísticas de templates: {e}")
+                print(f"Error calculando estadísticas de templates: {e}")
         
         return {
             "success": True,
@@ -424,7 +424,7 @@ async def get_system_statistics():
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"❌ ERROR en get_system_statistics: {error_trace}")
+        print(f"ERROR en get_system_statistics: {error_trace}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -437,11 +437,11 @@ async def cleanup_resources():
         Dict con resultado de la limpieza
     """
     try:
-        print("🧹 Limpiando recursos del sistema...")
+        print("Limpiando recursos del sistema...")
         manager = get_system_manager()
         manager.cleanup_resources()
         
-        print("✅ Recursos limpiados exitosamente")
+        print("Recursos limpiados exitosamente")
         
         return {
             "success": True,
@@ -451,7 +451,7 @@ async def cleanup_resources():
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"❌ ERROR en cleanup_resources: {error_trace}")
+        print(f"ERROR en cleanup_resources: {error_trace}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -496,14 +496,14 @@ async def system_health_check():
             }
         }
         
-        print(f"💓 Health Check - Status: {health_status['status']}")
+        print(f"Health Check - Status: {health_status['status']}")
         
         return health_status
         
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
-        print(f"❌ ERROR en system_health_check: {error_trace}")
+        print(f"ERROR en system_health_check: {error_trace}")
         return {
             "healthy": False,
             "status": "error",

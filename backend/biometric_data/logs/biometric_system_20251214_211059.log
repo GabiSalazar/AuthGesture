@@ -1,0 +1,691 @@
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:504] - Validación de configuración: ✓ EXITOSA
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:317] - ================================================================================
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:318] - SISTEMA BIOMÉTRICO DE GESTOS DE MANOS - CONFIG MANAGER INICIALIZADO
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:319] - ================================================================================
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:320] - Configuración cargada desde: biometric_config.json
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:321] - Muestras por gesto: 7
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:322] - Gestos por usuario: 3
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:323] - Umbral confianza mano: 0.9
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:324] - Umbral confianza gesto: 0.6
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:325] - Resolución cámara: 1280x720
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:326] - Directorios creados: 11 rutas configuradas
+2025-12-14 21:10:59,357 - biometric_gesture_system - INFO - [config_manager.py:327] - ================================================================================
+2025-12-14 21:11:00,468 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-12-14 21:11:00,468 - biometric_gesture_system - INFO - [config_manager.py:630] - ROI NORMALIZATION SYSTEM INICIALIZADO
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución mínima: 150px
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Resolución máxima: 600px
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Tamaño normalizado: (224, 224)
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Padding: 15%
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] -   ✓ Sharpening: ACTIVADO
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [config_manager.py:630] - ======================================================================
+2025-12-14 21:11:00,470 - biometric_gesture_system - INFO - [visual_feedback.py:62] - ======================================================================
+2025-12-14 21:11:00,471 - biometric_gesture_system - INFO - [visual_feedback.py:63] - VISUAL FEEDBACK MANAGER INICIALIZADO
+2025-12-14 21:11:00,471 - biometric_gesture_system - INFO - [visual_feedback.py:64] -   ✓ 5 niveles de feedback configurados
+2025-12-14 21:11:00,471 - biometric_gesture_system - INFO - [visual_feedback.py:65] -   ✓ Colores BGR definidos
+2025-12-14 21:11:00,471 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
+2025-12-14 21:11:00,471 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
+2025-12-14 21:11:24,808 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-12-14 21:11:24,808 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.enabled, usando default: True
+2025-12-14 21:11:24,808 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: roi_normalization.use_single_area, usando default: True
+2025-12-14 21:11:24,808 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.dynamic_features, usando default: {'min_transition_frames': 8, 'max_transition_frames': 40, 'gesture_stability_threshold': 5, 'velocity_smoothing_window': 3, 'min_movement_threshold': 0.005, 'transition_detection_sensitivity': 0.85, 'temporal_downsampling': 1, 'normalize_temporal_features': True, 'use_3d_trajectories': True, 'velocity_threshold_percentile': 75, 'acceleration_smoothing': True, 'jerk_threshold': 0.1, 'minimum_sequence_duration_ms': 200}
+2025-12-14 21:11:24,814 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.sequence_management, usando default: {'sequence_length': 3, 'max_sequence_duration': 60.0, 'max_gesture_duration': 15.0, 'min_gesture_confidence': 0.7, 'min_stable_frames': 3, 'gesture_timeout': 10.0, 'sequence_timeout': 45.0, 'max_failed_attempts': 3, 'cooldown_period': 5.0, 'auto_save_sequences': True, 'validation_mode': 'moderate', 'allow_gesture_skipping': False, 'require_exact_order': True, 'enable_adaptive_timeouts': True}
+2025-12-14 21:11:24,814 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.samples_per_gesture, usando default: 8
+2025-12-14 21:11:24,815 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_confidence, usando default: 0.65
+2025-12-14 21:11:24,815 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.min_stability_frames, usando default: 8
+2025-12-14 21:11:24,815 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.require_all_gestures, usando default: True
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.sample_timeout, usando default: 120.0
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.session_timeout, usando default: 3600.0
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.capture_interval, usando default: 0.8
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_quality_check, usando default: True
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_duplicate_check, usando default: True
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.duplicate_threshold, usando default: 0.92
+2025-12-14 21:11:24,816 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.template_fusion_strategy, usando default: average
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.enable_template_optimization, usando default: True
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.embedding_dimension_check, usando default: True
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_preview, usando default: True
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.show_quality_feedback, usando default: False
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.enrollment.save_enrollment_video, usando default: False
+2025-12-14 21:11:24,817 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.siamese_anatomical, usando default: {'hidden_layers': [128, 64], 'activation': 'relu', 'dropout_rate': 0.2, 'batch_normalization': True, 'l2_regularization': 0.001, 'learning_rate': 0.001, 'batch_size': 32, 'epochs': 100, 'patience': 15, 'validation_split': 0.2, 'min_users_for_training': 2, 'min_samples_per_user': 15, 'max_samples_per_user': 50, 'min_sessions_per_user': 1, 'loss_function': 'contrastive', 'distance_metric': 'euclidean', 'margin': 1.5, 'alpha': 0.2, 'use_stratified_split': True, 'cross_validation_folds': 5, 'threshold_optimization': 'eer', 'quality_threshold': 80.0, 'use_real_augmentation': True, 'temporal_jitter': 0.02, 'noise_from_real_variance': True, 'require_independent_test': True, 'min_test_users': 1, 'performance_monitoring': True}
+2025-12-14 21:11:27,954 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.feature_preprocessing, usando default: {'anatomical_normalization': 'robust', 'dynamic_normalization': 'standard', 'normalize_per_user': False, 'balancing_method': 'balanced_subsample', 'target_balance_ratio': 1.0, 'augmentation_strategy': 'moderate', 'augmentation_factor': 1.5, 'cv_folds': 5, 'cv_strategy': 'stratified_user', 'test_size': 0.2, 'validation_size': 0.2, 'outlier_threshold': 3.0, 'min_samples_per_user': 5, 'feature_selection': False, 'variance_threshold': 0.01, 'cache_transformations': True, 'parallel_processing': False, 'random_state': 42, 'stratify_by_user': True}
+2025-12-14 21:11:27,958 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.sequence_timeout, usando default: 25.0
+2025-12-14 21:11:27,958 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.total_timeout, usando default: 45.0
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.frame_timeout, usando default: 3.0
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_low, usando default: 0.65
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_standard, usando default: 0.75
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_high, usando default: 0.85
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.threshold_maximum, usando default: 0.92
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.require_sequence_completion, usando default: True
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_gestures_for_auth, usando default: 2
+2025-12-14 21:11:27,959 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_attempts_per_session, usando default: 3
+2025-12-14 21:11:27,962 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_identification_candidates, usando default: 5
+2025-12-14 21:11:27,962 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.identification_threshold_factor, usando default: 1.1
+2025-12-14 21:11:27,962 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_quality_score, usando default: 0.7
+2025-12-14 21:11:27,962 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_confidence, usando default: 0.65
+2025-12-14 21:11:27,963 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.min_stability_frames, usando default: 8
+2025-12-14 21:11:27,963 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.score_fusion_strategy, usando default: weighted_average
+2025-12-14 21:11:27,963 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.anatomical_weight, usando default: 0.6
+2025-12-14 21:11:27,963 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.dynamic_weight, usando default: 0.4
+2025-12-14 21:11:27,963 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_audit_logging, usando default: True
+2025-12-14 21:11:27,964 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_continuous_auth, usando default: False
+2025-12-14 21:11:27,964 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_failed_attempts, usando default: 5
+2025-12-14 21:11:27,964 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.lockout_duration, usando default: 300.0
+2025-12-14 21:11:27,964 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.score_fusion, usando default: {'fusion_strategy': 'weighted_average', 'calibration_method': 'none', 'weight_optimization': 'grid_search', 'anatomical_weight': 0.6, 'dynamic_weight': 0.4, 'decision_threshold': 0.5, 'use_confidence_weighting': True, 'adaptive_threshold': False, 'cross_validation_folds': 5, 'optimization_metric': 'eer'}
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:456] - RealAuthenticationPipeline inicializado con componentes
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:1478] - RealSessionManager inicializado para gestión de sesiones
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:278] - RealSecurityAuditor inicializado para auditoría
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:1707] - Servicio de feedback inicializado
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:1711] - Servicio de identificación inicializado
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:1734] - RealAuthenticationSystem inicializado
+2025-12-14 21:11:27,964 - biometric_gesture_system - INFO - [authentication_system.py:1735] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
+2025-12-14 23:24:01,548 - biometric_gesture_system - INFO - [authentication_system.py:3875] - Usuarios disponibles: 10
+2025-12-14 23:24:05,639 - biometric_gesture_system - INFO - [authentication_system.py:1769] - Inicializando sistema de autenticación...
+2025-12-14 23:24:05,639 - biometric_gesture_system - INFO - [authentication_system.py:1772] - Obteniendo referencias a redes entrenadas...
+2025-12-14 23:24:05,639 - biometric_gesture_system - INFO - [authentication_system.py:1777] - === DIAGNÓSTICO DE ESTADO DE REDES ===
+2025-12-14 23:24:05,644 - biometric_gesture_system - INFO - [authentication_system.py:1785] - Archivos de modelo en disco:
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1786] -   - Anatómico: True - biometric_data\models\anatomical_model.h5
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1787] -   - Dinámico: True - biometric_data\models\dynamic_model.h5
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1790] - Estado de instancias globales:
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1791] -   - Anatómica is_trained: True
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1792] -   - Dinámica is_trained: True
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1795] - Modelos compilados:
+2025-12-14 23:24:05,646 - biometric_gesture_system - INFO - [authentication_system.py:1796] -   - Anatómica siamese_model: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1797] -   - Dinámica siamese_model: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1799] - === FIN DIAGNÓSTICO ===
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1801] - Referencias a redes obtenidas:
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1802] -   - Red anatómica disponible: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1803] -   - Red anatómica entrenada: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1804] -   - Red dinámica disponible: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:1805] -   - Red dinámica entrenada: True
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:461] - Inicializando pipeline de autenticación...
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:464] - Obteniendo referencias actuales a redes entrenadas...
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:469] - Verificando estado de entrenamiento...
+2025-12-14 23:24:05,647 - biometric_gesture_system - INFO - [authentication_system.py:470] -   - Red anatómica entrenada: True
+2025-12-14 23:24:05,649 - biometric_gesture_system - INFO - [authentication_system.py:471] -   - Red dinámica entrenada: True
+2025-12-14 23:24:14,349 - biometric_gesture_system - INFO - [authentication_system.py:511] - Pipeline de autenticación inicializado exitosamente
+2025-12-14 23:24:14,349 - biometric_gesture_system - INFO - [authentication_system.py:512] -   - Red anatómica entrenada: True
+2025-12-14 23:24:14,361 - biometric_gesture_system - INFO - [authentication_system.py:513] -   - Red dinámica entrenada: True
+2025-12-14 23:24:14,361 - biometric_gesture_system - INFO - [authentication_system.py:514] -   - Sistema de fusión listo: True
+2025-12-14 23:24:14,361 - biometric_gesture_system - INFO - [authentication_system.py:1851] - Sistema de autenticación inicializado exitosamente
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1852] -   - Usuarios disponibles: 10
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1853] -   - Templates totales: 443
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1855] -   - Pipeline listo: True
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1856] -   - Redes entrenadas: anatómica=True, dinámica=True
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1887] - Iniciando verificación para usuario: user_alexamor_1765771952766_b37f74b0
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1888] -   - Nivel de seguridad: standard
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1889] -   - Secuencia requerida: None
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1503] - Creando sesión: modo=verification, usuario=user_alexamor_1765771952766_b37f74b0
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1556] - Sesión creada exitosamente: eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1557] -   - Modo: verification
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1558] -   - Usuario: user_alexamor_1765771952766_b37f74b0
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1559] -   - Nivel seguridad: standard
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1560] -   - Secuencia requerida: ['Open_Palm', 'Closed_Fist', 'Victory']
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1920] - Verificación iniciada: sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1921] -   - Usuario: user_alexamor_1765771952766_b37f74b0
+2025-12-14 23:24:14,362 - biometric_gesture_system - INFO - [authentication_system.py:1922] -   - Templates disponibles: 49
+2025-12-14 23:24:15,633 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:15,633 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #1 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:15,633 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:15,681 - biometric_gesture_system - INFO - [authentication_system.py:874] - AUTH: No se detectó mano válida en frame original
+2025-12-14 23:24:16,213 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:16,213 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #2 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:16,213 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:16,248 - biometric_gesture_system - INFO - [authentication_system.py:874] - AUTH: No se detectó mano válida en frame original
+2025-12-14 23:24:16,810 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:16,811 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #3 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:16,811 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:16,843 - biometric_gesture_system - INFO - [authentication_system.py:874] - AUTH: No se detectó mano válida en frame original
+2025-12-14 23:24:17,397 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:17,397 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #4 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:17,397 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:17,426 - biometric_gesture_system - INFO - [authentication_system.py:874] - AUTH: No se detectó mano válida en frame original
+2025-12-14 23:24:18,012 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:18,012 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #5 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:18,012 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:18,074 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:18,074 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:18,074 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:18,074 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 79.058
+2025-12-14 23:24:18,629 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:18,629 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #6 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:18,629 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:18,657 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:18,658 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.911
+2025-12-14 23:24:18,658 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:18,658 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 67.768
+2025-12-14 23:24:19,210 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:19,210 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #7 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:19,211 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:19,236 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:19,248 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.964
+2025-12-14 23:24:19,248 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:19,249 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 80.934
+2025-12-14 23:24:19,804 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:19,804 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #8 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:19,805 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:19,838 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:19,838 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.948
+2025-12-14 23:24:19,838 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:19,838 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.290
+2025-12-14 23:24:20,405 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:20,406 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #9 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:20,406 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:20,431 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:20,431 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.959
+2025-12-14 23:24:20,433 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:20,433 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 68.984
+2025-12-14 23:24:21,008 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:21,008 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #10 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:21,008 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:21,048 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:21,048 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.975
+2025-12-14 23:24:21,049 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:21,049 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.871
+2025-12-14 23:24:21,601 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:21,601 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #11 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:21,602 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:21,639 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:21,639 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.975
+2025-12-14 23:24:21,639 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:21,639 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.145
+2025-12-14 23:24:22,199 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:22,199 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #12 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:22,200 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:22,237 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:22,237 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.965
+2025-12-14 23:24:22,237 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:22,237 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.841
+2025-12-14 23:24:22,822 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:22,822 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #13 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:22,822 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:22,862 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:22,862 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.965
+2025-12-14 23:24:22,862 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:22,863 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.808
+2025-12-14 23:24:23,428 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:23,428 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #14 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:23,428 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:23,456 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:23,456 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.977
+2025-12-14 23:24:23,456 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:23,456 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 79.148
+2025-12-14 23:24:24,011 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:24,011 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #15 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:24,012 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:24,049 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:24,049 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:24,049 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:24,050 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 73.643
+2025-12-14 23:24:24,609 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:24,610 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #16 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:24,610 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:24,637 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:24,637 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.968
+2025-12-14 23:24:24,637 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:24,637 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 73.019
+2025-12-14 23:24:25,210 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:25,210 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #17 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:25,210 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:25,259 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:25,259 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.974
+2025-12-14 23:24:25,259 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:25,260 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 73.863
+2025-12-14 23:24:25,803 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:25,804 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #18 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:25,804 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:25,846 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:25,846 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.972
+2025-12-14 23:24:25,846 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:25,847 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 73.774
+2025-12-14 23:24:26,422 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:26,423 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #19 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:26,423 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:26,483 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:26,483 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.967
+2025-12-14 23:24:26,483 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:26,483 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 74.156
+2025-12-14 23:24:27,002 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:27,003 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #20 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:27,003 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:27,041 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:27,041 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:27,041 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:27,041 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 74.098
+2025-12-14 23:24:27,602 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:27,602 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #21 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:27,602 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:27,640 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:27,640 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.976
+2025-12-14 23:24:27,641 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:27,641 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 74.281
+2025-12-14 23:24:28,207 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:28,208 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #22 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:28,208 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:28,266 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:28,267 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.975
+2025-12-14 23:24:28,267 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:28,267 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 84.060
+2025-12-14 23:24:28,811 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:28,811 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #23 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:28,811 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:28,860 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:28,860 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.976
+2025-12-14 23:24:28,860 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:28,860 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 84.054
+2025-12-14 23:24:29,411 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:29,411 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #24 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:29,412 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:29,450 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:29,450 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.975
+2025-12-14 23:24:29,450 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:29,450 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 83.852
+2025-12-14 23:24:30,009 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:30,010 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #25 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:30,010 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:30,052 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:30,054 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.979
+2025-12-14 23:24:30,054 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:30,054 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 84.076
+2025-12-14 23:24:30,619 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:30,619 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #26 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:30,620 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:30,658 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:30,658 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.976
+2025-12-14 23:24:30,658 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:30,658 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 83.789
+2025-12-14 23:24:31,207 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:31,207 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #27 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:31,208 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:31,254 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:31,255 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.978
+2025-12-14 23:24:31,255 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:31,256 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 84.072
+2025-12-14 23:24:31,809 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:31,810 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #28 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:31,810 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:31,851 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:31,851 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:31,852 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:31,852 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.019
+2025-12-14 23:24:32,404 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:32,404 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #29 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:32,404 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:32,434 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:32,434 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.973
+2025-12-14 23:24:32,434 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:32,434 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.531
+2025-12-14 23:24:33,001 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:33,002 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #30 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:33,002 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:33,033 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:33,033 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.976
+2025-12-14 23:24:33,033 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:33,033 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.310
+2025-12-14 23:24:33,601 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:33,602 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #31 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:33,602 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:33,639 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:33,639 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.975
+2025-12-14 23:24:33,639 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:33,639 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 71.936
+2025-12-14 23:24:34,201 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:34,202 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #32 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:34,202 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:34,236 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:34,236 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.961
+2025-12-14 23:24:34,236 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:34,236 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.393
+2025-12-14 23:24:34,800 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:34,800 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #33 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:34,801 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:34,830 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:34,838 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.970
+2025-12-14 23:24:34,838 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:34,839 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.454
+2025-12-14 23:24:35,413 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:35,413 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #34 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:35,413 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:35,448 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:35,449 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.968
+2025-12-14 23:24:35,449 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:35,449 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 71.763
+2025-12-14 23:24:36,012 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:36,012 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #35 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:36,012 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:36,041 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:36,041 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.962
+2025-12-14 23:24:36,041 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:36,041 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.721
+2025-12-14 23:24:36,611 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:36,611 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #36 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:36,611 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:36,648 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:36,648 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.960
+2025-12-14 23:24:36,648 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:36,649 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 72.095
+2025-12-14 23:24:37,205 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:37,205 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #37 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:37,206 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:37,244 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:37,244 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.954
+2025-12-14 23:24:37,244 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:37,244 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.944
+2025-12-14 23:24:37,810 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:37,810 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #38 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:37,810 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:37,864 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:37,866 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.881
+2025-12-14 23:24:37,866 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:37,866 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 77.719
+2025-12-14 23:24:38,429 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:38,429 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #39 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:38,429 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:38,467 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:38,467 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.959
+2025-12-14 23:24:38,467 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:38,467 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.581
+2025-12-14 23:24:39,007 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:39,007 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #40 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:39,007 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:39,046 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:39,046 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.946
+2025-12-14 23:24:39,046 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:39,046 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.272
+2025-12-14 23:24:39,598 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:39,598 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #41 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:39,600 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:39,638 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:39,638 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.956
+2025-12-14 23:24:39,638 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:39,640 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.396
+2025-12-14 23:24:40,201 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:40,202 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #42 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:40,202 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:40,240 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:40,240 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.967
+2025-12-14 23:24:40,240 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:40,240 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.698
+2025-12-14 23:24:40,815 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:40,816 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #43 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:40,816 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:40,846 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:40,855 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:40,855 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:40,856 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.484
+2025-12-14 23:24:41,411 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:41,411 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #44 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:41,412 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:41,448 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:41,448 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.968
+2025-12-14 23:24:41,448 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:41,448 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.4
+2025-12-14 23:24:41,456 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:41,457 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (1 frames)
+2025-12-14 23:24:41,457 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (1/5)
+2025-12-14 23:24:42,012 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:42,012 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #45 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:42,012 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:42,038 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:42,038 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.970
+2025-12-14 23:24:42,038 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:42,038 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.7
+2025-12-14 23:24:42,055 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:42,055 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (2 frames)
+2025-12-14 23:24:42,055 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (2/5)
+2025-12-14 23:24:42,613 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:42,613 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #46 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:42,614 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:42,657 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:42,657 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.971
+2025-12-14 23:24:42,657 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:42,658 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.6
+2025-12-14 23:24:42,660 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:42,661 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (3 frames)
+2025-12-14 23:24:42,661 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (3/5)
+2025-12-14 23:24:43,235 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:43,235 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #47 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:43,236 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:43,287 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:43,288 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.971
+2025-12-14 23:24:43,288 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:43,288 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.5
+2025-12-14 23:24:43,291 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:43,292 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (4 frames)
+2025-12-14 23:24:43,292 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (4/5)
+2025-12-14 23:24:43,805 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:43,806 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #48 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:43,806 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.969
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.5
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (5 frames)
+2025-12-14 23:24:43,840 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (5/5)
+2025-12-14 23:24:44,411 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:44,412 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #49 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:44,412 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.967
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.6
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (6 frames)
+2025-12-14 23:24:44,468 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (6/5)
+2025-12-14 23:24:45,003 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:45,003 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #50 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:45,004 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:45,042 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:45,042 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.965
+2025-12-14 23:24:45,042 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:45,042 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.4
+2025-12-14 23:24:45,048 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:45,048 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (7 frames)
+2025-12-14 23:24:45,048 - biometric_gesture_system - INFO - [authentication_system.py:982] - AUTH: Acumulando frames para características dinámicas... (7/5)
+2025-12-14 23:24:45,600 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:45,600 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #51 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:45,600 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:45,626 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:45,626 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.968
+2025-12-14 23:24:45,626 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:45,626 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 92.6
+2025-12-14 23:24:45,644 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:45,644 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (8 frames)
+2025-12-14 23:24:45,683 - biometric_gesture_system - INFO - [authentication_system.py:1155] - Temporal sequence construida para autenticación: (8, 320)
+2025-12-14 23:24:45,683 - biometric_gesture_system - INFO - [authentication_system.py:1160] - Características dinámicas extraídas del buffer: dim=320
+2025-12-14 23:24:45,683 - biometric_gesture_system - INFO - [authentication_system.py:979] - AUTH: Características dinámicas extraídas del buffer (8 frames)
+2025-12-14 23:24:45,747 - biometric_gesture_system - INFO - [authentication_system.py:1301] - Embedding anatómico generado: dim=64, norm=1.000
+2025-12-14 23:24:45,747 - biometric_gesture_system - INFO - [authentication_system.py:1314] - Generando embedding dinámico para autenticación
+2025-12-14 23:24:45,747 - biometric_gesture_system - INFO - [authentication_system.py:1334] - Temporal sequence shape: (8, 320)
+2025-12-14 23:24:45,826 - biometric_gesture_system - INFO - [authentication_system.py:1359] - Embedding dinámico generado: dim=128, norm=1.000
+2025-12-14 23:24:45,827 - biometric_gesture_system - INFO - [authentication_system.py:995] - AUTH: Embeddings generados - Anatómico: True, Dinámico: True
+2025-12-14 23:24:45,827 - biometric_gesture_system - INFO - [authentication_system.py:1002] - AUTH: Embedding anatómico agregado - Total: 1
+2025-12-14 23:24:45,827 - biometric_gesture_system - INFO - [authentication_system.py:1006] - AUTH: Embedding dinámico agregado - Total: 1
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1013] - AUTH: Captura válida #1 - Embeddings almacenados exitosamente
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1022] - AUTH: Gesto 'Open_Palm' capturado (Verificación)
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1023] - AUTH:    Progreso: 1/3
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1061] - AUTH: Frame procesado exitosamente para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1062] - AUTH:   - Gesto detectado: Open_Palm
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1063] - AUTH:   - Calidad: 92.611
+2025-12-14 23:24:45,828 - biometric_gesture_system - INFO - [authentication_system.py:1064] - AUTH:   - Embeddings: anatómico=True, dinámico=True
+2025-12-14 23:24:45,829 - biometric_gesture_system - INFO - [authentication_system.py:1065] - AUTH:   - Progreso secuencia: 1/3
+2025-12-14 23:24:46,202 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:46,203 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #52 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:46,203 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:46,242 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:46,244 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.967
+2025-12-14 23:24:46,244 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:46,244 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 92.155
+2025-12-14 23:24:46,815 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:46,815 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #53 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:46,815 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:46,853 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:46,853 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.963
+2025-12-14 23:24:46,853 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:46,854 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 92.071
+2025-12-14 23:24:47,419 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:47,419 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #54 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:47,419 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:47,458 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:47,458 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.962
+2025-12-14 23:24:47,458 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:47,458 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 79.058
+2025-12-14 23:24:48,030 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:48,030 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #55 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:48,030 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:48,081 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:48,081 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.968
+2025-12-14 23:24:48,081 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:48,081 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 92.209
+2025-12-14 23:24:48,611 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:48,613 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #56 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:48,613 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:48,638 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:48,638 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.966
+2025-12-14 23:24:48,638 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:48,638 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 79.158
+2025-12-14 23:24:49,225 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:49,226 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #57 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:49,226 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:49,261 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:49,261 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.953
+2025-12-14 23:24:49,261 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:49,261 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.875
+2025-12-14 23:24:49,807 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:49,807 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #58 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:49,807 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:49,844 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:49,844 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.977
+2025-12-14 23:24:49,844 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:49,844 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 79.662
+2025-12-14 23:24:50,412 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:50,412 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #59 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:50,413 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:50,454 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:50,454 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.986
+2025-12-14 23:24:50,454 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:50,454 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 82.840
+2025-12-14 23:24:51,015 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:51,016 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #60 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:51,016 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:51,081 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:51,082 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.983
+2025-12-14 23:24:51,082 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:51,083 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 83.860
+2025-12-14 23:24:51,603 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:51,603 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #61 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:51,604 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:51,633 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:51,633 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.983
+2025-12-14 23:24:51,633 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:51,633 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 90.777
+2025-12-14 23:24:52,200 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:52,201 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #62 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:52,201 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:52,234 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:52,241 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.988
+2025-12-14 23:24:52,241 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:52,242 - biometric_gesture_system - INFO - [authentication_system.py:930] - AUTH: Frame válido - Quality: 95.0
+2025-12-14 23:24:52,245 - biometric_gesture_system - INFO - [authentication_system.py:957] - AUTH: Características anatómicas extraídas
+2025-12-14 23:24:52,247 - biometric_gesture_system - INFO - [authentication_system.py:969] - AUTH: Frame agregado a buffer temporal (9 frames)
+2025-12-14 23:24:52,285 - biometric_gesture_system - INFO - [authentication_system.py:1155] - Temporal sequence construida para autenticación: (9, 320)
+2025-12-14 23:24:52,285 - biometric_gesture_system - INFO - [authentication_system.py:1160] - Características dinámicas extraídas del buffer: dim=320
+2025-12-14 23:24:52,285 - biometric_gesture_system - INFO - [authentication_system.py:979] - AUTH: Características dinámicas extraídas del buffer (9 frames)
+2025-12-14 23:24:52,344 - biometric_gesture_system - INFO - [authentication_system.py:1301] - Embedding anatómico generado: dim=64, norm=1.000
+2025-12-14 23:24:52,346 - biometric_gesture_system - INFO - [authentication_system.py:1314] - Generando embedding dinámico para autenticación
+2025-12-14 23:24:52,346 - biometric_gesture_system - INFO - [authentication_system.py:1334] - Temporal sequence shape: (9, 320)
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1359] - Embedding dinámico generado: dim=128, norm=1.000
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:995] - AUTH: Embeddings generados - Anatómico: True, Dinámico: True
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1002] - AUTH: Embedding anatómico agregado - Total: 2
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1006] - AUTH: Embedding dinámico agregado - Total: 2
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1013] - AUTH: Captura válida #2 - Embeddings almacenados exitosamente
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1022] - AUTH: Gesto 'Closed_Fist' capturado (Verificación)
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1023] - AUTH:    Progreso: 2/3
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1061] - AUTH: Frame procesado exitosamente para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1062] - AUTH:   - Gesto detectado: Closed_Fist
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1063] - AUTH:   - Calidad: 94.975
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1064] - AUTH:   - Embeddings: anatómico=True, dinámico=True
+2025-12-14 23:24:52,411 - biometric_gesture_system - INFO - [authentication_system.py:1065] - AUTH:   - Progreso secuencia: 2/3
+2025-12-14 23:24:52,800 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:52,800 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #63 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:52,800 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:52,832 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:52,832 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.989
+2025-12-14 23:24:52,832 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:52,832 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 95.499
+2025-12-14 23:24:53,408 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:53,408 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #64 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:53,409 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:53,450 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:53,450 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.993
+2025-12-14 23:24:53,450 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:53,450 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 81.012
+2025-12-14 23:24:54,014 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:54,014 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #65 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:54,014 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:54,040 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:54,040 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.994
+2025-12-14 23:24:54,040 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:54,040 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 69.841
+2025-12-14 23:24:54,611 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:54,611 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #66 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:54,611 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:54,647 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:54,647 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.991
+2025-12-14 23:24:54,647 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:54,648 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 80.318
+2025-12-14 23:24:55,207 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:55,208 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #67 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:55,208 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:55,255 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:55,255 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.997
+2025-12-14 23:24:55,255 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:55,256 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 80.230
+2025-12-14 23:24:55,805 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:55,806 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #68 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:55,806 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:55,853 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:55,853 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.995
+2025-12-14 23:24:55,853 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:55,853 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.781
+2025-12-14 23:24:56,431 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:56,433 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #69 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:56,434 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:56,466 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:56,466 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.993
+2025-12-14 23:24:56,466 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:56,466 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.658
+2025-12-14 23:24:57,007 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:57,008 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #70 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:57,008 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:57,049 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:57,049 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.993
+2025-12-14 23:24:57,049 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:57,049 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.553
+2025-12-14 23:24:57,621 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:57,623 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #71 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:57,624 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:57,677 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:57,678 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.994
+2025-12-14 23:24:57,678 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:57,679 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.477
+2025-12-14 23:24:58,201 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:58,203 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #72 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:58,203 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:58,238 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:58,238 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.995
+2025-12-14 23:24:58,238 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:58,238 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.528
+2025-12-14 23:24:58,800 - biometric_gesture_system - INFO - [authentication_system.py:856] - Procesando frame para sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc
+2025-12-14 23:24:58,800 - biometric_gesture_system - INFO - [authentication_system.py:865] - AUTH: Frame #73 recibido del frontend - Shape: (720, 1280, 3)
+2025-12-14 23:24:58,800 - biometric_gesture_system - INFO - [authentication_system.py:870] - AUTH: Procesando frame original para detectar mano...
+2025-12-14 23:24:58,837 - biometric_gesture_system - INFO - [authentication_system.py:877] - AUTH: Mano detectada en frame original
+2025-12-14 23:24:58,837 - biometric_gesture_system - INFO - [authentication_system.py:878] - AUTH: Confianza inicial: 0.997
+2025-12-14 23:24:58,837 - biometric_gesture_system - INFO - [authentication_system.py:890] - AUTH: Usando landmarks del frame ORIGINAL
+2025-12-14 23:24:58,837 - biometric_gesture_system - INFO - [authentication_system.py:927] - AUTH: Calidad insuficiente: 86.882
+2025-12-14 23:24:59,405 - biometric_gesture_system - INFO - [authentication_system.py:1642] - Limpiando sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc por timeout_total
+2025-12-14 23:24:59,407 - biometric_gesture_system - INFO - [authentication_system.py:1598] - Sesión cerrada: eee2e06b-61d6-44b4-995b-35f9fe96d8dc - Estado: timeout
+2025-12-14 23:24:59,407 - biometric_gesture_system - INFO - [authentication_system.py:1599] -   - Duración: 45.0s
+2025-12-14 23:24:59,407 - biometric_gesture_system - INFO - [authentication_system.py:1600] -   - Frames procesados: 73
+2025-12-14 23:24:59,407 - biometric_gesture_system - INFO - [authentication_system.py:1601] -   - Gestos capturados: 2
+2025-12-14 23:24:59,407 - biometric_gesture_system - INFO - [authentication_system.py:1646] - Sesiones limpiadas: 1
+2025-12-14 23:25:09,697 - biometric_gesture_system - ERROR - [authentication_system.py:3638] - Sesión eee2e06b-61d6-44b4-995b-35f9fe96d8dc no encontrada para cancelar

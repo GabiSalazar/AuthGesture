@@ -76,7 +76,7 @@
 2025-11-29 15:55:41,543 - biometric_gesture_system - INFO - [authentication_system.py:1443] - Servicio de feedback inicializado
 2025-11-29 15:55:41,543 - biometric_gesture_system - INFO - [authentication_system.py:1466] - RealAuthenticationSystem inicializado
 2025-11-29 15:55:41,543 - biometric_gesture_system - INFO - [authentication_system.py:1467] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-11-29 15:55:41,621 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:55:41,621 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:55:41,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:55:41,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:55:41,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -94,7 +94,7 @@
 2025-11-29 15:55:41,624 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:55:41,624 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:55:41,624 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:55:52,120 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:55:52,120 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:55:52,120 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:55:52,120 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:55:52,120 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -112,7 +112,7 @@
 2025-11-29 15:55:52,122 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:55:52,122 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:55:52,122 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:56:01,702 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:56:01,702 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:56:01,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:56:01,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:56:01,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -130,7 +130,7 @@
 2025-11-29 15:56:01,705 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:56:01,705 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:56:01,705 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:56:11,693 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:56:11,693 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:56:11,693 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:56:11,693 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:56:11,693 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -148,7 +148,7 @@
 2025-11-29 15:56:11,695 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:56:11,695 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:56:11,695 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:56:21,701 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:56:21,701 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:56:21,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:56:21,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:56:21,702 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -166,7 +166,7 @@
 2025-11-29 15:56:21,705 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:56:21,705 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:56:21,705 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:56:31,733 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:56:31,733 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:56:31,735 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:56:31,735 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:56:31,735 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -184,7 +184,7 @@
 2025-11-29 15:56:31,741 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-29 15:56:31,742 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-29 15:56:31,742 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-29 15:56:41,710 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 15:56:41,710 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 15:56:41,710 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 15:56:41,710 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 15:56:41,710 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)

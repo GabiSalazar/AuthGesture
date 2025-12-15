@@ -109,14 +109,14 @@ app.include_router(authentication_logs.router, prefix=settings.API_V1_STR)
 # Evento de inicio
 @app.on_event("startup")
 async def startup_event():
-    logger.info(f"🚀 Starting {settings.PROJECT_NAME} v{settings.VERSION}")
-    logger.info(f"📁 Base directory: {settings.BASE_DIR}")
-    logger.info(f"🔧 Debug mode: {settings.DEBUG}")
+    logger.info(f"Starting {settings.PROJECT_NAME} v{settings.VERSION}")
+    logger.info(f"Base directory: {settings.BASE_DIR}")
+    logger.info(f"Debug mode: {settings.DEBUG}")
     
     # Crear directorios necesarios
     settings.BIOMETRIC_DATA_DIR.mkdir(exist_ok=True)
     settings.MODELS_DIR.mkdir(exist_ok=True)
-    logger.info("✅ Directories initialized")
+    logger.info("Directories initialized")
     
     logger.info("=" * 80)
     logger.info("INICIALIZANDO MÓDULOS DEL SISTEMA")
@@ -126,29 +126,29 @@ async def startup_event():
     try:
         from app.core.config_manager import get_config_manager
         config_mgr = get_config_manager()
-        logger.info("✅ MÓDULO 1: Config Manager - OK")
+        logger.info("MÓDULO 1: Config Manager - OK")
     except Exception as e:
-        logger.error(f"❌ MÓDULO 1: Config Manager - FAILED: {e}")
+        logger.error(f"MÓDULO 1: Config Manager - FAILED: {e}")
     
     # 2. ROI Normalization (Módulo 0)
     try:
         from app.core.roi_normalization import get_roi_normalization_system
         roi_system = get_roi_normalization_system()
-        logger.info("✅ MÓDULO 0: ROI Normalization System - OK")
+        logger.info("MÓDULO 0: ROI Normalization System - OK")
     except Exception as e:
-        logger.error(f"❌ MÓDULO 0: ROI Normalization - FAILED: {e}")
+        logger.error(f"MÓDULO 0: ROI Normalization - FAILED: {e}")
     
     # 3. Visual Feedback Manager (Módulo 0.5)
     try:
         from app.core.visual_feedback import get_visual_feedback_manager
         feedback_manager = get_visual_feedback_manager()
-        logger.info("✅ MÓDULO 0.5: Visual Feedback Manager - OK")
+        logger.info("MÓDULO 0.5: Visual Feedback Manager - OK")
     except Exception as e:
-        logger.error(f"❌ MÓDULO 0.5: Visual Feedback - FAILED: {e}")
+        logger.error(f"MÓDULO 0.5: Visual Feedback - FAILED: {e}")
     
-    # ✅ NUEVO: Inicialización del Sistema Biométrico Completo
+    # NUEVO: Inicialización del Sistema Biométrico Completo
     logger.info("=" * 80)
-    logger.info("🧠 INICIALIZANDO SISTEMA BIOMÉTRICO COMPLETO")
+    logger.info("INICIALIZANDO SISTEMA BIOMÉTRICO COMPLETO")
     logger.info("=" * 80)
     
     try:
@@ -159,19 +159,19 @@ async def startup_event():
         
         if success:
             status = manager.get_system_status()
-            logger.info("✅ Sistema biométrico inicializado correctamente")
-            logger.info(f"📊 Nivel de inicialización: {status['initialization_level']}")
-            logger.info(f"👥 Usuarios registrados: {status['users_count']}")
-            logger.info(f"🧠 Redes entrenadas: {'✅ SÍ' if status['networks_trained'] else '❌ NO'}")
-            logger.info(f"📝 Enrollment activo: {'✅ SÍ' if status['enrollment_active'] else '❌ NO'}")
-            logger.info(f"🔐 Autenticación activa: {'✅ SÍ' if status['authentication_active'] else '❌ NO'}")
+            logger.info("Sistema biométrico inicializado correctamente")
+            logger.info(f"Nivel de inicialización: {status['initialization_level']}")
+            logger.info(f"Usuarios registrados: {status['users_count']}")
+            logger.info(f"Redes entrenadas: {'SÍ' if status['networks_trained'] else 'NO'}")
+            logger.info(f"Enrollment activo: {'SÍ' if status['enrollment_active'] else 'NO'}")
+            logger.info(f"Autenticación activa: {'SÍ' if status['authentication_active'] else 'NO'}")
         else:
-            logger.error("❌ Error inicializando sistema biométrico")
+            logger.error("Error inicializando sistema biométrico")
             if manager.state.error_message:
-                logger.error(f"🔍 Detalle del error: {manager.state.error_message}")
+                logger.error(f"Detalle del error: {manager.state.error_message}")
     
     except Exception as e:
-        logger.error(f"❌ Error crítico en sistema biométrico: {e}")
+        logger.error(f"Error crítico en sistema biométrico: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
     
@@ -182,7 +182,7 @@ async def startup_event():
 # Evento de cierre
 @app.on_event("shutdown")
 async def shutdown_event():
-    logger.info("👋 Shutting down Biometric Gesture System")
+    logger.info("Shutting down Biometric Gesture System")
 
 if __name__ == "__main__":
     import uvicorn

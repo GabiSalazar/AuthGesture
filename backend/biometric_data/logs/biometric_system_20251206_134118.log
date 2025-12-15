@@ -76,7 +76,7 @@
 2025-12-06 13:41:38,849 - biometric_gesture_system - INFO - [authentication_system.py:1706] - Servicio de feedback inicializado
 2025-12-06 13:41:38,849 - biometric_gesture_system - INFO - [authentication_system.py:1729] - RealAuthenticationSystem inicializado
 2025-12-06 13:41:38,850 - biometric_gesture_system - INFO - [authentication_system.py:1730] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-12-06 13:41:52,285 - biometric_gesture_system - INFO - [system_manager.py:727] - 📊 Total usuarios en sistema: 10
+2025-12-06 13:41:52,285 - biometric_gesture_system - INFO - [system_manager.py:727] - Total usuarios en sistema: 10
 2025-12-06 13:41:52,285 - biometric_gesture_system - INFO - [system_manager.py:729] -    - Zoi Salazar (ID: user_zoisalaz_1764956864981_b9261f22_inactive_20251205172306)
 2025-12-06 13:41:52,286 - biometric_gesture_system - INFO - [system_manager.py:729] -    - GABI SALAZAR (ID: user_gabisala_1765043584036_96695a49)
 2025-12-06 13:41:52,286 - biometric_gesture_system - INFO - [system_manager.py:729] -    - TEST NUMERO 2 (ID: user_testnume_1764974156403_9fd6d5aa_inactive_20251205173801)
@@ -90,7 +90,7 @@
 2025-12-06 13:41:52,287 - biometric_gesture_system - WARNING - [system_manager.py:736] - ❌ No existe archivo de tracking (last_training.json)
 2025-12-06 13:41:52,287 - biometric_gesture_system - WARNING - [system_manager.py:737] -    No se puede determinar qué usuarios están entrenados
 2025-12-06 13:41:52,287 - biometric_gesture_system - WARNING - [system_manager.py:738] -    Retornando lista vacía - entrena las redes primero
-2025-12-06 13:43:12,664 - biometric_gesture_system - INFO - [system_manager.py:727] - 📊 Total usuarios en sistema: 10
+2025-12-06 13:43:12,664 - biometric_gesture_system - INFO - [system_manager.py:727] - Total usuarios en sistema: 10
 2025-12-06 13:43:12,665 - biometric_gesture_system - INFO - [system_manager.py:729] -    - Zoi Salazar (ID: user_zoisalaz_1764956864981_b9261f22_inactive_20251205172306)
 2025-12-06 13:43:12,665 - biometric_gesture_system - INFO - [system_manager.py:729] -    - GABI SALAZAR (ID: user_gabisala_1765043584036_96695a49)
 2025-12-06 13:43:12,666 - biometric_gesture_system - INFO - [system_manager.py:729] -    - TEST NUMERO 2 (ID: user_testnume_1764974156403_9fd6d5aa_inactive_20251205173801)

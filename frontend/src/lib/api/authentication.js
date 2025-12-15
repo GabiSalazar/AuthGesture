@@ -176,7 +176,7 @@ export const authenticationApi = {
   },
 
   /**
-   * ✅ Procesa un frame de autenticación (POST con base64)
+   * Procesa un frame de autenticación (POST con base64)
    */
   processFrame: async (sessionId, frameBase64) => {
     try {

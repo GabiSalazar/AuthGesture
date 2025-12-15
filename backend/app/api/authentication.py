@@ -69,7 +69,7 @@ class FrameProcessResponse(BaseModel):
     gesture_confidence: Optional[float] = None
     required_sequence: Optional[List[str]] = None
     captured_sequence: Optional[List[str]] = None
-    # ✅ NUEVOS CAMPOS PARA IDENTIFICACIÓN
+    #  NUEVOS CAMPOS PARA IDENTIFICACIÓN
     sequence_complete: Optional[bool] = None
     gestures_needed: Optional[int] = None
 
@@ -182,7 +182,7 @@ async def start_identification(request: IdentificationStartRequest):
         
 #         auth_system = get_real_authentication_system()
         
-#         # ✅ VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
+#         #  VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
 #         session = auth_system.session_manager.get_real_session(session_id)
 #         if not session:
 #             raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
@@ -193,7 +193,7 @@ async def start_identification(request: IdentificationStartRequest):
 #         if 'error' in result:
 #             raise HTTPException(status_code=404, detail=result['error'])
         
-#         # ✅ CAPTURAR Y PROCESAR FRAME VISUAL
+#         #  CAPTURAR Y PROCESAR FRAME VISUAL
 #         frame_base64 = None
 #         try:
 #             camera = get_camera_manager()
@@ -216,7 +216,7 @@ async def start_identification(request: IdentificationStartRequest):
 #                     frame = None
 #                 else:
 #                     frame = frame.copy()
-#                     logger.debug(f"✅ Frame válido capturado: {frame.shape}")
+#                     logger.debug(f" Frame válido capturado: {frame.shape}")
     
 #             # ========================================================================
 #             # DISEÑO ADAPTATIVO: VERIFICACIÓN vs IDENTIFICACIÓN
@@ -299,7 +299,7 @@ async def start_identification(request: IdentificationStartRequest):
 #                                                 COLOR_PRIMARY, -1)
                                 
 #                                 # ===== COLUMNA DERECHA: SOLO INDICADORES CIRCULARES =====
-#                                 # ✅ ELIMINADO EL BADGE GRIS - Solo quedan los círculos de progreso
+#                                 #  ELIMINADO EL BADGE GRIS - Solo quedan los círculos de progreso
 #                                 right_x = w - 110
 #                                 circle_y = 35  # Posición vertical de los círculos
 #                                 circle_spacing = 18
@@ -429,7 +429,7 @@ async def start_identification(request: IdentificationStartRequest):
 #                                         (x_pos, y_pos + 2), 
 #                                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                             
-#                             logger.debug("✅ Overlay dibujado correctamente")
+#                             logger.debug(" Overlay dibujado correctamente")
     
 #                     except Exception as e:
 #                         logger.error(f"Error dibujando overlay: {e}")
@@ -445,7 +445,7 @@ async def start_identification(request: IdentificationStartRequest):
                     
 #                     _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
 #                     frame_base64 = base64.b64encode(buffer).decode('utf-8')
-#                     logger.debug(f"✅ Frame codificado: {len(frame_base64)} bytes")
+#                     logger.debug(f" Frame codificado: {len(frame_base64)} bytes")
                     
 #                 except Exception as e:
 #                     logger.error(f"Error codificando frame: {e}")
@@ -459,10 +459,10 @@ async def start_identification(request: IdentificationStartRequest):
 #             logger.error(traceback.format_exc())
 #             frame_base64 = None
         
-#         # ✅ AGREGAR FRAME Y DATOS ADICIONALES AL RESULTADO
+#         #  AGREGAR FRAME Y DATOS ADICIONALES AL RESULTADO
 #         result['frame'] = f"data:image/jpeg;base64,{frame_base64}" if frame_base64 else None
         
-#         # ✅ INFORMACIÓN ADICIONAL PARA IDENTIFICACIÓN
+#         #  INFORMACIÓN ADICIONAL PARA IDENTIFICACIÓN
 #         if session and session.mode == AuthenticationMode.IDENTIFICATION:
 #             result['sequence_complete'] = len(session.gesture_sequence_captured) >= 3
 #             result['gestures_needed'] = 3
@@ -482,7 +482,7 @@ async def start_identification(request: IdentificationStartRequest):
 async def process_authentication_frame(session_id: str, request: ProcessFrameRequest):
     """
     Procesa un frame recibido del frontend para autenticación.
-    ✅ NO USA CÁMARA DEL BACKEND - Recibe frame del frontend
+     NO USA CÁMARA DEL BACKEND - Recibe frame del frontend
     """
     try:
         import cv2
@@ -492,12 +492,12 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
         
         auth_system = get_real_authentication_system()
         
-        # ✅ VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
+        #  VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
         session = auth_system.session_manager.get_real_session(session_id)
         if not session:
             raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
         
-        # ✅ DECODIFICAR FRAME DEL FRONTEND (igual que enrollment)
+        #  DECODIFICAR FRAME DEL FRONTEND (igual que enrollment)
         try:
             # Extraer solo la parte base64 si viene con prefijo data:image
             if request.frame.startswith('data:image'):
@@ -513,22 +513,22 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
             if frame is None:
                 raise ValueError("No se pudo decodificar el frame")
             
-            logger.debug(f"✅ Frame decodificado del frontend: {frame.shape}")
+            logger.debug(f" Frame decodificado del frontend: {frame.shape}")
                 
         except Exception as e:
             logger.error(f"Error decodificando frame del frontend: {e}")
             raise HTTPException(status_code=400, detail=f"Frame inválido: {str(e)}")
         
-        # # ✅ PROCESAR FRAME (usando el frame recibido del frontend)
+        # #  PROCESAR FRAME (usando el frame recibido del frontend)
         # result = auth_system.process_real_authentication_frame(session_id, frame)
         
         # if 'error' in result:
         #     raise HTTPException(status_code=404, detail=result['error'])
         
-        # ✅ PROCESAR FRAME (usando el frame recibido del frontend)
+        #  PROCESAR FRAME (usando el frame recibido del frontend)
         result = auth_system.process_real_authentication_frame(session_id, frame)
         
-        # ✅ MANEJAR ERRORES CON JSON ESTRUCTURADO
+        #  MANEJAR ERRORES CON JSON ESTRUCTURADO
         if 'error' in result:
             # Caso 1: Sesión limpiada por timeout
             if result.get('error') == 'Sesión no encontrada o expirada':
@@ -554,7 +554,7 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
             else:
                 raise HTTPException(status_code=404, detail=result['error'])
         
-        # ✅ DIBUJAR OVERLAY EN EL FRAME RECIBIDO
+        #  DIBUJAR OVERLAY EN EL FRAME RECIBIDO
         try:
             if not isinstance(frame, np.ndarray):
                 raise ValueError("Frame inválido")
@@ -757,7 +757,7 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
                             (x_pos, y_pos + 2), 
                             cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1, cv2.LINE_AA)
                 
-                logger.debug("✅ Overlay dibujado correctamente")
+                logger.debug(" Overlay dibujado correctamente")
 
         except Exception as e:
             logger.error(f"Error dibujando overlay: {e}")
@@ -773,22 +773,22 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
             
             _, buffer = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 90])
             frame_base64 = base64.b64encode(buffer).decode('utf-8')
-            logger.debug(f"✅ Frame codificado: {len(frame_base64)} bytes")
+            logger.debug(f" Frame codificado: {len(frame_base64)} bytes")
             
         except Exception as e:
             logger.error(f"Error codificando frame: {e}")
             frame_base64 = None
         
-        # ✅ AGREGAR FRAME Y DATOS ADICIONALES AL RESULTADO
+        #  AGREGAR FRAME Y DATOS ADICIONALES AL RESULTADO
         result['frame'] = f"data:image/jpeg;base64,{frame_base64}" if frame_base64 else None
         
-        # ✅ INFORMACIÓN ADICIONAL PARA IDENTIFICACIÓN
+        #  INFORMACIÓN ADICIONAL PARA IDENTIFICACIÓN
         if session and session.mode == AuthenticationMode.IDENTIFICATION:
             result['sequence_complete'] = len(session.gesture_sequence_captured) >= 3
             result['gestures_needed'] = 3
             result['captured_sequence'] = session.gesture_sequence_captured
         
-        # ✅ INFORMACIÓN DE BLOQUEO (si existe)
+        #  INFORMACIÓN DE BLOQUEO (si existe)
         if 'is_locked' not in result:
             result['is_locked'] = False
         if 'lockout_info' not in result:

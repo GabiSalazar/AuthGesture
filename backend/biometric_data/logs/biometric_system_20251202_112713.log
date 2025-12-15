@@ -37,4 +37,4 @@ Traceback (most recent call last):
     ^^^^^^^^^^^^^^^^^^^
 AttributeError: 'BiometricDatabase' object has no attribute '_load_database'
 2025-12-02 11:27:14,418 - biometric_gesture_system - ERROR - [system_manager.py:223] - ❌ Error inicializando sistema biométrico
-2025-12-02 11:27:14,418 - biometric_gesture_system - ERROR - [system_manager.py:224] - 🔍 Detalle del error: Error en Nivel 1 (Componentes Básicos)
+2025-12-02 11:27:14,418 - biometric_gesture_system - ERROR - [system_manager.py:224] - Detalle del error: Error en Nivel 1 (Componentes Básicos)

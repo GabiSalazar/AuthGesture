@@ -140,19 +140,19 @@
 2025-11-13 11:09:42,293 - biometric_gesture_system - INFO - [authentication_system.py:1315] -   - Gestos capturados: 0
 2025-11-13 11:09:42,293 - biometric_gesture_system - INFO - [authentication_system.py:1335] - Sesiones expiradas limpiadas: 1
 2025-11-13 11:09:42,293 - biometric_gesture_system - INFO - [authentication_system.py:524] - Procesando frame para sesión 6ead4d52-7feb-4770-b539-a33f11b9ee97
-2025-11-13 11:10:19,207 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 2
+2025-11-13 11:10:19,207 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 2
 2025-11-13 11:10:19,209 - biometric_gesture_system - INFO - [system_manager.py:728] -    - Gabriela Salazar (ID: user_gabriela_1762882140832_800f8527)
 2025-11-13 11:10:19,210 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-13 11:10:19,210 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-13 11:10:19,210 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-13 11:10:19,211 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-13 11:10:19,230 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 2
+2025-11-13 11:10:19,230 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 2
 2025-11-13 11:10:19,230 - biometric_gesture_system - INFO - [system_manager.py:728] -    - Gabriela Salazar (ID: user_gabriela_1762882140832_800f8527)
 2025-11-13 11:10:19,230 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-13 11:10:19,231 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-13 11:10:19,231 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-13 11:10:19,231 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-13 11:10:19,248 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 2
+2025-11-13 11:10:19,248 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 2
 2025-11-13 11:10:19,248 - biometric_gesture_system - INFO - [system_manager.py:728] -    - Gabriela Salazar (ID: user_gabriela_1762882140832_800f8527)
 2025-11-13 11:10:19,248 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-13 11:10:19,248 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)

@@ -42,7 +42,7 @@ async def siamese_anatomical_health_check():
             "status": "healthy",
             "module": "Siamese Anatomical Network",
             "initialized": True,
-            "message": "✅ Módulo 9 cargado correctamente",
+            "message": "Módulo 9 cargado correctamente",
             "tensorflow_available": True,
             "is_trained": network.is_trained,
             "embedding_dim": network.embedding_dim,

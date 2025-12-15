@@ -56,7 +56,7 @@ async def sequence_manager_health_check():
             "status": "healthy",
             "module": "Sequence Manager",
             "initialized": True,
-            "message": "✅ Módulo 8 cargado correctamente",
+            "message": "Módulo 8 cargado correctamente",
             "registered_users": len(manager.user_sequences),
             "active_sequence": manager.current_attempt is not None
         }

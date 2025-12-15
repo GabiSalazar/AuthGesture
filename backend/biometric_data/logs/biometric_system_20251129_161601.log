@@ -76,7 +76,7 @@
 2025-11-29 16:16:22,495 - biometric_gesture_system - INFO - [authentication_system.py:1443] - Servicio de feedback inicializado
 2025-11-29 16:16:22,495 - biometric_gesture_system - INFO - [authentication_system.py:1466] - RealAuthenticationSystem inicializado
 2025-11-29 16:16:22,496 - biometric_gesture_system - INFO - [authentication_system.py:1467] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-11-29 16:16:25,472 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 14
+2025-11-29 16:16:25,472 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 14
 2025-11-29 16:16:25,472 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 16:16:25,472 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 16:16:25,472 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)

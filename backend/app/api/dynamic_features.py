@@ -41,7 +41,7 @@ async def dynamic_features_health_check():
             "status": "healthy",
             "module": "Dynamic Features Extractor",
             "initialized": True,
-            "message": "✅ Módulo 7 cargado correctamente",
+            "message": "Módulo 7 cargado correctamente",
             "feature_dimension": 320,
             "version": "2.0 - 100% Real",
             "type": "REAL - Sin simulación"

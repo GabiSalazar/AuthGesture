@@ -195,7 +195,7 @@ class ROINormalizationSystem:
             
             if distance_status == ROIDistanceStatus.TOO_FAR:
                 self.too_far_count += 1
-                log_info(f"ROI: ❌ RECHAZO - Usuario muy lejos ({roi_width}px < {self.min_roi_width}px)")
+                log_info(f"ROI: RECHAZO - Usuario muy lejos ({roi_width}px < {self.min_roi_width}px)")
                 return self._create_result(
                     None, None, (x1, y1, x2, y2), roi_width, roi_height,
                     aspect_ratio, False, distance_status, feedback_msg,
@@ -204,14 +204,14 @@ class ROINormalizationSystem:
             
             if distance_status == ROIDistanceStatus.TOO_CLOSE:
                 self.too_close_count += 1
-                log_info(f"ROI: ❌ RECHAZO - Usuario muy cerca ({roi_width}px > {self.max_roi_width}px)")
+                log_info(f"ROI: RECHAZO - Usuario muy cerca ({roi_width}px > {self.max_roi_width}px)")
                 return self._create_result(
                     None, None, (x1, y1, x2, y2), roi_width, roi_height,
                     aspect_ratio, False, distance_status, feedback_msg,
                     feedback_color, 1.0, (time.time() - start_time) * 1000
                 )
             
-            log_info(f"ROI: ✅ Tamaño ACEPTABLE - {roi_width}px en rango válido")
+            log_info(f"ROI: Tamaño ACEPTABLE - {roi_width}px en rango válido")
             
             # ===== PASO 4: EXTRAER ROI =====
             log_info("ROI: PASO 4 - Extrayendo región de interés")
@@ -247,7 +247,7 @@ class ROINormalizationSystem:
             self.total_processing_time += processing_time
             
             log_info("=" * 70)
-            log_info("ROI: ✅✅✅ EXTRACCIÓN EXITOSA ✅✅✅")
+            log_info("ROI: EXTRACCIÓN EXITOSA ")
             log_info(f"ROI: Tiempo de procesamiento: {processing_time:.2f}ms")
             log_info(f"ROI: Estadísticas - Total: {self.total_extractions}, Válidos: {self.valid_extractions}")
             log_info(f"ROI: Success rate: {(self.valid_extractions/self.total_extractions)*100:.1f}%")
@@ -283,7 +283,7 @@ class ROINormalizationSystem:
             deficit = self.min_roi_width - roi_width
             return (
                 ROIDistanceStatus.TOO_FAR,
-                f"⚠️ Acérquese {deficit}px más",
+                f"Acérquese {deficit}px más",
                 self.colors[ROIDistanceStatus.TOO_FAR]
             )
         
@@ -291,13 +291,13 @@ class ROINormalizationSystem:
             excess = roi_width - self.max_roi_width
             return (
                 ROIDistanceStatus.TOO_CLOSE,
-                f"⚠️ Aléjese {excess}px",
+                f"Aléjese {excess}px",
                 self.colors[ROIDistanceStatus.TOO_CLOSE]
             )
         
         return (
             ROIDistanceStatus.ACCEPTABLE,
-            f"✅ Distancia perfecta ({roi_width}px)",
+            f"Distancia perfecta ({roi_width}px)",
             self.colors[ROIDistanceStatus.ACCEPTABLE]
         )
     

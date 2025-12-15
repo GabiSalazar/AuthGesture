@@ -268,7 +268,7 @@
 2025-11-27 09:44:47,412 - biometric_gesture_system - INFO - [authentication_system.py:540] - AUTH: Frame #36 capturado - Shape: (720, 1280, 3)
 2025-11-27 09:44:47,412 - biometric_gesture_system - INFO - [authentication_system.py:545] - AUTH: Procesando frame original para detectar mano...
 2025-11-27 09:44:47,503 - biometric_gesture_system - INFO - [authentication_system.py:549] - AUTH: No se detectó mano válida en frame original
-2025-11-27 09:44:48,422 - biometric_gesture_system - INFO - [authentication_system.py:1375] - 🧹 Limpiando sesión 4c61b32f-302f-4c7c-9c02-496544d7f555 por timeout_total
+2025-11-27 09:44:48,422 - biometric_gesture_system - INFO - [authentication_system.py:1375] - Limpiando sesión 4c61b32f-302f-4c7c-9c02-496544d7f555 por timeout_total
 2025-11-27 09:44:48,422 - biometric_gesture_system - INFO - [authentication_system.py:1331] - Sesión cerrada: 4c61b32f-302f-4c7c-9c02-496544d7f555 - Estado: timeout
 2025-11-27 09:44:48,422 - biometric_gesture_system - INFO - [authentication_system.py:1332] -   - Duración: 45.6s
 2025-11-27 09:44:48,422 - biometric_gesture_system - INFO - [authentication_system.py:1333] -   - Frames procesados: 36

@@ -35,7 +35,7 @@ async def feature_preprocessor_health_check():
             "status": "healthy",
             "module": "Feature Preprocessor",
             "initialized": True,
-            "message": "✅ Módulo 11 cargado correctamente",
+            "message": "Módulo 11 cargado correctamente",
             "sklearn_available": True,
             "is_fitted": preprocessor.is_fitted
         }

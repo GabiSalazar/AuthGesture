@@ -683,7 +683,7 @@ class RealSiameseDynamicNetwork:
         """
         try:
             logger.info("=== CARGANDO DATOS TEMPORALES===")
-            logger.info("🔄 Buscando templates con datos temporales para red dinámica...")
+            logger.info("Buscando templates con datos temporales para red dinámica...")
             
             # Obtener usuarios
             real_users = database.list_users()
@@ -692,7 +692,7 @@ class RealSiameseDynamicNetwork:
                 logger.error(f"Insuficientes usuarios: {len(real_users)} < {self.config.get('min_users_for_training', 2)}")
                 return False
             
-            logger.info(f"📊 Usuarios encontrados: {len(real_users)}")
+            logger.info(f"Usuarios encontrados: {len(real_users)}")
             
             # Limpiar muestras
             self.real_training_samples.clear()
@@ -702,7 +702,7 @@ class RealSiameseDynamicNetwork:
             
             for user in real_users:
                 try:
-                    logger.info(f"📂 Procesando usuario: {user.username} ({user.user_id})")
+                    logger.info(f"Procesando usuario: {user.username} ({user.user_id})")
                     
                     # Obtener templates
                     user_templates_list = []
@@ -711,10 +711,10 @@ class RealSiameseDynamicNetwork:
                             user_templates_list.append(template)
                     
                     if not user_templates_list:
-                        logger.info(f"  ⚠️ Usuario {user.user_id} sin templates, omitiendo")
+                        logger.info(f"  Usuario {user.user_id} sin templates, omitiendo")
                         continue
                     
-                    logger.info(f"   📊 Templates encontrados: {len(user_templates_list)}")
+                    logger.info(f"   Templates encontrados: {len(user_templates_list)}")
                     
                     # Filtrar templates con datos temporales
                     temporal_templates = []
@@ -730,7 +730,7 @@ class RealSiameseDynamicNetwork:
                         if 'dynamic' in template_type_str or has_temporal_sequence or has_individual_sequences:
                             temporal_templates.append(template)
                     
-                    logger.info(f"   📊 Templates con datos temporales: {len(temporal_templates)}")
+                    logger.info(f"   Templates con datos temporales: {len(temporal_templates)}")
                     
                     # Procesar templates temporales
                     user_temporal_samples = []
@@ -744,13 +744,13 @@ class RealSiameseDynamicNetwork:
                             has_temporal_sequence = temporal_sequence and len(temporal_sequence) >= 5
                             
                             if has_temporal_sequence or has_individual_data:
-                                logger.info(f"   🔧 Procesando template: {template.gesture_name}")
+                                logger.info(f"   Procesando template: {template.gesture_name}")
                                 logger.info(f"       Tipo: {template.template_type}")
 
                                 
                                 # PROCESAR SECUENCIAS INDIVIDUALES (USUARIOS NORMALES)
                                 if has_individual_data:
-                                    logger.info(f"       🎯 {len(individual_sequences)} secuencias individuales")
+                                    logger.info(f"       {len(individual_sequences)} secuencias individuales")
                                     
                                     sequences_loaded = 0
                                     for seq_idx, sequence in enumerate(individual_sequences):
@@ -783,7 +783,7 @@ class RealSiameseDynamicNetwork:
                                                 user_temporal_samples.append(dynamic_sample)
                                                 sequences_loaded += 1
                                     
-                                    logger.info(f"       ✅ Secuencias preservadas cargadas: {sequences_loaded}")
+                                    logger.info(f"       Secuencias preservadas cargadas: {sequences_loaded}")
 
                                 # PROCESAR SECUENCIA TEMPORAL (BOOTSTRAP)
                                 elif has_temporal_sequence:
@@ -812,14 +812,14 @@ class RealSiameseDynamicNetwork:
                                             }
                                         )
                                         user_temporal_samples.append(dynamic_sample)
-                                        logger.info(f"       ✅ Bootstrap: {len(temporal_sequence)} frames")
+                                        logger.info(f"       Bootstrap: {len(temporal_sequence)} frames")
                                     else:
-                                        logger.warning(f"       ⚠️ Dimensiones incorrectas: {temporal_array.shape}")
+                                        logger.warning(f"       Dimensiones incorrectas: {temporal_array.shape}")
                                 else:
-                                    logger.warning(f"   ⚠️ Template sin datos temporales válidos")
+                                    logger.warning(f"   Template sin datos temporales válidos")
                         
                         except Exception as e:
-                            logger.error(f"   ❌ Error procesando template: {e}")
+                            logger.error(f"   Error procesando template: {e}")
                             continue
                     
                     # Validar usuario
@@ -835,13 +835,13 @@ class RealSiameseDynamicNetwork:
                             gesture_name = sample.metadata.get('gesture_name', 'Unknown')
                             gesture_counts[gesture_name] = gesture_counts.get(gesture_name, 0) + 1
                         
-                        logger.info(f"✅ Usuario temporal válido: {user.username}")
-                        logger.info(f"   📊 Secuencias temporales cargadas: {len(user_temporal_samples)}")
-                        logger.info(f"   🎯 Gestos únicos: {len(gesture_counts)}")
+                        logger.info(f"Usuario temporal válido: {user.username}")
+                        logger.info(f"   Secuencias temporales cargadas: {len(user_temporal_samples)}")
+                        logger.info(f"   Gestos únicos: {len(gesture_counts)}")
                         for gesture, count in gesture_counts.items():
                             logger.info(f"      • {gesture}: {count} secuencias temporales")
                     else:
-                        logger.warning(f"   ⚠️ Usuario {user.user_id} con pocas secuencias temporales: {len(user_temporal_samples)} < {min_temporal_samples}")
+                        logger.warning(f"   Usuario {user.user_id} con pocas secuencias temporales: {len(user_temporal_samples)} < {min_temporal_samples}")
                     
                 except Exception as e:
                     logger.error(f"Error procesando usuario {user.user_id}: {e}")
@@ -855,14 +855,14 @@ class RealSiameseDynamicNetwork:
             
             if users_with_sufficient_data < min_users_required:
                 logger.error("=" * 60)
-                logger.error("❌ USUARIOS INSUFICIENTES")
+                logger.error("USUARIOS INSUFICIENTES")
                 logger.error("=" * 60)
                 logger.error(f"Válidos: {users_with_sufficient_data} < {min_users_required}")
                 return False
             
             if total_samples_loaded < min_total_samples:
                 logger.error("=" * 60)
-                logger.error("❌ MUESTRAS INSUFICIENTES")
+                logger.error("MUESTRAS INSUFICIENTES")
                 logger.error("=" * 60)
                 logger.error(f"Muestras cargadas: {total_samples_loaded} < {min_total_samples}")
                 return False
@@ -890,11 +890,11 @@ class RealSiameseDynamicNetwork:
                 self.real_training_samples = self.real_training_samples[:split_idx]
             
             logger.info("=" * 60)
-            logger.info("✅ DATOS TEMPORALES REALES CARGADOS EXITOSAMENTE")
+            logger.info("DATOS TEMPORALES REALES CARGADOS EXITOSAMENTE")
             logger.info("=" * 60)
-            logger.info(f"👥 Usuarios con datos temporales suficientes: {users_with_sufficient_data}")
-            logger.info(f"🧬 Total secuencias temporales REALES cargadas: {total_samples_loaded}")
-            logger.info(f"📊 Promedio secuencias por usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
+            logger.info(f"Usuarios con datos temporales suficientes: {users_with_sufficient_data}")
+            logger.info(f"Total secuencias temporales REALES cargadas: {total_samples_loaded}")
+            logger.info(f"Promedio secuencias por usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
             logger.info(f"📐 Dimensiones por frame: {self.feature_dim}")
             
             # Actualizar contador
@@ -903,7 +903,7 @@ class RealSiameseDynamicNetwork:
             for sample in all_samples:
                 user_stats[sample.user_id] = user_stats.get(sample.user_id, 0) + 1
             
-            logger.info(f"📈 DISTRIBUCIÓN POR USUARIO:")
+            logger.info(f"DISTRIBUCIÓN POR USUARIO:")
             for user_id, count in user_stats.items():
                 user_name = next((u.username for u in real_users if u.user_id == user_id), user_id)
                 log_info(f"   • {user_name} ({user_id}): {count} secuencias")
@@ -912,20 +912,20 @@ class RealSiameseDynamicNetwork:
             
             # Reporte final
             logger.info("=" * 60)
-            logger.info("✅ DATOS TEMPORALES CARGADOS")
+            logger.info("DATOS TEMPORALES CARGADOS")
             logger.info("=" * 60)
-            logger.info(f"👥 Usuarios: {users_with_sufficient_data}")
-            logger.info(f"🧬 Total secuencias: {total_samples_loaded}")
-            logger.info(f"📊 Promedio/usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
+            logger.info(f"Usuarios: {users_with_sufficient_data}")
+            logger.info(f"Total secuencias: {total_samples_loaded}")
+            logger.info(f"Promedio/usuario: {total_samples_loaded/users_with_sufficient_data:.1f}")
             logger.info(f"📐 Dimensiones: {self.feature_dim}")
-            logger.info(f"📊 Usuarios registrados: {self.users_trained_count}")
+            logger.info(f"Usuarios registrados: {self.users_trained_count}")
             logger.info("=" * 60)
             
             return True
             
         except Exception as e:
             logger.error("=" * 60)
-            logger.error("❌ ERROR CARGANDO DATOS TEMPORALES")
+            logger.error("ERROR CARGANDO DATOS TEMPORALES")
             logger.error("=" * 60)
             logger.error(f"Error: {e}")
             import traceback
@@ -1228,7 +1228,7 @@ class RealSiameseDynamicNetwork:
                 
             def on_train_begin(self, logs=None):
                 initial_lr = float(self.model.optimizer.learning_rate)
-                logger.info(f"🚀 INICIO ENTRENAMIENTO: LR inicial = {initial_lr:.2e}")
+                logger.info(f"INICIO ENTRENAMIENTO: LR inicial = {initial_lr:.2e}")
                 self.prev_val_loss = None
         
         callbacks_list.append(LRAndMetricsMonitor())
@@ -1239,7 +1239,7 @@ class RealSiameseDynamicNetwork:
             def on_epoch_begin(self, epoch, logs=None):
                 # Solo monitorear después de época 15 (cerca del colapso)
                 if epoch >= 15:
-                    logger.info(f"🔍 MONITORING GRADIENTES - Época {epoch+1}")
+                    logger.info(f"MONITORING GRADIENTES - Época {epoch+1}")
             
             def on_epoch_end(self, epoch, logs=None):
                 if epoch >= 15 and logs is not None:  # Solo épocas críticas
@@ -1296,7 +1296,7 @@ class RealSiameseDynamicNetwork:
                 self.prev_batch_loss = None
                 self.batch_losses = []
                 if epoch >= 20:
-                    logger.info(f"🔍 MONITOREANDO COLAPSO ÉPOCA {epoch+1} - Análisis por batch")
+                    logger.info(f"MONITOREANDO COLAPSO ÉPOCA {epoch+1} - Análisis por batch")
             
             def on_batch_end(self, batch, logs=None):
                 self.total_batches += 1
@@ -1763,8 +1763,8 @@ def get_real_siamese_dynamic_network(embedding_dim: int = 128,
                     _real_siamese_dynamic_instance.siamese_model.load_weights(str(model_path))
                     _real_siamese_dynamic_instance.is_trained = True
                     
-                    logger.info(f"✅ Red dinámica cargada: {model_path}")
-                    logger.info(f"✅ Estado: is_trained = {_real_siamese_dynamic_instance.is_trained}")
+                    logger.info(f"Red dinámica cargada: {model_path}")
+                    logger.info(f"Estado: is_trained = {_real_siamese_dynamic_instance.is_trained}")
                     
                 except Exception as load_error:
                     logger.warning(f"Error cargando modelo: {load_error}")

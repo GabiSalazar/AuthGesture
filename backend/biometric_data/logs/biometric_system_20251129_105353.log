@@ -76,7 +76,7 @@
 2025-11-29 10:54:11,836 - biometric_gesture_system - INFO - [authentication_system.py:1443] - Servicio de feedback inicializado
 2025-11-29 10:54:11,836 - biometric_gesture_system - INFO - [authentication_system.py:1466] - RealAuthenticationSystem inicializado
 2025-11-29 10:54:11,836 - biometric_gesture_system - INFO - [authentication_system.py:1467] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-11-29 10:59:04,916 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 11
+2025-11-29 10:59:04,916 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 11
 2025-11-29 10:59:04,916 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaa (ID: user_aaaaaaaa_1763049970151_c1c0811b)
 2025-11-29 10:59:04,916 - biometric_gesture_system - INFO - [system_manager.py:728] -    - AAAAAAAAAAAAAA (ID: user_aaaaaaaa_1763828996188_c2770fd6)
 2025-11-29 10:59:04,916 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aaaaaaaaaaaaaaaaaaaaa (ID: user_aaaaaaaa_1763866366988_e2ec2fe0)
@@ -138,7 +138,7 @@
 2025-11-29 11:02:10,375 - biometric_gesture_system - INFO - [authentication_system.py:1654] -   - Templates disponibles: 40
 2025-11-29 11:02:10,587 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 637e230a-a977-42b8-b60b-1ecd63746e6a
 2025-11-29 11:02:47,384 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 637e230a-a977-42b8-b60b-1ecd63746e6a
-2025-11-29 11:03:08,994 - biometric_gesture_system - INFO - [authentication_system.py:1378] - 🧹 Limpiando sesión 637e230a-a977-42b8-b60b-1ecd63746e6a por timeout_total
+2025-11-29 11:03:08,994 - biometric_gesture_system - INFO - [authentication_system.py:1378] - Limpiando sesión 637e230a-a977-42b8-b60b-1ecd63746e6a por timeout_total
 2025-11-29 11:03:08,994 - biometric_gesture_system - INFO - [authentication_system.py:1334] - Sesión cerrada: 637e230a-a977-42b8-b60b-1ecd63746e6a - Estado: timeout
 2025-11-29 11:03:08,994 - biometric_gesture_system - INFO - [authentication_system.py:1335] -   - Duración: 58.6s
 2025-11-29 11:03:08,994 - biometric_gesture_system - INFO - [authentication_system.py:1336] -   - Frames procesados: 0

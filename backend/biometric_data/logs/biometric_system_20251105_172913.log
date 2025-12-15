@@ -645,7 +645,7 @@
 2025-11-05 17:30:47,320 - biometric_gesture_system - INFO - [authentication_system.py:2277] - ║         INICIANDO IDENTIFICACIÓN 1:N CON FILTRADO           ║
 2025-11-05 17:30:47,320 - biometric_gesture_system - INFO - [authentication_system.py:2278] - ╚══════════════════════════════════════════════════════════════╝
 2025-11-05 17:30:47,320 - biometric_gesture_system - INFO - [authentication_system.py:2285] - 
-2025-11-05 17:30:47,320 - biometric_gesture_system - INFO - [authentication_system.py:2286] - 📋 PASO 1: SECUENCIA CAPTURADA
+2025-11-05 17:30:47,320 - biometric_gesture_system - INFO - [authentication_system.py:2286] - PASO 1: SECUENCIA CAPTURADA
 2025-11-05 17:30:47,322 - biometric_gesture_system - INFO - [authentication_system.py:2287] -    Gestos detectados: ['Open_Palm', 'Closed_Fist', 'Victory']
 2025-11-05 17:30:47,322 - biometric_gesture_system - INFO - [authentication_system.py:2288] -    Total gestos: 3
 2025-11-05 17:30:47,322 - biometric_gesture_system - INFO - [authentication_system.py:2314] -    Secuencia objetivo (3 gestos): ['Open_Palm', 'Closed_Fist', 'Victory']
@@ -653,7 +653,7 @@
 2025-11-05 17:30:47,322 - biometric_gesture_system - INFO - [authentication_system.py:2320] - ╔══════════════════════════════════════════════════════════════╗
 2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2321] - ║              PASO 2: FILTRADO POR SECUENCIA                 ║
 2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2322] - ╚══════════════════════════════════════════════════════════════╝
-2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2569] - 🔍 Buscando usuarios con secuencia: ['Open_Palm', 'Closed_Fist', 'Victory']
+2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2569] - Buscando usuarios con secuencia: ['Open_Palm', 'Closed_Fist', 'Victory']
 2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2576] -    Total usuarios en base de datos: 3
 2025-11-05 17:30:47,323 - biometric_gesture_system - INFO - [authentication_system.py:2577] - 
 2025-11-05 17:30:47,324 - biometric_gesture_system - INFO - [authentication_system.py:2586] -    Usuario 2020:
@@ -666,7 +666,7 @@
 2025-11-05 17:30:47,325 - biometric_gesture_system - INFO - [authentication_system.py:2587] -       Secuencia: ['Open_Palm', 'Closed_Fist', 'Victory']
 2025-11-05 17:30:47,325 - biometric_gesture_system - INFO - [authentication_system.py:2596] -       ✅ COINCIDENCIA ENCONTRADA
 2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2606] - 
-2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2607] - 📊 RESULTADO DE BÚSQUEDA:
+2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2607] - RESULTADO DE BÚSQUEDA:
 2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2608] -    Usuarios totales: 3
 2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2609] -    Coincidencias encontradas: 3
 2025-11-05 17:30:47,326 - biometric_gesture_system - INFO - [authentication_system.py:2352] - 
@@ -682,128 +682,128 @@
 2025-11-05 17:30:47,328 - biometric_gesture_system - INFO - [authentication_system.py:2378] -    Total candidatos a verificar: 3
 2025-11-05 17:30:47,328 - biometric_gesture_system - INFO - [authentication_system.py:2389] - 
 2025-11-05 17:30:47,328 - biometric_gesture_system - INFO - [authentication_system.py:2390] - ═══════════════════════════════════════════════════════════════
-2025-11-05 17:30:47,328 - biometric_gesture_system - INFO - [authentication_system.py:2391] - 🔐 CANDIDATO 1/3: 2020 (ss)
+2025-11-05 17:30:47,328 - biometric_gesture_system - INFO - [authentication_system.py:2391] - CANDIDATO 1/3: 2020 (ss)
 2025-11-05 17:30:47,329 - biometric_gesture_system - INFO - [authentication_system.py:2392] - ═══════════════════════════════════════════════════════════════
 2025-11-05 17:30:47,329 - biometric_gesture_system - INFO - [authentication_system.py:2401] -    Llamando a verificación 1:1...
 2025-11-05 17:30:47,329 - biometric_gesture_system - INFO - [authentication_system.py:1858] - Realizando verificación 1:1 para usuario 2020
-2025-11-05 17:30:47,329 - biometric_gesture_system - INFO - [authentication_system.py:1867] - 📊 Templates encontrados para usuario 2020: 40
-2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1873] - 🧠 Referencias a redes obtenidas:
+2025-11-05 17:30:47,329 - biometric_gesture_system - INFO - [authentication_system.py:1867] - Templates encontrados para usuario 2020: 40
+2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1873] - Referencias a redes obtenidas:
 2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1874] -   - Red anatómica disponible: True
 2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1875] -   - Red anatómica entrenada: True
 2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1876] -   - Red anatómica base_network: True
 2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1877] -   - Red dinámica disponible: True
 2025-11-05 17:30:47,330 - biometric_gesture_system - INFO - [authentication_system.py:1878] -   - Red dinámica entrenada: True
 2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1879] -   - Red dinámica base_network: True
-2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 1/40: 2020_anatomical_1762270093099_...
+2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 1/40: 2020_anatomical_1762270093099_...
 2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 2/40: 2020_anatomical_1762270094213_...
+2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 2/40: 2020_anatomical_1762270094213_...
 2025-11-05 17:30:47,331 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 3/40: 2020_anatomical_1762270095927_...
+2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 3/40: 2020_anatomical_1762270095927_...
 2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 4/40: 2020_anatomical_1762270097652_...
+2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 4/40: 2020_anatomical_1762270097652_...
 2025-11-05 17:30:47,332 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 5/40: 2020_anatomical_1762270099175_...
+2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 5/40: 2020_anatomical_1762270099175_...
 2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 6/40: 2020_anatomical_1762270100929_...
+2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 6/40: 2020_anatomical_1762270100929_...
 2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 7/40: 2020_anatomical_1762270102696_...
+2025-11-05 17:30:47,333 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 7/40: 2020_anatomical_1762270102696_...
 2025-11-05 17:30:47,334 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,334 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 8/40: 2020_anatomical_1762270104440_...
+2025-11-05 17:30:47,334 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 8/40: 2020_anatomical_1762270104440_...
 2025-11-05 17:30:47,335 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,335 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 9/40: 2020_anatomical_1762270106494_...
+2025-11-05 17:30:47,335 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 9/40: 2020_anatomical_1762270106494_...
 2025-11-05 17:30:47,335 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 10/40: 2020_anatomical_1762270110784_...
+2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 10/40: 2020_anatomical_1762270110784_...
 2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 11/40: 2020_anatomical_1762270111354_...
+2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 11/40: 2020_anatomical_1762270111354_...
 2025-11-05 17:30:47,336 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,337 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 12/40: 2020_anatomical_1762270113025_...
+2025-11-05 17:30:47,337 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 12/40: 2020_anatomical_1762270113025_...
 2025-11-05 17:30:47,337 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,337 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 13/40: 2020_anatomical_1762270114466_...
+2025-11-05 17:30:47,337 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 13/40: 2020_anatomical_1762270114466_...
 2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 14/40: 2020_anatomical_1762270116130_...
+2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 14/40: 2020_anatomical_1762270116130_...
 2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 15/40: 2020_anatomical_1762270117718_...
+2025-11-05 17:30:47,338 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 15/40: 2020_anatomical_1762270117718_...
 2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 16/40: 2020_anatomical_1762270119507_...
+2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 16/40: 2020_anatomical_1762270119507_...
 2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 17/40: 2020_anatomical_1762270122415_...
+2025-11-05 17:30:47,339 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 17/40: 2020_anatomical_1762270122415_...
 2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 18/40: 2020_anatomical_1762270124208_...
+2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 18/40: 2020_anatomical_1762270124208_...
 2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 19/40: 2020_anatomical_1762270125849_...
+2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 19/40: 2020_anatomical_1762270125849_...
 2025-11-05 17:30:47,340 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 20/40: 2020_anatomical_1762270127564_...
+2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 20/40: 2020_anatomical_1762270127564_...
 2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 21/40: 2020_anatomical_1762270129512_...
+2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 21/40: 2020_anatomical_1762270129512_...
 2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 22/40: 2020_anatomical_1762270130926_...
+2025-11-05 17:30:47,341 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 22/40: 2020_anatomical_1762270130926_...
 2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 23/40: 2020_anatomical_1762270132519_...
+2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 23/40: 2020_anatomical_1762270132519_...
 2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 24/40: 2020_anatomical_1762270134147_...
+2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 24/40: 2020_anatomical_1762270134147_...
 2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1895] -   ✅ Embedding anatómico agregado (método 1)
-2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 25/40: 2020_dynamic_1762270110832_303...
+2025-11-05 17:30:47,342 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 25/40: 2020_dynamic_1762270110832_303...
 2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 26/40: 2020_dynamic_1762270111437_e5a...
+2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 26/40: 2020_dynamic_1762270111437_e5a...
 2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 27/40: 2020_dynamic_1762270113093_4aa...
+2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 27/40: 2020_dynamic_1762270113093_4aa...
 2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 28/40: 2020_dynamic_1762270114534_bda...
+2025-11-05 17:30:47,343 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 28/40: 2020_dynamic_1762270114534_bda...
 2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 29/40: 2020_dynamic_1762270116205_b52...
+2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 29/40: 2020_dynamic_1762270116205_b52...
 2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 30/40: 2020_dynamic_1762270117779_095...
+2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 30/40: 2020_dynamic_1762270117779_095...
 2025-11-05 17:30:47,344 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 31/40: 2020_dynamic_1762270119580_f86...
+2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 31/40: 2020_dynamic_1762270119580_f86...
 2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 32/40: 2020_dynamic_1762270122465_fe2...
+2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 32/40: 2020_dynamic_1762270122465_fe2...
 2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 33/40: 2020_dynamic_1762270124317_3b7...
+2025-11-05 17:30:47,345 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 33/40: 2020_dynamic_1762270124317_3b7...
 2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 34/40: 2020_dynamic_1762270125910_370...
+2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 34/40: 2020_dynamic_1762270125910_370...
 2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 35/40: 2020_dynamic_1762270127632_472...
+2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 35/40: 2020_dynamic_1762270127632_472...
 2025-11-05 17:30:47,346 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 36/40: 2020_dynamic_1762270129593_037...
+2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 36/40: 2020_dynamic_1762270129593_037...
 2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 37/40: 2020_dynamic_1762270130990_b45...
+2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 37/40: 2020_dynamic_1762270130990_b45...
 2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 38/40: 2020_dynamic_1762270132590_357...
+2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 38/40: 2020_dynamic_1762270132590_357...
 2025-11-05 17:30:47,347 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 39/40: 2020_dynamic_1762270134214_429...
+2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 39/40: 2020_dynamic_1762270134214_429...
 2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
-2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 40/40: 2020_dynamic_sequence_17622701...
+2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 40/40: 2020_dynamic_sequence_17622701...
 2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:1901] -   ✅ Embedding dinámico agregado (método 1)
 2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:2074] - ✅ RESUMEN DE PROCESAMIENTO:
-2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   📊 Templates procesados: 40/40
-2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   🧠 Referencias anatómicas: 24
-2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   🔄 Referencias dinámicas: 16
-2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   📈 Total referencias: 40
-2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2113] - 🧠 Calculando similitudes anatómicas con 24 referencias...
-2025-11-05 17:30:47,350 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 1: 0.9958
-2025-11-05 17:30:47,350 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 2: 0.0048
-2025-11-05 17:30:47,351 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 3: 0.0051
-2025-11-05 17:30:47,351 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 4: 0.0050
-2025-11-05 17:30:47,352 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 5: 0.0053
-2025-11-05 17:30:47,352 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 6: 0.0050
-2025-11-05 17:30:47,353 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 7: 0.0051
-2025-11-05 17:30:47,353 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 8: 0.0052
-2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 9: 0.0045
-2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 10: 0.0052
-2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 11: 0.0052
-2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 12: 0.0048
-2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 13: 0.0076
-2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 14: 0.0057
-2025-11-05 17:30:47,356 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 15: 0.0050
-2025-11-05 17:30:47,356 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 16: 0.0056
-2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 17: 0.9992
-2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 18: 0.9956
-2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 19: 0.9955
-2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 20: 0.9954
-2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 21: 0.9953
-2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 22: 0.9954
-2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 23: 0.9953
-2025-11-05 17:30:47,359 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 24: 0.9953
+2025-11-05 17:30:47,348 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   Templates procesados: 40/40
+2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   Referencias anatómicas: 24
+2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   Referencias dinámicas: 16
+2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   Total referencias: 40
+2025-11-05 17:30:47,349 - biometric_gesture_system - INFO - [authentication_system.py:2113] - Calculando similitudes anatómicas con 24 referencias...
+2025-11-05 17:30:47,350 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 1: 0.9958
+2025-11-05 17:30:47,350 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 2: 0.0048
+2025-11-05 17:30:47,351 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 3: 0.0051
+2025-11-05 17:30:47,351 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 4: 0.0050
+2025-11-05 17:30:47,352 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 5: 0.0053
+2025-11-05 17:30:47,352 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 6: 0.0050
+2025-11-05 17:30:47,353 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 7: 0.0051
+2025-11-05 17:30:47,353 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 8: 0.0052
+2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 9: 0.0045
+2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 10: 0.0052
+2025-11-05 17:30:47,354 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 11: 0.0052
+2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 12: 0.0048
+2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 13: 0.0076
+2025-11-05 17:30:47,355 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 14: 0.0057
+2025-11-05 17:30:47,356 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 15: 0.0050
+2025-11-05 17:30:47,356 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 16: 0.0056
+2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 17: 0.9992
+2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 18: 0.9956
+2025-11-05 17:30:47,357 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 19: 0.9955
+2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 20: 0.9954
+2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 21: 0.9953
+2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 22: 0.9954
+2025-11-05 17:30:47,358 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 23: 0.9953
+2025-11-05 17:30:47,359 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 24: 0.9953
 2025-11-05 17:30:47,359 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:47,359 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 9/24 (37.5%)
 2025-11-05 17:30:47,359 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -811,23 +811,23 @@
 2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:82] -      ❌ Consenso NO alcanzado - Rechazo automático
 2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2152] -   ✅ Score anatómico FINAL: 0.0000
 2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2153] -   ✅ Confianza anatómica: 0.3767
-2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2164] - 🔄 Calculando similitudes dinámicas con 16 referencias...
-2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 1: 0.9998
-2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 2: 0.9998
-2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 3: 0.9998
-2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 4: 0.9998
-2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 5: 0.9998
-2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 6: 0.9998
-2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 7: 0.9998
-2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 8: 0.9998
-2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 9: 0.9998
-2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 10: 0.9998
-2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 11: 0.9998
-2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 12: 0.9998
-2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 13: 0.9998
-2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 14: 0.9998
-2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 15: 0.9998
-2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 16: 0.3327
+2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2164] - Calculando similitudes dinámicas con 16 referencias...
+2025-11-05 17:30:47,360 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 1: 0.9998
+2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 2: 0.9998
+2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 3: 0.9998
+2025-11-05 17:30:47,361 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 4: 0.9998
+2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 5: 0.9998
+2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 6: 0.9998
+2025-11-05 17:30:47,362 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 7: 0.9998
+2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 8: 0.9998
+2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 9: 0.9998
+2025-11-05 17:30:47,363 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 10: 0.9998
+2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 11: 0.9998
+2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 12: 0.9998
+2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 13: 0.9998
+2025-11-05 17:30:47,364 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 14: 0.9998
+2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 15: 0.9998
+2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 16: 0.3327
 2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:47,365 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 15/16 (93.8%)
 2025-11-05 17:30:47,366 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -839,7 +839,7 @@
 2025-11-05 17:30:47,367 - biometric_gesture_system - INFO - [authentication_system.py:2216] - ✅ Score fusionado: 0.4999
 2025-11-05 17:30:47,367 - biometric_gesture_system - INFO - [authentication_system.py:2217] - ✅ Confianza fusionada: 0.4003
 2025-11-05 17:30:47,368 - biometric_gesture_system - INFO - [authentication_system.py:2413] - 
-2025-11-05 17:30:47,368 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    📊 RESULTADOS DE VERIFICACIÓN:
+2025-11-05 17:30:47,368 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    RESULTADOS DE VERIFICACIÓN:
 2025-11-05 17:30:47,369 - biometric_gesture_system - INFO - [authentication_system.py:2415] -       Score anatómico: 0.0000
 2025-11-05 17:30:47,369 - biometric_gesture_system - INFO - [authentication_system.py:2416] -       Score dinámico: 0.9998
 2025-11-05 17:30:47,369 - biometric_gesture_system - INFO - [authentication_system.py:2417] -       Score fusionado: 0.4999
@@ -848,290 +848,290 @@
 2025-11-05 17:30:47,370 - biometric_gesture_system - INFO - [authentication_system.py:2420] -       Decisión: ❌ RECHAZADO
 2025-11-05 17:30:47,370 - biometric_gesture_system - INFO - [authentication_system.py:2389] - 
 2025-11-05 17:30:47,370 - biometric_gesture_system - INFO - [authentication_system.py:2390] - ═══════════════════════════════════════════════════════════════
-2025-11-05 17:30:47,370 - biometric_gesture_system - INFO - [authentication_system.py:2391] - 🔐 CANDIDATO 2/3: al (qw)
+2025-11-05 17:30:47,370 - biometric_gesture_system - INFO - [authentication_system.py:2391] - CANDIDATO 2/3: al (qw)
 2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:2392] - ═══════════════════════════════════════════════════════════════
 2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:2401] -    Llamando a verificación 1:1...
 2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:1858] - Realizando verificación 1:1 para usuario al
-2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:1867] - 📊 Templates encontrados para usuario al: 49
-2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:1873] - 🧠 Referencias a redes obtenidas:
+2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:1867] - Templates encontrados para usuario al: 49
+2025-11-05 17:30:47,371 - biometric_gesture_system - INFO - [authentication_system.py:1873] - Referencias a redes obtenidas:
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1874] -   - Red anatómica disponible: True
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1875] -   - Red anatómica entrenada: True
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1876] -   - Red anatómica base_network: True
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1877] -   - Red dinámica disponible: True
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1878] -   - Red dinámica entrenada: True
 2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1879] -   - Red dinámica base_network: True
-2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 1/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,373 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,372 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 1/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,373 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,473 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,473 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,473 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 2/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,474 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,473 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 2/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,474 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,570 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,571 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,571 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 3/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,571 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,571 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 3/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,571 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,662 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,662 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,662 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 4/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,663 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,662 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 4/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,663 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,772 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,773 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,773 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 5/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,773 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,773 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 5/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,773 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,866 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,866 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,867 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 6/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,867 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,867 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 6/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,867 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 7/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 7/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:47,964 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,073 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,073 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,074 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 8/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,074 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,074 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 8/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,074 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,188 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,188 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,189 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 9/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,189 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,189 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 9/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,189 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,278 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,279 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,279 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 10/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,279 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,279 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 10/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,279 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,364 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,365 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,365 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 11/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,365 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,365 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 11/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,365 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,462 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,463 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,463 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 12/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,463 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,463 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 12/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,463 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,573 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,573 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,575 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 13/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,575 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,575 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 13/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,575 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,666 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,666 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,668 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 14/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,668 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,668 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 14/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,668 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,754 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,754 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,755 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 15/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,755 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,755 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 15/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,755 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,841 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,841 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,842 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 16/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,842 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,842 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 16/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,842 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:48,927 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:48,928 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:48,928 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 17/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:48,928 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:48,928 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 17/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:48,928 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,024 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,024 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,024 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 18/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,025 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,024 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 18/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,025 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,140 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,140 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,141 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 19/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,141 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,141 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 19/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,141 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,234 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,234 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,235 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 20/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,235 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,235 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 20/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,235 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,322 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,322 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,323 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 21/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,323 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,323 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 21/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,323 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,407 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,408 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,408 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 22/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,408 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,408 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 22/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,408 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,492 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,492 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,492 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 23/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,493 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,492 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 23/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,493 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,579 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,580 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,580 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 24/49: al_bootstrap_anatomical_176153...
-2025-11-05 17:30:49,580 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:49,580 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 24/49: al_bootstrap_anatomical_176153...
+2025-11-05 17:30:49,580 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:49,664 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:49,664 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,664 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 25/49: al_bootstrap_dynamic_176153371...
-2025-11-05 17:30:49,665 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:49,664 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 25/49: al_bootstrap_dynamic_176153371...
+2025-11-05 17:30:49,665 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:49,665 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (25, 320)
 2025-11-05 17:30:49,665 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:49,771 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:49,771 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,771 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 26/49: al_bootstrap_dynamic_176153371...
-2025-11-05 17:30:49,772 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:49,771 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 26/49: al_bootstrap_dynamic_176153371...
+2025-11-05 17:30:49,772 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:49,772 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (26, 320)
 2025-11-05 17:30:49,772 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:49,895 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:49,896 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:49,896 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 27/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:49,896 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:49,896 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 27/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:49,896 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:49,897 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (27, 320)
 2025-11-05 17:30:49,897 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,030 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,031 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,031 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 28/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:50,031 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,031 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 28/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:50,031 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,032 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (28, 320)
 2025-11-05 17:30:50,032 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,166 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,166 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,167 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 29/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:50,167 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,167 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 29/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:50,167 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,167 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (29, 320)
 2025-11-05 17:30:50,168 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,296 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,296 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,296 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 30/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:50,298 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,296 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 30/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:50,298 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,298 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (30, 320)
 2025-11-05 17:30:50,299 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,410 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,410 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,410 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 31/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:50,411 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,410 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 31/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:50,411 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,411 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (31, 320)
 2025-11-05 17:30:50,411 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,521 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,521 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,521 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 32/49: al_bootstrap_dynamic_176153372...
-2025-11-05 17:30:50,522 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,521 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 32/49: al_bootstrap_dynamic_176153372...
+2025-11-05 17:30:50,522 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,522 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (32, 320)
 2025-11-05 17:30:50,523 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,641 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,642 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,642 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 33/49: al_bootstrap_dynamic_176153374...
-2025-11-05 17:30:50,642 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,642 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 33/49: al_bootstrap_dynamic_176153374...
+2025-11-05 17:30:50,642 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,643 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (33, 320)
 2025-11-05 17:30:50,643 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,760 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,760 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,760 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 34/49: al_bootstrap_dynamic_176153374...
-2025-11-05 17:30:50,762 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,760 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 34/49: al_bootstrap_dynamic_176153374...
+2025-11-05 17:30:50,762 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,762 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (34, 320)
 2025-11-05 17:30:50,762 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:50,869 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:50,869 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:50,869 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 35/49: al_bootstrap_dynamic_176153374...
-2025-11-05 17:30:50,871 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:50,869 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 35/49: al_bootstrap_dynamic_176153374...
+2025-11-05 17:30:50,871 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:50,871 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (35, 320)
 2025-11-05 17:30:50,872 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 36/49: al_bootstrap_dynamic_176153374...
-2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 36/49: al_bootstrap_dynamic_176153374...
+2025-11-05 17:30:51,008 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,009 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (36, 320)
 2025-11-05 17:30:51,011 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,136 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,137 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,137 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 37/49: al_bootstrap_dynamic_176153375...
-2025-11-05 17:30:51,137 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,137 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 37/49: al_bootstrap_dynamic_176153375...
+2025-11-05 17:30:51,137 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,138 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (37, 320)
 2025-11-05 17:30:51,138 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,253 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,254 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,254 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 38/49: al_bootstrap_dynamic_176153375...
-2025-11-05 17:30:51,254 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,254 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 38/49: al_bootstrap_dynamic_176153375...
+2025-11-05 17:30:51,254 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,255 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (38, 320)
 2025-11-05 17:30:51,255 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,375 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,375 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,376 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 39/49: al_bootstrap_dynamic_176153375...
-2025-11-05 17:30:51,376 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,376 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 39/49: al_bootstrap_dynamic_176153375...
+2025-11-05 17:30:51,376 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,377 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (39, 320)
 2025-11-05 17:30:51,377 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 40/49: al_bootstrap_dynamic_176153375...
-2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 40/49: al_bootstrap_dynamic_176153375...
+2025-11-05 17:30:51,505 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,506 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (40, 320)
 2025-11-05 17:30:51,507 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,618 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,618 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,619 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 41/49: al_bootstrap_dynamic_176153376...
-2025-11-05 17:30:51,619 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,619 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 41/49: al_bootstrap_dynamic_176153376...
+2025-11-05 17:30:51,619 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,619 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (41, 320)
 2025-11-05 17:30:51,621 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,728 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,728 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,729 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 42/49: al_bootstrap_dynamic_176153377...
-2025-11-05 17:30:51,729 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,729 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 42/49: al_bootstrap_dynamic_176153377...
+2025-11-05 17:30:51,729 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,729 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (42, 320)
 2025-11-05 17:30:51,731 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,837 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,837 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,838 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 43/49: al_bootstrap_dynamic_176153377...
-2025-11-05 17:30:51,838 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,838 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 43/49: al_bootstrap_dynamic_176153377...
+2025-11-05 17:30:51,838 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,839 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (43, 320)
 2025-11-05 17:30:51,839 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:51,959 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:51,959 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:51,961 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 44/49: al_bootstrap_dynamic_176153377...
-2025-11-05 17:30:51,961 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:51,961 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 44/49: al_bootstrap_dynamic_176153377...
+2025-11-05 17:30:51,961 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:51,962 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (44, 320)
 2025-11-05 17:30:51,962 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:52,089 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:52,089 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,090 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 45/49: al_bootstrap_dynamic_176153379...
-2025-11-05 17:30:52,090 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:52,090 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 45/49: al_bootstrap_dynamic_176153379...
+2025-11-05 17:30:52,090 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:52,091 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (45, 320)
 2025-11-05 17:30:52,091 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:52,198 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:52,198 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,199 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 46/49: al_bootstrap_dynamic_176153379...
-2025-11-05 17:30:52,199 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:52,199 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 46/49: al_bootstrap_dynamic_176153379...
+2025-11-05 17:30:52,199 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:52,199 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (46, 320)
 2025-11-05 17:30:52,201 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:52,307 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:52,307 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,308 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 47/49: al_bootstrap_dynamic_176153380...
-2025-11-05 17:30:52,308 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:52,308 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 47/49: al_bootstrap_dynamic_176153380...
+2025-11-05 17:30:52,308 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:52,309 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (47, 320)
 2025-11-05 17:30:52,309 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:52,419 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:52,420 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,420 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 48/49: al_bootstrap_dynamic_176153380...
-2025-11-05 17:30:52,420 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:52,420 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 48/49: al_bootstrap_dynamic_176153380...
+2025-11-05 17:30:52,420 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:52,422 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (48, 320)
 2025-11-05 17:30:52,422 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:52,529 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:52,530 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,530 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 49/49: al_dynamic_sequence_1761533806...
+2025-11-05 17:30:52,530 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 49/49: al_dynamic_sequence_1761533806...
 2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2066] -   ⚠️ Template sin datos utilizables
 2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2074] - ✅ RESUMEN DE PROCESAMIENTO:
-2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   📊 Templates procesados: 48/49
-2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   🧠 Referencias anatómicas: 24
-2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   🔄 Referencias dinámicas: 24
-2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   📈 Total referencias: 48
-2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2113] - 🧠 Calculando similitudes anatómicas con 24 referencias...
-2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 1: 0.9951
-2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 2: 0.9950
-2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 3: 0.9951
-2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 4: 0.9950
-2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 5: 0.9951
-2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 6: 0.9950
-2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 7: 0.9951
-2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 8: 0.9951
-2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 9: 0.9966
-2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 10: 0.9967
-2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 11: 0.9983
-2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 12: 0.9969
-2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 13: 0.9982
-2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 14: 0.9980
-2025-11-05 17:30:52,537 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 15: 0.9977
-2025-11-05 17:30:52,537 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 16: 0.9961
-2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 17: 0.9957
-2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 18: 0.9957
-2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 19: 0.9956
-2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 20: 0.9957
-2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 21: 0.9956
-2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 22: 0.9956
-2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 23: 0.9955
-2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 24: 0.9959
+2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   Templates procesados: 48/49
+2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   Referencias anatómicas: 24
+2025-11-05 17:30:52,531 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   Referencias dinámicas: 24
+2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   Total referencias: 48
+2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2113] - Calculando similitudes anatómicas con 24 referencias...
+2025-11-05 17:30:52,532 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 1: 0.9951
+2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 2: 0.9950
+2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 3: 0.9951
+2025-11-05 17:30:52,533 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 4: 0.9950
+2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 5: 0.9951
+2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 6: 0.9950
+2025-11-05 17:30:52,534 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 7: 0.9951
+2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 8: 0.9951
+2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 9: 0.9966
+2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 10: 0.9967
+2025-11-05 17:30:52,535 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 11: 0.9983
+2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 12: 0.9969
+2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 13: 0.9982
+2025-11-05 17:30:52,536 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 14: 0.9980
+2025-11-05 17:30:52,537 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 15: 0.9977
+2025-11-05 17:30:52,537 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 16: 0.9961
+2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 17: 0.9957
+2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 18: 0.9957
+2025-11-05 17:30:52,538 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 19: 0.9956
+2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 20: 0.9957
+2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 21: 0.9956
+2025-11-05 17:30:52,539 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 22: 0.9956
+2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 23: 0.9955
+2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 24: 0.9959
 2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:52,540 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 24/24 (100.0%)
 2025-11-05 17:30:52,541 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -1139,31 +1139,31 @@
 2025-11-05 17:30:52,541 - biometric_gesture_system - INFO - [authentication_system.py:78] -      ✅ Consenso alcanzado - Score: 0.9960
 2025-11-05 17:30:52,541 - biometric_gesture_system - INFO - [authentication_system.py:2152] -   ✅ Score anatómico FINAL: 0.9960
 2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2153] -   ✅ Confianza anatómica: 0.9960
-2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2164] - 🔄 Calculando similitudes dinámicas con 24 referencias...
-2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 1: 0.3684
-2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 2: 0.3631
-2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 3: 0.3601
-2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 4: 0.3575
-2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 5: 0.3552
-2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 6: 0.3531
-2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 7: 0.3512
-2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 8: 0.3494
-2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 9: 0.3518
-2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 10: 0.3558
-2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 11: 0.3598
-2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 12: 0.3621
-2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 13: 0.3634
-2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 14: 0.3640
-2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 15: 0.3635
-2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 16: 0.3632
-2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 17: 0.3627
-2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 18: 0.3621
-2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 19: 0.3615
-2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 20: 0.3609
-2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 21: 0.3602
-2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 22: 0.3596
-2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 23: 0.3588
-2025-11-05 17:30:52,550 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 24: 0.3579
+2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2164] - Calculando similitudes dinámicas con 24 referencias...
+2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 1: 0.3684
+2025-11-05 17:30:52,542 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 2: 0.3631
+2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 3: 0.3601
+2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 4: 0.3575
+2025-11-05 17:30:52,543 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 5: 0.3552
+2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 6: 0.3531
+2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 7: 0.3512
+2025-11-05 17:30:52,544 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 8: 0.3494
+2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 9: 0.3518
+2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 10: 0.3558
+2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 11: 0.3598
+2025-11-05 17:30:52,545 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 12: 0.3621
+2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 13: 0.3634
+2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 14: 0.3640
+2025-11-05 17:30:52,546 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 15: 0.3635
+2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 16: 0.3632
+2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 17: 0.3627
+2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 18: 0.3621
+2025-11-05 17:30:52,548 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 19: 0.3615
+2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 20: 0.3609
+2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 21: 0.3602
+2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 22: 0.3596
+2025-11-05 17:30:52,549 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 23: 0.3588
+2025-11-05 17:30:52,550 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 24: 0.3579
 2025-11-05 17:30:52,550 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:52,550 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 0/24 (0.0%)
 2025-11-05 17:30:52,551 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -1175,7 +1175,7 @@
 2025-11-05 17:30:52,552 - biometric_gesture_system - INFO - [authentication_system.py:2216] - ✅ Score fusionado: 0.4980
 2025-11-05 17:30:52,554 - biometric_gesture_system - INFO - [authentication_system.py:2217] - ✅ Confianza fusionada: 0.4053
 2025-11-05 17:30:52,554 - biometric_gesture_system - INFO - [authentication_system.py:2413] - 
-2025-11-05 17:30:52,555 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    📊 RESULTADOS DE VERIFICACIÓN:
+2025-11-05 17:30:52,555 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    RESULTADOS DE VERIFICACIÓN:
 2025-11-05 17:30:52,555 - biometric_gesture_system - INFO - [authentication_system.py:2415] -       Score anatómico: 0.9960
 2025-11-05 17:30:52,555 - biometric_gesture_system - INFO - [authentication_system.py:2416] -       Score dinámico: 0.0000
 2025-11-05 17:30:52,555 - biometric_gesture_system - INFO - [authentication_system.py:2417] -       Score fusionado: 0.4980
@@ -1184,236 +1184,236 @@
 2025-11-05 17:30:52,556 - biometric_gesture_system - INFO - [authentication_system.py:2420] -       Decisión: ❌ RECHAZADO
 2025-11-05 17:30:52,556 - biometric_gesture_system - INFO - [authentication_system.py:2389] - 
 2025-11-05 17:30:52,557 - biometric_gesture_system - INFO - [authentication_system.py:2390] - ═══════════════════════════════════════════════════════════════
-2025-11-05 17:30:52,557 - biometric_gesture_system - INFO - [authentication_system.py:2391] - 🔐 CANDIDATO 3/3: kk (aa)
+2025-11-05 17:30:52,557 - biometric_gesture_system - INFO - [authentication_system.py:2391] - CANDIDATO 3/3: kk (aa)
 2025-11-05 17:30:52,557 - biometric_gesture_system - INFO - [authentication_system.py:2392] - ═══════════════════════════════════════════════════════════════
 2025-11-05 17:30:52,557 - biometric_gesture_system - INFO - [authentication_system.py:2401] -    Llamando a verificación 1:1...
 2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1858] - Realizando verificación 1:1 para usuario kk
-2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1867] - 📊 Templates encontrados para usuario kk: 40
-2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1873] - 🧠 Referencias a redes obtenidas:
+2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1867] - Templates encontrados para usuario kk: 40
+2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1873] - Referencias a redes obtenidas:
 2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1874] -   - Red anatómica disponible: True
 2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1875] -   - Red anatómica entrenada: True
 2025-11-05 17:30:52,558 - biometric_gesture_system - INFO - [authentication_system.py:1876] -   - Red anatómica base_network: True
 2025-11-05 17:30:52,559 - biometric_gesture_system - INFO - [authentication_system.py:1877] -   - Red dinámica disponible: True
 2025-11-05 17:30:52,559 - biometric_gesture_system - INFO - [authentication_system.py:1878] -   - Red dinámica entrenada: True
 2025-11-05 17:30:52,559 - biometric_gesture_system - INFO - [authentication_system.py:1879] -   - Red dinámica base_network: True
-2025-11-05 17:30:52,559 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 1/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:52,560 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:52,559 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 1/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:52,560 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:52,672 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:52,672 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,673 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 2/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:52,673 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:52,673 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 2/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:52,673 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 3/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 3/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:52,774 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:52,861 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:52,862 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,862 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 4/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:52,862 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:52,862 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 4/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:52,862 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:52,947 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:52,949 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:52,949 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 5/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:52,949 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:52,949 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 5/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:52,949 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,036 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,036 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,036 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 6/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,037 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,036 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 6/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,037 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,123 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,123 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,123 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 7/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,124 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,123 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 7/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,124 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,212 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,212 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,213 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 8/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,213 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,213 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 8/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,213 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,294 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,296 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,296 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 9/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,296 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,296 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 9/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,296 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,380 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,381 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,381 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 10/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,381 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,381 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 10/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,381 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,487 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,487 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,489 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 11/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,489 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,489 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 11/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,489 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,591 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,592 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,592 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 12/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,592 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,592 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 12/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,592 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,686 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,686 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,688 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 13/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,688 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,688 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 13/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,688 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,785 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,786 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,786 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 14/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,786 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,786 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 14/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,786 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,872 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,873 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,873 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 15/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,873 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,873 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 15/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,873 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:53,962 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:53,962 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:53,962 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 16/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:53,963 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:53,962 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 16/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:53,963 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,050 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,051 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,051 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 17/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,051 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,051 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 17/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,051 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,143 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,145 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,145 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 18/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,145 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,145 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 18/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,145 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,244 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,245 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,245 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 19/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,245 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,245 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 19/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,245 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,369 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,369 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,370 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 20/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,370 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,370 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 20/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,370 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,488 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,488 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,490 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 21/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,490 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,490 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 21/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,490 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 22/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 22/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,596 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 23/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 23/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,686 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 24/40: kk_bootstrap_anatomical_176153...
-2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   🔧 Template Bootstrap anatómico detectado: 180 características
+2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 24/40: kk_bootstrap_anatomical_176153...
+2025-11-05 17:30:54,775 - biometric_gesture_system - INFO - [authentication_system.py:1930] -   Template Bootstrap anatómico detectado: 180 características
 2025-11-05 17:30:54,862 - biometric_gesture_system - INFO - [authentication_system.py:1957] -   ✅ Bootstrap anatómico convertido a embedding (180→128 dim)
 2025-11-05 17:30:54,862 - biometric_gesture_system - INFO - [authentication_system.py:1958] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 25/40: kk_bootstrap_dynamic_176153308...
-2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 25/40: kk_bootstrap_dynamic_176153308...
+2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (10, 320)
 2025-11-05 17:30:54,863 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:54,966 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:54,967 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:54,967 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 26/40: kk_bootstrap_dynamic_176153308...
-2025-11-05 17:30:54,967 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:54,967 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 26/40: kk_bootstrap_dynamic_176153308...
+2025-11-05 17:30:54,967 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:54,968 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (11, 320)
 2025-11-05 17:30:54,968 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,072 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,072 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,073 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 27/40: kk_bootstrap_dynamic_176153309...
-2025-11-05 17:30:55,073 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,073 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 27/40: kk_bootstrap_dynamic_176153309...
+2025-11-05 17:30:55,073 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,074 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (12, 320)
 2025-11-05 17:30:55,074 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,181 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,181 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,182 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 28/40: kk_bootstrap_dynamic_176153309...
-2025-11-05 17:30:55,182 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,182 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 28/40: kk_bootstrap_dynamic_176153309...
+2025-11-05 17:30:55,182 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,182 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (13, 320)
 2025-11-05 17:30:55,183 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,288 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,288 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,289 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 29/40: kk_bootstrap_dynamic_176153309...
-2025-11-05 17:30:55,289 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,289 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 29/40: kk_bootstrap_dynamic_176153309...
+2025-11-05 17:30:55,289 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,289 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (14, 320)
 2025-11-05 17:30:55,290 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,403 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 30/40: kk_bootstrap_dynamic_176153309...
-2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 30/40: kk_bootstrap_dynamic_176153309...
+2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (15, 320)
 2025-11-05 17:30:55,405 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,532 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,533 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,533 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 31/40: kk_bootstrap_dynamic_176153310...
-2025-11-05 17:30:55,533 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,533 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 31/40: kk_bootstrap_dynamic_176153310...
+2025-11-05 17:30:55,533 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,534 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (16, 320)
 2025-11-05 17:30:55,534 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,640 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,641 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,641 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 32/40: kk_bootstrap_dynamic_176153310...
-2025-11-05 17:30:55,641 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,641 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 32/40: kk_bootstrap_dynamic_176153310...
+2025-11-05 17:30:55,641 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,642 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (17, 320)
 2025-11-05 17:30:55,642 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,744 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,745 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,745 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 33/40: kk_bootstrap_dynamic_176153310...
-2025-11-05 17:30:55,745 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,745 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 33/40: kk_bootstrap_dynamic_176153310...
+2025-11-05 17:30:55,745 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,746 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (18, 320)
 2025-11-05 17:30:55,746 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,848 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,848 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,849 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 34/40: kk_bootstrap_dynamic_176153310...
-2025-11-05 17:30:55,849 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,849 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 34/40: kk_bootstrap_dynamic_176153310...
+2025-11-05 17:30:55,849 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,850 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (19, 320)
 2025-11-05 17:30:55,850 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:55,954 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:55,954 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:55,955 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 35/40: kk_bootstrap_dynamic_176153311...
-2025-11-05 17:30:55,955 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:55,955 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 35/40: kk_bootstrap_dynamic_176153311...
+2025-11-05 17:30:55,955 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:55,955 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (20, 320)
 2025-11-05 17:30:55,956 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:56,061 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:56,061 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:56,062 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 36/40: kk_bootstrap_dynamic_176153311...
-2025-11-05 17:30:56,062 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:56,062 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 36/40: kk_bootstrap_dynamic_176153311...
+2025-11-05 17:30:56,062 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:56,062 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (21, 320)
 2025-11-05 17:30:56,063 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 37/40: kk_bootstrap_dynamic_176153311...
-2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 37/40: kk_bootstrap_dynamic_176153311...
+2025-11-05 17:30:56,166 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:56,167 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (22, 320)
 2025-11-05 17:30:56,167 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:56,275 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:56,276 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:56,276 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 38/40: kk_bootstrap_dynamic_176153311...
-2025-11-05 17:30:56,276 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:56,276 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 38/40: kk_bootstrap_dynamic_176153311...
+2025-11-05 17:30:56,276 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:56,277 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (23, 320)
 2025-11-05 17:30:56,277 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:56,380 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 39/40: kk_bootstrap_dynamic_176153311...
-2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   🔧 Template Bootstrap dinámico detectado: secuencia temporal
+2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 39/40: kk_bootstrap_dynamic_176153311...
+2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:1982] -   Template Bootstrap dinámico detectado: secuencia temporal
 2025-11-05 17:30:56,381 - biometric_gesture_system - INFO - [authentication_system.py:1988] -       Secuencia shape: (24, 320)
 2025-11-05 17:30:56,383 - biometric_gesture_system - INFO - [authentication_system.py:2017] -       Preparada secuencia para red: (1, 50, 320)
 2025-11-05 17:30:56,485 - biometric_gesture_system - INFO - [authentication_system.py:2028] -   ✅ Bootstrap dinámico convertido a embedding
 2025-11-05 17:30:56,485 - biometric_gesture_system - INFO - [authentication_system.py:2029] -       Embedding norm: 1.0000
-2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:1888] - 🔍 Procesando template 40/40: kk_dynamic_sequence_1761533118...
+2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:1888] - Procesando template 40/40: kk_dynamic_sequence_1761533118...
 2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2066] -   ⚠️ Template sin datos utilizables
 2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2074] - ✅ RESUMEN DE PROCESAMIENTO:
-2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   📊 Templates procesados: 39/40
-2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   🧠 Referencias anatómicas: 24
-2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   🔄 Referencias dinámicas: 15
-2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   📈 Total referencias: 39
-2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2113] - 🧠 Calculando similitudes anatómicas con 24 referencias...
-2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 1: 0.0044
-2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 2: 0.0053
-2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 3: 0.0057
-2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 4: 0.0053
-2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 5: 0.0051
-2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 6: 0.0052
-2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 7: 0.0050
-2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 8: 0.0047
-2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 9: 0.0051
-2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 10: 0.0048
-2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 11: 0.0052
-2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 12: 0.0051
-2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 13: 0.0053
-2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 14: 0.0050
-2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 15: 0.0051
-2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 16: 0.0050
-2025-11-05 17:30:56,494 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 17: 0.0061
-2025-11-05 17:30:56,494 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 18: 0.0057
-2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 19: 0.0058
-2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 20: 0.0054
-2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 21: 0.0056
-2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 22: 0.0059
-2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 23: 0.0059
-2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   📊 Similitud anatómica 24: 0.0060
+2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2075] -   Templates procesados: 39/40
+2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2076] -   Referencias anatómicas: 24
+2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2077] -   Referencias dinámicas: 15
+2025-11-05 17:30:56,486 - biometric_gesture_system - INFO - [authentication_system.py:2078] -   Total referencias: 39
+2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2113] - Calculando similitudes anatómicas con 24 referencias...
+2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 1: 0.0044
+2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 2: 0.0053
+2025-11-05 17:30:56,488 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 3: 0.0057
+2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 4: 0.0053
+2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 5: 0.0051
+2025-11-05 17:30:56,490 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 6: 0.0052
+2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 7: 0.0050
+2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 8: 0.0047
+2025-11-05 17:30:56,491 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 9: 0.0051
+2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 10: 0.0048
+2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 11: 0.0052
+2025-11-05 17:30:56,492 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 12: 0.0051
+2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 13: 0.0053
+2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 14: 0.0050
+2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 15: 0.0051
+2025-11-05 17:30:56,493 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 16: 0.0050
+2025-11-05 17:30:56,494 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 17: 0.0061
+2025-11-05 17:30:56,494 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 18: 0.0057
+2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 19: 0.0058
+2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 20: 0.0054
+2025-11-05 17:30:56,495 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 21: 0.0056
+2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 22: 0.0059
+2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 23: 0.0059
+2025-11-05 17:30:56,496 - biometric_gesture_system - INFO - [authentication_system.py:2134] -   Similitud anatómica 24: 0.0060
 2025-11-05 17:30:56,497 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:56,497 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 0/24 (0.0%)
 2025-11-05 17:30:56,497 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -1421,22 +1421,22 @@
 2025-11-05 17:30:56,497 - biometric_gesture_system - INFO - [authentication_system.py:82] -      ❌ Consenso NO alcanzado - Rechazo automático
 2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2152] -   ✅ Score anatómico FINAL: 0.0000
 2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2153] -   ✅ Confianza anatómica: 0.0053
-2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2164] - 🔄 Calculando similitudes dinámicas con 15 referencias...
-2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 1: 0.9998
-2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 2: 0.9998
-2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 3: 0.9998
-2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 4: 0.9998
-2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 5: 0.9998
-2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 6: 0.9998
-2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 7: 0.9998
-2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 8: 0.9998
-2025-11-05 17:30:56,502 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 9: 0.9998
-2025-11-05 17:30:56,502 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 10: 0.9998
-2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 11: 0.9998
-2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 12: 0.9998
-2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 13: 0.9998
-2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 14: 0.9998
-2025-11-05 17:30:56,504 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   📊 Similitud dinámica 15: 0.9998
+2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2164] - Calculando similitudes dinámicas con 15 referencias...
+2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 1: 0.9998
+2025-11-05 17:30:56,498 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 2: 0.9998
+2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 3: 0.9998
+2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 4: 0.9998
+2025-11-05 17:30:56,500 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 5: 0.9998
+2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 6: 0.9998
+2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 7: 0.9998
+2025-11-05 17:30:56,501 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 8: 0.9998
+2025-11-05 17:30:56,502 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 9: 0.9998
+2025-11-05 17:30:56,502 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 10: 0.9998
+2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 11: 0.9998
+2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 12: 0.9998
+2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 13: 0.9998
+2025-11-05 17:30:56,503 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 14: 0.9998
+2025-11-05 17:30:56,504 - biometric_gesture_system - INFO - [authentication_system.py:2185] -   Similitud dinámica 15: 0.9998
 2025-11-05 17:30:56,504 - biometric_gesture_system - INFO - [authentication_system.py:69] -   🗳️ Sistema de votación:
 2025-11-05 17:30:56,504 - biometric_gesture_system - INFO - [authentication_system.py:70] -      Votos positivos: 15/15 (100.0%)
 2025-11-05 17:30:56,504 - biometric_gesture_system - INFO - [authentication_system.py:71] -      Umbral de votación: 0.85
@@ -1448,7 +1448,7 @@
 2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2216] - ✅ Score fusionado: 0.4999
 2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2217] - ✅ Confianza fusionada: 0.3509
 2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2413] - 
-2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    📊 RESULTADOS DE VERIFICACIÓN:
+2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2414] -    RESULTADOS DE VERIFICACIÓN:
 2025-11-05 17:30:56,507 - biometric_gesture_system - INFO - [authentication_system.py:2415] -       Score anatómico: 0.0000
 2025-11-05 17:30:56,508 - biometric_gesture_system - INFO - [authentication_system.py:2416] -       Score dinámico: 0.9998
 2025-11-05 17:30:56,508 - biometric_gesture_system - INFO - [authentication_system.py:2417] -       Score fusionado: 0.4999
@@ -1460,7 +1460,7 @@
 2025-11-05 17:30:56,509 - biometric_gesture_system - INFO - [authentication_system.py:2441] - ║                   PASO 4: DECISIÓN FINAL                    ║
 2025-11-05 17:30:56,509 - biometric_gesture_system - INFO - [authentication_system.py:2442] - ╚══════════════════════════════════════════════════════════════╝
 2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2444] - 
-2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2445] - 📊 RESUMEN DE VERIFICACIONES:
+2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2445] - RESUMEN DE VERIFICACIONES:
 2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2446] -    Total candidatos procesados: 3
 2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2447] -    Mejor resultado: NINGUNO
 2025-11-05 17:30:56,511 - biometric_gesture_system - INFO - [authentication_system.py:2497] - 

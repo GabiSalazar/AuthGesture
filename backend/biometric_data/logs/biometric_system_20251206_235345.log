@@ -77,7 +77,7 @@
 2025-12-06 23:54:08,609 - biometric_gesture_system - INFO - [authentication_system.py:1711] - Servicio de identificación inicializado
 2025-12-06 23:54:08,609 - biometric_gesture_system - INFO - [authentication_system.py:1734] - RealAuthenticationSystem inicializado
 2025-12-06 23:54:08,609 - biometric_gesture_system - INFO - [authentication_system.py:1735] -   - Configuración: umbrales={'low': 0.65, 'standard': 0.75, 'high': 0.85, 'maximum': 0.92}
-2025-12-06 23:56:14,014 - biometric_gesture_system - INFO - [system_manager.py:727] - 📊 Total usuarios en sistema: 10
+2025-12-06 23:56:14,014 - biometric_gesture_system - INFO - [system_manager.py:727] - Total usuarios en sistema: 10
 2025-12-06 23:56:14,014 - biometric_gesture_system - INFO - [system_manager.py:729] -    - Zoi Salazar (ID: user_zoisalaz_1764956864981_b9261f22_inactive_20251205172306)
 2025-12-06 23:56:14,014 - biometric_gesture_system - INFO - [system_manager.py:729] -    - GABI SALAZAR (ID: user_gabisala_1765043584036_96695a49)
 2025-12-06 23:56:14,014 - biometric_gesture_system - INFO - [system_manager.py:729] -    - TEST NUMERO 2 (ID: user_testnume_1764974156403_9fd6d5aa_inactive_20251205173801)

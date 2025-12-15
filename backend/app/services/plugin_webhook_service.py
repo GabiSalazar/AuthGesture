@@ -80,24 +80,24 @@ class PluginWebhookService:
             
             # Verificar respuesta
             if response.status_code in [200, 201, 202]:
-                logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+                logger.info(f"Resultado enviado exitosamente al Plugin")
                 logger.info(f"   Status: {response.status_code}")
                 return True
             else:
-                logger.warning(f"⚠️ Plugin respondió con status: {response.status_code}")
+                logger.warning(f"Plugin respondió con status: {response.status_code}")
                 logger.warning(f"   Response: {response.text}")
                 return False
         
         except requests.exceptions.Timeout:
-            logger.error(f"❌ Timeout enviando al Plugin (>{self.timeout}s)")
+            logger.error(f"Timeout enviando al Plugin (>{self.timeout}s)")
             return False
         
         except requests.exceptions.ConnectionError as e:
-            logger.error(f"❌ Error de conexión con Plugin: {e}")
+            logger.error(f"Error de conexión con Plugin: {e}")
             return False
         
         except Exception as e:
-            logger.error(f"❌ Error enviando resultado al Plugin: {e}")
+            logger.error(f"Error enviando resultado al Plugin: {e}")
             import traceback
             logger.error(traceback.format_exc())
             return False
@@ -176,14 +176,14 @@ class PluginWebhookService:
             )
             
             if response.status_code in [200, 201, 202]:
-                logger.info(f"✅ Resultado enviado exitosamente al Plugin")
+                logger.info(f"Resultado enviado exitosamente al Plugin")
                 return True
             else:
-                logger.warning(f"⚠️ Plugin respondió con status: {response.status_code}")
+                logger.warning(f"Plugin respondió con status: {response.status_code}")
                 return False
         
         except Exception as e:
-            logger.error(f"❌ Error enviando autenticación al Plugin: {e}")
+            logger.error(f"Error enviando autenticación al Plugin: {e}")
             return False
 
 

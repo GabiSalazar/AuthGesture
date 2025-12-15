@@ -1,23 +1,6 @@
 import { useState, useEffect } from 'react'
 import { adminApi } from '../../../lib/api/admin'
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  Button,
-  Badge,
-  Spinner,
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableHead,
-  TableCell,
-  Input,
-  Select
-} from '../../../components/ui'
-import {
   Users,
   Search,
   Filter,
@@ -25,7 +8,8 @@ import {
   Edit2,
   Trash2,
   RefreshCw,
-  Download
+  Download,
+  AlertCircle
 } from 'lucide-react'
 
 import UserDetailsModal from './UserDetailsModal'
@@ -46,7 +30,7 @@ export default function UsersManagement() {
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState('desc')
   
-  // Estados de modales (los crearemos después)
+  // Estados de modales
   const [selectedUser, setSelectedUser] = useState(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -95,7 +79,6 @@ export default function UsersManagement() {
     setMaxAge('')
     setSortBy('created_at')
     setSortOrder('desc')
-    // Recargar después de limpiar
     setTimeout(loadUsers, 100)
   }
 
@@ -141,203 +124,414 @@ export default function UsersManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      
+      {/* ========================================
+          HEADER
+      ======================================== */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Usuarios</h1>
-          <p className="text-gray-500 mt-1">
+          <h2 className="text-2xl sm:text-3xl font-black text-gray-900">
+            Gestión de Usuarios
+          </h2>
+          <p className="text-gray-600 text-sm mt-1">
             Administra usuarios registrados en el sistema
           </p>
         </div>
-        <Button
+        <button
           onClick={loadUsers}
-          variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+          style={{
+            background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+            boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+          }}
         >
           <RefreshCw className="w-4 h-4" />
-          Recargar
-        </Button>
+          <span className="hidden sm:inline">Recargar</span>
+        </button>
       </div>
 
-      {/* Filtros */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="w-5 h-5" />
-            Filtros de Búsqueda
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Búsqueda */}
-            <Input
-              label="Buscar"
-              placeholder="Nombre o email..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleApplyFilters()}
-            />
+      {/* ========================================
+          CARD DE FILTROS
+      ======================================== */}
+      <div 
+        className="bg-white rounded-2xl border-2 shadow-lg p-6"
+        style={{ borderColor: '#E0F2FE' }}
+      >
+        {/* Header filtros */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Filter className="w-5 h-5" style={{ color: '#05A8F9' }} />
+            <h3 className="text-lg font-black text-gray-900">
+              Filtros de Búsqueda
+            </h3>
+          </div>
+        </div>
 
-            {/* Filtro género */}
-            <Select
-              label="Género"
+        {/* Grid de filtros */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          
+          {/* Búsqueda */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Buscar
+            </label>
+            <div className="relative">
+              <Search 
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none"
+              />
+              <input
+                type="text"
+                placeholder="Nombre o email..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleApplyFilters()}
+                className="w-full pl-10 pr-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+                style={{ borderColor: '#E0F2FE' }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#05A8F9'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#E0F2FE'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Filtro género */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Género
+            </label>
+            <select
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value)}
+              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+              style={{ borderColor: '#E0F2FE' }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#05A8F9'
+                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E0F2FE'
+                e.target.style.boxShadow = 'none'
+              }}
             >
               <option value="">Todos</option>
               <option value="Masculino">Masculino</option>
               <option value="Femenino">Femenino</option>
-            </Select>
+            </select>
+          </div>
 
-            {/* Edad mínima */}
-            <Input
-              label="Edad mínima"
+          {/* Edad mínima */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Edad mínima
+            </label>
+            <input
               type="number"
               placeholder="Ej: 18"
               value={minAge}
               onChange={(e) => setMinAge(e.target.value)}
+              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+              style={{ borderColor: '#E0F2FE' }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#05A8F9'
+                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E0F2FE'
+                e.target.style.boxShadow = 'none'
+              }}
             />
+          </div>
 
-            {/* Edad máxima */}
-            <Input
-              label="Edad máxima"
+          {/* Edad máxima */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Edad máxima
+            </label>
+            <input
               type="number"
               placeholder="Ej: 65"
               value={maxAge}
               onChange={(e) => setMaxAge(e.target.value)}
+              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+              style={{ borderColor: '#E0F2FE' }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#05A8F9'
+                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E0F2FE'
+                e.target.style.boxShadow = 'none'
+              }}
             />
+          </div>
 
-            {/* Ordenar por */}
-            <Select
-              label="Ordenar por"
+          {/* Ordenar por */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Ordenar por
+            </label>
+            <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
+              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+              style={{ borderColor: '#E0F2FE' }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#05A8F9'
+                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E0F2FE'
+                e.target.style.boxShadow = 'none'
+              }}
             >
               <option value="created_at">Fecha de registro</option>
               <option value="username">Nombre</option>
               <option value="age">Edad</option>
               <option value="templates">Templates</option>
               <option value="last_activity">Última actividad</option>
-            </Select>
+            </select>
+          </div>
 
-            {/* Orden */}
-            <Select
-              label="Orden"
+          {/* Orden */}
+          <div className="space-y-2">
+            <label className="block text-sm font-bold text-gray-700">
+              Orden
+            </label>
+            <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
+              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+              style={{ borderColor: '#E0F2FE' }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#05A8F9'
+                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#E0F2FE'
+                e.target.style.boxShadow = 'none'
+              }}
             >
               <option value="desc">Descendente</option>
               <option value="asc">Ascendente</option>
-            </Select>
-
-            {/* Botones */}
-            <div className="flex items-end gap-2 col-span-2">
-              <Button
-                onClick={handleApplyFilters}
-                className="flex-1 flex items-center justify-center gap-2"
-              >
-                <Search className="w-4 h-4" />
-                Aplicar Filtros
-              </Button>
-              <Button
-                onClick={handleClearFilters}
-                variant="outline"
-                className="flex-1"
-              >
-                Limpiar
-              </Button>
-            </div>
+            </select>
           </div>
-        </CardContent>
-      </Card>
 
-      {/* Tabla de usuarios */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2">
-              <Users className="w-5 h-5" />
-              Usuarios Registrados ({users.length})
-            </CardTitle>
-            <Button variant="outline" size="sm" className="flex items-center gap-2">
+          {/* Botones de acción */}
+          <div className="flex items-end gap-3 col-span-1 md:col-span-2">
+            <button
+              onClick={handleApplyFilters}
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-white font-bold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+              style={{
+                background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+              }}
+            >
+              <Search className="w-4 h-4" />
+              Aplicar Filtros
+            </button>
+            <button
+              onClick={handleClearFilters}
+              className="flex-1 px-5 py-3 font-bold rounded-xl transition-all duration-300 border-2"
+              style={{
+                backgroundColor: 'white',
+                borderColor: '#E0F2FE',
+                color: '#05A8F9'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F4FCFF'
+                e.currentTarget.style.borderColor = '#6FBFDE'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white'
+                e.currentTarget.style.borderColor = '#E0F2FE'
+              }}
+            >
+              Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================
+          CARD DE TABLA
+      ======================================== */}
+      <div 
+        className="bg-white rounded-2xl border-2 shadow-lg overflow-hidden"
+        style={{ borderColor: '#E0F2FE' }}
+      >
+        {/* Header de la tabla */}
+        <div className="p-6 border-b-2" style={{ borderColor: '#E0F2FE' }}>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Users className="w-5 h-5" style={{ color: '#05A8F9' }} />
+              <h3 className="text-lg font-black text-gray-900">
+                Usuarios Registrados ({users.length})
+              </h3>
+            </div>
+            <button
+              className="flex items-center gap-2 px-4 py-2 font-bold rounded-xl transition-all duration-300 border-2 text-sm"
+              style={{
+                backgroundColor: 'white',
+                borderColor: '#E0F2FE',
+                color: '#05A8F9'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#F4FCFF'
+                e.currentTarget.style.borderColor = '#6FBFDE'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'white'
+                e.currentTarget.style.borderColor = '#E0F2FE'
+              }}
+            >
               <Download className="w-4 h-4" />
               Exportar CSV
-            </Button>
+            </button>
           </div>
-        </CardHeader>
-        <CardContent>
+        </div>
+
+        {/* Contenido de la tabla */}
+        <div className="p-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="text-center">
-                <Spinner size="lg" className="mx-auto mb-4" />
-                <p className="text-gray-600">Cargando usuarios...</p>
+              <div className="text-center space-y-4">
+                <div 
+                  className="w-12 h-12 mx-auto border-4 border-t-transparent rounded-full animate-spin"
+                  style={{ borderColor: '#05A8F9', borderTopColor: 'transparent' }}
+                />
+                <p className="text-gray-600 text-sm font-medium">
+                  Cargando usuarios...
+                </p>
               </div>
             </div>
           ) : error ? (
-            <div className="text-center py-12">
-              <p className="text-red-600">{error}</p>
-              <Button onClick={loadUsers} className="mt-4">
-                Reintentar
-              </Button>
+            <div 
+              className="rounded-xl border-2 p-6"
+              style={{ 
+                backgroundColor: '#FEF2F2',
+                borderColor: '#FCA5A5'
+              }}
+            >
+              <div className="flex flex-col items-center gap-4">
+                <AlertCircle className="w-12 h-12 text-red-600" />
+                <p className="text-red-900 font-bold text-center">{error}</p>
+                <button
+                  onClick={loadUsers}
+                  className="px-5 py-2.5 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+                  style={{
+                    background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                  }}
+                >
+                  Reintentar
+                </button>
+              </div>
             </div>
           ) : users.length === 0 ? (
             <div className="text-center py-12">
-              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600">No se encontraron usuarios</p>
+              <Users className="w-16 h-16 mx-auto mb-4" style={{ color: '#E0F2FE' }} />
+              <p className="text-gray-600 font-medium">
+                No se encontraron usuarios
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Usuario</TableHead>
-                    <TableHead>Contacto</TableHead>
-                    <TableHead>Edad</TableHead>
-                    <TableHead>Género</TableHead>
-                    <TableHead>Gestos</TableHead>
-                    <TableHead>Templates</TableHead>
-                    <TableHead>Registro</TableHead>
-                    <TableHead>Última Actividad</TableHead>
-                    <TableHead className="text-right">Acciones</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {users.map((user) => (
-                    <TableRow key={user.user_id}>
+              <table className="w-full">
+                <thead>
+                  <tr 
+                    className="border-b-2"
+                    style={{ borderColor: '#E0F2FE' }}
+                  >
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Usuario
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Contacto
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Edad
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Género
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Gestos
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Templates
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Registro
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Última Actividad
+                    </th>
+                    <th className="px-4 py-3 text-right text-xs font-bold text-gray-700 uppercase tracking-wider">
+                      Acciones
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr 
+                      key={user.user_id}
+                      className={`border-b transition-colors hover:bg-gray-50 ${
+                        index === users.length - 1 ? 'border-b-0' : ''
+                      }`}
+                      style={{ 
+                        borderColor: index === users.length - 1 ? 'transparent' : '#F3F4F6'
+                      }}
+                    >
                       {/* Usuario */}
-                      <TableCell>
+                      <td className="px-4 py-4">
                         <div>
-                          <div className="font-medium text-gray-900">
+                          <div className="font-bold text-gray-900">
                             {user.username}
                           </div>
-                          <div className="text-xs text-gray-500">
-                            ID: {user.user_id.slice(0, 8)}...
+                          <div className="text-xs text-gray-500 font-mono">
+                            {user.user_id.slice(0, 8)}...
                           </div>
                         </div>
-                      </TableCell>
+                      </td>
 
                       {/* Contacto */}
-                      <TableCell>
+                      <td className="px-4 py-4">
                         <div className="text-sm">
-                          <div className="text-gray-900">{user.email}</div>
-                          <div className="text-gray-500">{user.phone_number}</div>
+                          <div className="text-gray-900 font-medium">
+                            {user.email}
+                          </div>
+                          <div className="text-gray-500">
+                            {user.phone_number}
+                          </div>
                         </div>
-                      </TableCell>
+                      </td>
 
                       {/* Edad */}
-                      <TableCell>
-                        <span className="text-gray-900">{user.age} años</span>
-                      </TableCell>
+                      <td className="px-4 py-4">
+                        <span className="text-gray-900 font-medium">
+                          {user.age} años
+                        </span>
+                      </td>
 
                       {/* Género */}
-                      <TableCell>
-                        <Badge variant={user.gender === 'Masculino' ? 'primary' : 'info'}>
+                      <td className="px-4 py-4">
+                        <span 
+                          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold"
+                          style={{
+                            backgroundColor: user.gender === 'Masculino' ? '#DBEAFE' : '#ECFEFF',
+                            color: user.gender === 'Masculino' ? '#1E40AF' : '#0E7490'
+                          }}
+                        >
                           {user.gender}
-                        </Badge>
-                      </TableCell>
+                        </span>
+                      </td>
 
                       {/* Gestos */}
-                      <TableCell>
+                      <td className="px-4 py-4">
                         <div className="flex gap-1">
                           {user.gesture_sequence?.slice(0, 3).map((gesture, idx) => (
                             <span
@@ -355,69 +549,112 @@ export default function UsersManagement() {
                             </span>
                           ))}
                         </div>
-                      </TableCell>
+                      </td>
 
                       {/* Templates */}
-                      <TableCell>
-                        <Badge variant={user.total_templates > 0 ? 'success' : 'default'}>
+                      <td className="px-4 py-4">
+                        <span 
+                          className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold"
+                          style={{
+                            backgroundColor: user.total_templates > 0 ? '#F0FDF4' : '#F3F4F6',
+                            color: user.total_templates > 0 ? '#065F46' : '#6B7280'
+                          }}
+                        >
                           {user.total_templates}
-                        </Badge>
-                      </TableCell>
+                        </span>
+                      </td>
 
                       {/* Fecha registro */}
-                      <TableCell>
-                        <span className="text-sm text-gray-600">
+                      <td className="px-4 py-4">
+                        <span className="text-sm text-gray-600 font-medium">
                           {formatDate(user.created_at)}
                         </span>
-                      </TableCell>
+                      </td>
 
                       {/* Última actividad */}
-                      <TableCell>
-                        <span className="text-sm text-gray-600">
+                      <td className="px-4 py-4">
+                        <span className="text-sm text-gray-600 font-medium">
                           {formatLastActivity(user.last_activity)}
                         </span>
-                      </TableCell>
+                      </td>
 
                       {/* Acciones */}
-                      <TableCell>
+                      <td className="px-4 py-4">
                         <div className="flex items-center justify-end gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
+                          <button
                             onClick={() => handleViewUser(user)}
                             title="Ver detalles"
+                            className="p-2 rounded-lg transition-all duration-200 border-2"
+                            style={{
+                              backgroundColor: 'white',
+                              borderColor: '#E0F2FE',
+                              color: '#05A8F9'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#F4FCFF'
+                              e.currentTarget.style.borderColor = '#6FBFDE'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'white'
+                              e.currentTarget.style.borderColor = '#E0F2FE'
+                            }}
                           >
                             <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
+                          </button>
+                          <button
                             onClick={() => handleEditUser(user)}
                             title="Editar"
+                            className="p-2 rounded-lg transition-all duration-200 border-2"
+                            style={{
+                              backgroundColor: 'white',
+                              borderColor: '#E0F2FE',
+                              color: '#05A8F9'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#F4FCFF'
+                              e.currentTarget.style.borderColor = '#6FBFDE'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'white'
+                              e.currentTarget.style.borderColor = '#E0F2FE'
+                            }}
                           >
                             <Edit2 className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
+                          </button>
+                          <button
                             onClick={() => handleDeleteUser(user)}
                             title="Eliminar"
-                            className="text-red-600 hover:bg-red-50"
+                            className="p-2 rounded-lg transition-all duration-200 border-2"
+                            style={{
+                              backgroundColor: 'white',
+                              borderColor: '#FCA5A5',
+                              color: '#EF4444'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#FEF2F2'
+                              e.currentTarget.style.borderColor = '#F87171'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = 'white'
+                              e.currentTarget.style.borderColor = '#FCA5A5'
+                            }}
                           >
                             <Trash2 className="w-4 h-4" />
-                          </Button>
+                          </button>
                         </div>
-                      </TableCell>
-                    </TableRow>
+                      </td>
+                    </tr>
                   ))}
-                </TableBody>
-              </Table>
+                </tbody>
+              </table>
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
-      {/* Modales */}
+      {/* ========================================
+          MODALES
+      ======================================== */}
       <UserDetailsModal
         user={selectedUser}
         open={showDetailsModal}
@@ -435,7 +672,7 @@ export default function UsersManagement() {
           setSelectedUser(null)
         }}
         onSuccess={() => {
-          loadUsers() // Recargar lista después de editar
+          loadUsers()
         }}
       />
 
@@ -447,7 +684,7 @@ export default function UsersManagement() {
           setSelectedUser(null)
         }}
         onSuccess={() => {
-          loadUsers() // Recargar lista después de eliminar
+          loadUsers()
         }}
       />
     </div>

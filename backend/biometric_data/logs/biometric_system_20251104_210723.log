@@ -106,21 +106,21 @@ NameError: name 'get_score_fusion_system' is not defined
 2025-11-04 21:07:43,575 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.enable_continuous_auth, usando default: False
 2025-11-04 21:07:43,575 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.max_failed_attempts, usando default: 5
 2025-11-04 21:07:43,575 - biometric_gesture_system - WARNING - [config_manager.py:349] - Clave de configuración no encontrada: biometric.auth.lockout_duration, usando default: 300.0
-2025-11-04 21:07:43,588 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 21:07:43,588 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 21:07:43,589 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 21:07:43,590 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 21:07:43,590 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 21:07:43,590 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-04 21:07:43,590 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-04 21:07:43,591 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-04 21:07:43,597 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 21:07:43,597 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 21:07:43,597 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 21:07:43,597 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 21:07:43,597 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 21:07:43,598 - biometric_gesture_system - WARNING - [system_manager.py:735] - ❌ No existe archivo de tracking (last_training.json)
 2025-11-04 21:07:43,598 - biometric_gesture_system - WARNING - [system_manager.py:736] -    No se puede determinar qué usuarios están entrenados
 2025-11-04 21:07:43,599 - biometric_gesture_system - WARNING - [system_manager.py:737] -    Retornando lista vacía - entrena las redes primero
-2025-11-04 21:07:43,613 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 21:07:43,613 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 21:07:43,617 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 21:07:43,618 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 21:07:43,618 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)

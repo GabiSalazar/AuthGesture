@@ -18,7 +18,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/status')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo estado del sistema:', error)
+      console.error('Error obteniendo estado del sistema:', error)
       throw error
     }
   },
@@ -31,7 +31,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/status/detailed')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo estado detallado:', error)
+      console.error('Error obteniendo estado detallado:', error)
       throw error
     }
   },
@@ -44,7 +44,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/health')
       return data
     } catch (error) {
-      console.error('❌ Error en health check:', error)
+      console.error('Error en health check:', error)
       throw error
     }
   },
@@ -57,7 +57,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/statistics')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo estadísticas:', error)
+      console.error('Error obteniendo estadísticas:', error)
       throw error
     }
   },
@@ -70,7 +70,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/modules')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo estado de módulos:', error)
+      console.error('Error obteniendo estado de módulos:', error)
       throw error
     }
   },
@@ -87,7 +87,7 @@ export const systemApi = {
       const { data } = await apiClient.post('/system/initialize')
       return data
     } catch (error) {
-      console.error('❌ Error inicializando sistema:', error)
+      console.error('Error inicializando sistema:', error)
       throw error
     }
   },
@@ -100,7 +100,7 @@ export const systemApi = {
       const { data } = await apiClient.post('/system/train')
       return data
     } catch (error) {
-      console.error('❌ Error entrenando redes:', error)
+      console.error('Error entrenando redes:', error)
       throw error
     }
   },
@@ -114,7 +114,7 @@ export const systemApi = {
       const { data } = await apiClient.post(`/system/retrain?force=${force}`)
       return data
     } catch (error) {
-      console.error('❌ Error reentrenando redes:', error)
+      console.error('Error reentrenando redes:', error)
       throw error
     }
   },
@@ -127,7 +127,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/system/pending-retrain')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo usuarios pendientes:', error)
+      console.error('Error obteniendo usuarios pendientes:', error)
       throw error
     }
   },
@@ -140,7 +140,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/score-fusion/authentication-thresholds')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo umbrales de autenticación:', error)
+      console.error('Error obteniendo umbrales de autenticación:', error)
       throw error
     }
   },
@@ -157,7 +157,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/siamese-anatomical/metrics')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo métricas de red anatómica:', error)
+      console.error('Error obteniendo métricas de red anatómica:', error)
       throw error
     }
   },
@@ -170,7 +170,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/siamese-dynamic/metrics')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo métricas de red dinámica:', error)
+      console.error('Error obteniendo métricas de red dinámica:', error)
       throw error
     }
   },
@@ -183,7 +183,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/score-fusion/config')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo configuración de fusión:', error)
+      console.error('Error obteniendo configuración de fusión:', error)
       throw error
     }
   },
@@ -196,7 +196,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/score-fusion/summary')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo resumen de fusión:', error)
+      console.error('Error obteniendo resumen de fusión:', error)
       throw error
     }
   },
@@ -209,7 +209,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/score-fusion/weights')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo pesos de fusión:', error)
+      console.error('Error obteniendo pesos de fusión:', error)
       throw error
     }
   },
@@ -222,7 +222,7 @@ export const systemApi = {
       const { data } = await apiClient.post('/system/cleanup')
       return data
     } catch (error) {
-      console.error('❌ Error limpiando recursos:', error)
+      console.error('Error limpiando recursos:', error)
       throw error
     }
   },
@@ -239,7 +239,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/all')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo configuración completa:', error)
+      console.error('Error obteniendo configuración completa:', error)
       throw error
     }
   },
@@ -252,7 +252,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/system-info')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo información del sistema:', error)
+      console.error('Error obteniendo información del sistema:', error)
       throw error
     }
   },
@@ -265,7 +265,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/capture-settings')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo configuración de captura:', error)
+      console.error('Error obteniendo configuración de captura:', error)
       throw error
     }
   },
@@ -278,7 +278,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/thresholds')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo umbrales:', error)
+      console.error('Error obteniendo umbrales:', error)
       throw error
     }
   },
@@ -291,7 +291,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/camera-settings')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo configuración de cámara:', error)
+      console.error('Error obteniendo configuración de cámara:', error)
       throw error
     }
   },
@@ -304,7 +304,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/config/paths')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo rutas:', error)
+      console.error('Error obteniendo rutas:', error)
       throw error
     }
   },
@@ -333,7 +333,7 @@ export const systemApi = {
       const { data } = await apiClient.get(`/logs/?${params.toString()}`)
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo logs:', error)
+      console.error('Error obteniendo logs:', error)
       throw error
     }
   },
@@ -346,7 +346,7 @@ export const systemApi = {
       const { data } = await apiClient.get('/logs/stats')
       return data
     } catch (error) {
-      console.error('❌ Error obteniendo estadísticas de logs:', error)
+      console.error('Error obteniendo estadísticas de logs:', error)
       throw error
     }
   },
@@ -359,7 +359,7 @@ export const systemApi = {
       const { data } = await apiClient.delete('/logs/clear')
       return data
     } catch (error) {
-      console.error('❌ Error limpiando logs:', error)
+      console.error('Error limpiando logs:', error)
       throw error
     }
   }

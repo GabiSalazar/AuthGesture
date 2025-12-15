@@ -124,7 +124,7 @@
 2025-11-29 12:15:43,481 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 13ea87d2-f565-4c2f-8253-38e9878aad6a
 2025-11-29 12:16:03,483 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 13ea87d2-f565-4c2f-8253-38e9878aad6a
 2025-11-29 12:16:22,683 - biometric_gesture_system - INFO - [authentication_system.py:532] - Procesando frame para sesión 13ea87d2-f565-4c2f-8253-38e9878aad6a
-2025-11-29 12:16:43,700 - biometric_gesture_system - INFO - [authentication_system.py:1378] - 🧹 Limpiando sesión 13ea87d2-f565-4c2f-8253-38e9878aad6a por timeout_total
+2025-11-29 12:16:43,700 - biometric_gesture_system - INFO - [authentication_system.py:1378] - Limpiando sesión 13ea87d2-f565-4c2f-8253-38e9878aad6a por timeout_total
 2025-11-29 12:16:43,700 - biometric_gesture_system - INFO - [authentication_system.py:1334] - Sesión cerrada: 13ea87d2-f565-4c2f-8253-38e9878aad6a - Estado: timeout
 2025-11-29 12:16:43,700 - biometric_gesture_system - INFO - [authentication_system.py:1335] -   - Duración: 60.4s
 2025-11-29 12:16:43,700 - biometric_gesture_system - INFO - [authentication_system.py:1336] -   - Frames procesados: 0

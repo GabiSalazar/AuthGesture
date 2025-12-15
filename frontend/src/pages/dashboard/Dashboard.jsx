@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import { systemApi } from '../../lib/api/system'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import { adminApi } from '../../lib/api/admin'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, Badge, Spinner, Button } from '../../components/ui'
 import { 
   Activity, Users, Brain, Shield, Clock, AlertCircle, Zap, TrendingUp, 
-  CheckCircle, XCircle, Database, Server, RefreshCw, UserPlus, Key, BarChart3
+  CheckCircle, XCircle, Database, Server, RefreshCw, UserPlus, Key, BarChart3,
+  Sparkles
 } from 'lucide-react'
 
 export default function Dashboard() {
@@ -77,8 +77,13 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="text-center space-y-4">
-          <Spinner size="lg" />
-          <p className="text-gray-600 text-sm">Cargando información del sistema...</p>
+          <div 
+            className="w-12 h-12 mx-auto border-4 border-t-transparent rounded-full animate-spin"
+            style={{ borderColor: '#05A8F9', borderTopColor: 'transparent' }}
+          />
+          <p className="text-gray-600 text-sm font-medium">
+            Cargando información del sistema...
+          </p>
         </div>
       </div>
     )
@@ -87,11 +92,17 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-6">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600" />
+        <div 
+          className="rounded-xl border-2 p-4"
+          style={{ 
+            backgroundColor: '#FEF2F2',
+            borderColor: '#FCA5A5'
+          }}
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-red-900">Error al cargar datos</h3>
+              <h3 className="font-bold text-red-900 mb-1">Error al cargar datos</h3>
               <p className="text-red-700 text-sm">{error}</p>
             </div>
           </div>
@@ -105,49 +116,94 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      
+      {/* ========================================
+          HEADER
+      ======================================== */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Dashboard</h1>
-            <div className="flex items-center gap-2 px-3 py-1 bg-white border border-gray-200 rounded-full shadow-sm">
-              <div className={`w-2 h-2 rounded-full ${systemHealth === 'healthy' ? 'bg-green-500' : 'bg-yellow-500'} animate-pulse`} />
-              <span className="text-xs font-medium text-gray-700">
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-900">
+              Panel de control
+            </h1>
+            <div 
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full border-2"
+              style={{ 
+                backgroundColor: systemHealth === 'healthy' ? '#F0FDF4' : '#FFFBEB',
+                borderColor: systemHealth === 'healthy' ? '#86EFAC' : '#FCD34D'
+              }}
+            >
+              <div 
+                className={`w-2 h-2 rounded-full animate-pulse`}
+                style={{ 
+                  backgroundColor: systemHealth === 'healthy' ? '#10B981' : '#F59E0B'
+                }}
+              />
+              <span 
+                className="text-xs font-bold"
+                style={{ 
+                  color: systemHealth === 'healthy' ? '#065F46' : '#92400E'
+                }}
+              >
                 {systemHealth === 'healthy' ? 'Operativo' : 'En configuración'}
               </span>
             </div>
           </div>
           <p className="text-gray-600 text-sm">
-            Panel de control y monitoreo del sistema biométrico
+            Monitoreo en tiempo real del sistema biométrico
           </p>
         </div>
+        
         <button
           onClick={loadData}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+          className="flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+          style={{
+            background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+            boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+          }}
         >
           <RefreshCw className="w-4 h-4" />
-          Actualizar
+          <span className="hidden sm:inline">Actualizar</span>
         </button>
       </div>
 
-      {/* Alertas */}
+      {/* ========================================
+          ALERTAS
+      ======================================== */}
+      
+      {/* Alerta: Redes pendientes de entrenamiento */}
       {!systemStatus?.networks_trained && systemStatus?.users_count >= 2 && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-yellow-100 rounded-lg flex-shrink-0">
-              <Brain className="w-5 h-5 text-yellow-600" />
+        <div 
+          className="rounded-xl border-2 p-5"
+          style={{ 
+            backgroundColor: '#FFFBEB',
+            borderColor: '#FCD34D'
+          }}
+        >
+          <div className="flex items-start gap-4">
+            <div 
+              className="p-3 rounded-xl flex-shrink-0"
+              style={{ backgroundColor: '#FEF3C7' }}
+            >
+              <Brain className="w-6 h-6 text-yellow-600" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-yellow-900 mb-1">
+              <h4 className="text-base font-black text-yellow-900 mb-2">
                 Redes neuronales pendientes de entrenamiento
               </h4>
-              <p className="text-sm text-yellow-700 mb-3">
+              <p className="text-sm text-yellow-700 mb-4">
                 Ya hay {systemStatus.users_count} usuarios registrados. Es necesario entrenar las redes para activar la autenticación.
               </p>
               <button
                 onClick={handleTrainNetworks}
                 disabled={training}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+                className="flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: training 
+                    ? 'linear-gradient(to right, #9CA3AF, #6B7280)'
+                    : 'linear-gradient(to right, #F59E0B, #D97706)',
+                  boxShadow: '0 4px 12px 0 rgba(245, 158, 11, 0.4)'
+                }}
               >
                 <Brain className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
                 {training ? 'Entrenando...' : 'Entrenar Ahora'}
@@ -157,23 +213,39 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Alerta: Reentrenamiento disponible */}
       {pendingRetrain && pendingRetrain.can_retrain && pendingRetrain.pending_count > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg flex-shrink-0">
-              <Zap className="w-5 h-5 text-blue-600" />
+        <div 
+          className="rounded-xl border-2 p-5"
+          style={{ 
+            backgroundColor: '#EFF6FF',
+            borderColor: '#BFDBFE'
+          }}
+        >
+          <div className="flex items-start gap-4">
+            <div 
+              className="p-3 rounded-xl flex-shrink-0"
+              style={{ backgroundColor: '#DBEAFE' }}
+            >
+              <Zap className="w-6 h-6 text-blue-600" />
             </div>
             <div className="flex-1">
-              <h4 className="text-sm font-semibold text-blue-900 mb-1">
+              <h4 className="text-base font-black text-blue-900 mb-2">
                 Nuevos usuarios disponibles para reentrenamiento
               </h4>
-              <p className="text-sm text-blue-700 mb-3">
+              <p className="text-sm text-blue-700 mb-4">
                 Hay {pendingRetrain.pending_count} usuario(s) nuevo(s) que pueden incluirse en las redes neuronales.
               </p>
               <button
                 onClick={handleTrainNetworks}
                 disabled={training}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 disabled:from-gray-400 disabled:to-gray-500 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 text-sm font-medium"
+                className="flex items-center gap-2 px-5 py-2.5 text-white font-bold rounded-full transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: training 
+                    ? 'linear-gradient(to right, #9CA3AF, #6B7280)'
+                    : 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                  boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                }}
               >
                 <RefreshCw className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
                 {training ? 'Reentrenando...' : 'Reentrenar Redes'}
@@ -183,285 +255,332 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Stats Cards */}
+      {/* ========================================
+          CARDS DE ESTADÍSTICAS
+      ======================================== */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* Total Usuarios */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Usuarios</p>
-                <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                  {systemStatus?.users_count || 0}
-                </p>
-                <p className="text-xs text-gray-500">Registrados en el sistema</p>
-              </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <Users className="w-6 h-6 text-blue-600" />
-              </div>
+        
+        {/* Card: Total Usuarios */}
+        <div 
+          className="bg-white rounded-2xl border-2 shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          style={{ borderColor: '#E0F2FE' }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                Total Usuarios
+              </p>
+              <p 
+                className="text-4xl font-black mb-2"
+                style={{ color: '#05A8F9' }}
+              >
+                {systemStatus?.users_count || 0}
+              </p>
+              <p className="text-xs text-gray-600 font-medium">
+                Registrados en el sistema
+              </p>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Redes Neuronales */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Redes Neuronales</p>
-                <div className="flex items-center gap-2 mb-2">
-                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                    {systemStatus?.networks_trained ? 'Listas' : 'Pendiente'}
-                  </p>
-                  {systemStatus?.networks_trained ? (
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                  ) : (
-                    <Clock className="w-5 h-5 text-yellow-500" />
-                  )}
-                </div>
-                <p className="text-xs text-gray-500">
-                  {systemStatus?.networks_trained ? 'Sistema operativo' : 'Requiere entrenamiento'}
-                </p>
-              </div>
-              <div className={`p-3 rounded-lg ${systemStatus?.networks_trained ? 'bg-green-50' : 'bg-yellow-50'}`}>
-                <Brain className={`w-6 h-6 ${systemStatus?.networks_trained ? 'text-green-600' : 'text-yellow-600'}`} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Autenticación */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Autenticación</p>
-                <div className="flex items-center gap-2 mb-2">
-                  <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-                    {systemStatus?.authentication_active ? 'Activa' : 'Inactiva'}
-                  </p>
-                  {systemStatus?.authentication_active ? (
-                    <CheckCircle className="w-5 h-5 text-green-500" />
-                  ) : (
-                    <XCircle className="w-5 h-5 text-gray-400" />
-                  )}
-                </div>
-                <p className="text-xs text-gray-500">
-                  {systemStatus?.authentication_active ? 'Sistema verificando' : 'No disponible'}
-                </p>
-              </div>
-              <div className={`p-3 rounded-lg ${systemStatus?.authentication_active ? 'bg-green-50' : 'bg-gray-50'}`}>
-                <Shield className={`w-6 h-6 ${systemStatus?.authentication_active ? 'text-green-600' : 'text-gray-400'}`} />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Base de Datos */}
-        <Card className="hover:shadow-md transition-shadow">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <p className="text-xs sm:text-sm font-medium text-gray-600 mb-1">Templates</p>
-                <p className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
-                  {dbStats?.total_templates || 0}
-                </p>
-                <p className="text-xs text-gray-500">Almacenados en BD</p>
-              </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <Database className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Información Detallada */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Estado del Sistema */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-              <Server className="w-5 h-5 text-gray-700" />
-              Estado del Sistema
-            </CardTitle>
-            <CardDescription>Información detallada del sistema biométrico</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Modo Operación</span>
-              <Badge variant={systemStatus?.bootstrap_mode ? 'warning' : 'success'}>
-                {systemStatus?.bootstrap_mode ? 'Bootstrap' : 'Normal'}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Nivel Inicialización</span>
-              <Badge variant="info">{systemStatus?.initialization_level || 'N/A'}</Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Enrollment</span>
-              <Badge variant={systemStatus?.enrollment_active ? 'success' : 'danger'}>
-                {systemStatus?.enrollment_active ? 'Activo' : 'Inactivo'}
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-gray-600" />
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Tiempo Activo</span>
-              </div>
-              <span className="font-mono text-xs sm:text-sm text-gray-900">{systemStatus?.uptime || '0h 0m 0s'}</span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Versión</span>
-              <Badge variant="primary">v{systemStatus?.version || '2.0.0'}</Badge>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Estadísticas de Bootstrap */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-              <BarChart3 className="w-5 h-5 text-gray-700" />
-              Estadísticas
-            </CardTitle>
-            <CardDescription>Métricas de configuración inicial</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Templates Bootstrap</span>
-              <span className="text-sm sm:text-base font-bold text-gray-900">
-                {bootstrapStatus?.templates_count || 0}
-              </span>
-            </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-              <span className="text-xs sm:text-sm font-medium text-gray-700">Usuarios Mínimos</span>
-              <span className="text-sm sm:text-base font-bold text-gray-900">
-                {bootstrapStatus?.min_users_required || 2}
-              </span>
-            </div>
-            <div className="p-3 bg-gray-50 rounded-lg space-y-2">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs sm:text-sm font-medium text-gray-700">Progreso Bootstrap</span>
-                <span className="text-xs font-medium text-gray-600">
-                  {systemStatus?.users_count}/{bootstrapStatus?.min_users_required || 2}
-                </span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-blue-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${Math.min(100, (systemStatus?.users_count / (bootstrapStatus?.min_users_required || 2)) * 100)}%`
-                  }}
-                />
-              </div>
-            </div>
-
-            {bootstrapStatus?.message && (
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <p className="text-xs sm:text-sm text-blue-800">
-                    {bootstrapStatus.message}
-                  </p>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-            <Zap className="w-5 h-5 text-gray-700" />
-            Acciones Rápidas
-          </CardTitle>
-          <CardDescription>Operaciones comunes del sistema</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {/* Nuevo Usuario */}
-            <button
-              onClick={() => window.location.href = '/enrollment'}
-              className="group flex items-center gap-3 px-4 py-3 bg-white border-2 border-gray-200 hover:border-blue-400 hover:bg-blue-50 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 text-left"
+            <div 
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: '#F4FCFF' }}
             >
-              <div className="p-2 bg-blue-100 group-hover:bg-blue-200 rounded-lg flex-shrink-0 transition-colors">
-                <UserPlus className="w-5 h-5 text-blue-600" />
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900 text-sm mb-0.5">Nuevo Usuario</p>
-                <p className="text-xs text-gray-500">Registrar en el sistema</p>
-              </div>
-            </button>
-
-            {/* Verificar */}
-            <button
-              onClick={() => window.location.href = '/verification'}
-              disabled={!systemStatus?.authentication_active}
-              className={`group flex items-center gap-3 px-4 py-3 rounded-lg shadow-sm transition-all duration-300 text-left ${
-                systemStatus?.authentication_active 
-                  ? 'bg-white border-2 border-gray-200 hover:border-cyan-400 hover:bg-cyan-50 hover:shadow-md' 
-                  : 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed opacity-50'
-              }`}
-            >
-              <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${
-                systemStatus?.authentication_active 
-                  ? 'bg-cyan-100 group-hover:bg-cyan-200' 
-                  : 'bg-gray-200'
-              }`}>
-                <Key className={`w-5 h-5 ${systemStatus?.authentication_active ? 'text-cyan-600' : 'text-gray-400'}`} />
-              </div>
-              <div className="flex-1">
-                <p className={`font-semibold text-sm mb-0.5 ${systemStatus?.authentication_active ? 'text-gray-900' : 'text-gray-500'}`}>
-                  Verificar
-                </p>
-                <p className={`text-xs ${systemStatus?.authentication_active ? 'text-gray-500' : 'text-gray-400'}`}>
-                  Autenticación 1:1
-                </p>
-              </div>
-            </button>
-
-            {/* Entrenar IA */}
-            <button
-              onClick={handleTrainNetworks}
-              disabled={training || systemStatus?.users_count < 2}
-              className={`group flex items-center gap-3 px-4 py-3 rounded-lg shadow-sm transition-all duration-300 text-left ${
-                training || systemStatus?.users_count < 2
-                  ? 'bg-gray-100 border-2 border-gray-200 cursor-not-allowed opacity-50'
-                  : 'bg-white border-2 border-gray-200 hover:border-green-400 hover:bg-green-50 hover:shadow-md'
-              }`}
-            >
-              <div className={`p-2 rounded-lg flex-shrink-0 transition-colors ${
-                training || systemStatus?.users_count < 2
-                  ? 'bg-gray-200'
-                  : 'bg-green-100 group-hover:bg-green-200'
-              }`}>
-                <Brain className={`w-5 h-5 ${
-                  training 
-                    ? 'text-gray-400 animate-spin' 
-                    : systemStatus?.users_count < 2 
-                      ? 'text-gray-400' 
-                      : 'text-green-600'
-                }`} />
-              </div>
-              <div className="flex-1">
-                <p className={`font-semibold text-sm mb-0.5 ${
-                  training || systemStatus?.users_count < 2 ? 'text-gray-500' : 'text-gray-900'
-                }`}>
-                  {training ? 'Entrenando...' : 'Entrenar IA'}
-                </p>
-                <p className={`text-xs ${
-                  training || systemStatus?.users_count < 2 ? 'text-gray-400' : 'text-gray-500'
-                }`}>
-                  Redes neuronales
-                </p>
-              </div>
-            </button>
+              <Users className="w-7 h-7" style={{ color: '#05A8F9' }} />
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        {/* Card: Redes Neuronales */}
+        <div 
+          className="bg-white rounded-2xl border-2 shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          style={{ 
+            borderColor: systemStatus?.networks_trained ? '#86EFAC' : '#FCD34D'
+          }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                Redes Neuronales
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <p 
+                  className="text-3xl font-black"
+                  style={{ 
+                    color: systemStatus?.networks_trained ? '#10B981' : '#F59E0B'
+                  }}
+                >
+                  {systemStatus?.networks_trained ? 'Listas' : 'Pendiente'}
+                </p>
+                {systemStatus?.networks_trained ? (
+                  <CheckCircle className="w-6 h-6 text-green-500" />
+                ) : (
+                  <Clock className="w-6 h-6 text-yellow-500" />
+                )}
+              </div>
+              <p className="text-xs text-gray-600 font-medium">
+                {systemStatus?.networks_trained ? 'Sistema operativo' : 'Requiere entrenamiento'}
+              </p>
+            </div>
+            <div 
+              className="p-3 rounded-xl"
+              style={{ 
+                backgroundColor: systemStatus?.networks_trained ? '#F0FDF4' : '#FFFBEB'
+              }}
+            >
+              <Brain 
+                className="w-7 h-7"
+                style={{ 
+                  color: systemStatus?.networks_trained ? '#10B981' : '#F59E0B'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Card: Autenticación */}
+        <div 
+          className="bg-white rounded-2xl border-2 shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          style={{ 
+            borderColor: systemStatus?.authentication_active ? '#86EFAC' : '#E5E7EB'
+          }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                Autenticación
+              </p>
+              <div className="flex items-center gap-2 mb-2">
+                <p 
+                  className="text-3xl font-black"
+                  style={{ 
+                    color: systemStatus?.authentication_active ? '#10B981' : '#9CA3AF'
+                  }}
+                >
+                  {systemStatus?.authentication_active ? 'Activa' : 'Inactiva'}
+                </p>
+                {systemStatus?.authentication_active ? (
+                  <CheckCircle className="w-6 h-6 text-green-500" />
+                ) : (
+                  <XCircle className="w-6 h-6 text-gray-400" />
+                )}
+              </div>
+              <p className="text-xs text-gray-600 font-medium">
+                {systemStatus?.authentication_active ? 'Sistema verificando' : 'No disponible'}
+              </p>
+            </div>
+            <div 
+              className="p-3 rounded-xl"
+              style={{ 
+                backgroundColor: systemStatus?.authentication_active ? '#F0FDF4' : '#F3F4F6'
+              }}
+            >
+              <Shield 
+                className="w-7 h-7"
+                style={{ 
+                  color: systemStatus?.authentication_active ? '#10B981' : '#9CA3AF'
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Card: Templates */}
+        <div 
+          className="bg-white rounded-2xl border-2 shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
+          style={{ borderColor: '#E0F2FE' }}
+        >
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex-1">
+              <p className="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">
+                Templates
+              </p>
+              <p 
+                className="text-4xl font-black mb-2"
+                style={{ color: '#05A8F9' }}
+              >
+                {dbStats?.total_templates || 0}
+              </p>
+              <p className="text-xs text-gray-600 font-medium">
+                Almacenados en BD
+              </p>
+            </div>
+            <div 
+              className="p-3 rounded-xl"
+              style={{ backgroundColor: '#F4FCFF' }}
+            >
+              <Database className="w-7 h-7" style={{ color: '#05A8F9' }} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================
+          ACCIONES RÁPIDAS
+      ======================================== */}
+      <div 
+        className="bg-white rounded-2xl border-2 shadow-lg p-6"
+        style={{ borderColor: '#E0F2FE' }}
+      >
+        {/* Header */}
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <Zap className="w-5 h-5" style={{ color: '#05A8F9' }} />
+            <h3 className="text-lg font-black text-gray-900">
+              Acciones rápidas
+            </h3>
+          </div>
+
+        </div>
+
+        {/* Botones de acción */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          
+          {/* Botón: Nuevo Usuario */}
+          <button
+            onClick={() => window.location.href = '/enrollment'}
+            className="group flex items-center gap-3 px-4 py-4 bg-white border-2 rounded-xl shadow-sm transition-all duration-300 text-left hover:shadow-lg hover:scale-105"
+            style={{ borderColor: '#E0F2FE' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#05A8F9'
+              e.currentTarget.style.backgroundColor = '#F4FCFF'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#E0F2FE'
+              e.currentTarget.style.backgroundColor = 'white'
+            }}
+          >
+            <div 
+              className="p-3 rounded-xl flex-shrink-0 transition-all"
+              style={{ backgroundColor: '#F4FCFF' }}
+            >
+              <UserPlus className="w-6 h-6" style={{ color: '#05A8F9' }} />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-gray-900 text-sm mb-1">
+                Nuevo Usuario
+              </p>
+              <p className="text-xs text-gray-600">
+                Registrar en el sistema
+              </p>
+            </div>
+          </button>
+
+          {/* Botón: Verificar */}
+          <button
+            onClick={() => window.location.href = '/verification'}
+            disabled={!systemStatus?.authentication_active}
+            className={`group flex items-center gap-3 px-4 py-4 rounded-xl shadow-sm transition-all duration-300 text-left ${
+              systemStatus?.authentication_active 
+                ? 'bg-white border-2 hover:shadow-lg hover:scale-105' 
+                : 'bg-gray-100 border-2 cursor-not-allowed opacity-50'
+            }`}
+            style={{ 
+              borderColor: systemStatus?.authentication_active ? '#E0F2FE' : '#E5E7EB'
+            }}
+            onMouseEnter={(e) => {
+              if (systemStatus?.authentication_active) {
+                e.currentTarget.style.borderColor = '#05A8F9'
+                e.currentTarget.style.backgroundColor = '#F4FCFF'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (systemStatus?.authentication_active) {
+                e.currentTarget.style.borderColor = '#E0F2FE'
+                e.currentTarget.style.backgroundColor = 'white'
+              }
+            }}
+          >
+            <div 
+              className="p-3 rounded-xl flex-shrink-0"
+              style={{ 
+                backgroundColor: systemStatus?.authentication_active ? '#F4FCFF' : '#F3F4F6'
+              }}
+            >
+              <Key 
+                className="w-6 h-6"
+                style={{ 
+                  color: systemStatus?.authentication_active ? '#05A8F9' : '#9CA3AF'
+                }}
+              />
+            </div>
+            <div className="flex-1">
+              <p 
+                className={`font-bold text-sm mb-1 ${
+                  systemStatus?.authentication_active ? 'text-gray-900' : 'text-gray-500'
+                }`}
+              >
+                Verificar
+              </p>
+              <p 
+                className={`text-xs ${
+                  systemStatus?.authentication_active ? 'text-gray-600' : 'text-gray-400'
+                }`}
+              >
+                Autenticación 1:1
+              </p>
+            </div>
+          </button>
+
+          {/* Botón: Entrenar IA */}
+          <button
+            onClick={handleTrainNetworks}
+            disabled={training || systemStatus?.users_count < 2}
+            className={`group flex items-center gap-3 px-4 py-4 rounded-xl shadow-sm transition-all duration-300 text-left ${
+              training || systemStatus?.users_count < 2
+                ? 'bg-gray-100 border-2 cursor-not-allowed opacity-50'
+                : 'bg-white border-2 hover:shadow-lg hover:scale-105'
+            }`}
+            style={{ 
+              borderColor: (training || systemStatus?.users_count < 2) ? '#E5E7EB' : '#E0F2FE'
+            }}
+            onMouseEnter={(e) => {
+              if (!training && systemStatus?.users_count >= 2) {
+                e.currentTarget.style.borderColor = '#10B981'
+                e.currentTarget.style.backgroundColor = '#F0FDF4'
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!training && systemStatus?.users_count >= 2) {
+                e.currentTarget.style.borderColor = '#E0F2FE'
+                e.currentTarget.style.backgroundColor = 'white'
+              }
+            }}
+          >
+            <div 
+              className="p-3 rounded-xl flex-shrink-0"
+              style={{ 
+                backgroundColor: (training || systemStatus?.users_count < 2) 
+                  ? '#F3F4F6' 
+                  : '#F0FDF4'
+              }}
+            >
+              <Brain 
+                className={`w-6 h-6 ${training ? 'animate-spin' : ''}`}
+                style={{ 
+                  color: (training || systemStatus?.users_count < 2) 
+                    ? '#9CA3AF' 
+                    : '#10B981'
+                }}
+              />
+            </div>
+            <div className="flex-1">
+              <p 
+                className={`font-bold text-sm mb-1 ${
+                  (training || systemStatus?.users_count < 2) ? 'text-gray-500' : 'text-gray-900'
+                }`}
+              >
+                {training ? 'Entrenando...' : 'Entrenar IA'}
+              </p>
+              <p 
+                className={`text-xs ${
+                  (training || systemStatus?.users_count < 2) ? 'text-gray-400' : 'text-gray-600'
+                }`}
+              >
+                Redes neuronales
+              </p>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

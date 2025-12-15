@@ -218,12 +218,12 @@ class CameraManager:
                         if ret_retry:
                             self.frame_count += 1
                             self.last_frame_time = time.time()
-                            logger.info("✅ Captura exitosa después de recovery")
+                            logger.info("Captura exitosa después de recovery")
                             return ret_retry, frame_retry
                         else:
-                            logger.error("❌ Recovery falló - captura sigue fallando")
+                            logger.error("Recovery falló - captura sigue fallando")
                     else:
-                        logger.error("❌ Reset de cámara falló")
+                        logger.error("Reset de cámara falló")
                         self.is_initialized = False
                 
                 return False, None
@@ -508,7 +508,7 @@ def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
     global _camera_instance, _retry_count, _last_release_time
     
     if _camera_instance is None:
-        # 🆕 ESPERAR SI ACABA DE LIBERARSE
+        # ESPERAR SI ACABA DE LIBERARSE
         current_time = time.time()
         time_since_release = current_time - _last_release_time
         
@@ -559,7 +559,7 @@ def release_camera():
         _camera_instance.release()
         _camera_instance = None
         _last_release_time = time.time()
-        logger.info("✅ Cámara liberada completamente")
+        logger.info("Cámara liberada completamente")
         
 def reset_camera_for_new_operation():
     """Reset simple para nueva operación."""

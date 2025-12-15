@@ -84,348 +84,348 @@ Traceback (most recent call last):
     self.fusion_system = get_score_fusion_system()
                          ^^^^^^^^^^^^^^^^^^^^^^^
 NameError: name 'get_score_fusion_system' is not defined
-2025-11-04 19:24:12,500 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:12,500 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:12,501 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:12,503 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:17,176 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:12,504 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:17,176 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:17,176 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:17,177 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:17,178 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:17,178 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:17,178 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:17,178 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:17,178 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:22,191 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:17,179 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:22,191 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:22,191 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:22,191 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:22,192 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:22,193 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:22,194 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:26,623 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:22,194 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:26,623 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:26,623 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:26,623 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:26,624 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:31,625 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:26,625 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:31,625 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:31,626 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:31,628 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:36,615 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:36,616 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:36,617 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:36,617 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:36,617 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:36,617 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:36,617 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:36,618 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:41,618 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:36,618 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:41,618 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:41,618 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:41,618 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:41,619 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:41,620 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:41,621 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:41,621 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:46,614 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:51,622 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:51,624 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:24:56,608 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:51,625 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:24:56,608 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:24:56,609 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:24:56,611 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:56,611 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:24:56,611 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:24:56,611 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:24:56,611 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:01,931 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:24:56,612 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:01,931 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:01,932 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:01,932 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:01,932 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:01,932 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:01,933 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:06,669 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:01,935 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:06,669 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:06,669 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:06,670 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:06,670 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:06,671 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:06,672 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:06,673 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:11,671 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:06,673 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:11,671 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:11,673 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:11,673 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:11,673 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:11,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:11,675 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:11,677 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:16,694 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:11,677 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:16,694 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:16,695 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:21,673 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:16,697 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:21,673 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:21,673 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:21,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:26,990 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:21,676 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:26,990 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:26,990 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:26,990 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:26,991 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:26,991 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:26,991 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:26,991 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:26,991 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:26,992 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:26,993 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:26,993 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:26,993 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:31,672 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:26,993 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:31,672 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:31,672 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:31,672 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:31,674 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:31,674 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:31,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:31,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:31,675 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:31,676 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:36,672 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:36,673 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:36,673 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:36,673 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:36,673 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:36,673 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:41,671 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:36,674 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:41,671 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:41,671 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:41,671 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:41,671 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:41,672 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:46,674 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:41,674 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:46,674 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:46,675 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:46,675 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:46,675 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:46,675 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:46,677 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:46,678 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:46,678 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:46,678 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:51,680 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:46,678 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:51,680 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:51,682 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:51,682 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:51,682 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:51,683 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:25:56,683 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:51,684 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:25:56,683 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:25:56,683 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:25:56,684 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:25:56,684 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:25:56,684 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:25:56,685 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
-2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:726] - 📊 Total usuarios en sistema: 3
+2025-11-04 19:25:56,686 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes
+2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:726] - Total usuarios en sistema: 3
 2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:728] -    - ss (ID: 2020)
 2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:728] -    - qw (ID: al)
 2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:728] -    - aa (ID: kk)
 2025-11-04 19:26:01,678 - biometric_gesture_system - INFO - [system_manager.py:746] - ⚠️ No hay tracking previo - Asumiendo bootstrap: ['2020', 'al']
-2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: ss (ID: 2020)
+2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: ss (ID: 2020)
 2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: ss (ID: 2020)
-2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: qw (ID: al)
+2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: qw (ID: al)
 2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? True
 2025-11-04 19:26:01,679 - biometric_gesture_system - INFO - [system_manager.py:762] - ⏭️  Usuario ya entrenado: qw (ID: al)
-2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:751] - 🔍 Verificando usuario: aa (ID: kk)
+2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:751] - Verificando usuario: aa (ID: kk)
 2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:752] -    ¿Está en trained_user_ids? False
 2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:760] - ✅ Usuario pendiente agregado: aa (ID: kk)
-2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:764] - 📊 RESULTADO: 1 usuarios pendientes
+2025-11-04 19:26:01,680 - biometric_gesture_system - INFO - [system_manager.py:764] - RESULTADO: 1 usuarios pendientes

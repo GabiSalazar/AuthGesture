@@ -25,13 +25,13 @@
 2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [visual_feedback.py:66] -   ✓ Sistema de priorización activo
 2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [visual_feedback.py:67] - ======================================================================
 2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:147] - ================================================================================
-2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:148] - 🚀 BiometricSystemManager v2.0.0 Real Edition Iniciado
-2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:149] - 🏗️  Arquitectura: 15 Módulos + Main | 4 Capas Funcionales
-2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:150] - 🎯 Características: Redes siamesas, fusión multimodal, templates biométricos
+2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:148] - BiometricSystemManager v2.0.0 Real Edition Iniciado
+2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:149] - Arquitectura: 15 Módulos + Main | 4 Capas Funcionales
+2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:150] - Características: Redes siamesas, fusión multimodal, templates biométricos
 2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:151] - ================================================================================
 2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:203] - 
 ================================================================================
-2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:204] - 🔧 INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
+2025-10-25 10:31:42,768 - biometric_gesture_system - INFO - [system_manager.py:204] - INICIANDO INICIALIZACIÓN PROGRESIVA DEL SISTEMA
 2025-10-25 10:31:42,770 - biometric_gesture_system - INFO - [system_manager.py:205] - ================================================================================
 2025-10-25 10:31:42,770 - biometric_gesture_system - INFO - [system_manager.py:165] - VERIFICANDO MÓDULOS DEL SISTEMA...
 2025-10-25 10:31:42,770 - biometric_gesture_system - INFO - [system_manager.py:166] - ================================================================================
@@ -54,7 +54,7 @@
 ✅ TODOS LOS 15 MÓDULOS DISPONIBLES
 2025-10-25 10:31:42,772 - biometric_gesture_system - INFO - [system_manager.py:191] - ================================================================================
 2025-10-25 10:31:42,772 - biometric_gesture_system - INFO - [system_manager.py:218] - 
-🔧 NIVEL 1: Inicializando Componentes Básicos
+NIVEL 1: Inicializando Componentes Básicos
 2025-10-25 10:31:42,772 - biometric_gesture_system - INFO - [system_manager.py:219] - --------------------------------------------------------------------------------
 2025-10-25 10:31:42,772 - biometric_gesture_system - INFO - [system_manager.py:310] - Inicializando Base de Datos...
 2025-10-25 10:31:44,262 - biometric_gesture_system - INFO - [system_manager.py:319] - ✅ Base de datos lista: 1 usuarios registrados
@@ -68,7 +68,7 @@
 2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:355] - ✅ Validadores de calidad
 2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:228] - ✅ NIVEL 1 COMPLETADO: Componentes básicos listos
 
-2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:233] - 📊 NIVEL 2: Inicializando Extractores de Características
+2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:233] - NIVEL 2: Inicializando Extractores de Características
 2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:234] - --------------------------------------------------------------------------------
 2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:382] -   Inicializando AnatomicalFeaturesExtractor...
 2025-10-25 10:31:44,524 - biometric_gesture_system - INFO - [system_manager.py:384] -   ✅ AnatomicalFeaturesExtractor inicializado
@@ -104,4 +104,4 @@ Traceback (most recent call last):
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 AttributeError: 'RealEnrollmentSystem' object has no attribute 'check_bootstrap_mode'
 2025-10-25 10:31:44,571 - biometric_gesture_system - ERROR - [system_manager.py:238] - ❌ Error inicializando sistema biométrico
-2025-10-25 10:31:44,571 - biometric_gesture_system - ERROR - [system_manager.py:239] - 🔍 Detalle del error: Error en Nivel 2 (Extractores)
+2025-10-25 10:31:44,571 - biometric_gesture_system - ERROR - [system_manager.py:239] - Detalle del error: Error en Nivel 2 (Extractores)

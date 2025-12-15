@@ -8,8 +8,8 @@ print("-" * 50)
 
 # Probar conexión
 if test_supabase_connection():
-    print("✅ ¡Conexión exitosa!")
-    print("✅ Cliente de Supabase funcionando correctamente")
+    print("¡Conexión exitosa!")
+    print("Cliente de Supabase funcionando correctamente")
 else:
-    print("❌ Error de conexión")
+    print("Error de conexión")
     print("Verifica tu .env con las credenciales correctas")

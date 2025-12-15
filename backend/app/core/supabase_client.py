@@ -35,7 +35,7 @@ def get_supabase_client() -> Client:
         # Validar que existan las credenciales
         if not SUPABASE_URL or not SUPABASE_KEY:
             raise ValueError(
-                "❌ ERROR: SUPABASE_URL y SUPABASE_KEY deben estar configurados en .env"
+                "ERROR: SUPABASE_URL y SUPABASE_KEY deben estar configurados en .env"
             )
         
         # Crear cliente sin opciones adicionales
@@ -44,9 +44,9 @@ def get_supabase_client() -> Client:
                 supabase_url=SUPABASE_URL,
                 supabase_key=SUPABASE_KEY
             )
-            logger.info("✅ Cliente de Supabase inicializado correctamente")
+            logger.info("Cliente de Supabase inicializado correctamente")
         except Exception as e:
-            logger.error(f"❌ Error creando cliente: {e}")
+            logger.error(f"Error creando cliente: {e}")
             raise
     
     return _supabase_client
@@ -63,10 +63,10 @@ def test_supabase_connection() -> bool:
         client = get_supabase_client()
         # Intentar hacer una query simple
         response = client.table('authentication_attempts').select('id').limit(1).execute()
-        logger.info("✅ Conexión a Supabase exitosa")
+        logger.info("Conexión a Supabase exitosa")
         return True
     except Exception as e:
-        logger.error(f"❌ Error conectando a Supabase: {e}")
+        logger.error(f"Error conectando a Supabase: {e}")
         import traceback
         traceback.print_exc()
         return False
