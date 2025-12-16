@@ -21,6 +21,7 @@ import {
   Zap,
   Shield
 } from 'lucide-react'
+import config from '../../../lib/config'
 
 export default function SystemManagement() {
   const [activeTab, setActiveTab] = useState('config')
@@ -116,7 +117,8 @@ export default function SystemManagement() {
   const loadCurrentApiKey = async () => {
     try {
       setLoadingApiKey(true)
-      const response = await fetch('http://localhost:8000/api/v1/api-keys/current')
+      // const response = await fetch('http://localhost:8000/api/v1/api-keys/current')
+      const response = await fetch(config.endpoints.apiKeys.current)
       const data = await response.json()
       
       setApiKeyData(data.exists ? {
@@ -141,7 +143,8 @@ export default function SystemManagement() {
 
     try {
       setGeneratingKey(true)
-      const response = await fetch('http://localhost:8000/api/v1/api-keys/generate', {
+      // const response = await fetch('http://localhost:8000/api/v1/api-keys/generate', {
+      const response = await fetch(config.endpoints.apiKeys.generate, {
         method: 'POST'
       })
       const data = await response.json()
@@ -170,6 +173,7 @@ export default function SystemManagement() {
 
     try {
       setGeneratingKey(true)
+      // const response = await fetch('http://localhost:8000/api/v1/api-keys/regenerate', {
       const response = await fetch('http://localhost:8000/api/v1/api-keys/regenerate', {
         method: 'POST'
       })

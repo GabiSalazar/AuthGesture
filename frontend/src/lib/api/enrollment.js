@@ -4,6 +4,7 @@
  */
 
 import apiClient from './client'
+import config from '../config'
 
 export const enrollmentApi = {
   /**
@@ -108,7 +109,8 @@ export const enrollmentApi = {
     try {
       console.log('Verificando código:', { userId, code })
       // Usar URL absoluta porque el router de email no usa /api/v1
-      const response = await fetch('http://localhost:8000/api/email/verify-code', {
+      // const response = await fetch('http://localhost:8000/api/email/verify-code', {
+      const response = await fetch(config.endpoints.email.verifyCode, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -130,7 +132,8 @@ export const enrollmentApi = {
   resendCode: async (userId, username, email) => {
     try {
       console.log('Reenviando código a:', email)
-      const response = await fetch('http://localhost:8000/api/email/resend-code', {
+      // const response = await fetch('http://localhost:8000/api/email/resend-code', {
+      const response = await fetch(config.endpoints.email.resendCode, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -163,7 +166,8 @@ export const enrollmentApi = {
   sendOTPOnly: async (email, username) => {
     try {
       console.log('Enviando OTP a:', email)
-      const response = await fetch('http://localhost:8000/api/v1/enrollment/send-otp', {
+      // const response = await fetch('http://localhost:8000/api/v1/enrollment/send-otp', {
+      const response = await fetch(config.endpoints.enrollment.sendOTP, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

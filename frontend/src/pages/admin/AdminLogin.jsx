@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Lock, User, Eye, EyeOff, Shield, AlertCircle, ArrowLeft, Sparkles } from 'lucide-react'
+import config from '../../lib/config'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -18,7 +19,8 @@ export default function AdminLogin() {
     setLoading(true)
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/admin/login', {
+      // const response = await fetch('http://localhost:8000/api/v1/admin/login', {
+      const response = await fetch(config.endpoints.admin.login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

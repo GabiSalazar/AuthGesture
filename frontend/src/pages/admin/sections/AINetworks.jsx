@@ -14,6 +14,7 @@ import {
   BarChart3,
   Network
 } from 'lucide-react'
+import config from '../../../lib/config'
 
 export default function AINetworks() {
   const [activeTab, setActiveTab] = useState('anatomical')
@@ -42,7 +43,8 @@ export default function AINetworks() {
         systemApi.getDynamicNetworkMetrics(),
         systemApi.getFusionConfig(),
         systemApi.getFusionWeights(),
-        fetch('http://localhost:8000/api/v1/feedback/metrics/verification')
+        // fetch('http://localhost:8000/api/v1/feedback/metrics/verification')
+        fetch(config.endpoints.feedback.verificationMetrics)
           .then(res => res.json())
           .catch(() => ({ metrics: null }))
       ])

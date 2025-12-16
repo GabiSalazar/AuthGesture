@@ -20,7 +20,8 @@ class Settings(BaseSettings):
     # ============================================================================
     # CORS
     # ============================================================================
-    BACKEND_CORS_ORIGINS: list = ["http://localhost:5173", "http://localhost:3000"]
+    # BACKEND_CORS_ORIGINS: list = ["http://localhost:5173", "http://localhost:3000"]
+    BACKEND_CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,https://authgesture.com"
     
     # ============================================================================
     # URLs DE LA APLICACIÓN (NUEVO)

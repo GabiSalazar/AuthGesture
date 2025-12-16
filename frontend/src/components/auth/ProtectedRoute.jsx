@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Spinner } from '../ui'
+import config from '../../lib/config'
 
 export default function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -21,7 +22,8 @@ export default function ProtectedRoute({ children }) {
       }
 
       // Verificar token con el backend
-      const response = await fetch('http://localhost:8000/api/v1/admin/verify-token', {
+      // const response = await fetch('http://localhost:8000/api/v1/admin/verify-token', {
+      const response = await fetch(config.endpoints.admin.verifyToken, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

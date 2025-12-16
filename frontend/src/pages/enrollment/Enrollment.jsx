@@ -5,6 +5,7 @@ import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Button, Badge } from '../../components/ui'
 import WebcamCapture from '../../components/camera/WebcamCapture'
 import { UserPlus, CheckCircle, CheckCircle2, XCircle, Camera, Hand, AlertCircle, ArrowRight, User, IdCard, ArrowLeft, Mail, Phone, Calendar, Users, Loader2, RefreshCw, LogIn } from 'lucide-react'
+import config from '../../lib/config'
 
 export default function Enrollment() {
   const navigate = useNavigate()
@@ -1962,8 +1963,9 @@ export default function Enrollment() {
                       
                       console.log('Guardando personality profile:', responses)
                       
-                      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
-                      const response = await fetch(`${apiUrl}/personality/submit`, {
+                      // const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
+                      // const response = await fetch(`${apiUrl}/personality/submit`, {
+                      const response = await fetch(config.endpoints.personality.submit, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
