@@ -3,7 +3,7 @@ API endpoints para autenticación de administrador
 """
 
 import os
-import jwt
+from jose import jwt
 from datetime import datetime, timedelta
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
