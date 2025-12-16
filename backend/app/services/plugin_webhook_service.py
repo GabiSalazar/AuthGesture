@@ -5,7 +5,7 @@ Comunicación P2 → P1
 import requests
 import logging
 from typing import Dict, Any, Optional
-import jwt
+from jose import jwt
 from datetime import datetime, timedelta
 
 from app.config import settings
