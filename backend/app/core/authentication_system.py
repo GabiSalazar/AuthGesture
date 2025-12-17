@@ -471,15 +471,22 @@ class RealAuthenticationPipeline:
             logger.info(f"  - Red dinámica entrenada: {self.dynamic_network.is_trained}")
 
         
-            # Inicializar componentes base
-            if not self.camera_manager.initialize():
-                logger.error("Error inicializando cámara")
-                return False
+            # # Inicializar componentes base
+            # if not self.camera_manager.initialize():
+            #     logger.error("Error inicializando cámara")
+            #     return False
             
+            # if not self.mediapipe_processor.initialize():
+            #     logger.error("Error inicializando MediaPipe")
+            #     return False
+            
+            logger.info("Modo Web: Cámara manejada por frontend, no por servidor")
+
+            # inicializar MediaPipe para procesar frames
             if not self.mediapipe_processor.initialize():
                 logger.error("Error inicializando MediaPipe")
                 return False
-            
+
             # Verificar extractores
             if not self.anatomical_extractor:
                 logger.error("Extractor anatómico no disponible")
