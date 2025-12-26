@@ -53,7 +53,59 @@ class PluginWebhookService:
             logger.info(f"   Session Token: {session_token}")
             
             # Preparar payload
-            payload = {
+            # payload = {
+            #     "user_id": user_id,
+            #     "email": email,
+            #     "session_token": session_token,
+            #     "raw_responses": raw_responses,
+            #     "action": "registro"
+            # }
+            
+            # # Preparar headers
+            # headers = {
+            #     "Content-Type": "application/json"
+            # }
+            
+            # # Agregar API Key si está disponible
+            # if self.api_key:
+            #     headers["Authorization"] = f"Bearer {self.api_key}"
+            
+            # # Hacer POST request
+            # response = requests.post(
+            #     callback_url,
+            #     json=payload,
+            #     headers=headers,
+            #     timeout=self.timeout
+            # )
+            
+            # Generar JWT con los datos en el payload
+            jwt_payload = {
+                "user_id": user_id,
+                "email": email,
+                "raw_responses": raw_responses,
+                "session_token": session_token,
+                "action": "registro",
+                "timestamp": datetime.utcnow().isoformat(),
+                "exp": datetime.utcnow() + timedelta(hours=settings.BIOMETRIC_JWT_EXPIRATION_HOURS)
+            }
+            
+            # Firmar el JWT con la Secret Key compartida
+            jwt_token = jwt.encode(
+                jwt_payload,
+                settings.BIOMETRIC_JWT_SECRET,
+                algorithm="HS256"
+            )
+            
+            logger.info(f"JWT generado para registro")
+            
+            # Preparar headers con JWT
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {jwt_token}"
+            }
+            
+            # Body vacío o con los mismos datos (el plugin leerá del JWT)
+            body = {
                 "user_id": user_id,
                 "email": email,
                 "session_token": session_token,
@@ -61,19 +113,10 @@ class PluginWebhookService:
                 "action": "registro"
             }
             
-            # Preparar headers
-            headers = {
-                "Content-Type": "application/json"
-            }
-            
-            # Agregar API Key si está disponible
-            if self.api_key:
-                headers["Authorization"] = f"Bearer {self.api_key}"
-            
             # Hacer POST request
             response = requests.post(
                 callback_url,
-                json=payload,
+                json=body,
                 headers=headers,
                 timeout=self.timeout
             )
@@ -126,16 +169,19 @@ class PluginWebhookService:
             True si se envió exitosamente
         """
         try:
-            logger.info(f"📤 Enviando resultado de autenticación al Plugin")
-            logger.info(f"   Callback URL: {callback_url}")
-            logger.info(f"   User ID: {user_id}")
-            logger.info(f"   Authenticated: {authenticated}")
+            logger.info(f"Enviando resultado de autenticación al Plugin")
+            logger.info(f"Callback URL: {callback_url}")
+            logger.info(f"User ID: {user_id}")
+            logger.info(f"Authenticated: {authenticated}")
             
             # Generar JWT
+            # Generar JWT con los datos en el payload
             jwt_payload = {
                 "user_id": user_id,
                 "email": email,
+                "session_token": session_token,
                 "authenticated": authenticated,
+                "action": "autenticacion",
                 "timestamp": datetime.utcnow().isoformat(),
                 "exp": datetime.utcnow() + timedelta(hours=settings.BIOMETRIC_JWT_EXPIRATION_HOURS)
             }
@@ -143,34 +189,37 @@ class PluginWebhookService:
             if confidence is not None:
                 jwt_payload["confidence"] = confidence
             
+            # Firmar el JWT con la Secret Key compartida
             jwt_token = jwt.encode(
                 jwt_payload,
                 settings.BIOMETRIC_JWT_SECRET,
                 algorithm="HS256"
             )
             
-            # Preparar payload
-            payload = {
+            logger.info(f"JWT generado para autenticación")
+            
+            # Preparar headers con JWT
+            headers = {
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {jwt_token}"
+            }
+            
+            # Body con los mismos datos (el plugin leerá del JWT)
+            body = {
                 "user_id": user_id,
                 "email": email,
                 "session_token": session_token,
                 "action": "autenticacion",
-                "authenticated": authenticated,
-                "jwt": jwt_token
+                "authenticated": authenticated
             }
             
-            # Preparar headers
-            headers = {
-                "Content-Type": "application/json"
-            }
-            
-            if self.api_key:
-                headers["Authorization"] = f"Bearer {self.api_key}"
+            if confidence is not None:
+                body["confidence"] = confidence
             
             # Hacer POST request
             response = requests.post(
                 callback_url,
-                json=payload,
+                json=body,
                 headers=headers,
                 timeout=self.timeout
             )
