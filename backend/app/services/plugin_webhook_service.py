@@ -98,21 +98,16 @@ class PluginWebhookService:
             
             logger.info(f"JWT generado para registro")
             
-            # Preparar headers con JWT
+            # Preparar headers (SIN API Key, SIN Authorization)
             headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {jwt_token}"
+                "Content-Type": "application/json"
             }
-            
-            # Body vacío o con los mismos datos (el plugin leerá del JWT)
+
+            # Body con JWT como campo "jwt_token"
             body = {
-                "user_id": user_id,
-                "email": email,
-                "session_token": session_token,
-                "raw_responses": raw_responses,
-                "action": "registro"
+                "jwt_token": jwt_token
             }
-            
+
             # Hacer POST request
             response = requests.post(
                 callback_url,
@@ -120,6 +115,7 @@ class PluginWebhookService:
                 headers=headers,
                 timeout=self.timeout
             )
+
             
             # Verificar respuesta
             if response.status_code in [200, 201, 202]:
@@ -174,7 +170,6 @@ class PluginWebhookService:
             logger.info(f"User ID: {user_id}")
             logger.info(f"Authenticated: {authenticated}")
             
-            # Generar JWT
             # Generar JWT con los datos en el payload
             jwt_payload = {
                 "user_id": user_id,
@@ -198,24 +193,16 @@ class PluginWebhookService:
             
             logger.info(f"JWT generado para autenticación")
             
-            # Preparar headers con JWT
+            # Preparar headers (SIN API Key, SIN Authorization)
             headers = {
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {jwt_token}"
+                "Content-Type": "application/json"
             }
-            
-            # Body con los mismos datos (el plugin leerá del JWT)
+
+            # Body con JWT como campo "jwt_token"
             body = {
-                "user_id": user_id,
-                "email": email,
-                "session_token": session_token,
-                "action": "autenticacion",
-                "authenticated": authenticated
+                "jwt_token": jwt_token
             }
-            
-            if confidence is not None:
-                body["confidence"] = confidence
-            
+
             # Hacer POST request
             response = requests.post(
                 callback_url,
