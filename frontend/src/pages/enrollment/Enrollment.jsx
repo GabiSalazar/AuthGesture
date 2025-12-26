@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useSearchParams} from 'react-router-dom'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Button, Badge } from '../../components/ui'
@@ -11,6 +11,7 @@ export default function Enrollment() {
   const navigate = useNavigate()
   const location = useLocation()
   const reenrollmentData = location.state?.reenrollment ? location.state : null
+  const [searchParams] = useSearchParams()
 
   const [step, setStep] = useState('personal-info')
   const [username, setUsername] = useState('')
@@ -21,6 +22,8 @@ export default function Enrollment() {
   const [selectedGestures, setSelectedGestures] = useState([])
   const [sessionId, setSessionId] = useState(null)
   const [userId, setUserId] = useState(null)
+  const [pluginSessionToken, setPluginSessionToken] = useState(null)
+  const [pluginCallbackUrl, setPluginCallbackUrl] = useState(null)
   const [sessionStatus, setSessionStatus] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -52,6 +55,25 @@ export default function Enrollment() {
 
   const lastFrameTimeRef = useRef(0)
   const processingFrameRef = useRef(false)
+
+  // Leer datos del plugin desde la URL
+  useEffect(() => {
+    const sessionToken = searchParams.get('session_token')
+    
+    if (sessionToken) {
+      // URL FIJO del plugin para recibir resultado de registro
+      const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/api/registro-finalizado'
+      
+      console.log('Datos del plugin detectados:')
+      console.log('Session Token:', sessionToken)
+      console.log('Callback URL (fijo):', PLUGIN_CALLBACK_URL)
+      
+      setPluginSessionToken(sessionToken)
+      setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+    } else {
+      console.log('No hay datos del plugin - Usuario accedió directamente')
+    }
+  }, [searchParams])
 
   // Detectar si viene desde forgot-sequence y pre-cargar datos
   useEffect(() => {
@@ -425,6 +447,12 @@ export default function Enrollment() {
 
     try {
       setLoading(true)
+
+      console.log('Iniciando enrollment con:')
+      console.log('Username:', username)
+      console.log('Email:', email)
+      console.log('Plugin Session Token:', pluginSessionToken)
+      console.log('Plugin Callback URL:', pluginCallbackUrl)
       
       const response = await enrollmentApi.startEnrollment(
         userId,
@@ -433,7 +461,9 @@ export default function Enrollment() {
         phoneNumber, 
         parseInt(age), 
         gender, 
-        selectedGestures
+        selectedGestures,
+        pluginSessionToken,
+        pluginCallbackUrl
       )
       
       setSessionId(response.session_id)

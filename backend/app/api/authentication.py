@@ -3,7 +3,7 @@ API Endpoints para Authentication System
 Integración completa con RealAuthenticationSystem
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 import logging
@@ -14,6 +14,9 @@ from app.core.authentication_system import (
     AuthenticationStatus,
     SecurityLevel
 )
+
+from app.dependencies.auth import require_admin_token
+
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -151,7 +154,9 @@ async def start_identification(request: IdentificationStartRequest):
         
         session_id = auth_system.start_real_identification(
             security_level=security_level,
-            ip_address=request.ip_address
+            ip_address=request.ip_address,
+            session_token=request.session_token,
+            callback_url=request.callback_url 
         )
         
         return AuthenticationStartResponse(
@@ -852,7 +857,7 @@ async def cancel_authentication(session_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/authentication/users")
+@router.get("/authentication/users" , dependencies=[Depends(require_admin_token)])
 async def get_available_users():
     """
     Obtiene usuarios disponibles para autenticación.
@@ -872,7 +877,7 @@ async def get_available_users():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/authentication/stats")
+@router.get("/authentication/stats", dependencies=[Depends(require_admin_token)])
 async def get_authentication_stats():
     """
     Obtiene estadísticas del sistema de autenticación.
@@ -889,7 +894,7 @@ async def get_authentication_stats():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/authentication/initialize")
+@router.post("/authentication/initialize", dependencies=[Depends(require_admin_token)])
 async def initialize_authentication_system():
     """
     Inicializa el sistema de autenticación.

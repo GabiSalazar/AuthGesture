@@ -2,7 +2,7 @@
 API endpoints para Biometric Database
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 import numpy as np
@@ -20,6 +20,9 @@ from app.core.supabase_biometric_storage import (
     BiometricQuality,
     SearchStrategy
 )
+
+from app.dependencies.auth import require_admin_token
+
 
 router = APIRouter(prefix="/biometric-database", tags=["Biometric Database"])
 
@@ -72,7 +75,7 @@ async def biometric_database_health_check():
         raise HTTPException(status_code=500, detail=f"Error en Biometric Database: {str(e)}")
 
 
-@router.get("/stats", response_model=DatabaseStatsResponse)
+@router.get("/stats", response_model=DatabaseStatsResponse, dependencies=[Depends(require_admin_token)])
 async def get_database_stats():
     """Obtiene estadísticas de la base de datos"""
     try:
@@ -134,7 +137,7 @@ async def get_database_summary():
 #     except Exception as e:
 #         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@router.get("/users")
+@router.get("/users", dependencies=[Depends(require_admin_token)])
 async def list_all_users(
     search: Optional[str] = None,
     gender: Optional[str] = None,
@@ -250,7 +253,8 @@ async def list_all_users(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-@router.get("/users/{user_id}")
+@router.get("/users/{user_id}", dependencies=[Depends(require_admin_token)])
+
 async def get_user_profile(user_id: str):
     """Obtiene perfil detallado de un usuario"""
     try:
@@ -286,7 +290,8 @@ async def get_user_profile(user_id: str):
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/users/{user_id}/templates")
+@router.get("/users/{user_id}/templates", dependencies=[Depends(require_admin_token)])
+
 async def get_user_templates(user_id: str):
     """Obtiene templates de un usuario específico"""
     try:
@@ -371,7 +376,8 @@ async def get_template_details(template_id: str):
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.delete("/users/{user_id}")
+@router.delete("/users/{user_id}", dependencies=[Depends(require_admin_token)])
+
 async def delete_user(user_id: str):
     """Elimina un usuario y todos sus templates"""
     try:
@@ -434,7 +440,8 @@ async def update_user(user_id: str, request: UpdateUserRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@router.get("/users/{user_id}/auth-attempts")
+@router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
+
 async def get_user_auth_attempts(user_id: str, limit: int = 50):
     """Obtiene historial de autenticaciones de un usuario"""
     try:
@@ -474,7 +481,8 @@ async def get_user_auth_attempts(user_id: str, limit: int = 50):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-@router.delete("/templates/{template_id}")
+@router.delete("/templates/{template_id}", dependencies=[Depends(require_admin_token)])
+
 async def delete_template(template_id: str):
     """Elimina un template específico"""
     try:
@@ -595,7 +603,7 @@ async def get_indices_stats():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/config")
+@router.get("/config", dependencies=[Depends(require_admin_token)])
 async def get_database_config():
     """Obtiene configuración de la base de datos"""
     try:

@@ -6,6 +6,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
 
+from app.dependencies.auth import require_admin_token
+
 from app.services.api_key_service import get_api_key_service
 
 router = APIRouter(prefix="/api-keys", tags=["API Keys"])
@@ -57,7 +59,7 @@ class APIKeyStatsResponse(BaseModel):
 # ENDPOINTS
 # ============================================
 
-@router.get("/current", response_model=APIKeyCurrentResponse)
+@router.get("/current", response_model=APIKeyCurrentResponse, dependencies=[Depends(require_admin_token)])
 async def get_current_api_key():
     """
     Obtiene la API Key activa actual.
@@ -81,7 +83,8 @@ async def get_current_api_key():
         raise HTTPException(status_code=500, detail=f"Error obteniendo API Key: {str(e)}")
 
 
-@router.post("/generate", response_model=APIKeyResponse)
+@router.post("/generate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
+
 async def generate_api_key():
     """
     Genera una nueva API Key (primera vez o autogenerar).
@@ -102,7 +105,8 @@ async def generate_api_key():
         raise HTTPException(status_code=500, detail=f"Error generando API Key: {str(e)}")
 
 
-@router.post("/regenerate", response_model=APIKeyResponse)
+@router.post("/regenerate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
+
 async def regenerate_api_key():
     """
     Regenera la API Key (invalida la anterior y crea una nueva).
@@ -148,7 +152,8 @@ async def validate_api_key(request: APIKeyValidateRequest):
         raise HTTPException(status_code=500, detail=f"Error validando API Key: {str(e)}")
 
 
-@router.get("/stats", response_model=APIKeyStatsResponse)
+@router.get("/stats", response_model=APIKeyStatsResponse, dependencies=[Depends(require_admin_token)])
+
 async def get_api_key_stats():
     """
     Obtiene estadísticas de uso de la API Key actual.

@@ -3,11 +3,12 @@ API Endpoints para gestión del sistema biométrico
 VERSIÓN CORREGIDA - SOLO SISTEMA
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, Optional, List
 
 from app.core.system_manager import get_system_manager
+from app.dependencies.auth import require_admin_token
 
 router = APIRouter()
 
@@ -47,7 +48,8 @@ class PendingRetrainResponse(BaseModel):
     can_retrain: bool
     message: str
 
-@router.get("/system/status", response_model=SystemStatusResponse)
+@router.get("/system/status", response_model=SystemStatusResponse, dependencies=[Depends(require_admin_token)])
+
 async def get_system_status():
     """
     Obtiene el estado actual del sistema.
@@ -143,7 +145,7 @@ async def get_detailed_system_status():
         }
 
 
-@router.post("/system/initialize")
+@router.post("/system/initialize", dependencies=[Depends(require_admin_token)])
 async def initialize_system():
     """
     Inicializa el sistema biométrico.
@@ -196,7 +198,8 @@ async def initialize_system():
         raise HTTPException(status_code=500, detail=error_detail)
 
 
-@router.post("/system/train", response_model=TrainingResponse)
+@router.post("/system/train", response_model=TrainingResponse, dependencies=[Depends(require_admin_token)])
+
 async def train_networks():
     """
     Entrena las redes neuronales del sistema.
@@ -378,7 +381,8 @@ async def get_modules_status():
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/system/statistics")
+@router.get("/system/statistics", dependencies=[Depends(require_admin_token)])
+
 async def get_system_statistics():
     """
     Obtiene estadísticas del sistema.

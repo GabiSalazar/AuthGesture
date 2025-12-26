@@ -24,7 +24,7 @@ export const enrollmentApi = {
   /**
    * Inicia una nueva sesión de enrollment
    */
-  startEnrollment: async (userId, username, email, phoneNumber, age, gender, gestureSequence = null) => {
+  startEnrollment: async (userId, username, email, phoneNumber, age, gender, gestureSequence = null, sessionToken = null, callbackUrl = null) => {
     try {
       const requestBody = {
         username: username,
@@ -32,7 +32,9 @@ export const enrollmentApi = {
         phone_number: phoneNumber,
         age: age,
         gender: gender,
-        gesture_sequence: gestureSequence
+        gesture_sequence: gestureSequence,
+        session_token: sessionToken,
+        callback_url: callbackUrl
       }
       
       if (userId) {
