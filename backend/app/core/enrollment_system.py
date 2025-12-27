@@ -1524,7 +1524,7 @@ class RealEnrollmentWorkflow:
                     print(traceback.format_exc())
 
             print("=" * 70)
-            print(f"🎉 MUESTRA AGREGADA CON ROI!")
+            print(f" MUESTRA AGREGADA CON ROI!")
             print(f"   ID: {sample_id}")
             print(f"   🤚 Gesto: {session.current_gesture}")
             print(f"   Progreso: {session.successful_samples}/{session.total_samples_needed}")
@@ -1536,7 +1536,7 @@ class RealEnrollmentWorkflow:
             print("=" * 70)
             
             if session.is_current_gesture_complete(self.config.samples_per_gesture):
-                print(f"🎉 GESTO '{session.current_gesture}' COMPLETADO!")
+                print(f" GESTO '{session.current_gesture}' COMPLETADO!")
                 
                 if session.advance_to_next_gesture():
                     print(f"➡️ Siguiente: {session.current_gesture}")
@@ -1637,7 +1637,7 @@ class RealEnrollmentWorkflow:
         """
         try:
             print("\n" + "="*80)
-            print("🎬 FASE 2: CAPTURA DE SECUENCIA DINÁMICA FLUIDA")
+            print(" FASE 2: CAPTURA DE SECUENCIA DINÁMICA FLUIDA")
             print("="*80)
             print(f"Secuencia: {' → '.join(session.gesture_sequence)}")
             print("\nIMPORTANTE:")
@@ -1661,7 +1661,7 @@ class RealEnrollmentWorkflow:
             timestamps = []
             temporal_features_sequence = []
             
-            print(f"\n🎬 CAPTURANDO {target_frames} frames...\n")
+            print(f"\n CAPTURANDO {target_frames} frames...\n")
             
             while frames_captured < target_frames:
                 if time.time() - start_time > max_duration:
@@ -2006,7 +2006,7 @@ class RealEnrollmentWorkflow:
             
             # ========== FASE 2: CAPTURA DINÁMICA FLUIDA ==========
             print("\n" + "="*80)
-            print("🎬 FASE 2: CAPTURA DE SECUENCIA DINÁMICA FLUIDA")
+            print(" FASE 2: CAPTURA DE SECUENCIA DINÁMICA FLUIDA")
             print("="*80)
             
             fluid_sequence = self._capture_fluid_dynamic_sequence(session)
@@ -3347,7 +3347,7 @@ class RealEnrollmentSystem:
             
             # Verificar si el gesto actual está completo
             if samples_this_gesture >= self.config.samples_per_gesture:
-                print(f"🎉 ¡GESTO '{session.current_gesture}' COMPLETADO!")
+                print(f" ¡GESTO '{session.current_gesture}' COMPLETADO!")
                 
                 # Avanzar al siguiente gesto
                 session.current_gesture_index += 1
@@ -3355,7 +3355,7 @@ class RealEnrollmentSystem:
                 if session.current_gesture_index >= len(session.gesture_sequence):
                     # ENROLLMENT COMPLETADO
                     print("=" * 70)
-                    print("🎉 ENROLLMENT REAL COMPLETADO!")
+                    print(" ENROLLMENT REAL COMPLETADO!")
                     print("=" * 70)
                     
                     session.status = EnrollmentStatus.COMPLETED
@@ -3402,13 +3402,13 @@ class RealEnrollmentSystem:
                             }
                         
                         print("="*70)
-                        print("🎉🎉🎉 ENROLLMENT BOOTSTRAP COMPLETADO EXITOSAMENTE 🎉🎉🎉")
+                        print(" ENROLLMENT BOOTSTRAP COMPLETADO EXITOSAMENTE ")
                         print(f"   Usuario: {session.user_id} con {len(templates)} templates")
                         print("="*70)
                         
                         # ========== AGREGAR TEMPLATE DE SECUENCIA FLUIDA ==========
                         try:
-                            print("🎬 GENERANDO TEMPLATE DE SECUENCIA FLUIDA")
+                            print(" GENERANDO TEMPLATE DE SECUENCIA FLUIDA")
                             print(f"Buffer de sesión total: {len(session.all_frames_buffer)} frames")
                             
                             # USAR BUFFER DE SESIÓN (200+ frames acumulados)
@@ -3497,7 +3497,7 @@ class RealEnrollmentSystem:
                         
                         # ========== TEMPLATE DE SECUENCIA FLUIDA (MODO NORMAL) ==========
                         try:
-                            print("🎬 GENERANDO TEMPLATE DE SECUENCIA FLUIDA (MODO NORMAL)")
+                            print(" GENERANDO TEMPLATE DE SECUENCIA FLUIDA (MODO NORMAL)")
                             print(f"Buffer de sesión total: {len(session.all_frames_buffer)} frames")
                             
                             if hasattr(session, 'all_frames_buffer') and len(session.all_frames_buffer) >= 50:
@@ -3788,7 +3788,7 @@ class RealEnrollmentSystem:
             print(f"Estado: {sufficient_users} usuarios, {total_samples} muestras")
             
             if sufficient_users >= 2:
-                print(f"🎉 DATOS SUFICIENTES!")
+                print(f" DATOS SUFICIENTES!")
                 print(f"   - {sufficient_users} usuarios con 15+ muestras")
                 print(f"   - {total_samples} muestras totales")
                 print("Iniciando entrenamiento automático...")

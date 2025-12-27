@@ -857,7 +857,7 @@ async def cancel_authentication(session_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/authentication/users" , dependencies=[Depends(require_admin_token)])
+@router.get("/authentication/users")
 async def get_available_users():
     """
     Obtiene usuarios disponibles para autenticación.

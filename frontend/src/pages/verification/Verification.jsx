@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams} from 'react-router-dom'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import { Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand, Loader2 } from 'lucide-react'
@@ -160,6 +160,11 @@ function LockedAccountModal({ result, onBack }) {
 
 export default function Verification() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const [pluginSessionToken, setPluginSessionToken] = useState(null)
+  const [pluginCallbackUrl, setPluginCallbackUrl] = useState(null)
+  const [pluginEmail, setPluginEmail] = useState(null)
+
   const [step, setStep] = useState('select') // 'select', 'processing', 'result', 'locked'
   const [users, setUsers] = useState([])
   const [selectedUser, setSelectedUser] = useState(null)
@@ -211,6 +216,49 @@ export default function Verification() {
       sessionCompletedRef.current = false
     }
   }, [])
+
+  // Detectar datos del plugin desde URL
+  useEffect(() => {
+    const sessionToken = searchParams.get('session_token')
+    const email = searchParams.get('email')
+    
+    if (sessionToken && email) {
+      // Callback URL fijo del plugin
+      const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/generator-init'
+      
+      console.log('Datos del plugin detectados:')
+      console.log('   Session Token:', sessionToken)
+      console.log('   Email:', email)
+      console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
+      
+      setPluginSessionToken(sessionToken)
+      setPluginEmail(email)
+      setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+      
+      // Buscar y auto-seleccionar usuario por email
+      const findAndSelectUser = () => {
+        const user = users.find(u => u.email === email)
+        if (user) {
+          console.log('Usuario encontrado por email:', user.username)
+          setSelectedUser(user)
+          // Auto-iniciar verificación después de un breve delay
+          setTimeout(() => {
+            handleStartVerification()
+          }, 500)
+        } else {
+          console.log('Usuario no encontrado con email:', email)
+          setError(`No se encontró usuario con email: ${email}`)
+        }
+      }
+      
+      // Esperar a que se carguen los usuarios antes de buscar
+      if (users.length > 0) {
+        findAndSelectUser()
+      }
+    } else {
+      console.log('Acceso directo - sin plugin')
+    }
+  }, [searchParams, users])
 
   const startCamera = async () => {
     try {
@@ -275,7 +323,14 @@ export default function Verification() {
 
       await startCamera()
 
-      const response = await authenticationApi.startVerification(selectedUser.user_id)
+      // const response = await authenticationApi.startVerification(selectedUser.user_id)
+
+      const response = await authenticationApi.startVerification(
+        selectedUser.user_id,
+        'standard',
+        pluginSessionToken,
+        pluginCallbackUrl
+      )
       setSessionId(response.session_id)
       sessionIdRef.current = response.session_id
 
@@ -576,10 +631,10 @@ export default function Verification() {
       
       {/* ========================================
           PANEL LATERAL CYAN (SOLO DESKTOP)
-      ======================================== */}
+      ======================================== */}      
       <div 
         className="hidden lg:flex lg:w-2/5 h-screen sticky top-0 flex-col justify-between p-12"
-        style={{ backgroundColor: '#00ACC1' }}
+        style={{ backgroundColor: '#0291B9' }}
       >
         {/* Título centrado - arriba */}
         <div className="flex justify-center">
@@ -588,12 +643,15 @@ export default function Verification() {
           </span>
         </div>
 
-        {/* Logo grande - centrado */}
+        {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
-          <img 
-            src="/logo.png" 
-            alt="Auth-Gesture" 
-            className="w-64 h-64 brightness-0 invert opacity-90" 
+          <video
+            src="/videito.mp4"  
+            className="w-124 h-124 object opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
 

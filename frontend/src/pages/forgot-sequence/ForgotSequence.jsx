@@ -168,7 +168,7 @@ export default function ForgotSequence() {
       ======================================== */}
       <div 
         className="hidden lg:flex lg:w-2/5 h-screen sticky top-0 flex-col justify-between p-12"
-        style={{ backgroundColor: '#00ACC1' }}
+        style={{ backgroundColor: '#0291B9' }}
       >
         {/* Título centrado - arriba */}
         <div className="flex justify-center">
@@ -177,19 +177,16 @@ export default function ForgotSequence() {
           </span>
         </div>
 
-        {/* Logo grande - centrado */}
+        {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
-          <div className="relative group">
-            <img 
-              src="/logo.png" 
-              alt="Auth-Gesture" 
-              className="w-64 h-64 brightness-0 invert opacity-90 transition-transform group-hover:scale-110 duration-300" 
-            />
-            <div 
-              className="absolute inset-0 rounded-full blur-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-300"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }}
-            />
-          </div>
+          <video
+            src="/videito.mp4"  
+            className="w-124 h-124 object opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
 
         {/* Badge paso actual - abajo */}

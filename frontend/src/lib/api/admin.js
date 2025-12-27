@@ -3,7 +3,9 @@
  * Gestión de usuarios, métricas y configuración del sistema
  */
 
-import apiClient from './client'
+// import apiClient from './client'
+
+import { adminApiClient } from './client'
 
 export const adminApi = {
   // ========================================
@@ -26,7 +28,7 @@ export const adminApi = {
     const queryString = params.toString()
     const url = `/biometric-database/users${queryString ? `?${queryString}` : ''}`
     
-    const response = await apiClient.get(url)
+    const response = await adminApiClient.get(url)
     return response.data
   },
 
@@ -34,7 +36,7 @@ export const adminApi = {
    * Obtiene detalles de un usuario específico
    */
   async getUserDetails(userId) {
-    const response = await apiClient.get(`/biometric-database/users/${userId}`)
+    const response = await adminApiClient.get(`/biometric-database/users/${userId}`)
     return response.data
   },
 
@@ -42,7 +44,7 @@ export const adminApi = {
    * Obtiene templates biométricos de un usuario
    */
   async getUserTemplates(userId) {
-    const response = await apiClient.get(`/biometric-database/users/${userId}/templates`)
+    const response = await adminApiClient.get(`/biometric-database/users/${userId}/templates`)
     return response.data
   },
 
@@ -50,7 +52,7 @@ export const adminApi = {
    * Obtiene historial de autenticaciones de un usuario
    */
   async getUserAuthAttempts(userId, limit = 50) {
-    const response = await apiClient.get(`/biometric-database/users/${userId}/auth-attempts`, {
+    const response = await adminApiClient.get(`/biometric-database/users/${userId}/auth-attempts`, {
       params: { limit }
     })
     return response.data
@@ -60,7 +62,7 @@ export const adminApi = {
    * Obtiene historial de autenticaciones de un usuario
    */
   async getUserAuthAttempts(userId, limit = 50) {
-    const response = await apiClient.get(`/biometric-database/users/${userId}/auth-attempts`, {
+    const response = await adminApiClient.get(`/biometric-database/users/${userId}/auth-attempts`, {
       params: { limit }
     })
     return response.data
@@ -70,7 +72,7 @@ export const adminApi = {
    * Obtiene TODOS los intentos de autenticación del sistema
    */
   async getAllAuthAttempts(limit = 500) {
-    const response = await apiClient.get('/authentication/all-attempts', {
+    const response = await adminApiClient.get('/authentication/all-attempts', {
       params: { limit }
     })
     return response.data
@@ -80,7 +82,7 @@ export const adminApi = {
    * Obtiene TODOS los intentos de IDENTIFICACIÓN del sistema
    */
   async getAllIdentificationAttempts(limit = 500) {
-    const response = await apiClient.get('/authentication/all-identification-attempts', {
+    const response = await adminApiClient.get('/authentication/all-identification-attempts', {
       params: { limit }
     })
     return response.data
@@ -90,7 +92,7 @@ export const adminApi = {
    * Obtiene estadísticas globales de autenticación
    */
   async getAuthStats() {
-    const response = await apiClient.get('/authentication/stats')
+    const response = await adminApiClient.get('/authentication/stats')
     return response.data
   },
 
@@ -98,7 +100,7 @@ export const adminApi = {
    * Actualiza información de un usuario
    */
   async updateUser(userId, updates) {
-    const response = await apiClient.patch(`/biometric-database/users/${userId}`, updates)
+    const response = await adminApiClient.patch(`/biometric-database/users/${userId}`, updates)
     return response.data
   },
 
@@ -106,7 +108,7 @@ export const adminApi = {
    * Elimina un usuario del sistema
    */
   async deleteUser(userId) {
-    const response = await apiClient.delete(`/biometric-database/users/${userId}`)
+    const response = await adminApiClient.delete(`/biometric-database/users/${userId}`)
     return response.data
   },
 
@@ -118,7 +120,7 @@ export const adminApi = {
    * Obtiene estadísticas generales del sistema
    */
   async getSystemStats() {
-    const response = await apiClient.get('/system/status')
+    const response = await adminApiClient.get('/system/status')
     return response.data
   },
 
@@ -126,7 +128,7 @@ export const adminApi = {
    * Obtiene estadísticas de la base de datos biométrica
    */
   async getDatabaseStats() {
-    const response = await apiClient.get('/biometric-database/stats')
+    const response = await adminApiClient.get('/biometric-database/stats')
     return response.data
   },
 
@@ -134,7 +136,7 @@ export const adminApi = {
    * Obtiene métricas de autenticación
    */
   async getAuthenticationMetrics(period = '30d') {
-    const response = await apiClient.get('/authentication/metrics', {
+    const response = await adminApiClient.get('/authentication/metrics', {
       params: { period }
     })
     return response.data
@@ -144,7 +146,7 @@ export const adminApi = {
    * Obtiene métricas de enrollment
    */
   async getEnrollmentMetrics(period = '30d') {
-    const response = await apiClient.get('/enrollment/metrics', {
+    const response = await adminApiClient.get('/enrollment/metrics', {
       params: { period }
     })
     return response.data
@@ -154,7 +156,7 @@ export const adminApi = {
    * Obtiene logs del sistema
    */
   async getSystemLogs(limit = 100, level = 'all') {
-    const response = await apiClient.get('/system/logs', {
+    const response = await adminApiClient.get('/system/logs', {
       params: { limit, level }
     })
     return response.data
@@ -164,7 +166,7 @@ export const adminApi = {
    * Obtiene usuarios activos en tiempo real
    */
   async getActiveUsers() {
-    const response = await apiClient.get('/system/active-users')
+    const response = await adminApiClient.get('/system/active-users')
     return response.data
   },
 
@@ -176,7 +178,7 @@ export const adminApi = {
    * Obtiene configuración completa del sistema
    */
   async getSystemConfig() {
-    const response = await apiClient.get('/config/all')
+    const response = await adminApiClient.get('/config/all')
     return response.data
   },
 
@@ -184,7 +186,7 @@ export const adminApi = {
    * Actualiza un parámetro de configuración
    */
   async updateConfigParam(key, value) {
-    const response = await apiClient.put('/config/set', {
+    const response = await adminApiClient.put('/config/set', {
       key,
       value
     })
@@ -212,7 +214,7 @@ export const adminApi = {
    * Reentrena las redes neuronales
    */
   async retrainNetworks(force = false) {
-    const response = await apiClient.post('/system/retrain', {
+    const response = await adminApiClient.post('/system/retrain', {
       force_retrain: force
     })
     return response.data
@@ -222,7 +224,7 @@ export const adminApi = {
    * Obtiene usuarios pendientes de reentrenamiento
    */
   async getPendingRetrainUsers() {
-    const response = await apiClient.get('/system/pending-retrain')
+    const response = await adminApiClient.get('/system/pending-retrain')
     return response.data
   },
 
@@ -230,7 +232,7 @@ export const adminApi = {
    * Verifica estado de bootstrap
    */
   async getBootstrapStatus() {
-    const response = await apiClient.get('/enrollment/bootstrap-status')
+    const response = await adminApiClient.get('/enrollment/bootstrap-status')
     return response.data
   },
 
@@ -238,7 +240,7 @@ export const adminApi = {
    * Exporta base de datos biométrica
    */
   async exportDatabase() {
-    const response = await apiClient.get('/biometric-database/export', {
+    const response = await adminApiClient.get('/biometric-database/export', {
       responseType: 'blob'
     })
     return response.data
@@ -248,7 +250,7 @@ export const adminApi = {
    * Crea backup del sistema
    */
   async createBackup() {
-    const response = await apiClient.post('/system/backup')
+    const response = await adminApiClient.post('/system/backup')
     return response.data
   },
 
@@ -256,7 +258,7 @@ export const adminApi = {
    * Obtiene información de backups disponibles
    */
   async getBackups() {
-    const response = await apiClient.get('/system/backups')
+    const response = await adminApiClient.get('/system/backups')
     return response.data
   },
 
@@ -268,7 +270,7 @@ export const adminApi = {
    * Obtiene estadísticas de gestos más usados
    */
   async getGestureStats() {
-    const response = await apiClient.get('/sequence-manager/gesture-stats')
+    const response = await adminApiClient.get('/sequence-manager/gesture-stats')
     return response.data
   },
 
@@ -276,7 +278,7 @@ export const adminApi = {
    * Obtiene lista de gestos disponibles
    */
   async getAvailableGestures() {
-    const response = await apiClient.get('/mediapipe/gestures')
+    const response = await adminApiClient.get('/mediapipe/gestures')
     return response.data
   }
 }

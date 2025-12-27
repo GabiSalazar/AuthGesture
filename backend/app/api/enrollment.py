@@ -273,7 +273,7 @@ async def validate_unique_field(request: ValidateUniqueRequest):
 #         # ============================================================================
 #         user_id = database.generate_unique_user_id(username_stripped)
         
-#         print(f"🎬 Iniciando enrollment:")
+#         print(f" Iniciando enrollment:")
 #         print(f"   User ID (generado): {user_id}")
 #         print(f"   Username: {username_stripped}")
 #         print(f"   Email: {email_stripped}")
@@ -626,7 +626,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
         #     print(f"   User ID: {user_id}")
         #     print("=" * 80)
         
-        # print(f"🎬 Iniciando enrollment:")
+        # print(f" Iniciando enrollment:")
         # print(f"   User ID: {user_id}")
         # print(f"   Username: {username_stripped}")
         # print(f"   Email: {email_stripped}")
@@ -792,7 +792,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
         # ============================================================================
         # RESUMEN DE INFORMACIÓN
         # ============================================================================
-        print(f"🎬 Iniciando enrollment:")
+        print(f" Iniciando enrollment:")
         print(f"   User ID: {user_id}")
         print(f"   Username: {username_stripped}")
         print(f"   Email: {email_stripped}")

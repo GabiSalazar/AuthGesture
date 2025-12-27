@@ -38,13 +38,17 @@ export default function AINetworks() {
   const loadNetworksData = async () => {
     try {
       setLoading(true)
+      const token = sessionStorage.getItem('admin_token')
       const [anatomical, dynamic, fusion, weights, metricsResponse] = await Promise.all([
         systemApi.getAnatomicalNetworkMetrics(),
         systemApi.getDynamicNetworkMetrics(),
         systemApi.getFusionConfig(),
         systemApi.getFusionWeights(),
-        // fetch('http://localhost:8000/api/v1/feedback/metrics/verification')
-        fetch(config.endpoints.feedback.verificationMetrics)
+        fetch(config.endpoints.feedback.verificationMetrics, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
           .then(res => res.json())
           .catch(() => ({ metrics: null }))
       ])

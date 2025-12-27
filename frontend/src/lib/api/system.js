@@ -3,7 +3,8 @@
  * VERSIÓN COMPLETA CON TODOS LOS ENDPOINTS
  */
 
-import apiClient from './client'
+// import apiClient from './client'
+import { adminApiClient } from './client'
 
 export const systemApi = {
   // ========================================
@@ -15,7 +16,7 @@ export const systemApi = {
    */
   getStatus: async () => {
     try {
-      const { data } = await apiClient.get('/system/status')
+      const { data } = await adminApiClient.get('/system/status')
       return data
     } catch (error) {
       console.error('Error obteniendo estado del sistema:', error)
@@ -28,7 +29,7 @@ export const systemApi = {
    */
   getDetailedStatus: async () => {
     try {
-      const { data } = await apiClient.get('/system/status/detailed')
+      const { data } = await adminApiClient.get('/system/status/detailed')
       return data
     } catch (error) {
       console.error('Error obteniendo estado detallado:', error)
@@ -41,7 +42,7 @@ export const systemApi = {
    */
   getHealth: async () => {
     try {
-      const { data } = await apiClient.get('/system/health')
+      const { data } = await adminApiClient.get('/system/health')
       return data
     } catch (error) {
       console.error('Error en health check:', error)
@@ -54,7 +55,7 @@ export const systemApi = {
    */
   getStatistics: async () => {
     try {
-      const { data } = await apiClient.get('/system/statistics')
+      const { data } = await adminApiClient.get('/system/statistics')
       return data
     } catch (error) {
       console.error('Error obteniendo estadísticas:', error)
@@ -67,7 +68,7 @@ export const systemApi = {
    */
   getModulesStatus: async () => {
     try {
-      const { data } = await apiClient.get('/system/modules')
+      const { data } = await adminApiClient.get('/system/modules')
       return data
     } catch (error) {
       console.error('Error obteniendo estado de módulos:', error)
@@ -84,7 +85,7 @@ export const systemApi = {
    */
   initialize: async () => {
     try {
-      const { data } = await apiClient.post('/system/initialize')
+      const { data } = await adminApiClient.post('/system/initialize')
       return data
     } catch (error) {
       console.error('Error inicializando sistema:', error)
@@ -97,7 +98,7 @@ export const systemApi = {
    */
   trainNetworks: async () => {
     try {
-      const { data } = await apiClient.post('/system/train')
+      const { data } = await adminApiClient.post('/system/train')
       return data
     } catch (error) {
       console.error('Error entrenando redes:', error)
@@ -111,7 +112,7 @@ export const systemApi = {
    */
   retrainNetworks: async (force = false) => {
     try {
-      const { data } = await apiClient.post(`/system/retrain?force=${force}`)
+      const { data } = await adminApiClient.post(`/system/retrain?force=${force}`)
       return data
     } catch (error) {
       console.error('Error reentrenando redes:', error)
@@ -124,7 +125,7 @@ export const systemApi = {
    */
   getPendingRetrainUsers: async () => {
     try {
-      const { data } = await apiClient.get('/system/pending-retrain')
+      const { data } = await adminApiClient.get('/system/pending-retrain')
       return data
     } catch (error) {
       console.error('Error obteniendo usuarios pendientes:', error)
@@ -137,7 +138,7 @@ export const systemApi = {
    */
   getAuthenticationThresholds: async () => {
     try {
-      const { data } = await apiClient.get('/score-fusion/authentication-thresholds')
+      const { data } = await adminApiClient.get('/score-fusion/authentication-thresholds')
       return data
     } catch (error) {
       console.error('Error obteniendo umbrales de autenticación:', error)
@@ -154,7 +155,7 @@ export const systemApi = {
    */
   getAnatomicalNetworkMetrics: async () => {
     try {
-      const { data } = await apiClient.get('/siamese-anatomical/metrics')
+      const { data } = await adminApiClient.get('/siamese-anatomical/metrics')
       return data
     } catch (error) {
       console.error('Error obteniendo métricas de red anatómica:', error)
@@ -167,7 +168,7 @@ export const systemApi = {
    */
   getDynamicNetworkMetrics: async () => {
     try {
-      const { data } = await apiClient.get('/siamese-dynamic/metrics')
+      const { data } = await adminApiClient.get('/siamese-dynamic/metrics')
       return data
     } catch (error) {
       console.error('Error obteniendo métricas de red dinámica:', error)
@@ -180,7 +181,7 @@ export const systemApi = {
    */
   getFusionConfig: async () => {
     try {
-      const { data } = await apiClient.get('/score-fusion/config')
+      const { data } = await adminApiClient.get('/score-fusion/config')
       return data
     } catch (error) {
       console.error('Error obteniendo configuración de fusión:', error)
@@ -193,7 +194,7 @@ export const systemApi = {
    */
   getFusionSummary: async () => {
     try {
-      const { data } = await apiClient.get('/score-fusion/summary')
+      const { data } = await adminApiClient.get('/score-fusion/summary')
       return data
     } catch (error) {
       console.error('Error obteniendo resumen de fusión:', error)
@@ -206,7 +207,7 @@ export const systemApi = {
    */
   getFusionWeights: async () => {
     try {
-      const { data } = await apiClient.get('/score-fusion/weights')
+      const { data } = await adminApiClient.get('/score-fusion/weights')
       return data
     } catch (error) {
       console.error('Error obteniendo pesos de fusión:', error)
@@ -219,7 +220,7 @@ export const systemApi = {
    */
   cleanupResources: async () => {
     try {
-      const { data } = await apiClient.post('/system/cleanup')
+      const { data } = await adminApiClient.post('/system/cleanup')
       return data
     } catch (error) {
       console.error('Error limpiando recursos:', error)
@@ -236,7 +237,7 @@ export const systemApi = {
    */
   getFullConfig: async () => {
     try {
-      const { data } = await apiClient.get('/config/all')
+      const { data } = await adminApiClient.get('/config/all')
       return data
     } catch (error) {
       console.error('Error obteniendo configuración completa:', error)
@@ -249,7 +250,7 @@ export const systemApi = {
    */
   getSystemInfo: async () => {
     try {
-      const { data } = await apiClient.get('/config/system-info')
+      const { data } = await adminApiClient.get('/config/system-info')
       return data
     } catch (error) {
       console.error('Error obteniendo información del sistema:', error)
@@ -262,7 +263,7 @@ export const systemApi = {
    */
   getCaptureSettings: async () => {
     try {
-      const { data } = await apiClient.get('/config/capture-settings')
+      const { data } = await adminApiClient.get('/config/capture-settings')
       return data
     } catch (error) {
       console.error('Error obteniendo configuración de captura:', error)
@@ -275,7 +276,7 @@ export const systemApi = {
    */
   getThresholds: async () => {
     try {
-      const { data } = await apiClient.get('/config/thresholds')
+      const { data } = await adminApiClient.get('/config/thresholds')
       return data
     } catch (error) {
       console.error('Error obteniendo umbrales:', error)
@@ -288,7 +289,7 @@ export const systemApi = {
    */
   getCameraSettings: async () => {
     try {
-      const { data } = await apiClient.get('/config/camera-settings')
+      const { data } = await adminApiClient.get('/config/camera-settings')
       return data
     } catch (error) {
       console.error('Error obteniendo configuración de cámara:', error)
@@ -301,7 +302,7 @@ export const systemApi = {
    */
   getPaths: async () => {
     try {
-      const { data } = await apiClient.get('/config/paths')
+      const { data } = await adminApiClient.get('/config/paths')
       return data
     } catch (error) {
       console.error('Error obteniendo rutas:', error)
@@ -330,7 +331,7 @@ export const systemApi = {
       if (filters.limit) params.append('limit', filters.limit)
       if (filters.search) params.append('search', filters.search)
       
-      const { data } = await apiClient.get(`/logs/?${params.toString()}`)
+      const { data } = await adminApiClient.get(`/logs/?${params.toString()}`)
       return data
     } catch (error) {
       console.error('Error obteniendo logs:', error)
@@ -343,7 +344,7 @@ export const systemApi = {
    */
   getLogStats: async () => {
     try {
-      const { data } = await apiClient.get('/logs/stats')
+      const { data } = await adminApiClient.get('/logs/stats')
       return data
     } catch (error) {
       console.error('Error obteniendo estadísticas de logs:', error)
@@ -356,7 +357,7 @@ export const systemApi = {
    */
   clearLogs: async () => {
     try {
-      const { data } = await apiClient.delete('/logs/clear')
+      const { data } = await adminApiClient.delete('/logs/clear')
       return data
     } catch (error) {
       console.error('Error limpiando logs:', error)

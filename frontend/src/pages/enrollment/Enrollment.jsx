@@ -852,16 +852,7 @@ export default function Enrollment() {
             Auth-Gesture
           </span>
         </div>
-
-        {/* Logo grande - centrado
-        <div className="flex items-center justify-center flex-1">
-          <img 
-            src="/video.gif" 
-            alt="Auth-Gesture" 
-            className="w-64 h-64 brightness-0 invert opacity-90" 
-          />
-        </div> */}
-
+        
         {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
           <video

@@ -117,8 +117,12 @@ export default function SystemManagement() {
   const loadCurrentApiKey = async () => {
     try {
       setLoadingApiKey(true)
-      // const response = await fetch('http://localhost:8000/api/v1/api-keys/current')
-      const response = await fetch(config.endpoints.apiKeys.current)
+      const token = sessionStorage.getItem('admin_token')
+      const response = await fetch(config.endpoints.apiKeys.current, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
       const data = await response.json()
       
       setApiKeyData(data.exists ? {
@@ -143,9 +147,12 @@ export default function SystemManagement() {
 
     try {
       setGeneratingKey(true)
-      // const response = await fetch('http://localhost:8000/api/v1/api-keys/generate', {
+      const token = sessionStorage.getItem('admin_token')
       const response = await fetch(config.endpoints.apiKeys.generate, {
-        method: 'POST'
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       })
       const data = await response.json()
       
@@ -173,9 +180,12 @@ export default function SystemManagement() {
 
     try {
       setGeneratingKey(true)
-      // const response = await fetch('http://localhost:8000/api/v1/api-keys/regenerate', {
-      const response = await fetch('http://localhost:8000/api/v1/api-keys/regenerate', {
-        method: 'POST'
+      const token = sessionStorage.getItem('admin_token')
+      const response = await fetch(config.endpoints.apiKeys.regenerate, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       })
       const data = await response.json()
       

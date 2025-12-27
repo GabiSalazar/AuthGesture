@@ -821,7 +821,7 @@ class RealAuthenticationPipeline:
     #             len(attempt.gesture_sequence_captured) >= len(attempt.required_sequence)):
                 
     #             attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
-    #             logger.info("AUTH: 🎉 Secuencia de verificación completada - procediendo a matching biométrico")
+    #             logger.info("AUTH:  Secuencia de verificación completada - procediendo a matching biométrico")
     #             return True, "Secuencia completada - procediendo a matching biométrico"
 
     #         # IDENTIFICACIÓN 1:N
@@ -829,7 +829,7 @@ class RealAuthenticationPipeline:
     #             len(attempt.gesture_sequence_captured) >= 3):
                 
     #             attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
-    #             logger.info("AUTH: 🎉 Secuencia de identificación completada (3 gestos únicos)")
+    #             logger.info("AUTH:  Secuencia de identificación completada (3 gestos únicos)")
     #             logger.info(f"AUTH:    Secuencia capturada: {attempt.gesture_sequence_captured}")
     #             logger.info("AUTH:    Procediendo a filtrado por secuencia + verificación biométrica")
     #             return True, "Secuencia de 3 gestos completada - procediendo a identificación"
@@ -1081,7 +1081,7 @@ class RealAuthenticationPipeline:
                 len(attempt.gesture_sequence_captured) >= len(attempt.required_sequence)):
                 
                 attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
-                logger.info("AUTH: 🎉 Secuencia de verificación completada - procediendo a matching biométrico")
+                logger.info("AUTH:  Secuencia de verificación completada - procediendo a matching biométrico")
                 return True, "Secuencia completada - procediendo a matching biométrico"
 
             # IDENTIFICACIÓN 1:N
@@ -1089,7 +1089,7 @@ class RealAuthenticationPipeline:
                 len(attempt.gesture_sequence_captured) >= 3):
                 
                 attempt.current_phase = AuthenticationPhase.TEMPLATE_MATCHING
-                logger.info("AUTH: 🎉 Secuencia de identificación completada (3 gestos únicos)")
+                logger.info("AUTH:  Secuencia de identificación completada (3 gestos únicos)")
                 logger.info(f"AUTH:    Secuencia capturada: {attempt.gesture_sequence_captured}")
                 logger.info("AUTH:    Procediendo a filtrado por secuencia + verificación biométrica")
                 return True, "Secuencia de 3 gestos completada - procediendo a identificación"
@@ -2384,7 +2384,6 @@ class RealAuthenticationSystem:
                                 email=user_email,
                                 session_token=session.session_token,
                                 authenticated=auth_result.success,
-                                confidence=auth_result.confidence
                             )
                             
                             if success_webhook:
@@ -3216,7 +3215,7 @@ class RealAuthenticationSystem:
                 logger.info(f"║              IDENTIFICACIÓN EXITOSA                      ║")
                 logger.info(f"╚══════════════════════════════════════════════════════════════╝")
                 logger.info(f"")
-                logger.info(f"🎉 Usuario identificado: {best_user_id} ({matched_username})")
+                logger.info(f" Usuario identificado: {best_user_id} ({matched_username})")
                 logger.info(f"   Score anatómico: {best_verification_result.anatomical_score:.4f}")
                 logger.info(f"   Score dinámico: {best_verification_result.dynamic_score:.4f}")
                 logger.info(f"   Score fusionado: {best_score:.4f}")

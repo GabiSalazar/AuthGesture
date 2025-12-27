@@ -144,13 +144,33 @@ export const authenticationApi = {
   /**
    * Inicia verificación 1:1
    */
-  startVerification: async (userId, securityLevel = 'standard') => {
+  // startVerification: async (userId, securityLevel = 'standard') => {
+  //   try {
+  //     const { data } = await apiClient.post('/authentication/verify/start', {
+  //       user_id: userId,
+  //       security_level: securityLevel,
+  //       required_sequence: null,
+  //       ip_address: 'localhost'
+  //     })
+  //     return data
+  //   } catch (error) {
+  //     console.error('Error iniciando verificación:', error)
+  //     throw error
+  //   }
+  // },
+
+  /**
+   * Inicia verificación 1:1
+   */
+  startVerification: async (userId, securityLevel = 'standard', sessionToken = null, callbackUrl = null) => {
     try {
       const { data } = await apiClient.post('/authentication/verify/start', {
         user_id: userId,
         security_level: securityLevel,
         required_sequence: null,
-        ip_address: 'localhost'
+        ip_address: 'localhost',
+        session_token: sessionToken,
+        callback_url: callbackUrl
       })
       return data
     } catch (error) {

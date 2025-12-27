@@ -28,7 +28,7 @@ async def get_all_authentication_attempts(
     try:
         db = get_biometric_database()
         
-        print("\n🔵 ENDPOINT /all-attempts LLAMADO")
+        print("\n ENDPOINT /all-attempts LLAMADO")
         print(f"   Limit: {limit}, Offset: {offset}")
         
         #  USAR MÉTODO DIRECTO DE SUPABASE

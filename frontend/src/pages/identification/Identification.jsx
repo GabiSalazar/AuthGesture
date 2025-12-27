@@ -361,7 +361,7 @@ export default function Identification() {
       ======================================== */}
       <div 
         className="hidden lg:flex lg:w-2/5 h-screen sticky top-0 flex-col justify-between p-12"
-        style={{ backgroundColor: '#00ACC1' }}
+        style={{ backgroundColor: '#0291B9' }}
       >
         {/* Título centrado - arriba */}
         <div className="flex justify-center">
@@ -370,12 +370,15 @@ export default function Identification() {
           </span>
         </div>
 
-        {/* Logo grande - centrado */}
+        {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
-          <img 
-            src="/logo.png" 
-            alt="Auth-Gesture" 
-            className="w-64 h-64 brightness-0 invert opacity-90" 
+          <video
+            src="/videito.mp4"  
+            className="w-124 h-124 object opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
           />
         </div>
 

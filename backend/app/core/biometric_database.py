@@ -2327,7 +2327,7 @@ class BiometricDatabase:
                 else:
                     print(f"DEBUG: Template normal sin embeddings (verificar)")
             
-            print(f"🎉 DEBUG: Template {template.template_id} guardado completamente")
+            print(f" DEBUG: Template {template.template_id} guardado completamente")
             
         except Exception as e:
             print(f"DEBUG: Error en _save_template: {e}")
