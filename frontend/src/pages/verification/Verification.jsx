@@ -218,22 +218,78 @@ export default function Verification() {
   }, [])
 
   // Detectar datos del plugin desde URL
+  // useEffect(() => {
+  //   const sessionToken = searchParams.get('session_token')
+  //   const email = searchParams.get('email')
+    
+  //   if (sessionToken && email) {
+  //     // Callback URL fijo del plugin
+  //     const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/generator-init'
+      
+  //     console.log('Datos del plugin detectados:')
+  //     console.log('   Session Token:', sessionToken)
+  //     console.log('   Email:', email)
+  //     console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
+      
+  //     setPluginSessionToken(sessionToken)
+  //     setPluginEmail(email)
+  //     setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+      
+  //     // Buscar y auto-seleccionar usuario por email
+  //     const findAndSelectUser = () => {
+  //       const user = users.find(u => u.email === email)
+  //       if (user) {
+  //         console.log('Usuario encontrado por email:', user.username)
+  //         setSelectedUser(user)
+  //         // Auto-iniciar verificación después de un breve delay
+  //         setTimeout(() => {
+  //           handleStartVerification()
+  //         }, 500)
+  //       } else {
+  //         console.log('Usuario no encontrado con email:', email)
+  //         setError(`No se encontró usuario con email: ${email}`)
+  //       }
+  //     }
+      
+  //     // Esperar a que se carguen los usuarios antes de buscar
+  //     if (users.length > 0) {
+  //       findAndSelectUser()
+  //     }
+  //   } else {
+  //     console.log('Acceso directo - sin plugin')
+  //   }
+  // }, [searchParams, users])
+
+  // Detectar datos del plugin desde URL
   useEffect(() => {
     const sessionToken = searchParams.get('session_token')
     const email = searchParams.get('email')
+    const action = searchParams.get('action')
     
     if (sessionToken && email) {
-      // Callback URL fijo del plugin
-      const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/generator-init'
+      // Determinar callback URL según action
+      const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
+      let callbackUrl = ''
+      
+      if (action === 'generation') {
+        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+      } else if (action === 'authentication') {
+        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-login-callback`
+      } else {
+        // Si no viene action o es inválido, usar default (generation)
+        console.warn('Action no especificado o inválido, usando generation por defecto')
+        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+      }
       
       console.log('Datos del plugin detectados:')
       console.log('   Session Token:', sessionToken)
       console.log('   Email:', email)
-      console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
+      console.log('   Action:', action)
+      console.log('   Callback URL:', callbackUrl)
       
       setPluginSessionToken(sessionToken)
       setPluginEmail(email)
-      setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+      setPluginCallbackUrl(callbackUrl)
       
       // Buscar y auto-seleccionar usuario por email
       const findAndSelectUser = () => {
