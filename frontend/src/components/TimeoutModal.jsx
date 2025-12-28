@@ -8,9 +8,9 @@ const TimeoutModal = ({ timeoutInfo, onRetry, onCancel }) => {
       case 'timeout_total':
         return 'Tiempo agotado'
       case 'timeout_inactividad':
-        return 'Sesión inactiva'
-      case 'timeout_por_gesto':
-        return 'Tiempo de gesto excedido'
+        return 'Sin actividad detectada'
+      case 'timeout_secuencia_incorrecta':
+        return 'Secuencia incorrecta'
       case 'session_cleaned':
         return 'Sesión finalizada'
       default:
@@ -25,13 +25,13 @@ const TimeoutModal = ({ timeoutInfo, onRetry, onCancel }) => {
 
     switch (timeoutInfo.type) {
       case 'timeout_total':
-        return `El tiempo máximo de ${timeoutInfo.timeLimit} segundos ha sido excedido`
+        return `El tiempo máximo de ${timeoutInfo.timeLimit || 45} segundos ha sido excedido`
       case 'timeout_inactividad':
-        return 'No se detectó actividad durante demasiado tiempo'
-      case 'timeout_por_gesto':
-        return 'Se excedió el tiempo permitido para completar el gesto'
+        return `No se detectó mano durante ${timeoutInfo.inactivity_limit || 15} segundos`
+      case 'timeout_secuencia_incorrecta':
+        return 'Se mantuvo un gesto incorrecto por demasiado tiempo. Verifica tu secuencia registrada.'
       case 'session_cleaned':
-        return 'La sesión fue cerrada por inactividad o timeout'
+        return 'La sesión fue cerrada por timeout'
       default:
         return 'La verificación no pudo completarse'
     }
@@ -42,7 +42,7 @@ const TimeoutModal = ({ timeoutInfo, onRetry, onCancel }) => {
     const required = timeoutInfo.gesturesRequired || 3
     
     if (captured === 0) {
-      return 'No se capturó ningún gesto'
+      return ''
     } else if (captured < required) {
       return `Se capturaron ${captured} de ${required} gestos necesarios`
     }

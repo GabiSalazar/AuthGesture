@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams} from 'react-router-dom'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
-import { Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand, Loader2 } from 'lucide-react'
+import { Search, Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand, Loader2 } from 'lucide-react'
 import TimeoutModal from '../../components/TimeoutModal'
 
 // Componente para el modal de cuenta bloqueada con countdown
@@ -65,7 +65,7 @@ function LockedAccountModal({ result, onBack }) {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white">
-                Cuenta Bloqueada
+                Cuenta bloqueada
               </h2>
               <p className="text-red-100 text-sm mt-1">
                 Múltiples intentos fallidos detectados
@@ -167,6 +167,7 @@ export default function Verification() {
 
   const [step, setStep] = useState('select') // 'select', 'processing', 'result', 'locked'
   const [users, setUsers] = useState([])
+  const [searchTerm, setSearchTerm] = useState('')
   const [selectedUser, setSelectedUser] = useState(null)
   const [sessionId, setSessionId] = useState(null)
   const [processing, setProcessing] = useState(false)
@@ -189,6 +190,11 @@ export default function Verification() {
   const sessionIdRef = useRef(null)
 
   const lastFrameTimeRef = useRef(0)
+
+  // Filtrar usuarios por nombre
+  const filteredUsers = users.filter(user => 
+    user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   useEffect(() => {
     loadUsers()
@@ -373,7 +379,8 @@ export default function Verification() {
       setError(null)
       setProgress(0)
       setStatusMessage('Iniciando verificación...')
-      
+      setSessionInfo(null) 
+
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
 
@@ -484,14 +491,29 @@ export default function Verification() {
         const capturesProgress = (validCaptures / maxValidCaptures) * 100
         
         setProgress(Math.min(capturesProgress, 100))
-        setStatusMessage(frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`)
+        // setStatusMessage(frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`)
+
+        let displayMessage = frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`
+
+        if (displayMessage.includes('Calidad insuficiente')) {
+          displayMessage = 'Verificando...'
+        }
+
+        setStatusMessage(displayMessage)
+
+        console.log('frameResult completo:', frameResult)
+        console.log('current_gesture recibido:', frameResult.current_gesture)
 
         setSessionInfo({
           required_sequence: frameResult.required_sequence || [],
           captured_sequence: frameResult.captured_sequence || [],
           sequence_complete: frameResult.sequence_complete || false,
-          valid_captures: validCaptures
+          valid_captures: validCaptures,
+          current_gesture: frameResult.current_gesture || 'None',
+          gesture_confidence: frameResult.gesture_confidence || 0
         })
+
+        console.log('sessionInfo guardado con current_gesture:', frameResult.current_gesture)
 
         console.log(`Progreso: ${validCaptures}/${maxValidCaptures} capturas válidas`)
 
@@ -553,6 +575,43 @@ export default function Verification() {
 
         isProcessingFrameRef.current = false
 
+      // } catch (err) {
+      //   isProcessingFrameRef.current = false
+
+      //   const errorDetail = err.response?.data?.detail
+
+      //   if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
+      //     console.log('Timeout detectado - mostrando modal')
+      //     setTimeoutInfo({
+      //       type: errorDetail.error_type || 'timeout_total',
+      //       duration: errorDetail.details?.duration || 0,
+      //       gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+      //       gesturesRequired: errorDetail.details?.gestures_required || 3,
+      //       timeLimit: errorDetail.details?.time_limit || 45
+      //     })
+      //     sessionCompletedRef.current = true
+      //     stopProcessing()
+      //     return
+      //   }
+
+      //   if (err.response?.status === 410 && 
+      //       (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+      //     console.log('Sesión limpiada - mostrando modal')
+      //     setTimeoutInfo({
+      //       type: 'session_cleaned',
+      //       duration: 0,
+      //       gesturesCaptured: 0,
+      //       gesturesRequired: 3,
+      //       timeLimit: 45,
+      //       message: errorDetail?.message || 'La sesión fue cerrada'
+      //     })
+      //     sessionCompletedRef.current = true
+      //     stopProcessing()
+      //     return
+      //   }
+
+      //   consecutiveErrors++
+      
       } catch (err) {
         isProcessingFrameRef.current = false
 
@@ -566,6 +625,24 @@ export default function Verification() {
             gesturesCaptured: errorDetail.details?.gestures_captured || 0,
             gesturesRequired: errorDetail.details?.gestures_required || 3,
             timeLimit: errorDetail.details?.time_limit || 45
+          })
+          sessionCompletedRef.current = true
+          stopProcessing()
+          return
+        }
+
+        // NUEVO: Manejo de 410 con session_timeout (inactividad y secuencia incorrecta)
+        if (err.response?.status === 410 && errorDetail?.error === 'session_timeout') {
+          console.log('Timeout 410 detectado - mostrando modal')
+          setTimeoutInfo({
+            type: errorDetail.error_type || 'timeout_total',
+            duration: errorDetail.details?.duration || 0,
+            gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+            gesturesRequired: errorDetail.details?.gestures_required || 3,
+            timeLimit: errorDetail.details?.time_limit || 45,
+            inactivity_limit: errorDetail.details?.inactivity_limit || 15,
+            incorrect_gesture_limit: errorDetail.details?.incorrect_gesture_limit || 8,
+            message: errorDetail?.message
           })
           sessionCompletedRef.current = true
           stopProcessing()
@@ -589,6 +666,7 @@ export default function Verification() {
         }
 
         consecutiveErrors++
+        
         console.error('Error procesando frame:', err)
         
         if (consecutiveErrors >= maxConsecutiveErrors) {
@@ -656,7 +734,7 @@ export default function Verification() {
     setError(null)
     setProgress(0)
     setStatusMessage('')
-    
+    setSessionInfo(null)
     isProcessingFrameRef.current = false
     sessionCompletedRef.current = false
   }
@@ -728,7 +806,7 @@ export default function Verification() {
       <div className="flex-1 bg-white h-screen overflow-y-auto">
         
         {/* Header móvil */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b">
+        {/* <div className="lg:hidden flex items-center justify-between p-4 border-b">
           <button
             onClick={handleGoBack}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -746,7 +824,37 @@ export default function Verification() {
               Auth-Gesture
             </span>
           </div>
+        </div> */}
+
+        {/* Header móvil */}
+        <div 
+          className="lg:hidden flex items-center justify-between px-3 py-2 border-b"
+          style={{ backgroundColor: '#0291B9' }}
+        >
+          <button
+            onClick={handleGoBack}
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" style={{ color: '#ffffffff' }} />
+          </button>
+          
+          <span 
+            className="absolute left-1/2 transform -translate-x-1/2 text-xl font-black uppercase tracking-tight"
+            style={{ color: '#fbfbfbff' }}
+          >
+            Auth-Gesture
+          </span>
+          
+          <video
+            src="/videito.mp4"
+            className="hidden sm:block w-25 h-16 object-contain opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
+
 
         {/* Contenido principal */}
         <div className="w-full h-full px-8 py-8 lg:px-16 lg:py-12">
@@ -823,7 +931,7 @@ export default function Verification() {
                 <div className="flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="text-sm font-semibold text-red-900 mb-1">Error</h3>
+                    <h3 className="text-sm font-semibold text-red-900 mb-1 text-left">Error</h3>
                     <p className="text-sm text-red-700">{error}</p>
                   </div>
                 </div>
@@ -844,7 +952,7 @@ export default function Verification() {
                 </div>
                 <div className="relative flex justify-center">
                   <span className="px-4 bg-white text-sm font-semibold text-gray-500">
-                    Verificación de Identidad 1:1
+                    Verificación de identidad 1:1
                   </span>
                 </div>
               </div>
@@ -868,61 +976,102 @@ export default function Verification() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {users.map((user) => (
-                      <button
-                        key={user.user_id}
-                        onClick={() => setSelectedUser(user)}
-                        className={`
-                          group p-5 rounded-2xl border-2 transition-all duration-300
-                          ${selectedUser?.user_id === user.user_id
-                            ? 'shadow-lg'
-                            : 'border-gray-200 bg-white hover:border-blue-200 hover:shadow-md'
-                          }
-                        `}
-                        style={{
-                          borderColor: selectedUser?.user_id === user.user_id ? '#05A8F9' : undefined,
-                          backgroundColor: selectedUser?.user_id === user.user_id ? '#F4FCFF' : undefined,
-                          boxShadow: selectedUser?.user_id === user.user_id ? '0 4px 14px 0 rgba(5, 168, 249, 0.2)' : undefined
-                        }}
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-3 min-w-0 flex-1">
-                            <div 
-                              className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                              style={{ 
-                                backgroundColor: selectedUser?.user_id === user.user_id ? '#E0F2FE' : '#F3F4F6'
-                              }}
-                            >
-                              <User 
-                                className="w-6 h-6" 
-                                style={{ 
-                                  color: selectedUser?.user_id === user.user_id ? '#05A8F9' : '#6B7280'
-                                }}
-                              />
-                            </div>
-                            <div className="min-w-0 flex-1 text-left">
-                              <p 
-                                className="font-bold truncate text-base"
-                                style={{ 
-                                  color: selectedUser?.user_id === user.user_id ? '#05A8F9' : '#111827'
-                                }}
-                              >
-                                {user.username}
-                              </p>
-                              <p className="text-xs text-gray-500 truncate">ID: {user.user_id}</p>
-                            </div>
-                          </div>
-                          {selectedUser?.user_id === user.user_id && (
-                            <CheckCircle className="w-5 h-5 flex-shrink-0 ml-2" style={{ color: '#05A8F9' }} />
-                          )}
+                  <>
+                    {/* Barra de búsqueda */}
+                    <div className="mb-6">
+                      <div className="relative">
+                        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="Buscar usuario por nombre..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+                          style={{ 
+                            borderColor: '#E0F2FE',
+                            backgroundColor: '#FFFFFF'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#05A8F9'
+                            e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = '#E0F2FE'
+                            e.target.style.boxShadow = 'none'
+                          }}
+                        />
+                      </div>
+                      
+                      {searchTerm && (
+                        <p className="mt-2 text-sm text-gray-600">
+                          {filteredUsers.length} {filteredUsers.length === 1 ? 'usuario encontrado' : 'usuarios encontrados'}
+                        </p>
+                      )}
+                    </div>
+
+                    {filteredUsers.length === 0 ? (
+                      <div className="text-center py-12">
+                        <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-4">
+                          <Search className="w-8 h-8 text-gray-400" />
                         </div>
-                        <div className="text-xs text-gray-600 text-left">
-                          Templates: {user.total_templates || 0}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                        <p className="text-gray-600 mb-2">No se encontraron usuarios</p>
+                        <p className="text-sm text-gray-500">Intenta con otro nombre</p>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {filteredUsers.map((user) => (
+                          <button
+                            key={user.user_id}
+                            onClick={() => setSelectedUser(user)}
+                            className={`
+                              group p-5 rounded-2xl border-2 transition-all duration-300
+                              ${selectedUser?.user_id === user.user_id
+                                ? 'shadow-lg'
+                                : 'border-gray-200 bg-white hover:border-blue-200 hover:shadow-md'
+                              }
+                            `}
+                            style={{
+                              borderColor: selectedUser?.user_id === user.user_id ? '#05A8F9' : undefined,
+                              backgroundColor: selectedUser?.user_id === user.user_id ? '#F4FCFF' : undefined,
+                              boxShadow: selectedUser?.user_id === user.user_id ? '0 4px 14px 0 rgba(5, 168, 249, 0.2)' : undefined
+                            }}
+                          >
+                            <div className="flex items-start justify-between mb-3">
+                              <div className="flex items-center gap-3 min-w-0 flex-1">
+                                <div 
+                                  className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
+                                  style={{ 
+                                    backgroundColor: selectedUser?.user_id === user.user_id ? '#E0F2FE' : '#F3F4F6'
+                                  }}
+                                >
+                                  <User 
+                                    className="w-6 h-6" 
+                                    style={{ 
+                                      color: selectedUser?.user_id === user.user_id ? '#05A8F9' : '#6B7280'
+                                    }}
+                                  />
+                                </div>
+                                <div className="min-w-0 flex-1 text-left">
+                                  <p 
+                                    className="font-bold truncate text-base"
+                                    style={{ 
+                                      color: selectedUser?.user_id === user.user_id ? '#05A8F9' : '#111827'
+                                    }}
+                                  >
+                                    {user.username}
+                                  </p>
+                                  <p className="text-xs text-gray-500 truncate">ID: {user.user_id}</p>
+                                </div>
+                              </div>
+                              {selectedUser?.user_id === user.user_id && (
+                                <CheckCircle className="w-5 h-5 flex-shrink-0 ml-2" style={{ color: '#05A8F9' }} />
+                              )}
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </>
                 )}
 
                 <div className="pt-4 flex justify-center">
@@ -936,12 +1085,13 @@ export default function Verification() {
                     }}
                   >
                     <Shield className="w-4 h-4" />
-                    Iniciar verificación
+                    Verificar identidad
                   </Button>
                 </div>
               </div>
             </div>
           )}
+          
 
           {/* ========================================
               STEP: PROCESSING
@@ -984,7 +1134,7 @@ export default function Verification() {
               </div>
 
               {/* Secuencia de Gestos */}
-              {sessionInfo && sessionInfo.required_sequence && (
+              {/* {sessionInfo && sessionInfo.required_sequence && (
                 <div 
                   className="p-5 rounded-xl border-2 mb-6"
                   style={{ 
@@ -1066,6 +1216,77 @@ export default function Verification() {
                     </div>
                   )}
                 </div>
+              )} */}
+
+              {/* Secuencia de Gestos */}
+              {sessionInfo && sessionInfo.required_sequence && (
+                <div 
+                  className="p-2 lg:p-5 rounded-lg lg:rounded-xl border lg:border-2 mb-3 lg:mb-6"
+                  style={{ 
+                    backgroundColor: '#F0F9FF',
+                    borderColor: '#BFDBFE'
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-1.5 lg:mb-4">
+                    <h3 className="text-[10px] lg:text-sm font-semibold text-blue-900">Secuencia</h3>
+                    <Badge variant={sessionInfo.sequence_complete ? 'success' : 'default'}>
+                      <span className="text-[10px] lg:text-xs">{sessionInfo.captured_sequence?.length || 0}/{sessionInfo.required_sequence.length}</span>
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center justify-center gap-1 lg:gap-3 flex-wrap mb-1.5 lg:mb-4">
+                    {sessionInfo.required_sequence.map((gesture, idx) => {
+                      const isCaptured = idx < (sessionInfo.captured_sequence?.length || 0)
+                      const isCurrent = idx === (sessionInfo.captured_sequence?.length || 0)
+                      
+                      return (
+                        <div key={idx} className="flex items-center gap-0.5 lg:gap-2">
+                          <div className={`px-1.5 py-1 lg:px-4 lg:py-3 rounded lg:rounded-lg border lg:border-2 transition-all ${
+                            isCaptured 
+                              ? 'bg-green-100 border-green-500' 
+                              : isCurrent
+                              ? 'bg-blue-100 border-blue-500 ring-1 lg:ring-2 ring-blue-300 animate-pulse'
+                              : 'bg-gray-100 border-gray-300'
+                          }`}>
+                            <div className="flex items-center gap-0.5 lg:gap-2">
+                              {isCaptured && (
+                                <CheckCircle className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-green-600" />
+                              )}
+                              <span className={`text-[10px] lg:text-sm font-semibold whitespace-nowrap ${
+                                isCaptured 
+                                  ? 'text-green-900' 
+                                  : isCurrent
+                                  ? 'text-blue-900'
+                                  : 'text-gray-600'
+                              }`}>
+                                {isCurrent && '→ '}
+                                {/* ============================================== */}
+                                {/* CAMBIO: Auto-revelar solo si fue capturado   */}
+                                {isCaptured ? gesture : `Gesto ${idx + 1}`}
+                                {/* ============================================== */}
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {idx < sessionInfo.required_sequence.length - 1 && (
+                            <ArrowLeft className={`w-2.5 h-2.5 lg:w-4 lg:h-4 rotate-180 ${
+                              isCaptured ? 'text-green-400' : 'text-gray-300'
+                            }`} />
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {sessionInfo.sequence_complete && (
+                    <div className="flex items-center gap-1 lg:gap-2">
+                      <CheckCircle className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-green-700" />
+                      <p className="text-[10px] lg:text-xs font-medium text-green-700">
+                        Secuencia completa - Analizando...
+                      </p>
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* Cámara */}
@@ -1108,7 +1329,7 @@ export default function Verification() {
               </div>
 
               {/* Status Message */}
-              {statusMessage && (
+              {/* {statusMessage && (
                 <div 
                   className="p-4 border-2 rounded-lg mb-6"
                   style={{ 
@@ -1117,6 +1338,23 @@ export default function Verification() {
                   }}
                 >
                   <p className="text-sm text-blue-800 font-medium">{statusMessage}</p>
+                </div>
+              )} */}
+
+              {statusMessage && (
+                <div 
+                  className="p-4 border-2 rounded-lg mb-6"
+                  style={{ 
+                    backgroundColor: '#F0F9FF',
+                    borderColor: '#BFDBFE'
+                  }}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {statusMessage === 'Verificando...' && (
+                      <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
+                    )}
+                    <p className="text-sm text-blue-800 font-medium">{statusMessage}</p>
+                  </div>
                 </div>
               )}
 
@@ -1163,7 +1401,7 @@ export default function Verification() {
                     ? 'from-green-500 to-emerald-500' 
                     : 'from-red-500 to-red-600'
                 } bg-clip-text text-transparent`}>
-                  {result.success ? '¡Verificación Exitosa!' : 'Verificación Fallida'}
+                  {result.success ? '¡Verificación Exitosa!' : 'Verificación fallida'}
                 </span>
               </h2>
 

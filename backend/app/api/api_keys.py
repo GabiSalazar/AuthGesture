@@ -1,6 +1,7 @@
 """
 API endpoints para gestión de API Keys
-Comunicación segura Plugin ↔ Sistema Biométrico
+
+Permite generar, regenerar, validar y consultar estadísticas de API Keys para la comunicación entre el Plugin y el Sistema biométrico.
 """
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
@@ -59,6 +60,12 @@ class APIKeyStatsResponse(BaseModel):
 # ENDPOINTS
 # ============================================
 
+"""
+Obtiene la API Key activa actual.
+
+Returns:
+    APIKeyCurrentResponse: información de la clave activa
+"""
 @router.get("/current", response_model=APIKeyCurrentResponse, dependencies=[Depends(require_admin_token)])
 async def get_current_api_key():
     """
@@ -83,12 +90,17 @@ async def get_current_api_key():
         raise HTTPException(status_code=500, detail=f"Error obteniendo API Key: {str(e)}")
 
 
+"""
+Genera una nueva API Key e invalida la anterior si existe.
+
+Returns:
+    APIKeyResponse: API Key generada y fecha de creación
+"""
 @router.post("/generate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
 
 async def generate_api_key():
     """
     Genera una nueva API Key (primera vez o autogenerar).
-    Si ya existe una, genera una nueva e invalida la anterior.
     """
     try:
         service = get_api_key_service()
@@ -105,12 +117,20 @@ async def generate_api_key():
         raise HTTPException(status_code=500, detail=f"Error generando API Key: {str(e)}")
 
 
+"""
+Regenera la API Key activa.
+
+Invalida la clave anterior y genera una nueva.
+Requiere actualizar la clave en el Plugin.
+
+Returns:
+    APIKeyResponse: nueva API Key generada
+"""
 @router.post("/regenerate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
 
 async def regenerate_api_key():
     """
     Regenera la API Key (invalida la anterior y crea una nueva).
-    ADVERTENCIA: El Plugin dejará de funcionar hasta actualizar la nueva clave.
     """
     try:
         service = get_api_key_service()
@@ -126,12 +146,19 @@ async def regenerate_api_key():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error regenerando API Key: {str(e)}")
 
+"""
+Valida si una API Key es válida y está activa.
 
+Args:
+    request (APIKeyValidateRequest): API Key a validar
+
+Returns:
+    APIKeyValidateResponse: resultado de la validación
+"""
 @router.post("/validate", response_model=APIKeyValidateResponse)
 async def validate_api_key(request: APIKeyValidateRequest):
     """
     Valida si una API Key es válida y está activa.
-    Este endpoint será usado por el Plugin para autenticarse.
     """
     try:
         service = get_api_key_service()
@@ -152,6 +179,12 @@ async def validate_api_key(request: APIKeyValidateRequest):
         raise HTTPException(status_code=500, detail=f"Error validando API Key: {str(e)}")
 
 
+"""
+Obtiene estadísticas de uso de la API Key actual.
+
+Returns:
+    APIKeyStatsResponse: métricas de uso de la API Key
+"""
 @router.get("/stats", response_model=APIKeyStatsResponse, dependencies=[Depends(require_admin_token)])
 
 async def get_api_key_stats():

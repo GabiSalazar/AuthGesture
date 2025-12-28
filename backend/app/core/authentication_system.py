@@ -140,6 +140,8 @@ class RealAuthenticationConfig:
     sequence_timeout: float = 25.0
     total_timeout: float = 45.0
     frame_timeout: float = 3.0
+    inactivity_timeout: float = 15.0
+    incorrect_gesture_timeout: float = 8.0
     
     # Umbrales de seguridad por nivel
     security_thresholds: Dict[str, float] = field(default_factory=lambda: {
@@ -181,7 +183,7 @@ class RealAuthenticationAttempt:
     attempt_id: str
     session_id: str
     mode: AuthenticationMode
-    user_id: Optional[str]  # Para verificación
+    user_id: Optional[str]
     
     # Estado
     status: AuthenticationStatus = AuthenticationStatus.NOT_STARTED
@@ -192,6 +194,9 @@ class RealAuthenticationAttempt:
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
     last_frame_time: float = field(default_factory=time.time)
+    last_hand_detected_time: float = field(default_factory=time.time)
+    incorrect_gesture_start_time: Optional[float] = None
+    current_detected_gesture: Optional[str] = None
     
     # Datos de entrada
     required_sequence: List[str] = field(default_factory=list)
@@ -884,10 +889,36 @@ class RealAuthenticationPipeline:
             logger.info("AUTH: Mano detectada en frame original")
             logger.info(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
             
+            # Actualizar timestamp de detección de mano
+            attempt.last_hand_detected_time = time.time()
+            logger.info("AUTH: Timestamp de detección de mano actualizado")
+            
             # DEFINIR VARIABLES DE GESTO (necesarias para validación)
             current_gesture = "Unknown"
             expected_gesture = None
 
+            if attempt.mode == AuthenticationMode.VERIFICATION and attempt.required_sequence:
+                expected_gesture = attempt.required_sequence[len(attempt.gesture_sequence_captured)]
+                logger.info(f"AUTH: Gesto esperado: {expected_gesture}")
+            
+            # Extraer gesto detectado de MediaPipe
+            detected_gesture = processing_result_initial.gesture_result.gesture_name if processing_result_initial.gesture_result else "None"
+            attempt.current_detected_gesture = detected_gesture
+            logger.info(f"AUTH: Gesto detectado: {detected_gesture}")
+            
+            # Verificar si el gesto es incorrecto
+            if detected_gesture and detected_gesture != "None":
+                if expected_gesture and detected_gesture != expected_gesture:
+                    # Gesto incorrecto detectado
+                    if attempt.incorrect_gesture_start_time is None:
+                        attempt.incorrect_gesture_start_time = time.time()
+                        logger.info(f"AUTH: Iniciando contador de gesto incorrecto - Detectado: {detected_gesture}, Requerido: {expected_gesture}")
+                else:
+                    # Gesto correcto o sin secuencia, resetear contador
+                    if attempt.incorrect_gesture_start_time is not None:
+                        logger.info("AUTH: Gesto correcto detectado - Reseteando contador de gesto incorrecto")
+                    attempt.incorrect_gesture_start_time = None
+                    
             if attempt.mode == AuthenticationMode.VERIFICATION and attempt.required_sequence:
                 current_step = len(attempt.gesture_sequence_captured)
                 if current_step < len(attempt.required_sequence):
@@ -1479,6 +1510,9 @@ class RealSessionManager:
         self.session_limits: Dict[str, int] = defaultdict(int)
         self.failed_attempts: Dict[str, List[float]] = defaultdict(list)
         
+        # NUEVO: Información de sesiones cerradas recientemente (para 410 informativo)
+        self.closed_sessions_info: Dict[str, Dict[str, Any]] = {}
+        
         # Lock para concurrencia
         self.lock = threading.RLock()
         
@@ -1577,8 +1611,42 @@ class RealSessionManager:
         with self.lock:
             return self.active_sessions.get(session_id)
     
-    def close_real_session(self, session_id: str, final_status: AuthenticationStatus):
-        """Cierra sesión con estado final."""
+    # def close_real_session(self, session_id: str, final_status: AuthenticationStatus):
+    #     """Cierra sesión con estado final."""
+    #     try:
+    #         with self.lock:
+    #             if session_id not in self.active_sessions:
+    #                 logger.error(f"Sesión {session_id} no encontrada para cerrar")
+    #                 return
+                
+    #             session = self.active_sessions[session_id]
+    #             session.status = final_status
+    #             session.end_time = time.time()
+                
+    #             # Registrar intento fallido si es necesario
+    #             if final_status in [AuthenticationStatus.REJECTED, AuthenticationStatus.TIMEOUT, AuthenticationStatus.ERROR]:
+    #                 self.failed_attempts[session.ip_address].append(time.time())
+                
+    #             # Actualizar límites
+    #             self.session_limits[session.ip_address] -= 1
+    #             if self.session_limits[session.ip_address] <= 0:
+    #                 del self.session_limits[session.ip_address]
+                
+    #             # Mover a historial
+    #             self.session_history.append(session)
+    #             del self.active_sessions[session_id]
+                
+    #             logger.info(f"Sesión cerrada: {session_id} - Estado: {final_status.value}")
+    #             logger.info(f"  - Duración: {session.duration:.1f}s")
+    #             logger.info(f"  - Frames procesados: {session.frames_processed}")
+    #             logger.info(f"  - Gestos capturados: {len(session.gesture_sequence_captured)}")
+                
+    #     except Exception as e:
+    #         logger.error(f"Error cerrando sesión: {e}")
+    
+    def close_real_session(self, session_id: str, final_status: AuthenticationStatus, 
+                    timeout_reason: Optional[str] = None):
+        """Cierra sesión con estado final y motivo opcional."""
         try:
             with self.lock:
                 if session_id not in self.active_sessions:
@@ -1589,6 +1657,20 @@ class RealSessionManager:
                 session.status = final_status
                 session.end_time = time.time()
                 
+                # GUARDAR INFORMACIÓN DEL CIERRE (para endpoint 410 informativo)
+                if final_status == AuthenticationStatus.TIMEOUT and timeout_reason:
+                    self.closed_sessions_info[session_id] = {
+                        'timeout_reason': timeout_reason,
+                        'duration': round(session.duration, 1),
+                        'gestures_captured': len(session.gesture_sequence_captured),
+                        'gestures_required': len(session.required_sequence) if session.required_sequence else 3,
+                        'frames_processed': session.frames_processed,
+                        'closed_at': time.time()
+                    }
+                    logger.info(f"Info de timeout guardada: {session_id} -> {timeout_reason}")
+                    logger.info(f"DEBUG: closed_sessions_info ahora tiene {len(self.closed_sessions_info)} sesiones")
+                    logger.info(f"DEBUG: Info guardada: {self.closed_sessions_info[session_id]}")
+    
                 # Registrar intento fallido si es necesario
                 if final_status in [AuthenticationStatus.REJECTED, AuthenticationStatus.TIMEOUT, AuthenticationStatus.ERROR]:
                     self.failed_attempts[session.ip_address].append(time.time())
@@ -1609,7 +1691,7 @@ class RealSessionManager:
                 
         except Exception as e:
             logger.error(f"Error cerrando sesión: {e}")
-    
+        
     # def cleanup_expired_real_sessions(self):
     #     """Limpia sesiones expiradas."""
     #     try:
@@ -1630,6 +1712,31 @@ class RealSessionManager:
     #     except Exception as e:
     #         logger.error(f"Error limpiando sesiones expiradas: {e}")
     
+    # def cleanup_expired_real_sessions(self):
+    #     """Limpia sesiones expiradas por timeout O por inactividad."""
+    #     try:
+    #         with self.lock:
+    #             current_time = time.time()
+    #             expired_sessions = []
+                
+    #             for session_id, session in self.active_sessions.items():
+    #                 # LIMPIEZA POR TIMEOUT TOTAL (desde el inicio)
+    #                 if current_time - session.start_time > self.config.total_timeout:
+    #                     expired_sessions.append((session_id, "timeout_total"))
+    #                 # LIMPIEZA POR INACTIVIDAD (60 segundos sin frames)
+    #                 elif current_time - session.last_frame_time > 60:
+    #                     expired_sessions.append((session_id, "inactividad"))
+                
+    #             for session_id, reason in expired_sessions:
+    #                 logger.info(f"Limpiando sesión {session_id} por {reason}")
+    #                 self.close_real_session(session_id, AuthenticationStatus.TIMEOUT)
+                
+    #             if expired_sessions:
+    #                 logger.info(f"Sesiones limpiadas: {len(expired_sessions)}")
+                    
+    #     except Exception as e:
+    #         logger.error(f"Error limpiando sesiones expiradas: {e}")
+        
     def cleanup_expired_real_sessions(self):
         """Limpia sesiones expiradas por timeout O por inactividad."""
         try:
@@ -1641,20 +1748,47 @@ class RealSessionManager:
                     # LIMPIEZA POR TIMEOUT TOTAL (desde el inicio)
                     if current_time - session.start_time > self.config.total_timeout:
                         expired_sessions.append((session_id, "timeout_total"))
-                    # LIMPIEZA POR INACTIVIDAD (60 segundos sin frames)
-                    elif current_time - session.last_frame_time > 60:
-                        expired_sessions.append((session_id, "inactividad"))
+                    # LIMPIEZA POR INACTIVIDAD (15 segundos sin frames)
+                    elif current_time - session.last_frame_time > 15:
+                        expired_sessions.append((session_id, "timeout_inactividad"))
                 
                 for session_id, reason in expired_sessions:
                     logger.info(f"Limpiando sesión {session_id} por {reason}")
-                    self.close_real_session(session_id, AuthenticationStatus.TIMEOUT)
+                    self.close_real_session(session_id, AuthenticationStatus.TIMEOUT, timeout_reason=reason)
                 
                 if expired_sessions:
                     logger.info(f"Sesiones limpiadas: {len(expired_sessions)}")
                     
         except Exception as e:
             logger.error(f"Error limpiando sesiones expiradas: {e}")
+    
+    def get_closed_session_info(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Obtiene información de una sesión cerrada recientemente.
         
+        Args:
+            session_id: ID de la sesión
+            
+        Returns:
+            Información del cierre si existe, None si no
+        """
+        try:
+            with self.lock:
+                # Limpiar sesiones cerradas hace más de 60 segundos
+                current_time = time.time()
+                expired_keys = [
+                    sid for sid, info in self.closed_sessions_info.items()
+                    if current_time - info['closed_at'] > 60
+                ]
+                for sid in expired_keys:
+                    del self.closed_sessions_info[sid]
+                    logger.debug(f"Info de sesión cerrada limpiada: {sid}")
+                
+                return self.closed_sessions_info.get(session_id)
+                
+        except Exception as e:
+            logger.error(f"Error obteniendo info de sesión cerrada: {e}")
+            return None
     def get_real_session_stats(self) -> Dict[str, Any]:
         """Obtiene estadísticas de sesiones."""
         with self.lock:
@@ -2219,16 +2353,35 @@ class RealAuthenticationSystem:
             if not session:
                 return {'error': 'Sesión no encontrada o expirada', 'is_real': True}
             
-            # Verificar timeout
+            # # Verificar timeout
+            # if session.duration > self.config.total_timeout:
+            #     self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT)
+            #     # return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
+            #     return {
+            #         'error': 'session_timeout',
+            #         'error_type': 'timeout_total',
+            #         'status': 'timeout',
+            #         'details': {
+            #             'reason': 'timeout_total',  # Puede ser: timeout_total, timeout_inactividad, timeout_por_gesto
+            #             'duration': round(session.duration, 1),
+            #             'gestures_captured': len(session.gesture_sequence_captured),
+            #             'gestures_required': 3,
+            #             'frames_processed': session.frames_processed,
+            #             'time_limit': self.config.total_timeout
+            #         },
+            #         'message': f'Tiempo máximo agotado ({self.config.total_timeout}s)',
+            #         'is_real': True
+            #     }
+            
+            # Verificar timeout total
             if session.duration > self.config.total_timeout:
-                self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT)
-                # return {'status': 'timeout', 'message': 'Sesión expirada', 'is_real': True}
+                self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT, timeout_reason="timeout_total")
                 return {
                     'error': 'session_timeout',
                     'error_type': 'timeout_total',
                     'status': 'timeout',
                     'details': {
-                        'reason': 'timeout_total',  # Puede ser: timeout_total, timeout_inactividad, timeout_por_gesto
+                        'reason': 'timeout_total',
                         'duration': round(session.duration, 1),
                         'gestures_captured': len(session.gesture_sequence_captured),
                         'gestures_required': 3,
@@ -2239,6 +2392,50 @@ class RealAuthenticationSystem:
                     'is_real': True
                 }
             
+            # Verificar timeout por inactividad (sin mano detectada)
+            current_time = time.time()
+            time_without_hand = current_time - session.last_hand_detected_time
+            if time_without_hand > self.config.inactivity_timeout:
+                self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT, timeout_reason="timeout_inactividad")
+                return {
+                    'error': 'session_timeout',
+                    'error_type': 'timeout_inactividad',
+                    'status': 'timeout',
+                    'details': {
+                        'reason': 'timeout_inactividad',
+                        'duration': round(session.duration, 1),
+                        'gestures_captured': len(session.gesture_sequence_captured),
+                        'gestures_required': 3,
+                        'frames_processed': session.frames_processed,
+                        'time_without_hand': round(time_without_hand, 1),
+                        'inactivity_limit': self.config.inactivity_timeout
+                    },
+                    'message': f'Sin actividad detectada ({self.config.inactivity_timeout}s sin mano)',
+                    'is_real': True
+                }
+            
+            # Verificar timeout por gesto incorrecto
+            if session.incorrect_gesture_start_time is not None:
+                time_with_incorrect = current_time - session.incorrect_gesture_start_time
+                if time_with_incorrect > self.config.incorrect_gesture_timeout:
+                    self._complete_real_authentication(session, AuthenticationStatus.TIMEOUT, timeout_reason="timeout_secuencia_incorrecta")
+                    return {
+                        'error': 'session_timeout',
+                        'error_type': 'timeout_secuencia_incorrecta',
+                        'status': 'timeout',
+                        'details': {
+                            'reason': 'timeout_secuencia_incorrecta',
+                            'duration': round(session.duration, 1),
+                            'gestures_captured': len(session.gesture_sequence_captured),
+                            'gestures_required': 3,
+                            'frames_processed': session.frames_processed,
+                            'time_with_incorrect': round(time_with_incorrect, 1),
+                            'incorrect_gesture_limit': self.config.incorrect_gesture_timeout
+                        },
+                        'message': f'Secuencia incorrecta ({self.config.incorrect_gesture_timeout}s con gesto incorrecto)',
+                        'is_real': True
+                    }
+                        
             # PROCESAR FRAME RECIBIDO DEL FRONTEND
             success, message = self.pipeline.process_frame_for_real_authentication(session, frame_image)
             
@@ -3418,13 +3615,175 @@ class RealAuthenticationSystem:
     #     except Exception as e:
     #         logger.error(f"Error completando autenticación: {e}")
     
-    def _complete_real_authentication(self, session: RealAuthenticationAttempt, final_status: AuthenticationStatus):
+    # def _complete_real_authentication(self, session: RealAuthenticationAttempt, final_status: AuthenticationStatus):
+    #     """Completa el proceso de autenticación."""
+    #     try:
+    #         logger.info(f"Completando autenticación: {session.session_id} - Estado: {final_status.value}")
+            
+    #         # Cerrar sesión
+    #         self.session_manager.close_real_session(session.session_id, final_status)
+            
+    #         # Actualizar estadísticas finales
+    #         if final_status == AuthenticationStatus.AUTHENTICATED:
+    #             logger.info(f"Autenticación exitosa - Usuario: {session.user_id or 'identificación'}")
+    #         else:
+    #             logger.info(f"Autenticación fallida - Razón: {final_status.value}")
+            
+    #         if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
+    #             try:
+    #                 system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
+                    
+    #                 # EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
+    #                 anatomical_score = 0.0
+    #                 dynamic_score = 0.0
+    #                 fused_score = 0.0
+    #                 confidence = 0.0
+    #                 gestures_captured = []
+    #                 all_candidates = []
+    #                 top_match_score = None
+                    
+    #                 if hasattr(session, 'last_auth_result') and session.last_auth_result:
+    #                     anatomical_score = session.last_auth_result.anatomical_score
+    #                     dynamic_score = session.last_auth_result.dynamic_score
+    #                     fused_score = session.last_auth_result.fused_score
+    #                     confidence = session.last_auth_result.confidence
+    #                     gestures_captured = session.last_auth_result.gestures_captured
+                        
+    #                     # Datos específicos de identificación
+    #                     if hasattr(session.last_auth_result, 'all_candidates'):
+    #                         all_candidates = session.last_auth_result.all_candidates
+    #                     if hasattr(session.last_auth_result, 'top_match_score'):
+    #                         top_match_score = session.last_auth_result.top_match_score
+                    
+    #                 elif hasattr(session, 'final_score'):
+    #                     fused_score = session.final_score
+    #                     confidence = session.final_score
+                    
+    #                 if not gestures_captured and hasattr(session, 'gesture_sequence_captured'):
+    #                     gestures_captured = session.gesture_sequence_captured
+                    
+    #                 # USAR SERVICIO CORRECTO SEGÚN MODO
+    #                 if session.mode == AuthenticationMode.VERIFICATION:
+    #                     # ========================================
+    #                     # VERIFICACIÓN 1:1 → authentication_attempts
+    #                     # ========================================
+    #                     user_profile = self.database.get_user(session.user_id)
+    #                     user_email = user_profile.email if user_profile else "unknown@example.com"
+    #                     username = user_profile.username if user_profile else session.user_id
+                        
+    #                     logger.info(f"Guardando VERIFICACIÓN: user={session.user_id}, decision={system_decision}")
+                        
+    #                     feedback_data = self.feedback_service.save_authentication_attempt(
+    #                         session_id=session.attempt_id,
+    #                         user_id=session.user_id,
+    #                         username=username,
+    #                         mode='verification',
+    #                         system_decision=system_decision,
+    #                         confidence=confidence,
+    #                         ip_address=session.ip_address,
+    #                         duration=session.duration,
+    #                         user_email=user_email,
+    #                         anatomical_score=anatomical_score,
+    #                         dynamic_score=dynamic_score,
+    #                         fused_score=fused_score,
+    #                         gestures_captured=gestures_captured
+    #                     )
+                        
+    #                     if feedback_data and 'feedback_token' in feedback_data:
+    #                         session.feedback_token = feedback_data['feedback_token']
+    #                         logger.info(f"Verificación guardada con feedback_token: {feedback_data['feedback_token']}")
+                    
+    #                 elif session.mode == AuthenticationMode.IDENTIFICATION:
+    #                     # ========================================
+    #                     # IDENTIFICACIÓN 1:N → identification_attempts
+    #                     # ========================================
+    #                     identified_user_id = None
+    #                     username = None
+    #                     user_email = None
+                        
+    #                     # Obtener datos del usuario identificado (si existe)
+    #                     if hasattr(session, 'last_auth_result') and session.last_auth_result:
+    #                         if hasattr(session.last_auth_result, 'matched_user_id') and session.last_auth_result.matched_user_id:
+    #                             identified_user_id = session.last_auth_result.matched_user_id
+    #                             user_profile = self.database.get_user(identified_user_id)
+    #                             if user_profile:
+    #                                 username = user_profile.username
+    #                                 user_email = user_profile.email
+                        
+    #                     logger.info(f"Guardando IDENTIFICACIÓN: user={identified_user_id or 'unknown'}, decision={system_decision}")
+                        
+    #                     identification_data = self.identification_service.save_identification_attempt(
+    #                         session_id=session.attempt_id,
+    #                         identified_user_id=identified_user_id,
+    #                         username=username,
+    #                         user_email=user_email,
+    #                         system_decision=system_decision,
+    #                         confidence=confidence,
+    #                         anatomical_score=anatomical_score,
+    #                         dynamic_score=dynamic_score,
+    #                         fused_score=fused_score,
+    #                         all_candidates=all_candidates,
+    #                         top_match_score=top_match_score,
+    #                         gestures_captured=gestures_captured,
+    #                         ip_address=session.ip_address,
+    #                         duration=session.duration
+    #                     )
+                        
+    #                     if identification_data:
+    #                         logger.info(f"Identificación guardada: {identification_data['session_id']}")
+                    
+    #             except Exception as e:
+    #                 logger.error(f"Error guardando intento de autenticación: {str(e)}")
+            
+            
+    #     except Exception as e:
+    #         logger.error(f"Error completando autenticación: {e}")
+    
+    def _complete_real_authentication(self, session: RealAuthenticationAttempt, final_status: AuthenticationStatus, timeout_reason: Optional[str] = None):
         """Completa el proceso de autenticación."""
         try:
             logger.info(f"Completando autenticación: {session.session_id} - Estado: {final_status.value}")
             
-            # Cerrar sesión
-            self.session_manager.close_real_session(session.session_id, final_status)
+            # ========================================================================
+            # DETERMINAR TIMEOUT_REASON SI NO SE PROPORCIONÓ
+            # ========================================================================
+            if final_status == AuthenticationStatus.TIMEOUT and timeout_reason is None:
+                current_time = time.time()
+                
+                # 1. Verificar timeout total (desde inicio)
+                if current_time - session.start_time > self.config.total_timeout:
+                    timeout_reason = "timeout_total"
+                    logger.info(f"Timeout detectado: TOTAL ({session.duration:.1f}s > {self.config.total_timeout}s)")
+                
+                # 2. Verificar timeout por inactividad (sin mano)
+                elif current_time - session.last_hand_detected_time > self.config.inactivity_timeout:
+                    timeout_reason = "timeout_inactividad"
+                    time_without_hand = current_time - session.last_hand_detected_time
+                    logger.info(f"Timeout detectado: INACTIVIDAD ({time_without_hand:.1f}s sin mano > {self.config.inactivity_timeout}s)")
+                
+                # 3. Verificar timeout por gesto incorrecto
+                elif session.incorrect_gesture_start_time is not None:
+                    time_with_incorrect = current_time - session.incorrect_gesture_start_time
+                    if time_with_incorrect > self.config.incorrect_gesture_timeout:
+                        timeout_reason = "timeout_secuencia_incorrecta"
+                        logger.info(f"Timeout detectado: GESTO INCORRECTO ({time_with_incorrect:.1f}s > {self.config.incorrect_gesture_timeout}s)")
+                
+                # Fallback si no se detectó ninguno
+                if not timeout_reason:
+                    timeout_reason = "timeout_inactividad"  # Default
+                    logger.warning(f"Timeout sin causa específica detectada - usando timeout_inactividad como default")
+            
+            # Log del motivo final
+            if timeout_reason:
+                logger.info(f"TIMEOUT_REASON FINAL: {timeout_reason}")
+                logger.info(f"   Gestos capturados: {len(session.gesture_sequence_captured)}")
+                logger.info(f"   Frames procesados: {session.frames_processed}")
+                logger.info(f"   Duración: {session.duration:.1f}s")
+            
+            # ========================================================================
+            # CERRAR SESIÓN CON TIMEOUT_REASON
+            # ========================================================================
+            self.session_manager.close_real_session(session.session_id, final_status, timeout_reason=timeout_reason)
             
             # Actualizar estadísticas finales
             if final_status == AuthenticationStatus.AUTHENTICATED:
@@ -3432,62 +3791,9 @@ class RealAuthenticationSystem:
             else:
                 logger.info(f"Autenticación fallida - Razón: {final_status.value}")
             
-            # # GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
-            # if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
-            #     try:
-            #         system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
-                    
-            #         # OBTENER EMAIL Y USERNAME DEL USUARIO
-            #         user_profile = self.database.get_user(session.user_id)
-            #         user_email = user_profile.email if user_profile else "unknown@example.com"
-            #         username = user_profile.username if user_profile else session.user_id
-                    
-            #         # EXTRAER SCORES DEL RESULTADO DE AUTENTICACIÓN
-            #         anatomical_score = 0.0
-            #         dynamic_score = 0.0
-            #         fused_score = 0.0
-            #         confidence = 0.0
-            #         gestures_captured = []
-                    
-            #         if hasattr(session, 'last_auth_result') and session.last_auth_result:
-            #             anatomical_score = session.last_auth_result.anatomical_score
-            #             dynamic_score = session.last_auth_result.dynamic_score
-            #             fused_score = session.last_auth_result.fused_score
-            #             confidence = session.last_auth_result.confidence
-            #             gestures_captured = session.last_auth_result.gestures_captured
-            #         elif hasattr(session, 'final_score'):
-            #             fused_score = session.final_score
-            #             confidence = session.final_score
-                    
-            #         # Gestos de la sesión si no están en el resultado
-            #         if not gestures_captured and hasattr(session, 'gesture_sequence_captured'):
-            #             gestures_captured = session.gesture_sequence_captured
-                        
-            #         feedback_data = self.feedback_service.save_authentication_attempt(
-            #             session_id=session.attempt_id,
-            #             user_id=session.user_id,
-            #             username=username,  # Username real
-            #             mode='verification' if session.mode == AuthenticationMode.VERIFICATION else 'identification',
-            #             system_decision=system_decision,
-            #             confidence=confidence,
-            #             ip_address=session.ip_address,
-            #             duration=session.duration,
-            #             user_email=user_email,
-            #             anatomical_score=anatomical_score,
-            #             dynamic_score=dynamic_score,
-            #             fused_score=fused_score,
-            #             gestures_captured=gestures_captured
-            #         )
-                    
-            #         # Guardar token de feedback en la sesión
-            #         session.feedback_token = feedback_data['feedback_token']
-                    
-            #         logger.info(f"Intento guardado en Supabase - Token: {feedback_data['feedback_token']}")
-                    
-            #     except Exception as e:
-            #         logger.error(f"Error guardando intento en Supabase: {e}")
-            #         # No fallar la autenticación si falla el guardado
-            # GUARDAR INTENTO EN SUPABASE PARA MÉTRICAS
+            # ========================================================================
+            # GUARDAR EN SUPABASE (CÓDIGO ORIGINAL MANTENIDO)
+            # ========================================================================
             if final_status in [AuthenticationStatus.AUTHENTICATED, AuthenticationStatus.REJECTED]:
                 try:
                     system_decision = 'authenticated' if final_status == AuthenticationStatus.AUTHENTICATED else 'rejected'
@@ -3593,7 +3899,6 @@ class RealAuthenticationSystem:
                     
                 except Exception as e:
                     logger.error(f"Error guardando intento de autenticación: {str(e)}")
-            
             
         except Exception as e:
             logger.error(f"Error completando autenticación: {e}")

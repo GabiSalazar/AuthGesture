@@ -2,7 +2,8 @@
 API endpoints para System Logs
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
+from app.dependencies.auth import require_admin_token
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime, timedelta
@@ -12,7 +13,7 @@ import re
 router = APIRouter(prefix="/logs", tags=["System Logs"])
 
 
-@router.get("/")
+@router.get("/", dependencies=[Depends(require_admin_token)])
 async def get_system_logs(
     level: Optional[str] = Query(None, description="Filtrar por nivel: INFO, WARNING, ERROR"),
     module: Optional[str] = Query(None, description="Filtrar por módulo"),
@@ -93,7 +94,7 @@ async def get_system_logs(
         raise HTTPException(status_code=500, detail=f"Error obteniendo logs: {str(e)}")
 
 
-@router.get("/stats")
+@router.get("/stats", dependencies=[Depends(require_admin_token)])
 async def get_log_stats():
     """Obtiene estadísticas de logs"""
     try:
@@ -138,7 +139,7 @@ async def get_log_stats():
         raise HTTPException(status_code=500, detail=f"Error obteniendo estadísticas: {str(e)}")
 
 
-@router.delete("/clear")
+@router.delete("/clear", dependencies=[Depends(require_admin_token)])
 async def clear_logs():
     """Limpia el archivo de logs (con precaución)"""
     try:

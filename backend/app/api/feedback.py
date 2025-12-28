@@ -1,12 +1,13 @@
 """
 Endpoints para gestión de feedback de autenticación
 """
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import HTMLResponse
 from typing import Optional
 import logging
 
 from app.services.authentication_feedback_service import get_feedback_service
+from app.dependencies.auth import require_admin_token
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ async def confirm_feedback(
         return _generate_error_page("Error interno del servidor")
 
 
-@router.get("/metrics/verification")
+@router.get("/metrics/verification", dependencies=[Depends(require_admin_token)])
 async def get_verification_metrics(user_id: Optional[str] = None):
     """
     Obtiene métricas de verificación (TP, FP, TN, FN).

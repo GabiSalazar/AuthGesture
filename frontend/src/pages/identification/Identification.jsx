@@ -399,24 +399,32 @@ export default function Identification() {
       <div className="flex-1 bg-white h-screen overflow-y-auto">
         
         {/* Header móvil */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b">
+        <div 
+          className="lg:hidden flex items-center justify-between px-3 py-2 border-b"
+          style={{ backgroundColor: '#0291B9' }}
+        >
           <button
             onClick={handleGoBack}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-6 h-6 text-gray-700" />
+            <ArrowLeft className="w-5 h-5" style={{ color: '#ffffffff' }} />
           </button>
           
-          <div className="flex items-center gap-2">
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="h-8 w-8" 
-            />
-            <span className="text-lg font-black uppercase tracking-tight bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-              Auth-Gesture
-            </span>
-          </div>
+          <span 
+            className="absolute left-1/2 transform -translate-x-1/2 text-xl font-black uppercase tracking-tight"
+            style={{ color: '#fbfbfbff' }}
+          >
+            Auth-Gesture
+          </span>
+          
+          <video
+            src="/videito.mp4"
+            className="hidden sm:block w-25 h-16 object-contain opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
 
         {/* Contenido principal */}
@@ -513,7 +521,7 @@ export default function Identification() {
                 </div>
                 <div className="relative flex justify-center">
                   <span className="px-4 bg-white text-sm font-semibold text-gray-500">
-                    Identificación de Usuario 1:N
+                    Identificación de usuario 1:N
                   </span>
                 </div>
               </div>
@@ -533,7 +541,7 @@ export default function Identification() {
                       <div className="p-2 rounded-lg" style={{ backgroundColor: '#DBEAFE' }}>
                         <Hand className="w-5 h-5 text-blue-600" />
                       </div>
-                      <h3 className="font-semibold text-blue-900">Captura de Gestos</h3>
+                      <h3 className="font-semibold text-blue-900">Captura de gestos</h3>
                     </div>
                     <p className="text-sm text-blue-700">
                       Realizarás 3 gestos diferentes como tu firma biométrica
@@ -551,7 +559,7 @@ export default function Identification() {
                       <div className="p-2 rounded-lg" style={{ backgroundColor: '#CCFBF1' }}>
                         <Users className="w-5 h-5 text-cyan-600" />
                       </div>
-                      <h3 className="font-semibold text-cyan-900">Filtrado por Secuencia</h3>
+                      <h3 className="font-semibold text-cyan-900">Filtrado por secuencia</h3>
                     </div>
                     <p className="text-sm text-cyan-700">
                       El sistema busca usuarios con tu misma secuencia de gestos
@@ -569,7 +577,7 @@ export default function Identification() {
                       <div className="p-2 rounded-lg" style={{ backgroundColor: '#EDE9FE' }}>
                         <Brain className="w-5 h-5 text-indigo-600" />
                       </div>
-                      <h3 className="font-semibold text-indigo-900">Verificación Biométrica</h3>
+                      <h3 className="font-semibold text-indigo-900">Verificación biométrica</h3>
                     </div>
                     <p className="text-sm text-indigo-700">
                       Verifica tu identidad contra los candidatos filtrados

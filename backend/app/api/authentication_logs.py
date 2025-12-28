@@ -3,44 +3,42 @@ API Router para Authentication Logs
 Endpoints para el panel de administración de autenticaciones
 """
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
 from typing import Optional, List, Dict, Any
 import time
 import logging
 
 from app.core.supabase_biometric_storage import get_biometric_database
+from app.dependencies.auth import require_admin_token
 
 router = APIRouter(prefix="/authentication", tags=["Authentication Logs"])
 logger = logging.getLogger(__name__)
 
+"""
+Obtiene todos los intentos de autenticación del sistema. Panel de administración.
 
-@router.get("/all-attempts")
+Args:
+    limit (int): máximo de intentos a retornar
+    offset (int): desplazamiento para paginación
+"""
+@router.get("/all-attempts", dependencies=[Depends(require_admin_token)])
 async def get_all_authentication_attempts(
     limit: int = Query(500, ge=1, le=1000, description="Máximo número de intentos a retornar"),
     offset: int = Query(0, ge=0, description="Offset para paginación")
 ):
-    """
-    Obtiene TODOS los intentos de autenticación del sistema.
-    
-    Diseñado para el panel de administración - Tab "Autenticaciones".
-    Retorna todos los intentos de todos los usuarios ordenados por timestamp descendente.
-    """
     try:
         db = get_biometric_database()
         
         print("\n ENDPOINT /all-attempts LLAMADO")
         print(f"   Limit: {limit}, Offset: {offset}")
         
-        #  USAR MÉTODO DIRECTO DE SUPABASE
-        logger.info(f"Obteniendo intentos directamente desde Supabase...")
         all_attempts = db.get_all_auth_attempts(limit=None)
         
-        print(f"    Intentos retornados del método: {len(all_attempts)}")
+        print(f"Intentos retornados del método: {len(all_attempts)}")
         logger.info(f"Total de intentos obtenidos: {len(all_attempts)}")
         
-        # Si no hay intentos, devolver respuesta vacía válida
         if len(all_attempts) == 0:
-            print("   NONo hay intentos - retornando respuesta vacía")
+            print("   No hay intentos de autenticación")
             return {
                 "status": "success",
                 "total_attempts": 0,
@@ -53,9 +51,7 @@ async def get_all_authentication_attempts(
                 },
                 "message": "No hay intentos de autenticación registrados en el sistema"
             }
-        
-        # Los intentos ya vienen ordenados por timestamp descendente desde Supabase
-        
+                
         # Aplicar limit y offset
         paginated_attempts = all_attempts[offset:offset + limit]
         
@@ -124,7 +120,6 @@ async def get_authentication_stats():
     try:
         db = get_biometric_database()
         
-        #  USAR MÉTODO DIRECTO
         all_attempts = db.get_all_auth_attempts(limit=None)
         
         if len(all_attempts) == 0:
@@ -199,8 +194,6 @@ async def get_all_identification_attempts(
 ):
     """
     Obtiene TODOS los intentos de IDENTIFICACIÓN (1:N) del sistema.
-    
-    Diseñado para el panel de administración - Tab "Autenticaciones".
     """
     try:
         db = get_biometric_database()
@@ -261,20 +254,22 @@ async def get_all_identification_attempts(
         logger.error(traceback.format_exc())
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
+
+"""
+Obtiene los intentos de autenticación más recientes.
+
+Args:
+    limit (int): número de intentos a retornar
+    result (str, opcional): filtrar por 'success' o 'failed'
+"""
 @router.get("/recent")
 async def get_recent_authentication_attempts(
     limit: int = Query(10, ge=1, le=50, description="Número de intentos recientes"),
     result: Optional[str] = Query(None, description="Filtrar por resultado: 'success' o 'failed'")
 ):
-    """
-    Obtiene los intentos de autenticación más recientes.
-    
-    Útil para el Dashboard principal - vista rápida de actividad reciente.
-    """
     try:
         db = get_biometric_database()
         
-        #  USAR MÉTODO DIRECTO
         all_attempts = db.get_all_auth_attempts(limit=None)
         
         # Filtrar por resultado si se especifica

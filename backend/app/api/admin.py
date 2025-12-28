@@ -1,5 +1,7 @@
 """
-API endpoints para autenticación de administrador
+API de autenticación para administradores.
+
+Define modelos y endpoints para login, verificación de token y comprobación de estado del módulo.
 """
 
 import os
@@ -9,7 +11,6 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
-
 
 # ============================================
 # MODELOS DE AUTENTICACIÓN
@@ -30,12 +31,12 @@ class AdminLoginResponse(BaseModel):
 
 
 class TokenVerifyRequest(BaseModel):
-    """Request de verificación de token"""
+    """Request de verificación de token JWT"""
     token: str
 
 
 class TokenVerifyResponse(BaseModel):
-    """Response de verificación de token"""
+    """Response de verificación de token JWT"""
     valid: bool
     username: str
     expires_at: str
@@ -44,6 +45,16 @@ class TokenVerifyResponse(BaseModel):
 # ============================================
 # ENDPOINTS DE AUTENTICACIÓN
 # ============================================
+
+"""
+Autentica a un administrador y genera un token JWT.
+
+Args:
+    credentials (AdminLoginRequest): credenciales de acceso
+
+Returns:
+    AdminLoginResponse: token JWT y datos de expiración
+"""
 
 @router.post("/login", response_model=AdminLoginResponse)
 async def admin_login(credentials: AdminLoginRequest):
@@ -91,6 +102,15 @@ async def admin_login(credentials: AdminLoginRequest):
             detail=f"Error en autenticación: {str(e)}"
         )
 
+"""
+Verifica la validez de un token JWT de administrador.
+
+Args:
+    request (TokenVerifyRequest): token JWT a verificar
+
+Returns:
+    TokenVerifyResponse: estado del token y usuario asociado
+"""
 
 @router.post("/verify-token", response_model=TokenVerifyResponse)
 async def verify_admin_token(request: TokenVerifyRequest):
@@ -116,6 +136,9 @@ async def verify_admin_token(request: TokenVerifyRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error verificando token: {str(e)}")
 
+"""
+Verifica el estado del módulo de autenticación de administrador.
+"""
 
 @router.get("/health")
 async def admin_health_check():

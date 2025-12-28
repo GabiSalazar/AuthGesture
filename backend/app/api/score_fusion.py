@@ -2,9 +2,10 @@
 API endpoints para Score Fusion System
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
+from app.dependencies.auth import require_admin_token
 
 from app.core.score_fusion_system import (
     get_real_score_fusion_system,
@@ -68,7 +69,7 @@ async def get_fusion_stats():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/summary")
+@router.get("/summary", dependencies=[Depends(require_admin_token)])
 async def get_fusion_summary():
     """Obtiene resumen completo del sistema de fusión"""
     try:
@@ -83,7 +84,7 @@ async def get_fusion_summary():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/config")
+@router.get("/config", dependencies=[Depends(require_admin_token)])
 async def get_fusion_config():
     """Obtiene la configuración del sistema de fusión"""
     try:
@@ -109,7 +110,7 @@ async def get_fusion_config():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/weights")
+@router.get("/weights", dependencies=[Depends(require_admin_token)])
 async def get_fusion_weights():
     """Obtiene los pesos optimizados de fusión"""
     try:

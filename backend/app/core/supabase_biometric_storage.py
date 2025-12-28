@@ -805,7 +805,7 @@ class BiometricDatabase:
                 logger.error(f"Error cargando templates: {templates_error}")
             
             # CONSTRUIR ÍNDICES
-            print("🔨 Construyendo índices vectoriales...")
+            print(" Construyendo índices vectoriales...")
             self.anatomical_index.build_index()
             self.dynamic_index.build_index()
             

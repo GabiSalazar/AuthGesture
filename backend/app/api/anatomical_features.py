@@ -1,5 +1,7 @@
 """
-API endpoints para Anatomical Features Extractor
+API endpoints para Anatomical Features Extractor.
+
+Expone endpoints para consultar estado, estadísticas, configuración y metadatos del extractor de características anatómicas.
 """
 
 from fastapi import APIRouter, HTTPException
@@ -12,7 +14,6 @@ from app.core.anatomical_features_extractor import (
 )
 
 router = APIRouter(prefix="/anatomical-features", tags=["Anatomical Features"])
-
 
 class FeatureStatsResponse(BaseModel):
     """Respuesta con estadísticas de extracción"""
@@ -42,7 +43,12 @@ async def anatomical_features_health_check():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en Anatomical Features Extractor: {str(e)}")
 
+"""
+Obtiene estadísticas de extracción de características.
 
+Returns:
+    FeatureStatsResponse: métricas de uso y configuración del extractor
+"""
 @router.get("/stats", response_model=FeatureStatsResponse)
 async def get_extraction_stats():
     """Obtiene estadísticas de extracción de características"""
@@ -183,7 +189,7 @@ async def get_finger_names():
 
 @router.get("/palm-regions")
 async def get_palm_regions():
-    """Obtiene las regiones de la palma analizadas"""
+    """Obtiene las regiones de la palma analizadas por el extractor"""
     return {
         "status": "success",
         "regions": {

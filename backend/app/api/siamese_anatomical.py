@@ -2,9 +2,10 @@
 API endpoints para Siamese Anatomical Network
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, Optional, List
+from app.dependencies.auth import require_admin_token
 
 from app.core.siamese_anatomical_network import (
     get_real_siamese_anatomical_network,
@@ -129,7 +130,7 @@ async def get_model_architecture():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-@router.get("/metrics")
+@router.get("/metrics", dependencies=[Depends(require_admin_token)])
 async def get_anatomical_network_metrics():
     """
     Obtiene métricas detalladas de la red anatómica.

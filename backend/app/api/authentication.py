@@ -498,10 +498,77 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
         auth_system = get_real_authentication_system()
         
         #  VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
+        # session = auth_system.session_manager.get_real_session(session_id)
+        # if not session:
+        #     raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
+        
+        #  VERIFICAR SI SESIÓN EXISTE ANTES DE PROCESAR
         session = auth_system.session_manager.get_real_session(session_id)
         if not session:
-            raise HTTPException(status_code=410, detail="Sesión finalizada o no encontrada")
-        
+            # Intentar obtener información de cierre reciente
+            closed_info = auth_system.session_manager.get_closed_session_info(session_id)
+            
+            if closed_info and closed_info.get('timeout_reason'):
+                # Mapear el reason a error_type para el frontend
+                timeout_reason = closed_info['timeout_reason']
+                
+                # Determinar límite según tipo de timeout
+                if timeout_reason == 'timeout_total':
+                    time_limit = 45
+                    error_type = 'timeout_total'
+                    message = f'Sesión cerrada: tiempo máximo agotado ({time_limit}s)'
+                elif timeout_reason == 'timeout_inactividad':
+                    time_limit = 15
+                    error_type = 'timeout_inactividad'
+                    message = f'Sesión cerrada por inactividad ({time_limit}s sin detección de mano)'
+                elif timeout_reason == 'timeout_secuencia_incorrecta':
+                    time_limit = 8
+                    error_type = 'timeout_secuencia_incorrecta'
+                    message = f'Sesión cerrada: gesto incorrecto'
+                else:
+                    time_limit = 15
+                    error_type = 'timeout_inactividad'
+                    message = 'Sesión cerrada por timeout'
+                
+                raise HTTPException(
+                    status_code=410,
+                    detail={
+                        'error': 'session_timeout',
+                        'error_type': error_type,
+                        'message': message,
+                        'details': {
+                            'reason': timeout_reason,
+                            'duration': closed_info.get('duration', 0),
+                            'gestures_captured': closed_info.get('gestures_captured', 0),
+                            'gestures_required': closed_info.get('gestures_required', 3),
+                            'frames_processed': closed_info.get('frames_processed', 0),
+                            'time_limit': time_limit,
+                            'inactivity_limit': 15,
+                            'incorrect_gesture_limit': 8
+                        }
+                    }
+                )
+            else:
+                # CAMBIO CRÍTICO: Retornar 410 genérico en lugar de 404
+                raise HTTPException(
+                    status_code=410,
+                    detail={
+                        'error': 'session_timeout',
+                        'error_type': 'timeout_inactividad',
+                        'message': 'Sesión cerrada por timeout',
+                        'details': {
+                            'reason': 'unknown',
+                            'duration': 0,
+                            'gestures_captured': 0,
+                            'gestures_required': 3,
+                            'frames_processed': 0,
+                            'time_limit': 45,
+                            'inactivity_limit': 15,
+                            'incorrect_gesture_limit': 8
+                        }
+                    }
+                )
+                
         #  DECODIFICAR FRAME DEL FRONTEND (igual que enrollment)
         try:
             # Extraer solo la parte base64 si viene con prefijo data:image
@@ -542,7 +609,7 @@ async def process_authentication_frame(session_id: str, request: ProcessFrameReq
                     detail={
                         'error': 'session_expired',
                         'error_type': 'session_cleaned',
-                        'message': 'La sesión fue cerrada por timeout o inactividad',
+                        'message': 'La sesión fue cerrada por timeout',
                         'details': {
                             'reason': 'session_not_found',
                             'suggestion': 'Inicie una nueva sesión de autenticación'
