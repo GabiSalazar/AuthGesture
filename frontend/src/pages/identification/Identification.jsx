@@ -813,7 +813,7 @@ export default function Identification() {
               )}
 
               {/* Cámara */}
-              <div 
+              {/* <div 
                 className="rounded-2xl overflow-hidden border-4 mb-6"
                 style={{ 
                   borderColor: '#E0F2FE',
@@ -827,8 +827,24 @@ export default function Identification() {
                     playsInline
                     muted
                     className="w-full h-full object-contain"
+                  /> */}
+
+              {/* Cámara */}
+              <div 
+                className="rounded-2xl overflow-hidden border-4 mb-6"
+                style={{ 
+                  borderColor: '#E0F2FE',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)'
+                }}
+              >
+                <div className="relative bg-gray-900 aspect-[4/3] lg:aspect-video">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover lg:object-contain"
                   />
-                  
                   <canvas ref={canvasRef} className="hidden" />
                   
                   {/* Indicador IDENTIFICANDO */}
