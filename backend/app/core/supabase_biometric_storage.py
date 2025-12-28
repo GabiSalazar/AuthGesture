@@ -1442,8 +1442,22 @@ class BiometricDatabase:
             logger.error(f"Error actualizando usuario: {e}")
             return False
     
-    def list_users(self) -> List[UserProfile]:
-        """Lista todos los usuarios."""
+    # def list_users(self) -> List[UserProfile]:
+    #     """Lista todos los usuarios."""
+    #     return list(self.users.values())
+    
+    def list_users(self, active_only: bool = True) -> List[UserProfile]:
+        """
+        Lista usuarios del sistema.
+        
+        Args:
+            active_only: Si True, solo devuelve usuarios activos
+        
+        Returns:
+            Lista de perfiles de usuario
+        """
+        if active_only:
+            return [user for user in self.users.values() if user.is_active]
         return list(self.users.values())
     
     def delete_user(self, user_id: str) -> bool:
@@ -1908,6 +1922,10 @@ class BiometricDatabase:
                     combined_scores[match_user_id].append(('dynamic', similarity, template_id))
                 
                 for match_user_id, scores in combined_scores.items():
+                    
+                    # FILTRO: Solo considerar usuarios activos
+                    if match_user_id in self.users and not self.users[match_user_id].is_active:
+                        continue
                     anatomical_scores = [s[1] for s in scores if s[0] == 'anatomical']
                     dynamic_scores = [s[1] for s in scores if s[0] == 'dynamic']
                     

@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useNavigate, useLocation, useSearchParams} from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 import { enrollmentApi } from '../../lib/api/enrollment'
 import PersonalityQuestionnaire from './PersonalityQuestionnaire'
 import { Button, Badge } from '../../components/ui'
@@ -12,7 +13,6 @@ export default function Enrollment() {
   const location = useLocation()
   const reenrollmentData = location.state?.reenrollment ? location.state : null
   const [searchParams] = useSearchParams()
-
   const [step, setStep] = useState('personal-info')
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
@@ -24,6 +24,7 @@ export default function Enrollment() {
   const [userId, setUserId] = useState(null)
   const [pluginSessionToken, setPluginSessionToken] = useState(null)
   const [pluginCallbackUrl, setPluginCallbackUrl] = useState(null)
+  const [pluginEmail, setPluginEmail] = useState(null)
   const [sessionStatus, setSessionStatus] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -57,23 +58,106 @@ export default function Enrollment() {
   const processingFrameRef = useRef(false)
 
   // Leer datos del plugin desde la URL
+  // useEffect(() => {
+  //   const sessionToken = searchParams.get('session_token')
+    
+  //   if (sessionToken) {
+  //     // URL FIJO del plugin para recibir resultado de registro
+  //     const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/api/registro-finalizado'
+      
+  //     console.log('Datos del plugin detectados:')
+  //     console.log('Session Token:', sessionToken)
+  //     console.log('Callback URL (fijo):', PLUGIN_CALLBACK_URL)
+      
+  //     setPluginSessionToken(sessionToken)
+  //     setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+  //   } else {
+  //     console.log('No hay datos del plugin - Usuario accedió directamente')
+  //   }
+  // }, [searchParams])
+
+  // Leer datos del plugin desde la URL
   useEffect(() => {
+    const token = searchParams.get('t')
     const sessionToken = searchParams.get('session_token')
     
-    if (sessionToken) {
-      // URL FIJO del plugin para recibir resultado de registro
-      const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/api/registro-finalizado'
-      
-      console.log('Datos del plugin detectados:')
-      console.log('Session Token:', sessionToken)
-      console.log('Callback URL (fijo):', PLUGIN_CALLBACK_URL)
-      
-      setPluginSessionToken(sessionToken)
-      setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
-    } else {
-      console.log('No hay datos del plugin - Usuario accedió directamente')
+    // PRIORIDAD 1: Token JWT (nuevo metodo)
+    if (token) {
+      validarYUsarTokenPlugin(token)
+    }
+    // PRIORIDAD 2: Query params directos (metodo antiguo - retrocompatibilidad)
+    else if (sessionToken) {
+      usarQueryParamsDirectos(sessionToken)
+    }
+    // PRIORIDAD 3: Acceso directo sin plugin
+    else {
+      console.log('No hay datos del plugin - Usuario accedio directamente')
     }
   }, [searchParams])
+
+  // Funcion para validar JWT del plugin
+  const validarYUsarTokenPlugin = (token) => {
+    try {
+      console.log('Token del plugin detectado, validando...')
+      
+      // 1. Decodificar JWT
+      const payload = jwtDecode(token)
+      
+      console.log('JWT decodificado:', payload)
+      
+      // 2. Verificar expiracion
+      const ahora = Math.floor(Date.now() / 1000)
+      if (payload.exp && payload.exp < ahora) {
+        console.error('Token expirado')
+        setError('El enlace ha expirado. Por favor, solicita uno nuevo.')
+        return
+      }
+      
+      // 3. Extraer datos
+      const { session_token, email } = payload
+      
+      if (!session_token || !email) {
+        console.error('Token incompleto:', payload)
+        setError('Token invalido: faltan datos requeridos')
+        return
+      }
+      
+      console.log('Datos del plugin detectados:')
+      console.log('   Session Token:', session_token)
+      console.log('   Email:', email)
+      
+      // 4. URL fija del plugin
+      const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/api/registro-finalizado'
+      
+      console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
+      
+      // 5. Configurar estados
+      setPluginSessionToken(session_token)
+      setPluginEmail(email)
+      setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+      
+      // 6. Auto-llenar email en el formulario
+      setEmail(email)
+      
+    } catch (error) {
+      console.error('Error validando token del plugin:', error)
+      setError('Token invalido o corrupto. Verifica el enlace.')
+    }
+  }
+
+  // Funcion para usar query params directos (retrocompatibilidad)
+  const usarQueryParamsDirectos = (sessionToken) => {
+    console.log('Query params directos detectados (metodo antiguo):')
+    console.log('   Session Token:', sessionToken)
+    
+    const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/api/registro-finalizado'
+    
+    console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
+    
+    // Configurar estados
+    setPluginSessionToken(sessionToken)
+    setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
+  }
 
   // Detectar si viene desde forgot-sequence y pre-cargar datos
   // useEffect(() => {
@@ -1736,7 +1820,7 @@ export default function Enrollment() {
                     ) : (
                       <>
                         <Camera className="w-4 h-4" />
-                        <span>Iniciar captura</span>
+                        <span>Capturar gestos</span>
                       </>
                     )}
                   </Button>
@@ -2068,7 +2152,7 @@ export default function Enrollment() {
                           
                           <div>
                             <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                              Perfil de Personalidad Conservado
+                              Perfil de personalidad conservado
                             </h2>
                             <p className="text-gray-600">
                               Estamos reutilizando tu perfil de personalidad existente.

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams} from 'react-router-dom'
+import { jwtDecode } from 'jwt-decode'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import { Search, Shield, CheckCircle, XCircle, User, AlertCircle, Clock, ArrowLeft, Video, Hand, Loader2 } from 'lucide-react'
@@ -267,73 +268,206 @@ export default function Verification() {
   // }, [searchParams, users])
 
   // Detectar datos del plugin desde URL
+  // useEffect(() => {
+  //   const sessionToken = searchParams.get('session_token')
+  //   const email = searchParams.get('email')
+  //   const action = searchParams.get('action')
+    
+  //   if (sessionToken && email) {
+  //     // Determinar callback URL según action
+  //     const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
+  //     let callbackUrl = ''
+      
+  //     if (action === 'generation') {
+  //       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+  //     } else if (action === 'authentication') {
+  //       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-login-callback`
+  //     } else {
+  //       // Si no viene action o es inválido, usar default (generation)
+  //       console.warn('Action no especificado o inválido, usando generation por defecto')
+  //       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+  //     }
+      
+  //     console.log('Datos del plugin detectados:')
+  //     console.log('   Session Token:', sessionToken)
+  //     console.log('   Email:', email)
+  //     console.log('   Action:', action)
+  //     console.log('   Callback URL:', callbackUrl)
+      
+  //     setPluginSessionToken(sessionToken)
+  //     setPluginEmail(email)
+  //     setPluginCallbackUrl(callbackUrl)
+      
+  //     // Buscar y auto-seleccionar usuario por email
+  //     const findAndSelectUser = () => {
+  //       const user = users.find(u => u.email === email)
+  //       if (user) {
+  //         console.log('Usuario encontrado por email:', user.username)
+  //         setSelectedUser(user)
+  //         // Auto-iniciar verificación después de un breve delay
+  //         setTimeout(() => {
+  //           handleStartVerification()
+  //         }, 500)
+  //       } else {
+  //         console.log('Usuario no encontrado con email:', email)
+  //         setError(`No se encontró usuario con email: ${email}`)
+  //       }
+  //     }
+      
+  //     // Esperar a que se carguen los usuarios antes de buscar
+  //     // if (users.length > 0) {
+  //     //   findAndSelectUser()
+  //     // }
+  //     // Esperar a que se carguen los usuarios antes de buscar
+  //     console.log('Verificando si buscar usuario...')
+  //     console.log('   users.length:', users.length)
+  //     console.log('   sessionToken:', sessionToken)
+  //     console.log('   email:', email)
+
+  //     if (users.length > 0) {
+  //       console.log('SI hay usuarios, buscando...')
+  //       findAndSelectUser()
+  //     } else {
+  //       console.log('NO hay usuarios aún, esperando...')
+  //     }
+  //   } else {
+  //     console.log('Acceso directo - sin plugin')
+  //   }
+  // }, [searchParams, users])
+
+  // Detectar datos del plugin desde URL
   useEffect(() => {
+    const token = searchParams.get('t')
     const sessionToken = searchParams.get('session_token')
     const email = searchParams.get('email')
     const action = searchParams.get('action')
     
-    if (sessionToken && email) {
-      // Determinar callback URL según action
-      const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
-      let callbackUrl = ''
-      
-      if (action === 'generation') {
-        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
-      } else if (action === 'authentication') {
-        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-login-callback`
-      } else {
-        // Si no viene action o es inválido, usar default (generation)
-        console.warn('Action no especificado o inválido, usando generation por defecto')
-        callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
-      }
-      
-      console.log('Datos del plugin detectados:')
-      console.log('   Session Token:', sessionToken)
-      console.log('   Email:', email)
-      console.log('   Action:', action)
-      console.log('   Callback URL:', callbackUrl)
-      
-      setPluginSessionToken(sessionToken)
-      setPluginEmail(email)
-      setPluginCallbackUrl(callbackUrl)
-      
-      // Buscar y auto-seleccionar usuario por email
-      const findAndSelectUser = () => {
-        const user = users.find(u => u.email === email)
-        if (user) {
-          console.log('Usuario encontrado por email:', user.username)
-          setSelectedUser(user)
-          // Auto-iniciar verificación después de un breve delay
-          setTimeout(() => {
-            handleStartVerification()
-          }, 500)
-        } else {
-          console.log('Usuario no encontrado con email:', email)
-          setError(`No se encontró usuario con email: ${email}`)
-        }
-      }
-      
-      // Esperar a que se carguen los usuarios antes de buscar
-      // if (users.length > 0) {
-      //   findAndSelectUser()
-      // }
-      // Esperar a que se carguen los usuarios antes de buscar
-      console.log('Verificando si buscar usuario...')
-      console.log('   users.length:', users.length)
-      console.log('   sessionToken:', sessionToken)
-      console.log('   email:', email)
-
-      if (users.length > 0) {
-        console.log('SI hay usuarios, buscando...')
-        findAndSelectUser()
-      } else {
-        console.log('NO hay usuarios aún, esperando...')
-      }
-    } else {
+    // PRIORIDAD 1: Token JWT (nuevo método)
+    if (token) {
+      validarYUsarTokenPlugin(token)
+    }
+    // PRIORIDAD 2: Query params directos (método antiguo - retrocompatibilidad)
+    else if (sessionToken && email) {
+      usarQueryParamsDirectos(sessionToken, email, action)
+    }
+    // PRIORIDAD 3: Acceso directo sin plugin
+    else {
       console.log('Acceso directo - sin plugin')
     }
   }, [searchParams, users])
 
+  // Función para validar JWT del plugin
+  const validarYUsarTokenPlugin = (token) => {
+    try {
+      console.log('Token del plugin detectado, validando...')
+      
+      // 1. Decodificar JWT
+      const payload = jwtDecode(token)
+      
+      console.log('JWT decodificado:', payload)
+      
+      // 2. Verificar expiración
+      const ahora = Math.floor(Date.now() / 1000)
+      if (payload.exp && payload.exp < ahora) {
+        console.error('Token expirado')
+        setError('El enlace ha expirado. Por favor, solicita uno nuevo.')
+        return
+      }
+      
+      // 3. Extraer datos
+      const { session_token, email, action } = payload
+      
+      if (!session_token || !email || !action) {
+        console.error('Token incompleto:', payload)
+        setError('Token inválido: faltan datos requeridos')
+        return
+      }
+      
+      console.log('Datos del plugin detectados:')
+      console.log('   Session Token:', session_token)
+      console.log('   Email:', email)
+      console.log('   Action:', action)
+      
+      // 4. Determinar callback URL según action
+      const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
+      const callbackUrl = action === 'generation'
+        ? `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+        : `${PLUGIN_BASE_URL}/api/biometric-login-callback`
+      
+      console.log('   Callback URL:', callbackUrl)
+      
+      // 5. Configurar estados
+      setPluginSessionToken(session_token)
+      setPluginEmail(email)
+      setPluginCallbackUrl(callbackUrl)
+      
+      // 6. Buscar y auto-seleccionar usuario
+      buscarYSeleccionarUsuario(email)
+      
+    } catch (error) {
+      console.error('Error validando token del plugin:', error)
+      setError('Token inválido o corrupto. Verifica el enlace.')
+    }
+  }
+
+  // Función para usar query params directos (retrocompatibilidad)
+  const usarQueryParamsDirectos = (sessionToken, email, action) => {
+    console.log('Query params directos detectados (método antiguo):')
+    console.log('   Session Token:', sessionToken)
+    console.log('   Email:', email)
+    console.log('   Action:', action)
+    
+    // Determinar callback URL según action
+    const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
+    let callbackUrl = ''
+    
+    if (action === 'generation') {
+      callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+    } else if (action === 'authentication') {
+      callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-login-callback`
+    } else {
+      console.warn('Action no especificado o invalido, usando generation por defecto')
+      callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
+    }
+    
+    console.log('   Callback URL:', callbackUrl)
+    
+    // Configurar estados
+    setPluginSessionToken(sessionToken)
+    setPluginEmail(email)
+    setPluginCallbackUrl(callbackUrl)
+    
+    // Buscar y auto-seleccionar usuario
+    buscarYSeleccionarUsuario(email)
+  }
+
+  // Función compartida para buscar y seleccionar usuario
+  const buscarYSeleccionarUsuario = (email) => {
+    console.log('Verificando si buscar usuario...')
+    console.log('   users.length:', users.length)
+    console.log('   email:', email)
+    
+    if (users.length > 0) {
+      console.log('SI hay usuarios, buscando...')
+      
+      const user = users.find(u => u.email === email)
+      
+      if (user) {
+        console.log('Usuario encontrado por email:', user.username)
+        setSelectedUser(user)
+        
+        // Auto-iniciar verificación
+        setTimeout(() => {
+          handleStartVerification()
+        }, 500)
+      } else {
+        console.log('Usuario no encontrado con email:', email)
+        setError(`No se encontró usuario con email: ${email}`)
+      }
+    } else {
+      console.log('NO hay usuarios aun, esperando...')
+    }
+  }
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({

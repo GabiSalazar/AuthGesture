@@ -1207,17 +1207,28 @@ async def get_bootstrap_status():
         min_users = 2
         
         # Calcular templates totales - CORREGIDO v2
+        # templates_count = 0
+        # if hasattr(manager, 'database') and manager.database:
+        #     try:
+        #         import os
+        #         templates_dir = os.path.join(manager.database.db_path, 'templates')
+        #         if os.path.exists(templates_dir):
+        #             # Contar archivos .json directamente
+        #             templates_count = len([
+        #                 f for f in os.listdir(templates_dir) 
+        #                 if f.endswith('.json')
+        #             ])
+        #     except Exception as e:
+        #         print(f"Error contando templates: {e}")
+        #         templates_count = 0
+        
+        # Calcular templates totales - CORREGIDO v3 (Supabase)
         templates_count = 0
         if hasattr(manager, 'database') and manager.database:
             try:
-                import os
-                templates_dir = os.path.join(manager.database.db_path, 'templates')
-                if os.path.exists(templates_dir):
-                    # Contar archivos .json directamente
-                    templates_count = len([
-                        f for f in os.listdir(templates_dir) 
-                        if f.endswith('.json')
-                    ])
+                # Contar templates directamente desde la memoria (ya cargados desde Supabase)
+                templates_count = len(manager.database.templates)
+                print(f"Templates contados desde Supabase: {templates_count}")
             except Exception as e:
                 print(f"Error contando templates: {e}")
                 templates_count = 0
