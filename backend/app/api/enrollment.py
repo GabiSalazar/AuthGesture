@@ -823,7 +823,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
             
             print(f"✓ Email de verificación enviado exitosamente")
         else:
-            print(f"⏭️  Saltando envío de email (ya fue verificado previamente)")
+            print(f" Saltando envío de email (ya fue verificado previamente)")
     
     
         # ============================================================================

@@ -191,10 +191,8 @@ export default function ForgotSequence() {
 
         {/* Badge paso actual - abajo */}
         <div className="flex justify-center">
-          <div 
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 rounded-full backdrop-blur-sm border border-white/30 animate-pulse"
-          >
-            <Key className="w-4 h-4 text-white" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full backdrop-blur-sm">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
             <span className="text-sm font-semibold text-white">
               Paso {step} de 3
             </span>
@@ -214,9 +212,9 @@ export default function ForgotSequence() {
         >
           <button
             onClick={() => step > 1 ? setStep(step - 1) : navigate('/')}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600" style={{ color: '#ffffffff' }} />
+            <ArrowLeft className="w-5 h-5" style={{ color: '#ffffffff' }} />
           </button>
           
           <span 
@@ -236,270 +234,183 @@ export default function ForgotSequence() {
           />
         </div>
 
-        
-
-        {/* Contenido principal centrado */}
-        <div className="max-w-4xl mx-auto px-6 py-12">
+        {/* Contenido principal */}
+        <div className="w-full h-full px-8 py-8 lg:px-16 lg:py-12">
           
-          {/* Wizard de pasos */}
-          <div className="flex items-center justify-center mb-12">
-            {[1, 2, 3].map((stepNum, index) => (
-              <div key={stepNum} className="flex items-center">
-                {/* Círculo del paso */}
-                <div className="relative group">
-                  <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all duration-300 ${
-                      step >= stepNum
-                        ? 'text-white shadow-lg'
-                        : 'bg-gray-200 text-gray-400'
-                    }`}
-                    style={
-                      step >= stepNum
-                        ? { backgroundColor: '#05A8F9' }
-                        : {}
-                    }
-                  >
-                    {stepNum}
-                  </div>
-                  
-                  {/* Tooltip */}
-                  <div 
-                    className="absolute left-1/2 -translate-x-1/2 top-full mt-3 px-4 py-2 rounded-lg whitespace-nowrap text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 shadow-xl"
-                    style={{ 
-                      backgroundColor: '#05A8F9',
-                      color: 'white'
-                    }}
-                  >
-                    {stepTitles[stepNum - 1]}
-                    <div 
-                      className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-[6px] border-r-[6px] border-b-[6px] border-l-transparent border-r-transparent"
-                      style={{ borderBottomColor: '#05A8F9' }}
-                    />
-                  </div>
+          {/* Wizard de pasos - CENTRADO SIN FLEX-1 */}
+          <div className="w-full mb-6 sm:mb-8 lg:mb-12 px-3 sm:px-4 lg:px-6">
+            <div className="max-w-2xl mx-auto">
+              <div className="pt-0 lg:pt-8">
+                <div className="flex items-center justify-center w-full">
+                  {[1, 2, 3].map((stepNum, index) => (
+                    <div key={stepNum} className="flex items-center">
+                      
+                      {/* Círculo del paso */}
+                      <div className="relative group flex-shrink-0">
+                        <div
+                          className={`
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10
+                            rounded-full flex items-center justify-center 
+                            font-bold transition-all cursor-pointer
+                            text-[10px] sm:text-xs md:text-sm
+                            ${step > stepNum 
+                              ? 'text-white shadow-sm sm:shadow-md lg:shadow-lg' 
+                              : step === stepNum 
+                              ? 'text-white shadow-md sm:shadow-lg lg:shadow-xl md:scale-105 lg:scale-110' 
+                              : 'bg-gray-200 text-gray-400'
+                            }
+                          `}
+                          style={{ 
+                            backgroundColor: step >= stepNum ? '#05A8F9' : undefined
+                          }}
+                        >
+                          {step > stepNum ? (
+                            <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                          ) : (
+                            stepNum
+                          )}
+                        </div>
+                        
+                        {/* Tooltip - SOLO DESKTOP con HOVER */}
+                        <div className="hidden lg:block absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                          <div 
+                            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-lg"
+                            style={{ backgroundColor: '#05A8F9' }}
+                          >
+                            {stepTitles[stepNum - 1]}
+                            <div 
+                              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45"
+                              style={{ backgroundColor: '#05A8F9' }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Línea conectora */}
+                      {index < 2 && (
+                        <div 
+                          className="w-16 sm:w-20 md:w-24 lg:w-28 h-[2px] sm:h-[2.5px] md:h-0.5 transition-colors mx-1 sm:mx-1.5 md:mx-2 lg:mx-3"
+                          style={{ 
+                            backgroundColor: step > stepNum ? '#05A8F9' : '#E5E7EB'
+                          }}
+                        />
+                      )}
+                    </div>
+                  ))}
                 </div>
-                
-                {/* Línea conectora */}
-                {index < 2 && (
-                  <div
-                    className={`w-24 h-1 mx-2 rounded-full transition-all duration-300 ${
-                      step > stepNum ? '' : 'bg-gray-200'
-                    }`}
-                    style={
-                      step > stepNum
-                        ? { backgroundColor: '#05A8F9' }
-                        : {}
-                    }
-                  />
-                )}
               </div>
-            ))}
+            </div>
           </div>
 
-          {/* Card principal */}
-          <div 
-            className="bg-white rounded-3xl border-2 shadow-2xl p-8 sm:p-10"
-            style={{ borderColor: '#E0F2FE' }}
-          >
-            
-            {/* ========================================
-                PASO 1: VERIFICAR EMAIL
-            ======================================== */}
-            {step === 1 && (
+          {/* ========================================
+              PASO 1: VERIFICAR EMAIL
+          ======================================== */}
+          {step === 1 && (
+            <div className="max-w-4xl mx-auto">
               <div className="space-y-8">
-                {/* Título del paso */}
-                <div className="text-center space-y-3">
-                  <div className="flex items-center justify-center gap-3">
-                    <div 
-                      className="p-3 rounded-full"
-                      style={{ backgroundColor: '#F4FCFF' }}
-                    >
-                      <Mail className="w-8 h-8" style={{ color: '#05A8F9' }} />
-                    </div>
+                
+                {/* Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900">
-                    Verificar email
-                  </h2>
-                  <p className="text-gray-600">
-                    Ingresa tu email para recibir un código de verificación
-                  </p>
-                </div>
-
-                {/* Línea divisora */}
-                <div 
-                  className="relative flex items-center justify-center my-8"
-                >
-                  <div 
-                    className="absolute inset-0 flex items-center"
-                    style={{ top: '50%' }}
-                  >
-                    <div 
-                      className="w-full border-t"
-                      style={{ borderColor: '#E0F2FE' }}
-                    />
-                  </div>
-                  <div className="relative px-4 bg-white">
-                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Información de contacto
+                  <div className="relative flex justify-center">
+                    <span className="px-4 bg-white text-sm font-semibold text-gray-500">
+                      Recuperar secuencia de gestos
                     </span>
                   </div>
                 </div>
 
                 {/* Alerta de error */}
                 {error && (
-                  <div 
-                    className="p-4 rounded-xl border-2 flex items-start gap-3"
-                    style={{ 
-                      backgroundColor: '#FEF2F2',
-                      borderColor: '#FCA5A5'
-                    }}
-                  >
-                    <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm font-medium text-red-800">
-                      {error}
-                    </p>
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                    <p className="text-sm text-red-600 font-medium">{error}</p>
                   </div>
                 )}
 
                 {/* Input de email */}
                 <div className="space-y-2">
-                  <label className="block text-sm font-bold text-gray-700">
+                  <label className="block text-left text-xs font-semibold text-gray-700">
                     Correo electrónico
                   </label>
+                  
                   <div className="relative">
-                    <Mail 
-                      className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none z-10"
-                    />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="tu@email.com"
-                      disabled={loading}
-                      className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed text-gray-900 font-medium"
-                      style={{
-                        borderColor: '#E0F2FE'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = '#05A8F9'
-                        e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = '#E0F2FE'
-                        e.target.style.boxShadow = 'none'
-                      }}
-                    />
+                    <div className="flex items-center gap-3 px-4 py-3 rounded-xl border-2 transition-all duration-300 bg-white border-gray-200 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-100">
+                      <Mail className="w-5 h-5 flex-shrink-0 text-gray-400" />
+                      
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        disabled={loading}
+                        className="flex-1 outline-none text-gray-900 placeholder-gray-400 bg-transparent"
+                        placeholder="tu@email.com"
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Botón enviar */}
-                <button
-                  onClick={handleSendOTP}
-                  disabled={loading || !email}
-                  className="w-full py-4 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:scale-[1.02]"
-                  style={{
-                    background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
-                    boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
-                  }}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>Enviando código...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Enviar código</span>
-                      <ArrowRight className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-
-                {/* Link volver */}
-                <div className="text-center pt-4">
+                {/* Botón enviar - ALINEADO A LA DERECHA */}
+                <div className="pt-4 flex justify-end">
                   <button
-                    onClick={() => navigate('/')}
-                    className="text-sm font-semibold inline-flex items-center gap-2 transition-colors group"
-                    style={{ color: '#05A8F9' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#00ACC1'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#05A8F9'}
+                    onClick={handleSendOTP}
+                    disabled={loading || !email}
+                    className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide flex items-center gap-2"
+                    style={{
+                      background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                      boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                    }}
                   >
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    Volver al inicio
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Enviando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Enviar código</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
                   </button>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* ========================================
-                PASO 2: CÓDIGO OTP
-            ======================================== */}
-            {step === 2 && (
-              <div className="space-y-8">
-                {/* Título del paso */}
-                <div className="text-center space-y-3">
-                  <div className="flex items-center justify-center gap-3">
-                    <div 
-                      className="p-3 rounded-full"
-                      style={{ backgroundColor: '#F4FCFF' }}
-                    >
-                      <ShieldCheck className="w-8 h-8" style={{ color: '#05A8F9' }} />
-                    </div>
+          {/* ========================================
+              PASO 2: CÓDIGO OTP
+          ======================================== */}
+          {step === 2 && (
+            <div className="w-full">
+              <div className="max-w-xl mx-auto space-y-4 sm:space-y-6 px-4">
+                
+                {/* Divider superior */}
+                <div className="relative mb-6 sm:mb-8">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900">
-                    Código de seguridad
-                  </h2>
-                  <p className="text-gray-600">
-                    Ingresa el código de 6 dígitos enviado a tu email
+                  <div className="relative flex justify-center">
+                    <span className="px-3 sm:px-4 bg-white text-xs sm:text-sm font-semibold text-gray-500">
+                      Verificación de código
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-center">
+                  <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-1 sm:mb-2 px-2">
+                    Código enviado a:
                   </p>
-                </div>
-
-                {/* Línea divisora */}
-                <div 
-                  className="relative flex items-center justify-center my-8"
-                >
-                  <div 
-                    className="absolute inset-0 flex items-center"
-                    style={{ top: '50%' }}
-                  >
-                    <div 
-                      className="w-full border-t"
-                      style={{ borderColor: '#E0F2FE' }}
-                    />
-                  </div>
-                  <div className="relative px-4 bg-white">
-                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Verificación
-                    </span>
-                  </div>
-                </div>
-
-                {/* Info email */}
-                <div 
-                  className="text-center p-4 rounded-xl border-2"
-                  style={{ 
-                    backgroundColor: '#F4FCFF',
-                    borderColor: '#6FBFDE'
-                  }}
-                >
-                  <p className="text-sm">
-                    Código enviado a:{' '}
-                    <span className="font-bold" style={{ color: '#05A8F9' }}>
-                      {email}
-                    </span>
+                  <p className="text-base sm:text-lg lg:text-xl font-bold mb-6 sm:mb-8 break-all px-2" style={{ color: '#05A8F9' }}>
+                    {email}
                   </p>
                 </div>
 
                 {/* Alerta de éxito reenvío */}
                 {resendSuccess && (
-                  <div 
-                    className="p-4 rounded-xl border-2 flex items-center gap-3"
-                    style={{ 
-                      backgroundColor: '#F0FDF4',
-                      borderColor: '#86EFAC'
-                    }}
-                  >
-                    <CheckCircle className="w-5 h-5 text-green-600" />
-                    <p className="text-sm font-medium text-green-800">
+                  <div className="mb-3 p-2.5 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <p className="text-xs sm:text-sm text-green-700 font-medium">
                       ✓ Código reenviado exitosamente
                     </p>
                   </div>
@@ -507,63 +418,86 @@ export default function ForgotSequence() {
 
                 {/* Alerta de error */}
                 {error && (
-                  <div 
-                    className="p-4 rounded-xl border-2 flex items-start gap-3"
-                    style={{ 
-                      backgroundColor: '#FEF2F2',
-                      borderColor: '#FCA5A5'
-                    }}
-                  >
-                    <AlertTriangle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm font-medium text-red-800">
-                      {error}
-                    </p>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
+                    <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs sm:text-sm font-semibold text-red-800">{error}</p>
                   </div>
                 )}
 
-                {/* Inputs OTP */}
-                <div className="flex gap-3 justify-center py-4">
-                  {otpCode.map((digit, index) => (
-                    <input
-                      key={index}
-                      id={`otp-${index}`}
-                      type="text"
-                      maxLength="1"
-                      className="w-14 h-16 text-center text-2xl font-black border-2 rounded-xl focus:outline-none transition-all"
-                      style={{
-                        borderColor: digit ? '#05A8F9' : '#E0F2FE',
-                        color: '#111827'
-                      }}
-                      value={digit}
-                      onChange={(e) => handleOTPChange(index, e.target.value)}
-                      onKeyDown={(e) => handleOTPKeyDown(index, e)}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = '#05A8F9'
-                        e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-                      }}
-                      onBlur={(e) => {
-                        e.target.style.borderColor = digit ? '#05A8F9' : '#E0F2FE'
-                        e.target.style.boxShadow = 'none'
-                      }}
-                      disabled={loading}
-                    />
-                  ))}
+                <div className="mb-4 sm:mb-6">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3 sm:mb-4 text-center">
+                    Código de 6 dígitos
+                  </label>
+                  
+                  <div className="flex gap-1.5 sm:gap-2 lg:gap-3 justify-center px-2">
+                    {otpCode.map((digit, index) => (
+                      <input
+                        key={index}
+                        id={`otp-${index}`}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOTPChange(index, e.target.value)}
+                        onKeyDown={(e) => handleOTPKeyDown(index, e)}
+                        disabled={loading}
+                        className={`
+                          w-9 h-11 sm:w-11 sm:h-13 lg:w-12 lg:h-14
+                          text-center text-lg sm:text-xl lg:text-2xl font-bold rounded-lg
+                          border-2 transition-all duration-200
+                          ${digit
+                            ? 'bg-cyan-50 text-cyan-700'
+                            : 'border-gray-300 bg-white text-gray-900'
+                          }
+                          focus:outline-none focus:ring-2 sm:focus:ring-4
+                          disabled:opacity-50 disabled:cursor-not-allowed
+                        `}
+                        style={{
+                          borderColor: digit ? '#05A8F9' : undefined,
+                          boxShadow: digit ? '0 0 0 2px rgba(5, 168, 249, 0.1)' : undefined
+                        }}
+                        autoFocus={index === 0}
+                      />
+                    ))}
+                  </div>
                 </div>
 
-                {/* Botón reenviar código */}
-                <div className="text-center">
+                {/* Botón VERIFICAR - TAMAÑO FIJO */}
+                <div className="flex justify-center pt-2 sm:pt-4">
+                  <button
+                    onClick={handleVerifyOTP}
+                    disabled={loading || otpCode.some(d => !d)}
+                    className="w-auto max-w-[200px] sm:max-w-[240px] px-6 sm:px-8 py-2.5 sm:py-3 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide flex items-center justify-center gap-2"
+                    style={{
+                      background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                      boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                    }}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Verificando...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Verificar</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="border-t-2 mt-6 sm:mt-8 pt-4 sm:pt-6 text-center" style={{ borderColor: '#F4FCFF' }}>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2">
+                    ¿No recibiste el código?
+                  </p>
+                  
                   <button
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendingCode || resendCooldown > 0}
-                    className="text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-xs sm:text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ color: '#05A8F9' }}
-                    onMouseEnter={(e) => {
-                      if (resendCooldown === 0 && !resendingCode) {
-                        e.currentTarget.style.color = '#00ACC1'
-                      }
-                    }}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#05A8F9'}
                   >
                     {resendingCode ? (
                       'Reenviando...'
@@ -575,94 +509,25 @@ export default function ForgotSequence() {
                   </button>
                 </div>
 
-                {/* Botones */}
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => setStep(1)}
-                    disabled={loading}
-                    className="flex-1 py-4 font-bold rounded-full transition-all duration-300 border-2 hover:scale-[1.02]"
-                    style={{
-                      backgroundColor: 'white',
-                      borderColor: '#E0F2FE',
-                      color: '#05A8F9'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#F4FCFF'
-                      e.currentTarget.style.borderColor = '#6FBFDE'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'white'
-                      e.currentTarget.style.borderColor = '#E0F2FE'
-                    }}
-                  >
-                    <ArrowLeft className="w-5 h-5 inline mr-2" />
-                    Atrás
-                  </button>
-
-                  <button
-                    onClick={handleVerifyOTP}
-                    disabled={loading || otpCode.some(d => !d)}
-                    className="flex-1 py-4 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:scale-[1.02]"
-                    style={{
-                      background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
-                      boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
-                    }}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Verificando...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Verificar</span>
-                        <ArrowRight className="w-5 h-5" />
-                      </>
-                    )}
-                  </button>
-                </div>
               </div>
-            )}
+            </div>
+          )}
 
-            {/* ========================================
-                PASO 3: SECUENCIA RECUPERADA
-            ======================================== */}
-            {step === 3 && userData && (
+          {/* ========================================
+              PASO 3: SECUENCIA RECUPERADA
+          ======================================== */}
+          {step === 3 && userData && (
+            <div className="max-w-4xl mx-auto">
               <div className="space-y-8">
-                {/* Título del paso */}
-                <div className="text-center space-y-3">
-                  <div className="flex items-center justify-center gap-3">
-                    <div 
-                      className="p-3 rounded-full"
-                      style={{ backgroundColor: '#F0FDF4' }}
-                    >
-                      <CheckCircle className="w-8 h-8 text-green-600" />
-                    </div>
+                
+                {/* Divider */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-200"></div>
                   </div>
-                  <h2 className="text-3xl font-black text-gray-900">
-                    Tu secuencia
-                  </h2>
-                  <p className="text-gray-600">
-                    Esta es tu secuencia de gestos registrada
-                  </p>
-                </div>
-
-                {/* Línea divisora */}
-                <div 
-                  className="relative flex items-center justify-center my-8"
-                >
-                  <div 
-                    className="absolute inset-0 flex items-center"
-                    style={{ top: '50%' }}
-                  >
-                    <div 
-                      className="w-full border-t"
-                      style={{ borderColor: '#E0F2FE' }}
-                    />
-                  </div>
-                  <div className="relative px-4 bg-white">
-                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
-                      Secuencia Biométrica
+                  <div className="relative flex justify-center">
+                    <span className="px-4 bg-white text-sm font-semibold text-gray-500">
+                      Secuencia recuperada
                     </span>
                   </div>
                 </div>
@@ -672,23 +537,25 @@ export default function ForgotSequence() {
                   className="p-4 rounded-xl border-2 flex items-center gap-3"
                   style={{ 
                     backgroundColor: '#F0FDF4',
-                    borderColor: '#86EFAC'
+                    borderColor: '#10B981'
                   }}
                 >
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
-                  <p className="text-sm font-bold text-green-800">
-                    Tu secuencia de gestos es:
-                  </p>
+                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+                  <div>
+                    <p className="text-sm font-bold text-green-900">
+                      Secuencia encontrada
+                    </p>
+                    <p className="text-xs text-green-700">
+                      Esta es tu secuencia de gestos registrada
+                    </p>
+                  </div>
                 </div>
 
                 {/* Secuencia de gestos */}
-                <div className="flex justify-center gap-8 py-6">
+                {/* <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 py-4 sm:py-6">
                   {userData.gesture_sequence.map((gesture, index) => (
                     <div key={index} className="text-center">
-                      <div 
-                        className="mb-3 text-xs font-bold uppercase tracking-wider"
-                        style={{ color: '#6B7280' }}
-                      >
+                      <div className="mb-2 sm:mb-3 text-xs font-bold uppercase tracking-wider text-gray-500">
                         Paso {index + 1}
                       </div>
                       <GestureIcon 
@@ -698,45 +565,63 @@ export default function ForgotSequence() {
                       />
                     </div>
                   ))}
+                </div> */}
+                {/* Secuencia de gestos */}
+                <div className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-6 py-3 sm:py-4 lg:py-5">
+                  {userData.gesture_sequence.map((gesture, index) => (
+                    <div key={index} className="text-center">
+                      <div className="mb-1.5 sm:mb-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-500">
+                        Gesto {index + 1}
+                      </div>
+                      
+                      {/* IMAGEN*/}
+                      <div className="mb-2">
+                        <img 
+                          src={`/${gesture}.png`}
+                          alt={gesture.replace('_', ' ')}
+                          className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 object-contain mx-auto block"
+                        />
+                      </div>
+                      
+                      {/* Nombre del gesto */}
+                      <p className="text-[10px] sm:text-xs lg:text-sm font-bold" style={{ color: '#05A8F9' }}>
+                        {gesture.replace('_', ' ')}
+                      </p>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Botones */}
-                <div className="flex gap-3 pt-4">
-                  <button
-                    onClick={() => navigate('/')}
-                    className="flex-1 py-4 font-bold rounded-full transition-all duration-300 border-2 hover:scale-[1.02]"
-                    style={{
-                      backgroundColor: 'white',
-                      borderColor: '#E0F2FE',
-                      color: '#05A8F9'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#F4FCFF'
-                      e.currentTarget.style.borderColor = '#6FBFDE'
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'white'
-                      e.currentTarget.style.borderColor = '#E0F2FE'
-                    }}
-                  >
-                    Ir a inicio
-                  </button>
-
+                <div className="flex flex-col items-center gap-3 pt-4">
+                  {/* Botón PRINCIPAL arriba */}
                   <button
                     onClick={() => setShowConfirmModal(true)}
-                    className="flex-1 py-4 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.02]"
+                    className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 text-sm tracking-wide flex items-center justify-center gap-2"
                     style={{
                       background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                       boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
                     }}
                   >
                     <span>Volver a registrarme</span>
-                    <RefreshCw className="w-5 h-5" />
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+
+                  {/* Botón SECUNDARIO abajo */}
+                  <button
+                    onClick={() => navigate('/')}
+                    className="px-6 py-3 font-bold rounded-full transition-all duration-300 border-2 flex items-center justify-center gap-2"
+                    style={{
+                      backgroundColor: 'white',
+                      borderColor: '#ffffffff',
+                      color: '#05A8F9'
+                    }}
+                  >
+                    Ir a inicio
                   </button>
                 </div>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -770,7 +655,7 @@ export default function ForgotSequence() {
             }}
           >
             <p className="font-bold text-gray-900 mb-2">
-              Acción Importante
+              Acción importante
             </p>
             <p className="text-sm text-gray-700">
               Tu cuenta actual será desactivada y crearás una nueva con los mismos datos personales. 
@@ -788,19 +673,11 @@ export default function ForgotSequence() {
             <button
               onClick={() => setShowConfirmModal(false)}
               disabled={loading}
-              className="flex-1 py-3 font-bold rounded-full transition-all duration-300 border-2 hover:scale-[1.02]"
+              className="flex-1 py-3 font-bold rounded-full transition-all duration-300 border-2"
               style={{
                 backgroundColor: 'white',
                 borderColor: '#E0F2FE',
                 color: '#05A8F9'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F4FCFF'
-                e.currentTarget.style.borderColor = '#6FBFDE'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white'
-                e.currentTarget.style.borderColor = '#E0F2FE'
               }}
             >
               Cancelar
@@ -809,7 +686,7 @@ export default function ForgotSequence() {
             <button
               onClick={handleReenroll}
               disabled={loading}
-              className="flex-1 py-3 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-xl hover:scale-[1.02]"
+              className="flex-1 py-3 text-white font-bold rounded-full transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                 boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'

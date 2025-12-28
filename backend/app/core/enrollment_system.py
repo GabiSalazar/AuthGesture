@@ -901,7 +901,7 @@ class RealEnrollmentWorkflow:
             
             print(f"Configuración de captura:")
             print(f"   Gestos: {len(gesture_sequence)}")
-            print(f"   📸 Muestras por gesto: {self.config.samples_per_gesture}")
+            print(f"    Muestras por gesto: {self.config.samples_per_gesture}")
             print(f"   Total muestras: {session.total_samples_needed}")
             
             # Estados iniciales
@@ -935,7 +935,7 @@ class RealEnrollmentWorkflow:
             
             print(f"Enrollment iniciado: {session.session_id}")
             print(f"   Gestos: {' → '.join(gesture_sequence)}")
-            print(f"   📸 Muestras/gesto: {self.config.samples_per_gesture}")
+            print(f"    Muestras/gesto: {self.config.samples_per_gesture}")
             print(f"   Total muestras: {session.total_samples_needed}")
             print(f"   Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
             
@@ -1435,7 +1435,7 @@ class RealEnrollmentWorkflow:
             # BLOQUE BOOTSTRAP MEJORADO 
             if self.bootstrap_mode:
                 print("="*70)
-                print("💾 BOOTSTRAP: Guardando muestra durante captura")
+                print(" BOOTSTRAP: Guardando muestra durante captura")
                 print(f"   Usuario: {session.user_id}")
                 print(f"   Gesto: {sample.gesture_name}")
                 print(f"   Sample ID: {sample.sample_id}")
@@ -2696,13 +2696,13 @@ class RealEnrollmentSystem:
             print("INICIANDO ENROLLMENT")
             print("=" * 70)
             print(f"Usuario: {username}")
-            print(f"🆔 ID: {user_id}")
+            print(f" ID: {user_id}")
             print(f"Email: {email}")
             print(f"Teléfono: {phone_number}")
             print(f"Edad: {age}")
             print(f"Género: {gender}")
             print(f"Gestos: {' → '.join(gesture_sequence)}")
-            print(f"📸 Muestras/gesto: {self.config.samples_per_gesture}")
+            print(f" Muestras/gesto: {self.config.samples_per_gesture}")
             print(f"Modo Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
             
             # ============================================================================
@@ -2796,7 +2796,7 @@ class RealEnrollmentSystem:
             print("=" * 70)
             print("SESIÓN INICIADA EXITOSAMENTE")
             print("=" * 70)
-            print(f"🆔 Session ID: {session.session_id}")
+            print(f" Session ID: {session.session_id}")
             print(f"Muestras necesarias: {session.total_samples_needed}")
             print(f"Estado: {session.status.value}")
             print(f"Bootstrap: {'SÍ' if self.bootstrap_mode else 'NO'}")
@@ -2839,7 +2839,7 @@ class RealEnrollmentSystem:
             Diccionario con el resultado del procesamiento
         """
         try:
-            print(f"🎥 Procesando frame para sesión {session_id}")
+            print(f" Procesando frame para sesión {session_id}")
             print(f"   Frame shape: {frame_image.shape}")
             
             if session_id not in self.active_sessions:
@@ -3129,7 +3129,7 @@ class RealEnrollmentSystem:
             if self.bootstrap_mode:
                 try:
                     print("="*70)
-                    print("💾 GUARDANDO MUESTRA EN MODO BOOTSTRAP")
+                    print(" GUARDANDO MUESTRA EN MODO BOOTSTRAP")
                     print("="*70)
                     
                     # Preparar metadata de muestra para el método enroll_template_bootstrap
@@ -3182,7 +3182,7 @@ class RealEnrollmentSystem:
                 # MODO NORMAL: Guardar durante captura con embeddings
                 try:
                     print("="*70)
-                    print("💾 GUARDANDO MUESTRA EN MODO NORMAL")
+                    print(" GUARDANDO MUESTRA EN MODO NORMAL")
                     print("="*70)
 
                     # DEBUG CRÍTICO 

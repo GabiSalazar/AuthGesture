@@ -1002,7 +1002,7 @@ class BiometricDatabase:
                                     print(f"   Error índice dinámico: {idx_error}")
                             
                             print(f"Template cargado:")
-                            print(f"   🆔 ID: {template.template_id}")
+                            print(f"    ID: {template.template_id}")
                             print(f"   Usuario: {template.user_id}")
                             print(f"   🤚 Gesto: {template.gesture_name}")
                             print(f"   Calidad: {template.quality_score:.2f}")

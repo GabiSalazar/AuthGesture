@@ -762,7 +762,7 @@ class BiometricSystemManager:
                     })
                     logger.info(f"Usuario pendiente agregado: {user.username} (ID: {user.user_id})")
                 else:
-                    logger.info(f"⏭️  Usuario ya entrenado: {user.username} (ID: {user.user_id})")
+                    logger.info(f" Usuario ya entrenado: {user.username} (ID: {user.user_id})")
             
             logger.info(f"RESULTADO FINAL: {len(pending_users)} usuarios pendientes")
             
