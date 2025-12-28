@@ -713,13 +713,38 @@ export default function Enrollment() {
       
       console.log('Respuesta del servidor:', response)
       
+      // setSessionStatus({
+      //   ...response,
+      //   progress: response.progress_percentage || 
+      //             ((response.samples_captured || 0) / (response.samples_needed || 21)) * 100,
+      //   current_gesture: response.current_gesture,
+      //   samples_collected: response.samples_captured || 0,
+      //   samples_needed: response.samples_needed || 24,
+      //   message: response.message || response.feedback || 'Procesando...',
+      //   session_completed: response.all_gestures_completed || response.session_completed || false
+      // })
+
+      // Calcular el índice del gesto actual (0, 1, o 2)
+      const currentGestureIndex = selectedGestures.findIndex(g => g === response.current_gesture)
+
+      // Calcular muestras totales acumulativas (para progreso y gestos completados)
+      const totalSamplesCollected = currentGestureIndex >= 0 
+        ? (currentGestureIndex * 8) + (response.samples_captured || 0)
+        : 0
+
+      // Calcular progreso del total
+      const progressPercentage = (totalSamplesCollected / 24) * 100
+
+      console.log('Gesto actual:', response.current_gesture, '| Índice:', currentGestureIndex)
+      console.log('Muestras del gesto actual:', response.samples_captured, '| Total acumulado:', totalSamplesCollected)
+
       setSessionStatus({
         ...response,
-        progress: response.progress_percentage || 
-                  ((response.samples_captured || 0) / (response.samples_needed || 21)) * 100,
+        progress: progressPercentage,  // Porcentaje del total (0-100%)
         current_gesture: response.current_gesture,
-        samples_collected: response.samples_captured || 0,
-        samples_needed: response.samples_needed || 21,
+        samples_collected: totalSamplesCollected,  // Total acumulativo (para gestos X/3)
+        samples_needed: 24,  // Total de muestras
+        current_gesture_samples: response.samples_captured || 0,  // Muestras del gesto actual (1-8)
         message: response.message || response.feedback || 'Procesando...',
         session_completed: response.all_gestures_completed || response.session_completed || false
       })
@@ -882,89 +907,100 @@ export default function Enrollment() {
       <div className="flex-1 bg-white h-screen overflow-y-auto">
         
         {/* Header móvil */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b">
+        <div 
+          className="lg:hidden flex items-center justify-between px-3 py-2 border-b"
+          style={{ backgroundColor: '#0291B9' }}
+        >
           <button
             onClick={handleGoBack}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-6 h-6 text-gray-700" />
+            <ArrowLeft className="w-5 h-5" style={{ color: '#ffffffff' }} />
           </button>
           
-          <div className="flex items-center gap-2">
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="h-8 w-8" 
-            />
-            <span className="text-lg font-black uppercase tracking-tight text-[#00ACC1]">
-              Auth-Gesture
-            </span>
-          </div>
+          <span 
+            className="absolute left-1/2 transform -translate-x-1/2 text-xl font-black uppercase tracking-tight"
+            style={{ color: '#fbfbfbff' }}
+          >
+            Auth-Gesture
+          </span>
+          
+          <video
+            src="/videito.mp4"
+            className="hidden sm:block w-25 h-16 object-contain opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
 
         {/* Contenido principal */}
         <div className="w-full h-full px-8 py-8 lg:px-16 lg:py-12">
 
-          {/* Wizard de progreso - CENTRADO Y ADAPTATIVO */}
+          {/* Wizard de progreso - RESPONSIVE Y CENTRADO */}
           {!['success'].includes(step) && (
-            <div className="w-full mb-8 sm:mb-12 px-4 sm:px-6">
+            <div className="w-full mb-6 sm:mb-8 lg:mb-12 px-3 sm:px-4 lg:px-6">
               <div className="max-w-3xl mx-auto">
-                <div className="flex items-center w-full">
-                  {wizardSteps.map((s, index) => (
-                    <div key={s.number} className="flex items-center flex-1">
-                      
-                      {/* Círculo del paso */}
-                      <div className="relative group flex-shrink-0">
-                        <div 
-                          className={`
-                            w-7 h-7 sm:w-9 sm:h-9 md:w-10 md:h-10
-                            rounded-full flex items-center justify-center 
-                            font-bold transition-all cursor-pointer
-                            text-xs sm:text-sm
-                            ${currentStepNumber > s.number 
-                              ? 'text-white shadow-md sm:shadow-lg' 
-                              : currentStepNumber === s.number 
-                              ? 'text-white shadow-lg sm:shadow-xl md:scale-110' 
-                              : 'bg-gray-200 text-gray-400'
-                            }
-                          `}
-                          style={{ 
-                            backgroundColor: currentStepNumber >= s.number ? '#05A8F9' : undefined
-                          }}
-                        >
-                          {currentStepNumber > s.number ? (
-                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5" />
-                          ) : (
-                            s.number
-                          )}
-                        </div>
-
-                        {/* Tooltip - solo en desktop */}
-                        <div className="hidden md:block absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
+                {/* Espacio superior para tooltip */}
+                <div className="pt-0 lg:pt-8">
+                  <div className="flex items-center justify-center w-full">
+                    {wizardSteps.map((s, index) => (
+                      <div key={s.number} className="flex items-center flex-1">
+                        
+                        {/* Círculo del paso */}
+                        <div className="relative group flex-shrink-0">
                           <div 
-                            className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-lg"
-                            style={{ backgroundColor: '#05A8F9' }}
+                            className={`
+                              w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 lg:w-10 lg:h-10
+                              rounded-full flex items-center justify-center 
+                              font-bold transition-all cursor-pointer
+                              text-[10px] sm:text-xs md:text-sm
+                              ${currentStepNumber > s.number 
+                                ? 'text-white shadow-sm sm:shadow-md lg:shadow-lg' 
+                                : currentStepNumber === s.number 
+                                ? 'text-white shadow-md sm:shadow-lg lg:shadow-xl md:scale-105 lg:scale-110' 
+                                : 'bg-gray-200 text-gray-400'
+                              }
+                            `}
+                            style={{ 
+                              backgroundColor: currentStepNumber >= s.number ? '#05A8F9' : undefined
+                            }}
                           >
-                            {s.label}
+                            {currentStepNumber > s.number ? (
+                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5" />
+                            ) : (
+                              s.number
+                            )}
+                          </div>
+                          
+                          {/* Tooltip - SOLO DESKTOP con HOVER */}
+                          <div className="hidden lg:block absolute -top-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10 whitespace-nowrap">
                             <div 
-                              className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45"
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white shadow-lg"
                               style={{ backgroundColor: '#05A8F9' }}
-                            ></div>
+                            >
+                              {s.label}
+                              <div 
+                                className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45"
+                                style={{ backgroundColor: '#05A8F9' }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
+                        
+                        {/* Línea conectora */}
+                        {index < wizardSteps.length - 1 && (
+                          <div 
+                            className="flex-1 h-[2px] sm:h-[2.5px] md:h-0.5 transition-colors mx-1 sm:mx-1.5 md:mx-2 lg:mx-3"
+                            style={{ 
+                              backgroundColor: currentStepNumber > s.number ? '#05A8F9' : '#E5E7EB'
+                            }}
+                          />
+                        )}
                       </div>
-
-                      {/* Línea conectora - SE ADAPTA AUTOMÁTICAMENTE */}
-                      {index < wizardSteps.length - 1 && (
-                        <div 
-                          className="flex-1 h-0.5 transition-colors mx-1.5 sm:mx-2 md:mx-3"
-                          style={{ 
-                            backgroundColor: currentStepNumber > s.number ? '#05A8F9' : '#E5E7EB'
-                          }}
-                        />
-                      )}
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -1351,35 +1387,35 @@ export default function Enrollment() {
           ======================================== */}
           {step === 'code-verification' && (
             <div className="w-full">
-              <div className="max-w-xl mx-auto space-y-6">
+              <div className="max-w-xl mx-auto space-y-4 sm:space-y-6 px-4">
                 
                 {/* Divider superior */}
-                <div className="relative mb-8">
+                <div className="relative mb-6 sm:mb-8">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-200"></div>
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="px-4 bg-white text-sm font-semibold text-gray-500">
+                    <span className="px-3 sm:px-4 bg-white text-xs sm:text-sm font-semibold text-gray-500">
                       Verificación de correo electrónico
                     </span>
                   </div>
                 </div>
 
                 <div className="text-center">
-                  <p className="text-lg text-gray-600 mb-2">
+                  <p className="text-sm sm:text-base lg:text-lg text-gray-600 mb-1 sm:mb-2 px-2">
                     Enviamos un código de verificación a:
                   </p>
-                  <p className="text-xl font-bold mb-8" style={{ color: '#05A8F9' }}>
+                  <p className="text-base sm:text-lg lg:text-xl font-bold mb-6 sm:mb-8 break-all px-2" style={{ color: '#05A8F9' }}>
                     {email}
                   </p>
                 </div>
 
-                <div className="mb-6">
-                  <label className="block text-sm font-semibold text-gray-700 mb-4 text-center">
+                <div className="mb-4 sm:mb-6">
+                  <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-3 sm:mb-4 text-center">
                     Código de 6 dígitos
                   </label>
                   
-                  <div className="flex gap-3 justify-center">
+                  <div className="flex gap-1.5 sm:gap-2 lg:gap-3 justify-center px-2">
                     {[0, 1, 2, 3, 4, 5].map((index) => (
                       <input
                         key={index}
@@ -1393,7 +1429,8 @@ export default function Enrollment() {
                         onPaste={index === 0 ? handleCodePaste : undefined}
                         disabled={verifyingCode}
                         className={`
-                          w-12 h-14 text-center text-2xl font-bold rounded-lg
+                          w-9 h-11 sm:w-11 sm:h-13 lg:w-12 lg:h-14
+                          text-center text-lg sm:text-xl lg:text-2xl font-bold rounded-lg
                           border-2 transition-all duration-200
                           ${codeError
                             ? 'border-red-400 bg-red-50 text-red-600'
@@ -1401,12 +1438,12 @@ export default function Enrollment() {
                             ? 'bg-cyan-50 text-cyan-700'
                             : 'border-gray-300 bg-white text-gray-900'
                           }
-                          focus:outline-none focus:ring-4
+                          focus:outline-none focus:ring-2 sm:focus:ring-4
                           disabled:opacity-50 disabled:cursor-not-allowed
                         `}
                         style={{
                           borderColor: verificationCode[index] && !codeError ? '#05A8F9' : undefined,
-                          boxShadow: verificationCode[index] && !codeError ? '0 0 0 4px rgba(5, 168, 249, 0.1)' : undefined
+                          boxShadow: verificationCode[index] && !codeError ? '0 0 0 2px rgba(5, 168, 249, 0.1)' : undefined
                         }}
                         autoFocus={index === 0}
                       />
@@ -1415,18 +1452,18 @@ export default function Enrollment() {
                 </div>
 
                 {codeError && (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-                    <XCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm font-semibold text-red-800">{codeError}</p>
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3 sm:p-4 flex items-start gap-2 sm:gap-3">
+                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs sm:text-sm font-semibold text-red-800">{codeError}</p>
                   </div>
                 )}
 
-                {/* Botón VERIFICAR*/}
-                <div className="flex justify-center pt-4">
+                {/* Botón VERIFICAR - TAMAÑO FIJO EN TODOS LOS TAMAÑOS */}
+                <div className="flex justify-center pt-2 sm:pt-4">
                   <button
                     onClick={handleVerifyCode}
                     disabled={verifyingCode || verificationCode.some(d => !d)}
-                    className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide flex items-center gap-2"
+                    className="w-auto max-w-[200px] sm:max-w-[240px] px-6 sm:px-8 py-2.5 sm:py-3 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm tracking-wide flex items-center justify-center gap-2"
                     style={{
                       background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                       boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
@@ -1446,14 +1483,14 @@ export default function Enrollment() {
                   </button>
                 </div>
 
-                <div className="border-t-2 mt-8 pt-6 text-center" style={{ borderColor: '#F4FCFF' }}>
-                  <p className="text-sm text-gray-600 mb-2">
+                <div className="border-t-2 mt-6 sm:mt-8 pt-4 sm:pt-6 text-center" style={{ borderColor: '#F4FCFF' }}>
+                  <p className="text-xs sm:text-sm text-gray-600 mb-2">
                     ¿No recibiste el código?
                   </p>
                   
                   {resendSuccess && (
-                    <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                      <p className="text-sm text-green-700 font-medium">
+                    <div className="mb-3 p-2.5 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <p className="text-xs sm:text-sm text-green-700 font-medium">
                         ✓ Código reenviado exitosamente
                       </p>
                     </div>
@@ -1463,7 +1500,7 @@ export default function Enrollment() {
                     type="button"
                     onClick={handleResendCode}
                     disabled={resendingCode || resendCooldown > 0}
-                    className="text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="text-xs sm:text-sm font-semibold hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ color: '#05A8F9' }}
                   >
                     {resendingCode ? (
@@ -1515,7 +1552,7 @@ export default function Enrollment() {
                   </div>
                   <div className="relative flex justify-center">
                     <span className="px-4 bg-white text-sm font-semibold text-gray-500">
-                      Selecciona tu secuencia biometrica
+                      Selecciona tu secuencia biométrica
                     </span>
                   </div>
                 </div>
@@ -1603,25 +1640,26 @@ export default function Enrollment() {
 
                   {selectedGestures.length > 0 && (
                     <div 
-                      className="mt-6 p-5 rounded-2xl border-2"
+                      className="mt-4 sm:mt-5 lg:mt-6 p-2.5 min-[400px]:p-4 lg:p-5 rounded-xl lg:rounded-2xl border lg:border-2"
                       style={{ 
                         backgroundColor: '#F4FCFF',
                         borderColor: '#6FBFDE'
                       }}
                     >
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="p-2 bg-white rounded-lg shadow-sm">
-                          <Hand className="w-4 h-4" style={{ color: '#05A8F9' }} />
+                      <div className="flex items-center gap-1.5 min-[400px]:gap-2 lg:gap-3 mb-2 min-[400px]:mb-3">
+                        <div className="p-1 min-[400px]:p-1.5 lg:p-2 bg-white rounded-lg shadow-sm flex-shrink-0">
+                          <Hand className="w-3 h-3 min-[400px]:w-3.5 min-[400px]:h-3.5 lg:w-4 lg:h-4" style={{ color: '#05A8F9' }} />
                         </div>
-                        <p className="text-sm font-bold" style={{ color: '#05A8F9' }}>
-                          Secuencia biometrica:
+                        <p className="text-[10px] min-[400px]:text-xs lg:text-sm font-bold" style={{ color: '#05A8F9' }}>
+                          Secuencia biométrica:
                         </p>
                       </div>
-                      <div className="flex items-center gap-2 flex-wrap">
+                      
+                      <div className="flex items-center gap-0.5 min-[400px]:gap-1 lg:gap-2 flex-wrap">
                         {selectedGestures.map((gesture, index) => (
                           <div key={gesture} className="flex items-center">
                             <span 
-                              className="px-3 py-1.5 bg-white rounded-lg text-sm font-semibold shadow-sm border"
+                              className="px-1.5 py-0.5 min-[400px]:px-2.5 min-[400px]:py-1.5 lg:px-3 bg-white rounded min-[400px]:rounded-lg text-[9px] min-[400px]:text-xs lg:text-sm font-semibold shadow-sm border whitespace-nowrap"
                               style={{ 
                                 color: '#05A8F9',
                                 borderColor: '#6FBFDE'
@@ -1630,7 +1668,7 @@ export default function Enrollment() {
                               {gesture.replace('_', ' ')}
                             </span>
                             {index < selectedGestures.length - 1 && (
-                              <ArrowRight className="w-4 h-4 mx-1" style={{ color: '#6FBFDE' }} />
+                              <ArrowRight className="w-2.5 h-2.5 min-[400px]:w-3.5 min-[400px]:h-3.5 lg:w-4 lg:h-4 mx-0.5 min-[400px]:mx-1" style={{ color: '#6FBFDE' }} />
                             )}
                           </div>
                         ))}
@@ -1700,7 +1738,8 @@ export default function Enrollment() {
                     </span>
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium text-gray-600">
-                        {sessionStatus.samples_collected || 0} / {sessionStatus.samples_needed || 21} muestras
+                        {/* {sessionStatus.samples_collected || 0} / {sessionStatus.samples_needed || 24} muestras */}
+                        {sessionStatus.current_gesture_samples || 0} / 8 muestras
                       </span>
                       <span className="text-lg font-black" style={{ color: '#05A8F9' }}>
                         {Math.round(sessionStatus.progress || 0)}%
@@ -1720,144 +1759,82 @@ export default function Enrollment() {
                 </div>
               )}
 
-              {/* Secuencia de Gestos*/}
+              {/* Secuencia de Gestos - COMPACTA EN TODOS LOS TAMAÑOS */}
               {sessionStatus && selectedGestures.length > 0 && (
-              <div 
-                className="p-3 sm:p-5 rounded-xl border-2 mb-4 sm:mb-6"
-                style={{ 
-                  backgroundColor: '#F0F9FF',
-                  borderColor: '#BFDBFE'
-                }}
-              >
-                <div className="flex items-center justify-between mb-3 sm:mb-4">
-                  <h3 className="text-xs sm:text-sm font-semibold text-blue-900">Secuencia de gestos</h3>
-                  <span className="text-[10px] sm:text-xs font-semibold text-blue-600">
-                    {sessionStatus.samples_collected 
-                      ? `${Math.floor(sessionStatus.samples_collected / 7)}/${selectedGestures.length} gestos`
-                      : `0/${selectedGestures.length} gestos`
-                    }
-                  </span>
-                </div>
-                
-                {/* Secuencia horizontal con flechas - MÁS COMPACTA */}
-                <div className="flex items-center justify-center gap-1.5 sm:gap-3 flex-wrap mb-3 sm:mb-4">
-                  {selectedGestures.map((gesture, idx) => {
-                    const currentGestureIndex = selectedGestures.findIndex(g => g === sessionStatus.current_gesture)
-                    const isCurrent = idx === currentGestureIndex
-                    const isCompleted = idx < currentGestureIndex
-                    
-                    return (
-                      <div key={idx} className="flex items-center gap-1 sm:gap-2">
-                        <div 
-                          className={`
-                            px-2 py-2 sm:px-4 sm:py-3 rounded-lg border-2 transition-all duration-300 flex items-center gap-1.5 sm:gap-2
-                            ${isCompleted 
-                              ? 'bg-green-100 border-green-500' 
-                              : isCurrent
-                              ? 'bg-blue-100 border-blue-500 ring-2 ring-blue-300 ring-offset-2 animate-pulse'
-                              : 'bg-gray-100 border-gray-300'
-                            }
-                          `}
-                        >
-                          <img 
-                            src={`/${gesture}.png`}
-                            alt={gesture.replace('_', ' ')}
-                            className="w-5 h-5 sm:w-8 sm:h-8 object-contain"
-                          />
-                          <div className="flex items-center gap-1 sm:gap-2">
-                            {isCompleted && (
-                              <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
-                            )}
-                            <span className={`text-[10px] sm:text-sm font-semibold ${
-                              isCompleted 
-                                ? 'text-green-900' 
-                                : isCurrent
-                                ? 'text-blue-900'
-                                : 'text-gray-600'
-                            }`}>
-                              {isCurrent && '→ '}
-                              <span className="hidden sm:inline">{gesture.replace('_', ' ')}</span>
-                              <span className="sm:hidden">{gesture.replace('_', ' ').split(' ')[0]}</span>
-                            </span>
-                          </div>
-                        </div>
-                        
-                        {idx < selectedGestures.length - 1 && (
-                          <ArrowRight className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                            isCompleted ? 'text-green-400' : 'text-gray-300'
-                          }`} />
-                        )}
-                      </div>
-                    )
-                  })}
-                </div>
-
-                {/* Grid: Gesto esperado + Estado - MÁS COMPACTO */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3">
+                <div 
+                  className="p-2.5 sm:p-3 lg:p-4 rounded-lg lg:rounded-xl border lg:border-2 mb-3 sm:mb-4 lg:mb-5"
+                  style={{ 
+                    backgroundColor: '#F0F9FF',
+                    borderColor: '#BFDBFE'
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-2 sm:mb-2.5 lg:mb-3">
+                    <h3 className="text-[10px] sm:text-xs lg:text-sm font-semibold text-blue-900">Secuencia de gestos</h3>
+                    <span className="text-[9px] sm:text-[10px] lg:text-xs font-semibold text-blue-600">
+                      {sessionStatus.samples_collected 
+                        ? `${Math.floor(sessionStatus.samples_collected / 8)}/${selectedGestures.length} gestos`
+                        : `0/${selectedGestures.length} gestos`
+                      }
+                    </span>
+                  </div>
                   
-                  {/* Card: Gesto Esperado */}
-                  <div 
-                    className="p-2 sm:p-3 rounded-lg border-2"
-                    style={{ 
-                      backgroundColor: '#F0F9FF',
-                      borderColor: '#BFDBFE'
-                    }}
-                  >
-                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                      <Hand className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
-                      <p className="text-[10px] sm:text-xs font-semibold text-blue-700">
-                        Gesto Esperado
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <img 
-                        src={sessionStatus.current_gesture ? `/${sessionStatus.current_gesture}.png` : '/Hand.png'}
-                        alt={sessionStatus.current_gesture?.replace('_', ' ') || 'Esperando'}
-                        className="w-10 h-10 sm:w-16 sm:h-16 object-contain"
-                      />
-                      <p className="text-sm sm:text-base font-bold text-blue-900">
-                        {sessionStatus.current_gesture?.replace('_', ' ') || 'Esperando...'}
-                      </p>
-                    </div>
+                  {/* Secuencia horizontal con flechas - COMPACTA */}
+                  <div className="flex items-center justify-center gap-0.5 min-[400px]:gap-1 sm:gap-1.5 lg:gap-2 flex-wrap">
+                    {selectedGestures.map((gesture, idx) => {
+                      const currentGestureIndex = selectedGestures.findIndex(g => g === sessionStatus.current_gesture)
+                      const isCurrent = idx === currentGestureIndex
+                      const isCompleted = idx < currentGestureIndex
+                      
+                      return (
+                        <div key={idx} className="flex items-center gap-0.5 min-[400px]:gap-0.5 sm:gap-1 lg:gap-1.5">
+                          <div 
+                            className={`
+                              px-1 py-1 min-[400px]:px-1.5 min-[400px]:py-1.5 sm:px-2 sm:py-2 lg:px-3 lg:py-2.5
+                              rounded min-[400px]:rounded-lg border min-[400px]:border-2 
+                              transition-all duration-300 
+                              flex items-center gap-0.5 min-[400px]:gap-1 sm:gap-1.5
+                              ${isCompleted 
+                                ? 'bg-green-100 border-green-500' 
+                                : isCurrent
+                                ? 'bg-blue-100 border-blue-500 ring-1 min-[400px]:ring-2 ring-blue-300 animate-pulse'
+                                : 'bg-gray-100 border-gray-300'
+                              }
+                            `}
+                          >
+                            <img 
+                              src={`/${gesture}.png`}
+                              alt={gesture.replace('_', ' ')}
+                              className="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 object-contain flex-shrink-0"
+                            />
+                            <div className="flex items-center gap-0.5 min-[400px]:gap-0.5 sm:gap-1">
+                              {isCompleted && (
+                                <CheckCircle className="w-2.5 h-2.5 min-[400px]:w-3 min-[400px]:h-3 sm:w-3.5 sm:h-3.5 text-green-600 flex-shrink-0" />
+                              )}
+                              <span className={`text-[8px] min-[400px]:text-[9px] sm:text-[10px] lg:text-xs font-semibold whitespace-nowrap ${
+                                isCompleted 
+                                  ? 'text-green-900' 
+                                  : isCurrent
+                                  ? 'text-blue-900'
+                                  : 'text-gray-600'
+                              }`}>
+                                {isCurrent && '→ '}
+                                <span className="hidden min-[400px]:inline">{gesture.replace('_', ' ')}</span>
+                                <span className="min-[400px]:hidden">{gesture.replace('_', ' ').split(' ')[0]}</span>
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {idx < selectedGestures.length - 1 && (
+                            <ArrowRight className={`w-2 h-2 min-[400px]:w-2.5 min-[400px]:h-2.5 sm:w-3 sm:h-3 lg:w-3.5 lg:h-3.5 flex-shrink-0 ${
+                              isCompleted ? 'text-green-400' : 'text-gray-300'
+                            }`} />
+                          )}
+                        </div>
+                      )
+                    })}
                   </div>
-
-                  {/* Card: Estado en Tiempo Real */}
-                  <div 
-                    className="p-2 sm:p-3 rounded-lg border-2 transition-all duration-300"
-                    style={{
-                      backgroundColor: sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓')
-                        ? '#F0FDF4'
-                        : '#FFFFFF',
-                      borderColor: sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓')
-                        ? '#10B981'
-                        : '#E5E7EB'
-                    }}
-                  >
-                    <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
-                      {sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓') ? (
-                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
-                      ) : (
-                        <Camera className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
-                      )}
-                      <p className="text-[10px] sm:text-xs font-semibold text-gray-700">
-                        Estado en tiempo real
-                      </p>
-                    </div>
-                    
-                    {sessionStatus.message ? (
-                      <p className="text-xs sm:text-sm font-medium text-gray-900">
-                        {sessionStatus.message}
-                      </p>
-                    ) : (
-                      <p className="text-xs sm:text-sm font-medium text-gray-500">
-                        Esperando detección...
-                      </p>
-                    )}
-                  </div>
-
                 </div>
-              </div>
-            )}
+              )}
               {/* Cámara */}
               <div 
                 className="rounded-2xl overflow-hidden border-4 mb-6"
@@ -1881,14 +1858,52 @@ export default function Enrollment() {
                 </div>
               )}
 
-              {/* Botón cancelar */}
+              {/* Card: Estado en Tiempo Real - DESPUÉS DE CÁMARA */}
+              {sessionStatus && (
+                <div className="mb-4 sm:mb-6">
+                  <div 
+                    className="p-2 sm:p-2.5 lg:p-3 rounded-lg border lg:border-2 transition-all duration-300"
+                    style={{
+                      backgroundColor: sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓')
+                        ? '#F0FDF4'
+                        : '#FFFFFF',
+                      borderColor: sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓')
+                        ? '#10B981'
+                        : '#E5E7EB'
+                    }}
+                  >
+                    <div className="flex items-center gap-1 sm:gap-1.5 mb-1 sm:mb-1.5">
+                      {sessionStatus.message?.includes('Capturada') || sessionStatus.message?.includes('✓') ? (
+                        <CheckCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-green-600 flex-shrink-0" />
+                      ) : (
+                        <Camera className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-gray-500 flex-shrink-0" />
+                      )}
+                      <p className="text-[9px] sm:text-[10px] lg:text-xs font-semibold text-gray-700">
+                        Estado en tiempo real
+                      </p>
+                    </div>
+                    
+                    {sessionStatus.message ? (
+                      <p className="text-[10px] sm:text-xs lg:text-sm font-medium text-gray-900 leading-tight">
+                        {sessionStatus.message}
+                      </p>
+                    ) : (
+                      <p className="text-[10px] sm:text-xs lg:text-sm font-medium text-gray-500 leading-tight">
+                        Esperando detección...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Botón cancelar - RESPONSIVE */}
               <div className="flex justify-center">
                 <Button 
                   variant="danger" 
                   onClick={handleCancel} 
-                  className="px-6 py-3 rounded-full font-bold flex items-center gap-2"
+                  className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-6 lg:py-3 rounded-full font-bold flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base"
                 >
-                  <XCircle className="w-4 h-4" />
+                  <XCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   Cancelar
                 </Button>
               </div>

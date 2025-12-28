@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
 import { Search, CheckCircle, XCircle, Users, AlertCircle, Clock, Brain, Hand, ArrowLeft, Shield, Info, FileText, Video, Loader2 } from 'lucide-react'
+import TimeoutModal from '../../components/TimeoutModal'
 
 export default function Identification() {
   const navigate = useNavigate()
@@ -16,6 +17,8 @@ export default function Identification() {
   
   const [capturedSequence, setCapturedSequence] = useState([])
   const [sequenceComplete, setSequenceComplete] = useState(false)
+
+  const [timeoutInfo, setTimeoutInfo] = useState(null)
 
   // REFS PARA CÁMARA Y CANVAS
   const videoRef = useRef(null)
@@ -211,7 +214,7 @@ export default function Identification() {
         
         let message = frameResult.message || ''
         if (gesturesCaptured < gesturesNeeded) {
-          message = `Capturando gestos (${gesturesCaptured}/${gesturesNeeded} gestos diferentes)`
+          message = `Capturando gestos (${gesturesCaptured}/${gesturesNeeded})`
         } else if (frameResult.phase === 'template_matching') {
           message = 'Buscando coincidencias en base de datos'
         } else if (frameResult.phase === 'score_fusion') {
@@ -267,8 +270,53 @@ export default function Identification() {
       } catch (err) {
         isProcessingFrameRef.current = false
 
-        if (err.response?.status === 410) {
-          console.log('Recibido 410 - sesión completada, deteniendo')
+        const errorDetail = err.response?.data?.detail
+
+        // Manejo de timeout 408
+        if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
+          console.log('Timeout detectado - mostrando modal')
+          setTimeoutInfo({
+            type: errorDetail.error_type || 'timeout_total',
+            duration: errorDetail.details?.duration || 0,
+            gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+            gesturesRequired: errorDetail.details?.gestures_required || 3,
+            timeLimit: errorDetail.details?.time_limit || 45
+          })
+          sessionCompletedRef.current = true
+          stopProcessing()
+          return
+        }
+
+        // Manejo de timeout 410
+        if (err.response?.status === 410 && errorDetail?.error === 'session_timeout') {
+          console.log('Timeout 410 detectado - mostrando modal')
+          setTimeoutInfo({
+            type: errorDetail.error_type || 'timeout_total',
+            duration: errorDetail.details?.duration || 0,
+            gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+            gesturesRequired: errorDetail.details?.gestures_required || 3,
+            timeLimit: errorDetail.details?.time_limit || 45,
+            inactivity_limit: errorDetail.details?.inactivity_limit || 15,
+            incorrect_gesture_limit: errorDetail.details?.incorrect_gesture_limit || 8,
+            message: errorDetail?.message
+          })
+          sessionCompletedRef.current = true
+          stopProcessing()
+          return
+        }
+
+        // Sesión limpiada
+        if (err.response?.status === 410 && 
+            (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+          console.log('Sesión limpiada - mostrando modal')
+          setTimeoutInfo({
+            type: 'session_cleaned',
+            duration: 0,
+            gesturesCaptured: 0,
+            gesturesRequired: 3,
+            timeLimit: 45,
+            message: errorDetail?.message || 'La sesión fue cerrada'
+          })
           sessionCompletedRef.current = true
           stopProcessing()
           return
@@ -310,6 +358,24 @@ export default function Identification() {
         ? 'Usuario identificado exitosamente' 
         : 'No se pudo identificar al usuario'
     })
+  }
+
+  const handleRetryAfterTimeout = () => {
+    setTimeoutInfo(null)
+    setError(null)
+    setStatusMessage('')
+    setStep('ready')
+    setProcessing(false)
+    setResult(null)
+    setCapturedSequence([])
+    setSequenceComplete(false)
+    sessionCompletedRef.current = false
+    isProcessingFrameRef.current = false
+  }
+
+  const handleCancelAfterTimeout = () => {
+    setTimeoutInfo(null)
+    navigate('/')
   }
 
   const handleReset = () => {
@@ -644,7 +710,7 @@ export default function Identification() {
               </div>
 
               {/* Secuencia Capturada */}
-              {capturedSequence.length > 0 && (
+              {/* {capturedSequence.length > 0 && (
                 <div 
                   className="p-5 rounded-xl border-2 mb-6"
                   style={{ 
@@ -653,7 +719,7 @@ export default function Identification() {
                   }}
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-semibold text-blue-900">Secuencia Capturada</h3>
+                    <h3 className="text-sm font-semibold text-blue-900">Secuencia capturada</h3>
                     <Badge variant={sequenceComplete ? 'success' : 'default'}>
                       {capturedSequence.length}/3 gestos
                     </Badge>
@@ -671,7 +737,6 @@ export default function Identification() {
                       </div>
                     ))}
                     
-                    {/* Placeholders */}
                     {capturedSequence.length < 3 && Array.from({ length: 3 - capturedSequence.length }).map((_, idx) => (
                       <div key={`empty-${idx}`} className="flex items-center gap-2">
                         {capturedSequence.length > 0 && (
@@ -689,6 +754,58 @@ export default function Identification() {
                       <CheckCircle className="w-4 h-4 text-blue-700" />
                       <p className="text-xs text-blue-700 font-medium">
                         Secuencia completa - Buscando coincidencias en base de datos
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )} */}
+
+              {/* Secuencia Capturada */}
+              {capturedSequence.length > 0 && (
+                <div 
+                  className="p-2 lg:p-5 rounded-lg lg:rounded-xl border lg:border-2 mb-3 lg:mb-6"
+                  style={{ 
+                    backgroundColor: '#F0F9FF',
+                    borderColor: '#BFDBFE'
+                  }}
+                >
+                  <div className="flex items-center justify-between mb-1.5 lg:mb-4">
+                    <h3 className="text-[10px] lg:text-sm font-semibold text-blue-900">Secuencia capturada</h3>
+                    <Badge variant={sequenceComplete ? 'success' : 'default'}>
+                      <span className="text-[10px] lg:text-xs">{capturedSequence.length}/3 gestos</span>
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center justify-center gap-1 lg:gap-3 flex-wrap">
+                    {capturedSequence.map((gesture, idx) => (
+                      <div key={idx} className="flex items-center gap-0.5 lg:gap-2">
+                        <div className="px-1.5 py-1 lg:px-4 lg:py-3 bg-white border lg:border-2 border-blue-300 rounded lg:rounded-lg">
+                          <span className="text-[10px] lg:text-sm font-semibold text-blue-900">{gesture}</span>
+                        </div>
+                        {idx < 2 && (
+                          <ArrowLeft className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-blue-400 rotate-180" />
+                        )}
+                      </div>
+                    ))}
+                    
+                    {/* Placeholders */}
+                    {capturedSequence.length < 3 && Array.from({ length: 3 - capturedSequence.length }).map((_, idx) => (
+                      <div key={`empty-${idx}`} className="flex items-center gap-0.5 lg:gap-2">
+                        {capturedSequence.length > 0 && (
+                          <ArrowLeft className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-gray-300 rotate-180" />
+                        )}
+                        <div className="px-1.5 py-1 lg:px-4 lg:py-3 bg-gray-100 border lg:border-2 border-gray-300 rounded lg:rounded-lg">
+                          <span className="text-[10px] lg:text-sm text-gray-400">?</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {sequenceComplete && (
+                    <div className="flex items-center gap-1 lg:gap-2 mt-1.5 lg:mt-3">
+                      <CheckCircle className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-blue-700" />
+                      <p className="text-[10px] lg:text-xs text-blue-700 font-medium">
+                        Secuencia completa - Buscando coincidencias
                       </p>
                     </div>
                   )}
@@ -770,31 +887,35 @@ export default function Identification() {
               STEP: RESULT
           ======================================== */}
           {step === 'result' && result && (
-            <div className="max-w-2xl mx-auto text-center">
+            <div className="max-w-2xl mx-auto text-center px-4">
               
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full shadow-lg mb-6"
+              {/* Icono de resultado */}
+              <div 
+                className="inline-flex items-center justify-center w-16 h-16 lg:w-20 lg:h-20 rounded-full shadow-lg mb-4 lg:mb-6"
                 style={{ backgroundColor: result.success ? '#10B981' : '#EF4444' }}
               >
                 {result.success ? (
-                  <svg className="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-10 h-10 lg:w-14 lg:h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3.5} d="M5 13l4 4L19 7" />
                   </svg>
                 ) : (
-                  <XCircle className="w-14 h-14 text-white" />
+                  <XCircle className="w-10 h-10 lg:w-14 lg:h-14 text-white" />
                 )}
               </div>
 
-              <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-4">
+              {/* Título */}
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-gray-800 mb-3 lg:mb-4">
                 <span className={`bg-gradient-to-r ${
                   result.success 
                     ? 'from-green-500 to-emerald-500' 
                     : 'from-red-500 to-red-600'
                 } bg-clip-text text-transparent`}>
-                  {result.success ? 'Usuario Identificado' : 'Identificación Fallida'}
+                  {result.success ? 'Usuario Identificado' : 'Identificación fallida'}
                 </span>
               </h2>
 
-              <p className="text-lg text-gray-600 mb-8">
+              {/* Descripción */}
+              <p className="text-sm lg:text-lg text-gray-600 mb-6 lg:mb-8 px-2">
                 {result.success 
                   ? `Has sido identificado como: ${result.username}`
                   : 'No se pudo identificar al usuario'
@@ -804,19 +925,21 @@ export default function Identification() {
               {/* Secuencia capturada */}
               {result.captured_sequence && result.captured_sequence.length > 0 && (
                 <div 
-                  className="p-5 rounded-xl border-2 mb-8"
+                  className="p-3 lg:p-5 rounded-lg lg:rounded-xl border lg:border-2 mb-6 lg:mb-8"
                   style={{ 
                     backgroundColor: '#F0F9FF',
                     borderColor: '#BFDBFE'
                   }}
                 >
-                  <h3 className="text-sm font-semibold text-blue-900 mb-3">Secuencia Capturada</h3>
-                  <div className="flex items-center justify-center gap-2">
+                  <h3 className="text-xs lg:text-sm font-semibold text-blue-900 mb-2 lg:mb-3">Secuencia capturada</h3>
+                  <div className="flex items-center justify-center gap-1 lg:gap-2 flex-wrap">
                     {result.captured_sequence.map((gesture, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <Badge variant="outline">{gesture}</Badge>
+                      <div key={idx} className="flex items-center gap-1 lg:gap-2">
+                        <Badge variant="outline">
+                          <span className="text-[10px] lg:text-xs">{gesture}</span>
+                        </Badge>
                         {idx < result.captured_sequence.length - 1 && (
-                          <ArrowLeft className="w-4 h-4 text-gray-400 rotate-180" />
+                          <ArrowLeft className="w-3 h-3 lg:w-4 lg:h-4 text-gray-400 rotate-180" />
                         )}
                       </div>
                     ))}
@@ -825,41 +948,42 @@ export default function Identification() {
               )}
 
               {/* Detalles */}
-              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-6 max-w-md mx-auto mb-8">
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                    <span className="text-sm font-medium text-gray-700">Usuario Identificado</span>
-                    <span className="text-sm font-bold text-gray-900">{result.username}</span>
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl lg:rounded-2xl p-4 lg:p-6 max-w-md mx-auto mb-6 lg:mb-8">
+                <div className="space-y-2 lg:space-y-3">
+                  <div className="flex items-center justify-between p-2 lg:p-3 bg-white rounded-lg">
+                    <span className="text-xs lg:text-sm font-medium text-gray-700">Usuario identificado</span>
+                    <span className="text-xs lg:text-sm font-bold text-gray-900 truncate ml-2">{result.username}</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                    <span className="text-sm font-medium text-gray-700">ID de Usuario</span>
-                    <span className="text-sm text-gray-600">{result.user_id}</span>
+                  <div className="flex items-center justify-between p-2 lg:p-3 bg-white rounded-lg">
+                    <span className="text-xs lg:text-sm font-medium text-gray-700">ID de usuario</span>
+                    <span className="text-xs lg:text-sm text-gray-600 truncate ml-2">{result.user_id}</span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                    <span className="text-sm font-medium text-gray-700">Confianza</span>
+                  <div className="flex items-center justify-between p-2 lg:p-3 bg-white rounded-lg">
+                    <span className="text-xs lg:text-sm font-medium text-gray-700">Confianza</span>
                     <Badge variant={result.success ? 'success' : 'danger'}>
-                      {(result.confidence * 100).toFixed(1)}%
+                      <span className="text-[10px] lg:text-xs">{(result.confidence * 100).toFixed(1)}%</span>
                     </Badge>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                    <span className="text-sm font-medium text-gray-700">Duración</span>
-                    <span className="text-sm text-gray-600 flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
+                  <div className="flex items-center justify-between p-2 lg:p-3 bg-white rounded-lg">
+                    <span className="text-xs lg:text-sm font-medium text-gray-700">Duración</span>
+                    <span className="text-xs lg:text-sm text-gray-600 flex items-center gap-1">
+                      <Clock className="w-3 h-3 lg:w-4 lg:h-4" />
                       {result.duration.toFixed(1)}s
                     </span>
                   </div>
                 </div>
               </div>
 
+              {/* Botón */}
               <Button 
                 onClick={handleReset} 
-                className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 flex items-center gap-2 mx-auto"
+                className="px-6 lg:px-8 py-2.5 lg:py-3 text-white text-sm lg:text-base font-bold rounded-full transition-all duration-300 flex items-center gap-2 mx-auto"
                 style={{
                   background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                   boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
                 }}
               >
-                <Search className="w-4 h-4" />
+                <Search className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                 Nueva identificación
               </Button>
             </div>
@@ -867,6 +991,13 @@ export default function Identification() {
 
         </div>
       </div>
+
+      {/* Modal de Timeout */}
+      <TimeoutModal
+        timeoutInfo={timeoutInfo}
+        onRetry={handleRetryAfterTimeout}
+        onCancel={handleCancelAfterTimeout}
+      />
     </div>
   )
 }

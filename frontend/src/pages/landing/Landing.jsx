@@ -189,19 +189,7 @@ export default function Landing() {
               Auth-Gesture
             </span>
           </div>
-          
-          {/* Botón Acceder móvil */}
-          <Button
-            onClick={() => setShowLoginModal(true)}
-            className="px-4 py-2 text-white font-bold rounded-full transition-all duration-300 flex items-center gap-2 text-sm"
-            style={{
-              background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
-              boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
-            }}
-          >
-            <Key className="w-4 h-4" />
-            Acceder
-          </Button>
+        
         </div>
 
         {/* Contenido principal centrado - RESPONSIVE */}
@@ -285,7 +273,7 @@ export default function Landing() {
             {/* ========================================
                 FEATURE CARDS - RESPONSIVE 1 columna mobile, 3 desktop
             ======================================== */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-7xl px-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5 2xl:gap-6 max-w-7xl px-4">
               <FeatureCard
                 icon={<Hand className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
                 title="Biométrico"

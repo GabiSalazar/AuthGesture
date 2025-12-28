@@ -392,7 +392,7 @@ const PersonalityQuestionnaire = ({ userId, username, onComplete }) => {
             borderColor: '#BFDBFE'
           }}
         >
-          <h3 className="text-lg font-bold text-gray-800 leading-relaxed">
+          <h3 className="text-lg font-bold text-gray-600 leading-relaxed">
             {questions[currentQuestion]}
           </h3>
         </div>

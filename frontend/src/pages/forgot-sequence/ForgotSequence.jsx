@@ -208,24 +208,35 @@ export default function ForgotSequence() {
       <div className="flex-1 bg-white h-screen overflow-y-auto">
         
         {/* Header móvil */}
-        <div className="lg:hidden flex items-center gap-3 p-4 border-b">
+        <div 
+          className="lg:hidden flex items-center justify-between px-3 py-2 border-b"
+          style={{ backgroundColor: '#0291B9' }}
+        >
           <button
             onClick={() => step > 1 ? setStep(step - 1) : navigate('/')}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
           >
-            <ArrowLeft className="w-5 h-5 text-gray-600" />
+            <ArrowLeft className="w-5 h-5 text-gray-600" style={{ color: '#ffffffff' }} />
           </button>
           
-          <img 
-            src="/logo.png" 
-            alt="Logo" 
-            className="h-8 w-8" 
-          />
-          
-          <span className="text-lg font-black uppercase tracking-tight bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+          <span 
+            className="absolute left-1/2 transform -translate-x-1/2 text-xl font-black uppercase tracking-tight"
+            style={{ color: '#fbfbfbff' }}
+          >
             Auth-Gesture
           </span>
+          
+          <video
+            src="/videito.mp4"
+            className="hidden sm:block w-25 h-16 object-contain opacity-95"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
         </div>
+
+        
 
         {/* Contenido principal centrado */}
         <div className="max-w-4xl mx-auto px-6 py-12">
