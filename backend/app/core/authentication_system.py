@@ -4175,6 +4175,7 @@ class RealAuthenticationSystem:
                     user_list.append({
                         'user_id': user.user_id,
                         'username': user.username,
+                        'email': getattr(user, 'email', None),
                         'total_templates': user.total_templates,
                         'success_rate': getattr(user, 'verification_success_rate', 0.0),
                         'last_activity': getattr(user, 'last_activity', time.time()),
