@@ -123,7 +123,7 @@ export default function Dashboard() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-2xl sm:text-3xl font-black text-gray-900">
+            <h1 className="text-2xl sm:text-3xl font-black text-gray-600">
               Panel de control
             </h1>
             <div 
@@ -384,7 +384,7 @@ export default function Dashboard() {
         </div>
 
         {/* Card: Templates */}
-        <div 
+        {/* <div 
           className="bg-white rounded-2xl border-2 shadow-lg p-6 hover:shadow-xl transition-all duration-300 hover:scale-105"
           style={{ borderColor: '#E0F2FE' }}
         >
@@ -410,7 +410,7 @@ export default function Dashboard() {
               <Database className="w-7 h-7" style={{ color: '#05A8F9' }} />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* ========================================

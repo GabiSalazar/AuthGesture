@@ -98,11 +98,6 @@ export default function AdminPanel() {
         <div className="p-6 border-b border-white/20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img 
-                src="/logo.png" 
-                alt="Logo" 
-                className="h-10 w-10 brightness-0 invert" 
-              />
               {!sidebarCollapsed && (
                 <div>
                   <h1 className="text-lg font-black uppercase tracking-tight text-white">
@@ -212,18 +207,6 @@ export default function AdminPanel() {
             >
               <Menu className="w-5 h-5 text-gray-600" />
             </button>
-
-            {/* Logo móvil */}
-            <div className="lg:hidden flex items-center gap-2">
-              <img 
-                src="/logo.png" 
-                alt="Logo" 
-                className="h-8 w-8" 
-              />
-              <span className="text-base font-black uppercase tracking-tight bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                Admin
-              </span>
-            </div>
           </div>
 
         {/* Área de contenido scrollable */}
@@ -248,31 +231,7 @@ export default function AdminPanel() {
             className="lg:hidden fixed inset-y-0 left-0 w-72 z-50 flex flex-col shadow-2xl"
             style={{ backgroundColor: '#00ACC1' }}
           >
-            {/* Header móvil */}
-            <div className="p-6 border-b border-white/20 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/logo.png" 
-                  alt="Logo" 
-                  className="h-10 w-10 brightness-0 invert" 
-                />
-                <div>
-                  <h1 className="text-lg font-black uppercase tracking-tight text-white">
-                    Auth-Gesture
-                  </h1>
-                  <p className="text-xs text-white/80 font-medium">
-                    Admin Panel
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
-            </div>
-
+          
             {/* Navegación móvil */}
             <nav className="flex-1 px-3 py-6 space-y-2 overflow-y-auto">
               {tabs.map((tab) => {

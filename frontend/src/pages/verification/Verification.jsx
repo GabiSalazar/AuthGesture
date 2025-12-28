@@ -973,28 +973,6 @@ export default function Verification() {
           ÁREA DE CONTENIDO PRINCIPAL
       ======================================== */}
       <div className="flex-1 bg-white h-screen overflow-y-auto">
-        
-        {/* Header móvil */}
-        {/* <div className="lg:hidden flex items-center justify-between p-4 border-b">
-          <button
-            onClick={handleGoBack}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <ArrowLeft className="w-6 h-6 text-gray-700" />
-          </button>
-          
-          <div className="flex items-center gap-2">
-            <img 
-              src="/logo.png" 
-              alt="Logo" 
-              className="h-8 w-8" 
-            />
-            <span className="text-lg font-black uppercase tracking-tight bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-              Auth-Gesture
-            </span>
-          </div>
-        </div> */}
-
         {/* Header móvil */}
         <div 
           className="lg:hidden flex items-center justify-between px-3 py-2 border-b"

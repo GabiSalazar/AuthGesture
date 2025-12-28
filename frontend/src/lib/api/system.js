@@ -146,6 +146,19 @@ export const systemApi = {
     }
   },
 
+  /**
+ * Obtiene estadísticas del sistema de fusión
+ */
+  getFusionStats: async () => {
+    try {
+      const { data } = await adminApiClient.get('/score-fusion/stats')
+      return data
+    } catch (error) {
+      console.error('Error obteniendo estadísticas de fusión:', error)
+      throw error
+    }
+  },
+
   // ========================================
   // MÉTRICAS DE REDES NEURONALES
   // ========================================

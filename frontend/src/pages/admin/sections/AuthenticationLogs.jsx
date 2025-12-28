@@ -35,6 +35,11 @@ export default function AuthenticationLogs() {
 
   const [showFilters, setShowFilters] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
+
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false)
+  const [authTypeDropdownOpen, setAuthTypeDropdownOpen] = useState(false)
+  const [resultDropdownOpen, setResultDropdownOpen] = useState(false)
+
   const itemsPerPage = 20
 
   useEffect(() => {
@@ -220,8 +225,8 @@ export default function AuthenticationLogs() {
       ======================================== */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-gray-900">
-            Registros de Autenticación
+          <h2 className="text-2xl sm:text-3xl font-black text-gray-700">
+            Registros de autenticación
           </h2>
           <p className="text-gray-600 text-sm mt-1">
             Historial completo de intentos de autenticación del sistema
@@ -414,7 +419,7 @@ export default function AuthenticationLogs() {
               </div>
 
               {/* Filtro por usuario */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-bold text-gray-700">
                   Usuario
                 </label>
@@ -439,10 +444,67 @@ export default function AuthenticationLogs() {
                     </option>
                   ))}
                 </select>
+              </div> */}
+
+              {/* Filtro por usuario */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-700">
+                  Usuario
+                </label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                    onBlur={() => setTimeout(() => setUserDropdownOpen(false), 200)}
+                    className="w-full px-4 py-3 border-2 rounded-xl text-left transition-all text-gray-900 font-medium flex items-center justify-between"
+                    style={{ 
+                      borderColor: userDropdownOpen ? '#05A8F9' : '#E0F2FE',
+                      boxShadow: userDropdownOpen ? '0 0 0 3px rgba(5, 168, 249, 0.1)' : 'none'
+                    }}
+                  >
+                    <span>
+                      {filters.user_id 
+                        ? `${filters.user_id} (${users.find(u => u.user_id === filters.user_id)?.username || 'Sin nombre'})`
+                        : 'Todos los usuarios'
+                      }
+                    </span>
+                    <svg className={`w-5 h-5 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {userDropdownOpen && (
+                    <div 
+                      className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg max-h-60 overflow-auto"
+                      style={{ borderColor: '#E0F2FE' }}
+                    >
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, user_id: '' })
+                          setUserDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Todos los usuarios
+                      </div>
+                      {users.map(user => (
+                        <div
+                          key={user.user_id}
+                          onClick={() => {
+                            setFilters({ ...filters, user_id: user.user_id })
+                            setUserDropdownOpen(false)
+                          }}
+                          className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                        >
+                          {user.user_id} ({user.username || 'Sin nombre'})
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Filtro por tipo */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-bold text-gray-700">
                   Tipo de Autenticación
                 </label>
@@ -464,10 +526,72 @@ export default function AuthenticationLogs() {
                   <option value="verification">Verificación (1:1)</option>
                   <option value="identification">Identificación (1:N)</option>
                 </select>
+              </div> */}
+
+              {/* Filtro por tipo */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-700">
+                  Tipo de Autenticación
+                </label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setAuthTypeDropdownOpen(!authTypeDropdownOpen)}
+                    onBlur={() => setTimeout(() => setAuthTypeDropdownOpen(false), 200)}
+                    className="w-full px-4 py-3 border-2 rounded-xl text-left transition-all text-gray-900 font-medium flex items-center justify-between"
+                    style={{ 
+                      borderColor: authTypeDropdownOpen ? '#05A8F9' : '#E0F2FE',
+                      boxShadow: authTypeDropdownOpen ? '0 0 0 3px rgba(5, 168, 249, 0.1)' : 'none'
+                    }}
+                  >
+                    <span>
+                      {filters.auth_type === 'all' ? 'Todos' :
+                      filters.auth_type === 'verification' ? 'Verificación (1:1)' :
+                      'Identificación (1:N)'}
+                    </span>
+                    <svg className={`w-5 h-5 transition-transform ${authTypeDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {authTypeDropdownOpen && (
+                    <div 
+                      className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg"
+                      style={{ borderColor: '#E0F2FE' }}
+                    >
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, auth_type: 'all' })
+                          setAuthTypeDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Todos
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, auth_type: 'verification' })
+                          setAuthTypeDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Verificación (1:1)
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, auth_type: 'identification' })
+                          setAuthTypeDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Identificación (1:N)
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Filtro por resultado */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <label className="block text-sm font-bold text-gray-700">
                   Estado
                 </label>
@@ -489,6 +613,68 @@ export default function AuthenticationLogs() {
                   <option value="success">Exitosos</option>
                   <option value="failed">Fallidos</option>
                 </select>
+              </div> */}
+
+              {/* Filtro por resultado */}
+              <div className="space-y-2">
+                <label className="block text-sm font-bold text-gray-700">
+                  Estado
+                </label>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setResultDropdownOpen(!resultDropdownOpen)}
+                    onBlur={() => setTimeout(() => setResultDropdownOpen(false), 200)}
+                    className="w-full px-4 py-3 border-2 rounded-xl text-left transition-all text-gray-900 font-medium flex items-center justify-between"
+                    style={{ 
+                      borderColor: resultDropdownOpen ? '#05A8F9' : '#E0F2FE',
+                      boxShadow: resultDropdownOpen ? '0 0 0 3px rgba(5, 168, 249, 0.1)' : 'none'
+                    }}
+                  >
+                    <span>
+                      {filters.result === 'all' ? 'Todos' :
+                      filters.result === 'success' ? 'Exitosos' :
+                      'Fallidos'}
+                    </span>
+                    <svg className={`w-5 h-5 transition-transform ${resultDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {resultDropdownOpen && (
+                    <div 
+                      className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg"
+                      style={{ borderColor: '#E0F2FE' }}
+                    >
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, result: 'all' })
+                          setResultDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Todos
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, result: 'success' })
+                          setResultDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Exitosos
+                      </div>
+                      <div
+                        onClick={() => {
+                          setFilters({ ...filters, result: 'failed' })
+                          setResultDropdownOpen(false)
+                        }}
+                        className="px-4 py-3 hover:bg-gray-50 cursor-pointer font-medium text-gray-900"
+                      >
+                        Fallidos
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Fecha desde */}

@@ -54,6 +54,7 @@ class UpdateUserRequest(BaseModel):
     age: Optional[int] = None
     gender: Optional[str] = None
     gesture_sequence: Optional[List[str]] = None
+    is_active: Optional[bool] = None
 
 @router.get("/health")
 async def biometric_database_health_check():
@@ -424,6 +425,8 @@ async def update_user(user_id: str, request: UpdateUserRequest):
             updates['gender'] = request.gender
         if request.gesture_sequence is not None:
             updates['gesture_sequence'] = request.gesture_sequence
+        if request.is_active is not None:
+            updates['is_active'] = request.is_active
         
         success = db.update_user(user_id, updates)
         
@@ -440,11 +443,53 @@ async def update_user(user_id: str, request: UpdateUserRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-@router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
+# @router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
 
+# async def get_user_auth_attempts(user_id: str, limit: int = 50):
+#     """Obtiene historial de autenticaciones de un usuario"""
+#     try:
+#         db = get_biometric_database()
+        
+#         if user_id not in db.users:
+#             raise HTTPException(status_code=404, detail=f"Usuario {user_id} no encontrado")
+        
+#         attempts = db.get_user_auth_attempts(user_id, limit=limit)
+        
+#         attempts_data = [
+#             {
+#                 "attempt_id": a.attempt_id,
+#                 "timestamp": a.timestamp,
+#                 "date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(a.timestamp)),
+#                 "auth_type": a.auth_type,
+#                 "result": a.result,
+#                 "confidence": round(a.confidence, 3),
+#                 "anatomical_score": round(a.anatomical_score, 3),
+#                 "dynamic_score": round(a.dynamic_score, 3),
+#                 "fused_score": round(a.fused_score, 3),
+#                 "ip_address": a.ip_address,
+#                 "failure_reason": a.failure_reason
+#             }
+#             for a in attempts
+#         ]
+        
+#         return {
+#             "status": "success",
+#             "user_id": user_id,
+#             "total_attempts": len(attempts_data),
+#             "attempts": attempts_data
+#         }
+        
+#     except HTTPException:
+#         raise
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+    
+
+@router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
 async def get_user_auth_attempts(user_id: str, limit: int = 50):
     """Obtiene historial de autenticaciones de un usuario"""
     try:
+        import time
         db = get_biometric_database()
         
         if user_id not in db.users:
@@ -452,22 +497,35 @@ async def get_user_auth_attempts(user_id: str, limit: int = 50):
         
         attempts = db.get_user_auth_attempts(user_id, limit=limit)
         
-        attempts_data = [
-            {
-                "attempt_id": a.attempt_id,
-                "timestamp": a.timestamp,
-                "date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(a.timestamp)),
-                "auth_type": a.auth_type,
-                "result": a.result,
-                "confidence": round(a.confidence, 3),
-                "anatomical_score": round(a.anatomical_score, 3),
-                "dynamic_score": round(a.dynamic_score, 3),
-                "fused_score": round(a.fused_score, 3),
-                "ip_address": a.ip_address,
-                "failure_reason": a.failure_reason
-            }
-            for a in attempts
-        ]
+        print(f"Formateando {len(attempts)} intentos...")
+        
+        attempts_data = []
+        for a in attempts:
+            try:
+                # Manejar timestamp con seguridad
+                timestamp_value = a.timestamp if a.timestamp else time.time()
+                date_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp_value))
+                
+                attempts_data.append({
+                    "attempt_id": str(a.attempt_id) if a.attempt_id else "unknown",
+                    "timestamp": timestamp_value,
+                    "date": date_str,
+                    "auth_type": a.auth_type if a.auth_type else "unknown",
+                    "result": a.result if a.result else "failed",
+                    "confidence": round(float(a.confidence), 3) if a.confidence is not None else 0.0,
+                    "anatomical_score": round(float(a.anatomical_score), 3) if a.anatomical_score is not None else 0.0,
+                    "dynamic_score": round(float(a.dynamic_score), 3) if a.dynamic_score is not None else 0.0,
+                    "fused_score": round(float(a.fused_score), 3) if a.fused_score is not None else 0.0,
+                    "ip_address": a.ip_address if a.ip_address else "N/A",
+                    "failure_reason": a.failure_reason if a.failure_reason else None
+                })
+            except Exception as format_error:
+                print(f"Error formateando intento {getattr(a, 'attempt_id', 'unknown')}: {format_error}")
+                import traceback
+                traceback.print_exc()
+                continue
+        
+        print(f"Intentos formateados exitosamente: {len(attempts_data)}")
         
         return {
             "status": "success",
@@ -479,6 +537,9 @@ async def get_user_auth_attempts(user_id: str, limit: int = 50):
     except HTTPException:
         raise
     except Exception as e:
+        print(f"ERROR EN ENDPOINT: {e}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
 @router.delete("/templates/{template_id}", dependencies=[Depends(require_admin_token)])

@@ -21,6 +21,14 @@ export default function UserDetailsModal({ user, open, onClose }) {
   const [authAttempts, setAuthAttempts] = useState([])
   const [activeTab, setActiveTab] = useState('info')
 
+  // Estados de filtros para templates
+  const [templateTypeFilter, setTemplateTypeFilter] = useState('')
+  const [gestureFilter, setGestureFilter] = useState('')
+
+  // Estados para dropdowns personalizados
+  const [templateTypeDropdownOpen, setTemplateTypeDropdownOpen] = useState(false)
+  const [gestureDropdownOpen, setGestureDropdownOpen] = useState(false)
+
   useEffect(() => {
     if (open && user) {
       loadUserData()
@@ -66,18 +74,41 @@ export default function UserDetailsModal({ user, open, onClose }) {
     })
   }
 
-  const getGestureEmoji = (gesture) => {
-    const emojis = {
-      'Open_Palm': '🖐️',
-      'Closed_Fist': '✊',
-      'Victory': '✌️',
-      'Thumb_Up': '👍',
-      'Thumb_Down': '👎',
-      'Pointing_Up': '☝️',
-      'ILoveYou': '🤟'
+  // AGREGAR ESTA FUNCIÓN NUEVA:
+  const getFilteredTemplates = () => {
+    let filtered = [...templates]
+    
+    // Filtrar por tipo
+    if (templateTypeFilter) {
+      filtered = filtered.filter(t => t.template_type === templateTypeFilter)
     }
-    return emojis[gesture] || '👋'
+    
+    // Filtrar por gesto
+    if (gestureFilter) {
+      filtered = filtered.filter(t => t.gesture_name === gestureFilter)
+    }
+    
+    return filtered
   }
+
+  // Obtener gestos únicos
+  const getUniqueGestures = () => {
+    const gestures = [...new Set(templates.map(t => t.gesture_name))]
+    return gestures.sort()
+  }
+
+  // const getGestureEmoji = (gesture) => {
+  //   const emojis = {
+  //     'Open_Palm': '🖐️',
+  //     'Closed_Fist': '✊',
+  //     'Victory': '✌️',
+  //     'Thumb_Up': '👍',
+  //     'Thumb_Down': '👎',
+  //     'Pointing_Up': '☝️',
+  //     'ILoveYou': '🤟'
+  //   }
+  //   return emojis[gesture] || '👋'
+  // }
 
   const exportToCSV = () => {
     const headers = ['Fecha', 'Tipo', 'Resultado', 'Confidence', 'Anatómico', 'Dinámico', 'Fusionado', 'IP']
@@ -136,7 +167,7 @@ export default function UserDetailsModal({ user, open, onClose }) {
               <User className="w-6 h-6 text-white" />
             </div>
             <h2 className="text-xl font-bold text-gray-900">
-              Detalles del Usuario
+              Detalles del usuario
             </h2>
           </div>
           <button
@@ -240,7 +271,7 @@ export default function UserDetailsModal({ user, open, onClose }) {
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                       <User className="w-5 h-5" style={{ color: '#05A8F9' }} />
-                      Información Personal
+                      Información personal
                     </h3>
                     <div 
                       className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-lg"
@@ -308,7 +339,7 @@ export default function UserDetailsModal({ user, open, onClose }) {
                   {/* Secuencia de Gestos */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Secuencia de Gestos
+                      Secuencia de gestos
                     </h3>
                     <div 
                       className="flex flex-wrap gap-6 p-6 rounded-lg border-2"
@@ -319,7 +350,11 @@ export default function UserDetailsModal({ user, open, onClose }) {
                     >
                       {user.gesture_sequence?.map((gesture, idx) => (
                         <div key={idx} className="flex flex-col items-center gap-2">
-                          <div className="text-5xl">{getGestureEmoji(gesture)}</div>
+                          <img 
+                            src={`/${gesture}.png`}
+                            alt={gesture.replace('_', ' ')}
+                            className="w-16 h-16 object-contain"
+                          />
                           <div className="text-xs font-medium text-gray-700">
                             {gesture.replace('_', ' ')}
                           </div>
@@ -337,7 +372,7 @@ export default function UserDetailsModal({ user, open, onClose }) {
                   {/* Estadísticas */}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Estadísticas Biométricas
+                      Estadísticas biométricas
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                       <div 
@@ -348,15 +383,6 @@ export default function UserDetailsModal({ user, open, onClose }) {
                           Total Templates
                         </p>
                         <p className="text-2xl font-bold text-blue-900">{user.total_templates}</p>
-                      </div>
-                      <div 
-                        className="p-4 rounded-lg border-2"
-                        style={{ backgroundColor: '#F0FDF4', borderColor: '#86EFAC' }}
-                      >
-                        <p className="text-sm text-green-700 mb-1">
-                          Enrollments
-                        </p>
-                        <p className="text-2xl font-bold text-green-900">{user.total_enrollments}</p>
                       </div>
                       <div 
                         className="p-4 rounded-lg border-2"
@@ -379,20 +405,183 @@ export default function UserDetailsModal({ user, open, onClose }) {
               ======================================== */}
               {activeTab === 'templates' && (
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      Templates Biométricos
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                      Total: <span className="font-semibold">{templates.length}</span> templates
-                    </p>
+                  {/* Header con filtros */}
+                  <div className="space-y-4 mb-6">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Templates biométricos
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        Total: <span className="font-semibold">{getFilteredTemplates().length}</span> de {templates.length} templates
+                      </p>
+                    </div>
+                    
+                    {/* Filtros */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* Filtro por tipo */}
+                      {/* Filtro por tipo - CUSTOM DROPDOWN */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-bold text-gray-700">
+                          Tipo de template
+                        </label>
+                        
+                        <div className="relative">
+                          {/* Trigger del dropdown */}
+                          <button
+                            type="button"
+                            onClick={() => setTemplateTypeDropdownOpen(!templateTypeDropdownOpen)}
+                            className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                            style={{ borderColor: templateTypeDropdownOpen ? '#05A8F9' : '#E0F2FE' }}
+                            onBlur={() => setTimeout(() => setTemplateTypeDropdownOpen(false), 200)}
+                          >
+                            <span className="text-gray-700">
+                              {templateTypeFilter === '' && 'Todos los tipos'}
+                              {templateTypeFilter === 'anatomical' && 'Anatómico'}
+                              {templateTypeFilter === 'dynamic' && 'Dinámico'}
+                            </span>
+                            <svg 
+                              className={`w-5 h-5 text-gray-400 transition-transform ${templateTypeDropdownOpen ? 'rotate-180' : ''}`}
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+
+                          {/* Dropdown de opciones */}
+                          {templateTypeDropdownOpen && (
+                            <div 
+                              className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden"
+                              style={{ borderColor: '#E0F2FE' }}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setTemplateTypeFilter('')
+                                  setTemplateTypeDropdownOpen(false)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                              >
+                                Todos los tipos
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setTemplateTypeFilter('anatomical')
+                                  setTemplateTypeDropdownOpen(false)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                                style={{ borderColor: '#F3F4F6' }}
+                              >
+                                Anatómico
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setTemplateTypeFilter('dynamic')
+                                  setTemplateTypeDropdownOpen(false)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                                style={{ borderColor: '#F3F4F6' }}
+                              >
+                                Dinámico
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Filtro por gesto */}
+                      {/* Filtro por gesto - CUSTOM DROPDOWN */}
+                      <div className="space-y-2">
+                        <label className="block text-sm font-bold text-gray-700">
+                          Gesto
+                        </label>
+                        
+                        <div className="relative">
+                          {/* Trigger del dropdown */}
+                          <button
+                            type="button"
+                            onClick={() => setGestureDropdownOpen(!gestureDropdownOpen)}
+                            className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                            style={{ borderColor: gestureDropdownOpen ? '#05A8F9' : '#E0F2FE' }}
+                            onBlur={() => setTimeout(() => setGestureDropdownOpen(false), 200)}
+                          >
+                            <span className="text-gray-700">
+                              {gestureFilter === '' ? 'Todos los gestos' : gestureFilter.replace('_', ' ')}
+                            </span>
+                            <svg 
+                              className={`w-5 h-5 text-gray-400 transition-transform ${gestureDropdownOpen ? 'rotate-180' : ''}`}
+                              fill="none" 
+                              stroke="currentColor" 
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+
+                          {/* Dropdown de opciones */}
+                          {gestureDropdownOpen && (
+                            <div 
+                              className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden max-h-60 overflow-y-auto"
+                              style={{ borderColor: '#E0F2FE' }}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setGestureFilter('')
+                                  setGestureDropdownOpen(false)
+                                }}
+                                className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                              >
+                                Todos los gestos
+                              </button>
+                              {getUniqueGestures().map(gesture => (
+                                <button
+                                  key={gesture}
+                                  type="button"
+                                  onClick={() => {
+                                    setGestureFilter(gesture)
+                                    setGestureDropdownOpen(false)
+                                  }}
+                                  className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                                  style={{ borderColor: '#F3F4F6' }}
+                                >
+                                  {gesture.replace('_', ' ')}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Botón limpiar filtros */}
+                    {(templateTypeFilter || gestureFilter) && (
+                      <button
+                        onClick={() => {
+                          setTemplateTypeFilter('')
+                          setGestureFilter('')
+                        }}
+                        className="text-sm font-medium transition-colors"
+                        style={{ color: '#05A8F9' }}
+                        onMouseEnter={(e) => e.target.style.color = '#0891B2'}
+                        onMouseLeave={(e) => e.target.style.color = '#05A8F9'}
+                      >
+                        Limpiar filtros
+                      </button>
+                    )}
                   </div>
                   
-                  {templates.length === 0 ? (
+                  {/* Tabla */}
+                  {getFilteredTemplates().length === 0 ? (
                     <div className="text-center py-12">
                       <FileText className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                       <p className="text-gray-500">
-                        No hay templates disponibles
+                        {templates.length === 0 
+                          ? 'No hay templates disponibles'
+                          : 'No hay templates que coincidan con los filtros'}
                       </p>
                     </div>
                   ) : (
@@ -424,14 +613,14 @@ export default function UserDetailsModal({ user, open, onClose }) {
                           </tr>
                         </thead>
                         <tbody>
-                          {templates.map((template, idx) => (
+                          {getFilteredTemplates().map((template, idx) => (
                             <tr 
                               key={idx}
                               className={`border-b transition-colors hover:bg-gray-50 ${
-                                idx === templates.length - 1 ? 'border-b-0' : ''
+                                idx === getFilteredTemplates().length - 1 ? 'border-b-0' : ''
                               }`}
                               style={{ 
-                                borderColor: idx === templates.length - 1 ? 'transparent' : '#F3F4F6'
+                                borderColor: idx === getFilteredTemplates().length - 1 ? 'transparent' : '#F3F4F6'
                               }}
                             >
                               <td className="px-4 py-3">
@@ -447,9 +636,11 @@ export default function UserDetailsModal({ user, open, onClose }) {
                               </td>
                               <td className="px-4 py-3">
                                 <div className="flex items-center gap-2">
-                                  <span className="text-xl">
-                                    {getGestureEmoji(template.gesture_name)}
-                                  </span>
+                                  <img 
+                                    src={`/${template.gesture_name}.png`}
+                                    alt={template.gesture_name}
+                                    className="w-8 h-8 object-contain"
+                                  />
                                   <span className="text-sm">
                                     {template.gesture_name}
                                   </span>
@@ -519,7 +710,7 @@ export default function UserDetailsModal({ user, open, onClose }) {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-semibold text-gray-900">
-                      Historial de Autenticaciones
+                      Historial de autenticaciones
                     </h3>
                     <button
                       onClick={exportToCSV}

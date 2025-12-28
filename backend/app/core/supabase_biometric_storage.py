@@ -1388,9 +1388,65 @@ class BiometricDatabase:
         """Obtiene perfil de usuario."""
         return self.users.get(user_id)
     
+    # def update_user(self, user_id: str, updates: Dict[str, Any]) -> bool:
+    #     """Actualiza información de un usuario."""
+    #     try:
+    #         with self.lock:
+    #             if user_id not in self.users:
+    #                 logger.error(f"Usuario {user_id} no existe")
+    #                 return False
+                
+    #             user = self.users[user_id]
+                
+    #             # Validar email único
+    #             if 'email' in updates and updates['email']:
+    #                 if not self.is_email_unique(updates['email'], exclude_user_id=user_id):
+    #                     logger.error(f"Email {updates['email']} ya está registrado")
+    #                     return False
+    #                 user.email = updates['email']
+                
+    #             # Validar teléfono único
+    #             if 'phone_number' in updates and updates['phone_number']:
+    #                 if not self.is_phone_unique(updates['phone_number'], exclude_user_id=user_id):
+    #                     logger.error(f"Teléfono {updates['phone_number']} ya está registrado")
+    #                     return False
+    #                 user.phone_number = updates['phone_number']
+                
+    #             # Actualizar otros campos
+    #             if 'username' in updates:
+    #                 user.username = updates['username']
+                
+    #             if 'age' in updates:
+    #                 age = int(updates['age'])
+    #                 if age < 1 or age > 120:
+    #                     logger.error("Edad inválida")
+    #                     return False
+    #                 user.age = age
+                
+    #             if 'gender' in updates:
+    #                 if updates['gender'] not in ["Femenino", "Masculino"]:
+    #                     logger.error("Género inválido")
+    #                     return False
+    #                 user.gender = updates['gender']
+                
+    #             if 'gesture_sequence' in updates:
+    #                 user.gesture_sequence = updates['gesture_sequence']
+                
+    #             user.updated_at = time.time()
+    #             self._save_user(user)
+                
+    #             logger.info(f"Usuario {user_id} actualizado exitosamente")
+    #             return True
+                
+    #     except Exception as e:
+    #         logger.error(f"Error actualizando usuario: {e}")
+    #         return False
+    
     def update_user(self, user_id: str, updates: Dict[str, Any]) -> bool:
         """Actualiza información de un usuario."""
         try:
+            from datetime import datetime
+            
             with self.lock:
                 if user_id not in self.users:
                     logger.error(f"Usuario {user_id} no existe")
@@ -1412,10 +1468,11 @@ class BiometricDatabase:
                         return False
                     user.phone_number = updates['phone_number']
                 
-                # Actualizar otros campos
+                # Actualizar username
                 if 'username' in updates:
                     user.username = updates['username']
                 
+                # Actualizar age
                 if 'age' in updates:
                     age = int(updates['age'])
                     if age < 1 or age > 120:
@@ -1423,16 +1480,44 @@ class BiometricDatabase:
                         return False
                     user.age = age
                 
+                # Actualizar gender
                 if 'gender' in updates:
                     if updates['gender'] not in ["Femenino", "Masculino"]:
                         logger.error("Género inválido")
                         return False
                     user.gender = updates['gender']
                 
+                # Actualizar gesture_sequence
                 if 'gesture_sequence' in updates:
                     user.gesture_sequence = updates['gesture_sequence']
                 
+                # ACTUALIZAR is_active
+                if 'is_active' in updates:
+                    is_active = updates['is_active']
+                    print(f"\n{'='*80}")
+                    print(f"ACTUALIZANDO is_active PARA {user_id}")
+                    print(f"  Valor anterior: {getattr(user, 'is_active', True)}")
+                    print(f"  Valor nuevo: {is_active}")
+                    print(f"{'='*80}\n")
+                    
+                    # ASEGURAR que el atributo existe y se actualiza
+                    user.is_active = is_active
+                    
+                    # Verificar que se actualizó
+                    print(f"✓ user.is_active después de asignar: {user.is_active}")
+                    
+                    # Agregar metadata de desactivación
+                    if not is_active:
+                        if not hasattr(user, 'metadata') or user.metadata is None:
+                            user.metadata = {}
+                        user.metadata['deactivated_at'] = datetime.now().isoformat()
+                        user.metadata['deactivated_by'] = 'admin'
+                
+                # Actualizar timestamp
                 user.updated_at = time.time()
+                
+                # GUARDAR con _save_user (que debe incluir is_active)
+                print(f"\nLlamando a _save_user() con is_active={user.is_active}")
                 self._save_user(user)
                 
                 logger.info(f"Usuario {user_id} actualizado exitosamente")
@@ -1440,6 +1525,8 @@ class BiometricDatabase:
                 
         except Exception as e:
             logger.error(f"Error actualizando usuario: {e}")
+            import traceback
+            traceback.print_exc()
             return False
     
     # def list_users(self) -> List[UserProfile]:
@@ -1811,20 +1898,98 @@ class BiometricDatabase:
         """Obtiene template biométrico."""
         return self.templates.get(template_id)
     
+    # def list_user_templates(self, user_id: str) -> List[BiometricTemplate]:
+    #     """Lista templates de un usuario."""
+    #     if user_id not in self.users:
+    #         return []
+        
+    #     user_profile = self.users[user_id]
+    #     all_template_ids = (user_profile.anatomical_templates + user_profile.dynamic_templates)
+        
+    #     templates = []
+    #     for template_id in all_template_ids:
+    #         if template_id in self.templates:
+    #             templates.append(self.templates[template_id])
+        
+    #     return templates
+    
     def list_user_templates(self, user_id: str) -> List[BiometricTemplate]:
-        """Lista templates de un usuario."""
-        if user_id not in self.users:
+        """Lista templates de un usuario - CONSULTA DIRECTA A SUPABASE."""
+        try:
+            # CONSULTAR DIRECTAMENTE EN SUPABASE
+            response = self.supabase.table('biometric_templates').select('*').eq('user_id', user_id).execute()
+            
+            templates = []
+            
+            for template_data in response.data:
+                try:
+                    # Deserializar embeddings
+                    anatomical_emb = None
+                    if template_data.get('anatomical_embedding'):
+                        anatomical_emb = np.array(template_data['anatomical_embedding'], dtype=np.float32)
+                    
+                    dynamic_emb = None
+                    if template_data.get('dynamic_embedding'):
+                        dynamic_emb = np.array(template_data['dynamic_embedding'], dtype=np.float32)
+                    
+                    # Convertir timestamps
+                    created_at = template_data.get('created_at')
+                    if isinstance(created_at, str):
+                        from datetime import datetime
+                        created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00')).timestamp()
+                    
+                    updated_at = template_data.get('updated_at')
+                    if isinstance(updated_at, str):
+                        from datetime import datetime
+                        updated_at = datetime.fromisoformat(updated_at.replace('Z', '+00:00')).timestamp()
+                    
+                    last_used = template_data.get('last_used')
+                    if isinstance(last_used, str):
+                        from datetime import datetime
+                        last_used = datetime.fromisoformat(last_used.replace('Z', '+00:00')).timestamp()
+                    
+                    # Determinar tipo
+                    template_type_str = template_data.get('template_type', 'anatomical')
+                    if template_type_str == 'anatomical':
+                        template_type = TemplateType.ANATOMICAL
+                    elif template_type_str == 'dynamic':
+                        template_type = TemplateType.DYNAMIC
+                    else:
+                        template_type = TemplateType.MULTIMODAL
+                    
+                    # Crear objeto BiometricTemplate
+                    template = BiometricTemplate(
+                        template_id=template_data['template_id'],
+                        user_id=template_data['user_id'],
+                        template_type=template_type,
+                        anatomical_embedding=anatomical_emb,
+                        dynamic_embedding=dynamic_emb,
+                        gesture_name=template_data.get('gesture_name', 'Unknown'),
+                        hand_side=template_data.get('hand_side', 'unknown'),
+                        quality_score=float(template_data.get('quality_score', 0.0)),
+                        confidence=float(template_data.get('confidence', 0.0)),
+                        enrollment_session=template_data.get('enrollment_session', ''),
+                        created_at=created_at or time.time(),
+                        updated_at=updated_at or time.time(),
+                        last_used=last_used or time.time(),
+                        verification_count=template_data.get('verification_count', 0),
+                        success_count=template_data.get('success_count', 0),
+                        is_encrypted=False,
+                        checksum=template_data.get('checksum', ''),
+                        metadata=template_data.get('metadata', {})
+                    )
+                    
+                    templates.append(template)
+                    
+                except Exception as e:
+                    print(f"Error procesando template {template_data.get('template_id')}: {e}")
+                    continue
+            
+            return templates
+            
+        except Exception as e:
+            print(f"Error consultando templates de Supabase para {user_id}: {e}")
             return []
-        
-        user_profile = self.users[user_id]
-        all_template_ids = (user_profile.anatomical_templates + user_profile.dynamic_templates)
-        
-        templates = []
-        for template_id in all_template_ids:
-            if template_id in self.templates:
-                templates.append(self.templates[template_id])
-        
-        return templates
     
     def delete_template(self, template_id: str) -> bool:
         """Elimina un template específico."""
@@ -2016,44 +2181,160 @@ class BiometricDatabase:
             logger.error(f"Error guardando intento: {e}")
             return False
     
+    # def get_user_auth_attempts(self, user_id: str, limit: Optional[int] = None) -> List[AuthenticationAttempt]:
+    #     """Obtiene intentos de autenticación de un usuario desde Supabase."""
+    #     try:
+    #         # QUERY SUPABASE
+    #         query = self.supabase.table('authentication_attempts').select('*').eq('user_id', user_id).order('timestamp', desc=True)
+            
+    #         if limit:
+    #             query = query.limit(limit)
+            
+    #         response = query.execute()
+            
+    #         attempts = []
+    #         for data in response.data:
+    #             # Convertir timestamp ISO a float
+    #             timestamp = data.get('timestamp')
+    #             if isinstance(timestamp, str):
+    #                 timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00')).timestamp()
+                
+    #             attempts.append(AuthenticationAttempt(
+    #                 attempt_id=data['attempt_id'],
+    #                 user_id=data['user_id'],
+    #                 timestamp=timestamp,
+    #                 auth_type=data['auth_type'],
+    #                 result=data['result'],
+    #                 confidence=data['confidence'],
+    #                 anatomical_score=data['anatomical_score'],
+    #                 dynamic_score=data['dynamic_score'],
+    #                 fused_score=data['fused_score'],
+    #                 ip_address=data.get('ip_address'),
+    #                 device_info=data.get('device_info'),
+    #                 failure_reason=data.get('failure_reason'),
+    #                 metadata=data.get('metadata', {})
+    #             ))
+            
+    #         return attempts
+            
+    #     except Exception as e:
+    #         logger.error(f"Error obteniendo intentos: {e}")
+    #         return []
+    
     def get_user_auth_attempts(self, user_id: str, limit: Optional[int] = None) -> List[AuthenticationAttempt]:
-        """Obtiene intentos de autenticación de un usuario desde Supabase."""
+        """Obtiene intentos de autenticación de un usuario - AMBAS TABLAS CON CAMPOS REALES."""
         try:
-            # QUERY SUPABASE
-            query = self.supabase.table('authentication_attempts').select('*').eq('user_id', user_id).order('timestamp', desc=True)
+            import uuid
+            from datetime import datetime
+            attempts = []
+            
+            # ========================================
+            # 1. OBTENER DE authentication_attempts (VERIFICACIONES)
+            # ========================================
+            try:
+                response = self.supabase.table('authentication_attempts')\
+                    .select('*')\
+                    .eq('user_id', user_id)\
+                    .order('timestamp', desc=True)\
+                    .execute()
+                
+                for data in response.data:
+                    timestamp = data.get('timestamp')
+                    if isinstance(timestamp, str):
+                        timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00')).timestamp()
+                    
+                    # Mapear system_decision a result
+                    system_decision = data.get('system_decision', 'rejected')
+                    result = 'success' if system_decision == 'authenticated' else 'failed'
+                    
+                    attempts.append(AuthenticationAttempt(
+                        attempt_id=str(data.get('id', uuid.uuid4())),
+                        user_id=data['user_id'],
+                        timestamp=timestamp,
+                        auth_type=data.get('mode', 'verification'),  # Usar 'mode' en lugar de 'auth_type'
+                        result=result,  # Convertir system_decision a result
+                        confidence=float(data.get('confidence', 0.0)),
+                        anatomical_score=float(data.get('anatomical_score', 0.0)),
+                        dynamic_score=float(data.get('dynamic_score', 0.0)),
+                        fused_score=float(data.get('fused_score', 0.0)),
+                        ip_address=data.get('ip_address'),
+                        device_info=None,
+                        failure_reason=None if result == 'success' else 'Autenticación rechazada',
+                        metadata={
+                            'session_id': data.get('session_id'),
+                            'username': data.get('username'),
+                            'duration': data.get('duration'),
+                            'gestures_captured': data.get('gestures_captured', [])
+                        }
+                    ))
+            except Exception as e:
+                print(f"Error consultando authentication_attempts: {e}")
+                import traceback
+                traceback.print_exc()
+            
+            # ========================================
+            # 2. OBTENER DE identification_attempts (IDENTIFICACIONES)
+            # ========================================
+            try:
+                response = self.supabase.table('identification_attempts')\
+                    .select('*')\
+                    .eq('identified_user_id', user_id)\
+                    .order('timestamp', desc=True)\
+                    .execute()
+                
+                for data in response.data:
+                    timestamp = data.get('timestamp')
+                    if isinstance(timestamp, str):
+                        timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00')).timestamp()
+                    
+                    # Mapear system_decision a result
+                    system_decision = data.get('system_decision', 'rejected')
+                    result = 'success' if system_decision == 'authenticated' else 'failed'
+                    
+                    attempts.append(AuthenticationAttempt(
+                        attempt_id=str(data.get('id', uuid.uuid4())),
+                        user_id=user_id,
+                        timestamp=timestamp,
+                        auth_type='identification',
+                        result=result,
+                        confidence=float(data.get('confidence', 0.0)),
+                        anatomical_score=float(data.get('anatomical_score', 0.0)),
+                        dynamic_score=float(data.get('dynamic_score', 0.0)),
+                        fused_score=float(data.get('fused_score', 0.0)),
+                        ip_address=data.get('ip_address'),
+                        device_info=None,
+                        failure_reason=None if result == 'success' else 'Usuario no identificado',
+                        metadata={
+                            'session_id': data.get('session_id'),
+                            'username': data.get('username'),
+                            'user_email': data.get('user_email'),
+                            'duration': data.get('duration'),
+                            'all_candidates': data.get('all_candidates', []),
+                            'top_match_score': data.get('top_match_score'),
+                            'gestures_captured': data.get('gestures_captured', [])
+                        }
+                    ))
+            except Exception as e:
+                print(f"Error consultando identification_attempts: {e}")
+                import traceback
+                traceback.print_exc()
+            
+            # ========================================
+            # 3. ORDENAR POR TIMESTAMP Y LIMITAR
+            # ========================================
+            attempts.sort(key=lambda x: x.timestamp, reverse=True)
             
             if limit:
-                query = query.limit(limit)
+                attempts = attempts[:limit]
             
-            response = query.execute()
-            
-            attempts = []
-            for data in response.data:
-                # Convertir timestamp ISO a float
-                timestamp = data.get('timestamp')
-                if isinstance(timestamp, str):
-                    timestamp = datetime.fromisoformat(timestamp.replace('Z', '+00:00')).timestamp()
-                
-                attempts.append(AuthenticationAttempt(
-                    attempt_id=data['attempt_id'],
-                    user_id=data['user_id'],
-                    timestamp=timestamp,
-                    auth_type=data['auth_type'],
-                    result=data['result'],
-                    confidence=data['confidence'],
-                    anatomical_score=data['anatomical_score'],
-                    dynamic_score=data['dynamic_score'],
-                    fused_score=data['fused_score'],
-                    ip_address=data.get('ip_address'),
-                    device_info=data.get('device_info'),
-                    failure_reason=data.get('failure_reason'),
-                    metadata=data.get('metadata', {})
-                ))
+            print(f"Total intentos recuperados para {user_id}: {len(attempts)}")
             
             return attempts
             
         except Exception as e:
-            logger.error(f"Error obteniendo intentos: {e}")
+            logger.error(f"Error obteniendo intentos del usuario {user_id}: {e}")
+            import traceback
+            traceback.print_exc()
             return []
     
     def get_all_auth_attempts(self, limit: Optional[int] = None) -> List[AuthenticationAttempt]:

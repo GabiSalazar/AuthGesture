@@ -30,6 +30,11 @@ export default function UsersManagement() {
   const [sortBy, setSortBy] = useState('created_at')
   const [sortOrder, setSortOrder] = useState('desc')
   
+  // Estado para dropdown personalizado
+  const [genderDropdownOpen, setGenderDropdownOpen] = useState(false)
+  const [sortByDropdownOpen, setSortByDropdownOpen] = useState(false)
+  const [sortOrderDropdownOpen, setSortOrderDropdownOpen] = useState(false)
+
   // Estados de modales
   const [selectedUser, setSelectedUser] = useState(null)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
@@ -130,8 +135,8 @@ export default function UsersManagement() {
       ======================================== */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-black text-gray-900">
-            Gestión de Usuarios
+          <h2 className="text-2xl sm:text-3xl font-black text-gray-600">
+            Gestión de usuarios
           </h2>
           <p className="text-gray-600 text-sm mt-1">
             Administra usuarios registrados en el sistema
@@ -162,7 +167,7 @@ export default function UsersManagement() {
           <div className="flex items-center gap-2 mb-2">
             <Filter className="w-5 h-5" style={{ color: '#05A8F9' }} />
             <h3 className="text-lg font-black text-gray-900">
-              Filtros de Búsqueda
+              Filtros de búsqueda
             </h3>
           </div>
         </div>
@@ -200,28 +205,77 @@ export default function UsersManagement() {
           </div>
 
           {/* Filtro género */}
+          {/* Filtro género - CUSTOM SELECT */}
           <div className="space-y-2">
             <label className="block text-sm font-bold text-gray-700">
               Género
             </label>
-            <select
-              value={genderFilter}
-              onChange={(e) => setGenderFilter(e.target.value)}
-              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
-              style={{ borderColor: '#E0F2FE' }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#05A8F9'
-                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#E0F2FE'
-                e.target.style.boxShadow = 'none'
-              }}
-            >
-              <option value="">Todos</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-            </select>
+            
+            <div className="relative">
+              {/* Trigger del dropdown */}
+              <button
+                type="button"
+                onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
+                className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                style={{ borderColor: genderDropdownOpen ? '#05A8F9' : '#E0F2FE' }}
+                onBlur={() => setTimeout(() => setGenderDropdownOpen(false), 200)}
+              >
+                <span className="text-gray-700">
+                  {genderFilter === '' && 'Todos'}
+                  {genderFilter === 'Masculino' && 'Masculino'}
+                  {genderFilter === 'Femenino' && 'Femenino'}
+                </span>
+                <svg 
+                  className={`w-5 h-5 text-gray-400 transition-transform ${genderDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown de opciones */}
+              {genderDropdownOpen && (
+                <div 
+                  className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden"
+                  style={{ borderColor: '#E0F2FE' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenderFilter('')
+                      setGenderDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Todos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenderFilter('Masculino')
+                      setGenderDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Masculino
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenderFilter('Femenino')
+                      setGenderDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Femenino
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Edad mínima */}
@@ -271,54 +325,162 @@ export default function UsersManagement() {
           </div>
 
           {/* Ordenar por */}
+          {/* Ordenar por - CUSTOM DROPDOWN */}
           <div className="space-y-2">
             <label className="block text-sm font-bold text-gray-700">
               Ordenar por
             </label>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
-              style={{ borderColor: '#E0F2FE' }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#05A8F9'
-                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#E0F2FE'
-                e.target.style.boxShadow = 'none'
-              }}
-            >
-              <option value="created_at">Fecha de registro</option>
-              <option value="username">Nombre</option>
-              <option value="age">Edad</option>
-              <option value="templates">Templates</option>
-              <option value="last_activity">Última actividad</option>
-            </select>
+            
+            <div className="relative">
+              {/* Trigger del dropdown */}
+              <button
+                type="button"
+                onClick={() => setSortByDropdownOpen(!sortByDropdownOpen)}
+                className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                style={{ borderColor: sortByDropdownOpen ? '#05A8F9' : '#E0F2FE' }}
+                onBlur={() => setTimeout(() => setSortByDropdownOpen(false), 200)}
+              >
+                <span className="text-gray-700">
+                  {sortBy === 'created_at' && 'Fecha de registro'}
+                  {sortBy === 'username' && 'Nombre'}
+                  {sortBy === 'age' && 'Edad'}
+                  {sortBy === 'templates' && 'Templates'}
+                  {sortBy === 'last_activity' && 'Última actividad'}
+                </span>
+                <svg 
+                  className={`w-5 h-5 text-gray-400 transition-transform ${sortByDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown de opciones */}
+              {sortByDropdownOpen && (
+                <div 
+                  className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden"
+                  style={{ borderColor: '#E0F2FE' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy('created_at')
+                      setSortByDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Fecha de registro
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy('username')
+                      setSortByDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Nombre
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy('age')
+                      setSortByDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Edad
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy('templates')
+                      setSortByDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Templates
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortBy('last_activity')
+                      setSortByDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Última actividad
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Orden */}
+          {/* Orden - CUSTOM DROPDOWN */}
           <div className="space-y-2">
             <label className="block text-sm font-bold text-gray-700">
               Orden
             </label>
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
-              style={{ borderColor: '#E0F2FE' }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#05A8F9'
-                e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#E0F2FE'
-                e.target.style.boxShadow = 'none'
-              }}
-            >
-              <option value="desc">Descendente</option>
-              <option value="asc">Ascendente</option>
-            </select>
+            
+            <div className="relative">
+              {/* Trigger del dropdown */}
+              <button
+                type="button"
+                onClick={() => setSortOrderDropdownOpen(!sortOrderDropdownOpen)}
+                className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                style={{ borderColor: sortOrderDropdownOpen ? '#05A8F9' : '#E0F2FE' }}
+                onBlur={() => setTimeout(() => setSortOrderDropdownOpen(false), 200)}
+              >
+                <span className="text-gray-700">
+                  {sortOrder === 'desc' ? 'Descendente' : 'Ascendente'}
+                </span>
+                <svg 
+                  className={`w-5 h-5 text-gray-400 transition-transform ${sortOrderDropdownOpen ? 'rotate-180' : ''}`}
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Dropdown de opciones */}
+              {sortOrderDropdownOpen && (
+                <div 
+                  className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden"
+                  style={{ borderColor: '#E0F2FE' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortOrder('desc')
+                      setSortOrderDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    Descendente
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSortOrder('asc')
+                      setSortOrderDropdownOpen(false)
+                    }}
+                    className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                    style={{ borderColor: '#F3F4F6' }}
+                  >
+                    Ascendente
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Botones de acción */}
@@ -332,7 +494,7 @@ export default function UsersManagement() {
               }}
             >
               <Search className="w-4 h-4" />
-              Aplicar Filtros
+              Aplicar filtros
             </button>
             <button
               onClick={handleClearFilters}
@@ -370,28 +532,9 @@ export default function UsersManagement() {
             <div className="flex items-center gap-2">
               <Users className="w-5 h-5" style={{ color: '#05A8F9' }} />
               <h3 className="text-lg font-black text-gray-900">
-                Usuarios Registrados ({users.length})
+                Usuarios registrados ({users.length})
               </h3>
             </div>
-            <button
-              className="flex items-center gap-2 px-4 py-2 font-bold rounded-xl transition-all duration-300 border-2 text-sm"
-              style={{
-                backgroundColor: 'white',
-                borderColor: '#E0F2FE',
-                color: '#05A8F9'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#F4FCFF'
-                e.currentTarget.style.borderColor = '#6FBFDE'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white'
-                e.currentTarget.style.borderColor = '#E0F2FE'
-              }}
-            >
-              <Download className="w-4 h-4" />
-              Exportar CSV
-            </button>
           </div>
         </div>
 
@@ -531,7 +674,7 @@ export default function UsersManagement() {
                       </td>
 
                       {/* Gestos */}
-                      <td className="px-4 py-4">
+                      {/* <td className="px-4 py-4">
                         <div className="flex gap-1">
                           {user.gesture_sequence?.slice(0, 3).map((gesture, idx) => (
                             <span
@@ -547,6 +690,25 @@ export default function UsersManagement() {
                               {gesture === 'Pointing_Up' && '☝️'}
                               {gesture === 'ILoveYou' && '🤟'}
                             </span>
+                          ))}
+                        </div>
+                      </td> */}
+
+                      {/* Gestos */}
+                      <td className="px-4 py-4">
+                        <div className="flex gap-2">
+                          {user.gesture_sequence?.slice(0, 3).map((gesture, idx) => (
+                            <div
+                              key={idx}
+                              className="relative group"
+                              title={gesture.replace('_', ' ')}
+                            >
+                              <img 
+                                src={`/${gesture}.png`}
+                                alt={gesture.replace('_', ' ')}
+                                className="w-8 h-8 object-contain transition-transform hover:scale-110"
+                              />
+                            </div>
                           ))}
                         </div>
                       </td>

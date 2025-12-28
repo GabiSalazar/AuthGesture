@@ -16,8 +16,7 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
     email: '',
     phone_number: '',
     age: '',
-    gender: '',
-    gesture_sequence: []
+    gender: ''
   })
 
   // Estados de UI
@@ -25,6 +24,8 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
   const [errors, setErrors] = useState({})
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+
+  const [genderDropdownOpen, setGenderDropdownOpen] = useState(false)
 
   // Gestos disponibles
   const availableGestures = [
@@ -45,8 +46,7 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
         email: user.email || '',
         phone_number: user.phone_number || '',
         age: user.age || '',
-        gender: user.gender || '',
-        gesture_sequence: user.gesture_sequence || []
+        gender: user.gender || ''
       })
       setErrors({})
       setSuccessMessage('')
@@ -105,14 +105,6 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
         }
         break
 
-      case 'gesture_sequence':
-        if (value.length !== 3) {
-          newErrors.gesture_sequence = 'Debe seleccionar exactamente 3 gestos'
-        } else {
-          delete newErrors.gesture_sequence
-        }
-        break
-
       default:
         break
     }
@@ -129,30 +121,6 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
       [name]: value
     }))
     validateField(name, value)
-  }
-
-  // Manejar selección de gestos
-  const handleGestureToggle = (gesture) => {
-    setFormData(prev => {
-      const currentSequence = [...prev.gesture_sequence]
-      const index = currentSequence.indexOf(gesture)
-
-      if (index > -1) {
-        // Remover gesto
-        currentSequence.splice(index, 1)
-      } else {
-        // Agregar gesto (máximo 3)
-        if (currentSequence.length < 3) {
-          currentSequence.push(gesture)
-        }
-      }
-
-      validateField('gesture_sequence', currentSequence)
-      return {
-        ...prev,
-        gesture_sequence: currentSequence
-      }
-    })
   }
 
   // Validar formulario completo
@@ -192,8 +160,7 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
         email: formData.email.trim(),
         phone_number: formData.phone_number.replace(/\D/g, ''), // Solo números
         age: parseInt(formData.age),
-        gender: formData.gender,
-        gesture_sequence: formData.gesture_sequence
+        gender: formData.gender
       }
 
       // Enviar al backend
@@ -261,7 +228,7 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
               <Edit2 className="w-6 h-6 text-white" />
             </div>
             <h2 className="text-xl font-bold text-gray-900">
-              Editar Usuario
+              Editar usuario
             </h2>
           </div>
           <button
@@ -462,35 +429,85 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
                 </div>
 
                 {/* Género */}
+                {/* Género - CUSTOM DROPDOWN */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Género <span className="text-red-500">*</span>
                   </label>
-                  <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl border-2 font-medium transition-all duration-300 focus:outline-none"
-                    style={{ 
-                      borderColor: errors.gender ? '#FCA5A5' : '#E0F2FE',
-                      backgroundColor: errors.gender ? '#FEF2F2' : 'white'
-                    }}
-                    onFocus={(e) => {
-                      if (!errors.gender) {
-                        e.target.style.borderColor = '#05A8F9'
-                        e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
-                      }
-                    }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = errors.gender ? '#FCA5A5' : '#E0F2FE'
-                      e.target.style.boxShadow = 'none'
-                    }}
-                  >
-                    <option value="">Seleccionar...</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
+                  
+                  <div className="relative">
+                    {/* Trigger del dropdown */}
+                    <button
+                      type="button"
+                      onClick={() => setGenderDropdownOpen(!genderDropdownOpen)}
+                      className="w-full px-3 py-2 border-2 rounded-xl text-left transition-all font-medium text-sm bg-white flex items-center justify-between"
+                      style={{ 
+                        borderColor: errors.gender 
+                          ? '#FCA5A5' 
+                          : genderDropdownOpen 
+                            ? '#05A8F9' 
+                            : '#E0F2FE',
+                        backgroundColor: errors.gender ? '#FEF2F2' : 'white'
+                      }}
+                      onBlur={() => setTimeout(() => setGenderDropdownOpen(false), 200)}
+                    >
+                      <span className={formData.gender ? 'text-gray-700' : 'text-gray-400'}>
+                        {formData.gender === '' && 'Seleccionar...'}
+                        {formData.gender === 'Masculino' && 'Masculino'}
+                        {formData.gender === 'Femenino' && 'Femenino'}
+                      </span>
+                      <svg 
+                        className={`w-5 h-5 text-gray-400 transition-transform ${genderDropdownOpen ? 'rotate-180' : ''}`}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown de opciones */}
+                    {genderDropdownOpen && (
+                      <div 
+                        className="absolute z-10 w-full mt-1 bg-white border-2 rounded-xl shadow-lg overflow-hidden"
+                        style={{ borderColor: '#E0F2FE' }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleChange({ target: { name: 'gender', value: '' } })
+                            setGenderDropdownOpen(false)
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm font-medium text-gray-400 hover:bg-gray-50 transition-colors"
+                        >
+                          Seleccionar...
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleChange({ target: { name: 'gender', value: 'Masculino' } })
+                            setGenderDropdownOpen(false)
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                          style={{ borderColor: '#F3F4F6' }}
+                        >
+                          Masculino
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleChange({ target: { name: 'gender', value: 'Femenino' } })
+                            setGenderDropdownOpen(false)
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border-t"
+                          style={{ borderColor: '#F3F4F6' }}
+                        >
+                          Femenino
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  
                   {errors.gender && (
                     <p className="text-sm text-red-600 mt-1">{errors.gender}</p>
                   )}
@@ -500,94 +517,42 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
               {/* Secuencia de gestos */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Secuencia de Gestos <span className="text-red-500">*</span>
+                  Secuencia de gestos
                 </label>
                 <p className="text-xs text-gray-500 mb-3">
-                  Selecciona 3 gestos en el orden deseado ({formData.gesture_sequence.length}/3 seleccionados)
+                  La secuencia de gestos no puede ser modificada después del registro
                 </p>
-
-                {/* Gestos seleccionados */}
-                {formData.gesture_sequence.length > 0 && (
-                  <div 
-                    className="flex gap-4 mb-4 p-4 rounded-xl border-2"
-                    style={{ 
-                      backgroundColor: '#F4FCFF',
-                      borderColor: '#E0F2FE'
-                    }}
-                  >
-                    {formData.gesture_sequence.map((gesture, idx) => {
-                      const gestureData = availableGestures.find(g => g.value === gesture)
-                      return (
-                        <div key={idx} className="flex flex-col items-center gap-2">
-                          <div className="text-4xl">{gestureData?.emoji}</div>
-                          <span 
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
-                            style={{ backgroundColor: '#05A8F9', color: 'white' }}
-                          >
-                            #{idx + 1}
-                          </span>
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-
-                {/* Selector de gestos */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {availableGestures.map((gesture) => {
-                    const isSelected = formData.gesture_sequence.includes(gesture.value)
-                    const position = formData.gesture_sequence.indexOf(gesture.value)
-                    const isDisabled = !isSelected && formData.gesture_sequence.length >= 3
-
+                
+                {/* Gestos - Solo visualización */}
+                <div 
+                  className="flex gap-4 p-4 rounded-xl border-2"
+                  style={{ 
+                    backgroundColor: '#F9FAFB',
+                    borderColor: '#E5E7EB'
+                  }}
+                >
+                  {user.gesture_sequence?.map((gesture, idx) => {
+                    const gestureData = availableGestures.find(g => g.value === gesture)
                     return (
-                      <button
-                        key={gesture.value}
-                        type="button"
-                        onClick={() => handleGestureToggle(gesture.value)}
-                        disabled={isDisabled}
-                        className="relative p-4 rounded-xl border-2 transition-all duration-300"
-                        style={{
-                          borderColor: isSelected ? '#05A8F9' : '#E0F2FE',
-                          backgroundColor: isSelected ? '#F4FCFF' : 'white',
-                          opacity: isDisabled ? 0.5 : 1,
-                          cursor: isDisabled ? 'not-allowed' : 'pointer',
-                          boxShadow: isSelected ? '0 0 0 3px rgba(5, 168, 249, 0.1)' : 'none'
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isDisabled && !isSelected) {
-                            e.currentTarget.style.borderColor = '#6FBFDE'
-                            e.currentTarget.style.transform = 'scale(1.05)'
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isDisabled && !isSelected) {
-                            e.currentTarget.style.borderColor = '#E0F2FE'
-                            e.currentTarget.style.transform = 'scale(1)'
-                          }
-                        }}
-                      >
-                        <div className="text-3xl mb-2">{gesture.emoji}</div>
-                        <div className="text-xs text-gray-600 text-center font-medium">
-                          {gesture.label}
+                      <div key={idx} className="flex flex-col items-center gap-2">
+                        <img 
+                          src={`/${gesture}.png`}
+                          alt={gestureData?.label || gesture}
+                          className="w-16 h-16 object-contain opacity-75"
+                        />
+                        <div className="text-xs font-medium text-gray-700">
+                          {gestureData?.label || gesture}
                         </div>
-                        {isSelected && (
-                          <div className="absolute top-2 right-2">
-                            <span 
-                              className="inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold"
-                              style={{ backgroundColor: '#05A8F9', color: 'white' }}
-                            >
-                              {position + 1}
-                            </span>
-                          </div>
-                        )}
-                      </button>
+                        <span 
+                          className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold"
+                          style={{ backgroundColor: '#9CA3AF', color: 'white' }}
+                        >
+                          #{idx + 1}
+                        </span>
+                      </div>
                     )
                   })}
                 </div>
-
-                {errors.gesture_sequence && (
-                  <p className="text-sm text-red-600 mt-2">{errors.gesture_sequence}</p>
-                )}
               </div>
             </div>
           </div>
@@ -658,7 +623,7 @@ export default function EditUserModal({ user, open, onClose, onSuccess }) {
               ) : (
                 <>
                   <Save className="w-4 h-4" />
-                  Guardar Cambios
+                  Guardar
                 </>
               )}
             </button>
