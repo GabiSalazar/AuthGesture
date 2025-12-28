@@ -314,8 +314,20 @@ export default function Verification() {
       }
       
       // Esperar a que se carguen los usuarios antes de buscar
+      // if (users.length > 0) {
+      //   findAndSelectUser()
+      // }
+      // Esperar a que se carguen los usuarios antes de buscar
+      console.log('Verificando si buscar usuario...')
+      console.log('   users.length:', users.length)
+      console.log('   sessionToken:', sessionToken)
+      console.log('   email:', email)
+
       if (users.length > 0) {
+        console.log('SI hay usuarios, buscando...')
         findAndSelectUser()
+      } else {
+        console.log('NO hay usuarios aún, esperando...')
       }
     } else {
       console.log('Acceso directo - sin plugin')
@@ -356,10 +368,33 @@ export default function Verification() {
     }
   }
 
+  // const loadUsers = async () => {
+  //   try {
+  //     const response = await authenticationApi.getAvailableUsers()
+  //     setUsers(response.users || [])
+  //     setError(null)
+  //   } catch (err) {
+  //     console.error('Error cargando usuarios:', err)
+  //     setError('Error al cargar usuarios disponibles')
+  //   }
+  // }
+
   const loadUsers = async () => {
     try {
+      console.log('Cargando usuarios...')
       const response = await authenticationApi.getAvailableUsers()
-      setUsers(response.users || [])
+      console.log('Response de usuarios:', response)
+      console.log('Usuarios recibidos:', response.users)
+      
+      const usersList = response.users || []
+      console.log('Total usuarios a setear:', usersList.length)
+      
+      if (usersList.length > 0) {
+        console.log('Primer usuario:', usersList[0])
+        console.log('Emails de usuarios:', usersList.map(u => u.email))
+      }
+      
+      setUsers(usersList)
       setError(null)
     } catch (err) {
       console.error('Error cargando usuarios:', err)

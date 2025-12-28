@@ -673,21 +673,46 @@ async def start_enrollment(request: EnrollmentStartRequest):
             print("FLUJO NUEVO: User ID recibido desde frontend")
             print("=" * 80)
             
-            email_system = get_email_verification_system()
-            is_verified = email_system.is_email_verified(request.user_id)
+            # VERIFICAR SI ES RE-ENROLLMENT (usuario inactivo con este email)
+            existing_inactive_user = database.get_user_by_email(email_stripped, active_only=False)
             
-            if not is_verified:
-                raise HTTPException(
-                    status_code=400,
-                    detail="Email no verificado. Por favor verifica tu codigo primero."
-                )
+            if existing_inactive_user and not existing_inactive_user.is_active:
+                print("✓ RE-ENROLLMENT DETECTADO EN FLUJO NUEVO")
+                print(f"   Usuario inactivo encontrado: {existing_inactive_user.user_id}")
+                
+                # Extraer ID original del usuario inactivo
+                if '_inactive_' in existing_inactive_user.user_id:
+                    original_user_id = existing_inactive_user.user_id.split('_inactive_')[0]
+                    print(f"   ID original extraído: {original_user_id}")
+                    print(f"   Ignorando user_id del frontend: {request.user_id}")
+                    print(f"   Usando ID original: {original_user_id}")
+                    
+                    user_id = original_user_id  # USAR ID ORIGINAL
+                    is_reenrollment = True
+                    skip_email_sending = True
+                else:
+                    print(f"   Usuario inactivo sin formato '_inactive_', usando ID del frontend")
+                    user_id = request.user_id
+                    is_reenrollment = False
+                    skip_email_sending = True
+            else:
+                # No es re-enrollment, verificar email normalmente
+                email_system = get_email_verification_system()
+                is_verified = email_system.is_email_verified(request.user_id)
+                
+                if not is_verified:
+                    raise HTTPException(
+                        status_code=400,
+                        detail="Email no verificado. Por favor verifica tu codigo primero."
+                    )
+                
+                print(f"✓ Email verificado correctamente para {request.user_id}")
+                user_id = request.user_id
+                is_reenrollment = False
+                skip_email_sending = True
             
-            print(f"✓ Email verificado correctamente para {request.user_id}")
-            user_id = request.user_id
-            is_reenrollment = False
-            skip_email_sending = True
-            
-            print(f"USANDO USER_ID VERIFICADO: {user_id}")
+            print(f"USANDO USER_ID FINAL: {user_id}")
+            print(f"ES RE-ENROLLMENT: {is_reenrollment}")
             print("=" * 80)
             
         else:

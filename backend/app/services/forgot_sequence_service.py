@@ -256,6 +256,27 @@ class ForgotSequenceService:
                 reason="forgot_sequence_reenroll"
             )
             
+            # ============================================================================
+            # LIMPIAR EMAIL DEL USUARIO INACTIVO PARA LIBERAR CONSTRAINT
+            # ============================================================================
+            try:
+                inactive_user_id = result['new_inactive_id']
+                
+                # Actualizar email del usuario inactivo a NULL para liberar constraint
+                self.database.supabase.table('users').update({
+                    'email': None,
+                    'updated_at': datetime.now().isoformat()
+                }).eq('user_id', inactive_user_id).execute()
+                
+                print(f"✓ Email liberado del usuario inactivo: {inactive_user_id}")
+                logger.info(f"Email liberado del usuario inactivo para permitir re-registro")
+                
+            except Exception as e:
+                print(f"Error limpiando email del usuario inactivo: {e}")
+                logger.warning(f"Error limpiando email del usuario inactivo: {e}")
+                # No fallar, continuar
+    
+            
             if not result['success']:
                 print(f"ERROR: No se pudo desactivar usuario {user_id}")
                 logger.error(f"Error desactivando usuario {user_id}")
