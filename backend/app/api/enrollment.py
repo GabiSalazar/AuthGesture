@@ -9,7 +9,7 @@ from typing import Dict, Any, Optional, List
 import base64
 import cv2
 import numpy as np
-
+import datetime
 from app.core.system_manager import get_system_manager
 from app.core.email_verification import get_email_verification_system
 
@@ -673,8 +673,42 @@ async def start_enrollment(request: EnrollmentStartRequest):
             print("FLUJO NUEVO: User ID recibido desde frontend")
             print("=" * 80)
             
-            # VERIFICAR SI ES RE-ENROLLMENT (usuario inactivo con este email)
+            # VERIFICAR SI ES RE-ENROLLMENT
+            # Opción 1: Buscar usuario inactivo por email
             existing_inactive_user = database.get_user_by_email(email_stripped, active_only=False)
+            
+            # Opción 2: Si viene user_id del frontend, verificar si hay usuario inactivo con ese ID original
+            if not existing_inactive_user and request.user_id:
+                # Buscar si hay algún usuario inactivo cuyo ID original coincida
+                try:
+                    all_inactive = database.supabase.table('users')\
+                        .select('*')\
+                        .eq('is_active', False)\
+                        .execute()
+                    
+                    for inactive_user in all_inactive.data:
+                        metadata = inactive_user.get('metadata', {})
+                        if isinstance(metadata, str):
+                            import json
+                            metadata = json.loads(metadata)
+                        
+                        if metadata.get('original_user_id') == request.user_id:
+                            # Reconstruir UserProfile
+                            from app.core.supabase_biometric_storage import UserProfile
+                            existing_inactive_user = UserProfile(
+                                user_id=inactive_user['user_id'],
+                                username=inactive_user['username'],
+                                email=inactive_user['email'],
+                                phone_number=inactive_user['phone_number'],
+                                age=inactive_user['age'],
+                                gender=inactive_user['gender'],
+                                is_active=False,
+                                metadata=metadata
+                            )
+                            print(f"✓ Re-enrollment detectado por metadata: {existing_inactive_user.user_id}")
+                            break
+                except Exception as e:
+                    print(f"Error buscando usuarios inactivos: {e}")
             
             if existing_inactive_user and not existing_inactive_user.is_active:
                 print("✓ RE-ENROLLMENT DETECTADO EN FLUJO NUEVO")
@@ -690,11 +724,55 @@ async def start_enrollment(request: EnrollmentStartRequest):
                     user_id = original_user_id  # USAR ID ORIGINAL
                     is_reenrollment = True
                     skip_email_sending = True
+                    
+                    # CRÍTICO: CREAR USUARIO EN SUPABASE CON ID ORIGINAL
+                    print(f"\n{'='*60}")
+                    print(f"CREANDO USUARIO EN SUPABASE PARA RE-ENROLLMENT")
+                    print(f"{'='*60}")
+                    
+                    try:
+                        # Crear usuario con ID original
+                        created = database.create_user(
+                            user_id=original_user_id,
+                            username=request.username,
+                            email=email_stripped,
+                            phone_number=request.phone_number,
+                            age=request.age,
+                            gender=request.gender,
+                            gesture_sequence=request.gesture_sequence,
+                            metadata={
+                                'enrollment_mode': 'reenrollment',
+                                'reenrollment_from': existing_inactive_user.user_id,
+                                'reenrollment_at': datetime.datetime.now().isoformat()
+                            }
+                        )
+                        
+                        if created:
+                            print(f"✓ Usuario creado en Supabase: {original_user_id}")
+                        else:
+                            print(f"ERROR: No se pudo crear usuario en Supabase")
+                            raise HTTPException(
+                                status_code=500,
+                                detail="Error creando usuario para re-enrollment"
+                            )
+                            
+                    except Exception as e:
+                        print(f"EXCEPCIÓN creando usuario: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        raise HTTPException(
+                            status_code=500,
+                            detail=f"Error en creación de usuario: {str(e)}"
+                        )
+                    
+                    print(f"{'='*60}\n")
+    
                 else:
                     print(f"   Usuario inactivo sin formato '_inactive_', usando ID del frontend")
                     user_id = request.user_id
                     is_reenrollment = False
                     skip_email_sending = True
+                    
             else:
                 # No es re-enrollment, verificar email normalmente
                 email_system = get_email_verification_system()

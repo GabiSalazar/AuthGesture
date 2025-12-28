@@ -1099,10 +1099,19 @@ class BiometricDatabase:
                 print(f"\nEJECUTANDO UPDATE...")
                 print(f"   Cambiando user_id: {user_id} -> {new_inactive_id}")
                 print(f"   Cambiando is_active: True -> False")
-                
+
+                # LIMPIAR EMAIL Y TELÉFONO para liberar constraints
+                fake_email = f"{new_inactive_id}@inactive.deleted"
+                fake_phone = f"INACTIVE_{int(time.time())}"  # Timestamp único
+
+                print(f"   Cambiando email a: {fake_email}")
+                print(f"   Cambiando teléfono a: {fake_phone}")
+
                 try:
                     result = self.supabase.table('users').update({
                         'user_id': new_inactive_id,
+                        'email': fake_email,
+                        'phone_number': fake_phone,
                         'is_active': False,
                         'metadata': new_metadata,
                         'updated_at': datetime.now().isoformat()

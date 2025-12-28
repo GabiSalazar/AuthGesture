@@ -76,9 +76,25 @@ export default function Enrollment() {
   }, [searchParams])
 
   // Detectar si viene desde forgot-sequence y pre-cargar datos
+  // useEffect(() => {
+  //   if (reenrollmentData && reenrollmentData.userData) {
+  //     const { userData } = reenrollmentData
+      
+  //     setUsername(userData.username || '')
+  //     setEmail(userData.email || '')
+  //     setPhoneNumber(userData.phone_number || '')
+  //     setAge(userData.age?.toString() || '')
+  //     setGender(userData.gender || '')
+  //     setSelectedGestures(userData.gesture_sequence || [])
+      
+  //     console.log('Datos pre-cargados para re-registro:', userData)
+  //   }
+  // }, [reenrollmentData])
+
+  // Detectar si viene desde forgot-sequence y pre-cargar datos
   useEffect(() => {
     if (reenrollmentData && reenrollmentData.userData) {
-      const { userData } = reenrollmentData
+      const { userData, original_user_id } = reenrollmentData
       
       setUsername(userData.username || '')
       setEmail(userData.email || '')
@@ -86,6 +102,16 @@ export default function Enrollment() {
       setAge(userData.age?.toString() || '')
       setGender(userData.gender || '')
       setSelectedGestures(userData.gesture_sequence || [])
+      
+      // CRÍTICO: Pre-cargar el user_id original para re-enrollment
+      if (original_user_id) {
+        setUserId(original_user_id)
+        console.log('✓ Re-enrollment detectado - User ID pre-cargado:', original_user_id)
+        
+        // Saltar directamente a gesture-selection (ya tiene email verificado y datos cargados)
+        setStep('gesture-selection')
+        console.log('✓ Saltando verificación de email - Ir directo a selección de gestos')
+      }
       
       console.log('Datos pre-cargados para re-registro:', userData)
     }
@@ -298,6 +324,13 @@ export default function Enrollment() {
   }
 
   const handleSendVerification = async () => {
+    // PREVENIR envío de OTP en re-enrollment (ya tiene user_id pre-cargado)
+    if (reenrollmentData && userId) {
+      console.log('Re-enrollment detectado - Saltando OTP, usando user_id:', userId)
+      setStep('gesture-selection')
+      return
+    }
+
     setUsernameTouched(true)
     setEmailTouched(true)
     setPhoneTouched(true)
