@@ -194,9 +194,22 @@ class PluginWebhookService:
             logger.info(f"JWT generado para autenticación")
             
             # Preparar headers (SIN API Key, SIN Authorization)
+            # headers = {
+            #     "Content-Type": "application/json"
+            # }
+            
+            # Preparar headers con API Key
             headers = {
                 "Content-Type": "application/json"
             }
+
+            # Agregar API Key si está configurada
+            if self.api_key:
+                headers["Authorization"] = f"Bearer {self.api_key}"
+                logger.info("API Key agregada al header de autenticación")
+            else:
+                logger.warning("No se configuró API Key para el webhook de autenticación")
+
 
             # Body con JWT como campo "jwt_token"
             body = {

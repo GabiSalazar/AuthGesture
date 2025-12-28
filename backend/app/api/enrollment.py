@@ -775,41 +775,41 @@ async def start_enrollment(request: EnrollmentStartRequest):
             # ========================================================================
             # GENERAR O REUTILIZAR USER_ID
             # ========================================================================
-            if is_reenrollment and original_user_id:
-                user_id = original_user_id
-                print("=" * 80)
-                print(f"RE-ENROLLMENT: Reutilizando ID original")
-                print(f"   User ID: {user_id}")
-                print("=" * 80)
+            # if is_reenrollment and original_user_id:
+            #     user_id = original_user_id
+            #     print("=" * 80)
+            #     print(f"RE-ENROLLMENT: Reutilizando ID original")
+            #     print(f"   User ID: {user_id}")
+            #     print("=" * 80)
                 
-                # REACTIVAR USUARIO EN SUPABASE
-                print(f"Reactivando usuario en Supabase...")
-                try:
-                    reactivation_success = database.reactivate_user(original_user_id)
+            #     # REACTIVAR USUARIO EN SUPABASE
+            #     print(f"Reactivando usuario en Supabase...")
+            #     try:
+            #         reactivation_success = database.reactivate_user(original_user_id)
                     
-                    if not reactivation_success:
-                        print(f"ERROR: No se pudo reactivar usuario {original_user_id}")
-                        raise HTTPException(
-                            status_code=500,
-                            detail="Error reactivando usuario existente. Por favor contacta soporte."
-                        )
+            #         if not reactivation_success:
+            #             print(f"ERROR: No se pudo reactivar usuario {original_user_id}")
+            #             raise HTTPException(
+            #                 status_code=500,
+            #                 detail="Error reactivando usuario existente. Por favor contacta soporte."
+            #             )
                     
-                    print(f"✓ Usuario {original_user_id} reactivado exitosamente en Supabase")
+            #         print(f"✓ Usuario {original_user_id} reactivado exitosamente en Supabase")
                     
-                except Exception as reactivation_error:
-                    print(f"Excepción reactivando usuario: {reactivation_error}")
-                    import traceback
-                    print(traceback.format_exc())
-                    raise HTTPException(
-                        status_code=500,
-                        detail=f"Error crítico reactivando usuario: {str(reactivation_error)}"
-                    )
-            else:
-                user_id = database.generate_unique_user_id(username_stripped)
-                print("=" * 80)
-                print(f"NUEVO ENROLLMENT: ID generado")
-                print(f"   User ID: {user_id}")
-                print("=" * 80)
+            #     except Exception as reactivation_error:
+            #         print(f"Excepción reactivando usuario: {reactivation_error}")
+            #         import traceback
+            #         print(traceback.format_exc())
+            #         raise HTTPException(
+            #             status_code=500,
+            #             detail=f"Error crítico reactivando usuario: {str(reactivation_error)}"
+            #         )
+            # else:
+            #     user_id = database.generate_unique_user_id(username_stripped)
+            #     print("=" * 80)
+            #     print(f"NUEVO ENROLLMENT: ID generado")
+            #     print(f"   User ID: {user_id}")
+            #     print("=" * 80)
             
             # Marcar que SÍ debe enviar email
             skip_email_sending = False

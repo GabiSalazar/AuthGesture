@@ -262,20 +262,23 @@ class ForgotSequenceService:
             try:
                 inactive_user_id = result['new_inactive_id']
                 
-                # Actualizar email del usuario inactivo a NULL para liberar constraint
+                # Generar email fake único para el usuario inactivo
+                fake_email = f"{inactive_user_id}@inactive.deleted"
+                
+                # Actualizar email del usuario inactivo para liberar constraint
                 self.database.supabase.table('users').update({
-                    'email': None,
+                    'email': fake_email,
                     'updated_at': datetime.now().isoformat()
                 }).eq('user_id', inactive_user_id).execute()
                 
-                print(f"✓ Email liberado del usuario inactivo: {inactive_user_id}")
-                logger.info(f"Email liberado del usuario inactivo para permitir re-registro")
+                print(f"✓ Email del usuario inactivo cambiado a: {fake_email}")
+                logger.info(f"Email del usuario inactivo actualizado para permitir re-registro")
                 
             except Exception as e:
                 print(f"Error limpiando email del usuario inactivo: {e}")
                 logger.warning(f"Error limpiando email del usuario inactivo: {e}")
                 # No fallar, continuar
-    
+                
             
             if not result['success']:
                 print(f"ERROR: No se pudo desactivar usuario {user_id}")
