@@ -170,7 +170,11 @@ async def get_anatomical_network_metrics():
                 "precision": round(metrics.precision * 100, 2),
                 "recall": round(metrics.recall * 100, 2),
                 "f1_score": round(metrics.f1_score * 100, 2),
-                "auc_score": round(metrics.auc_score * 100, 2)
+                "auc_score": round(metrics.auc_score * 100, 2),
+                "roc_curve": {                       # ← NUEVO
+                    "fpr": metrics.roc_fpr,          # ← NUEVO
+                    "tpr": metrics.roc_tpr           # ← NUEVO
+                } 
             }
         
         # Arquitectura - Valores FIJOS de diseño + parámetros REALES

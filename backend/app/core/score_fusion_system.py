@@ -131,6 +131,8 @@ class RealFusionMetrics:
     calibration_quality: float
     fusion_consistency: float
     decision_confidence_avg: float
+    roc_fpr: List[float] = field(default_factory=list)
+    roc_tpr: List[float] = field(default_factory=list)
 
 
 @dataclass
@@ -998,7 +1000,9 @@ class RealScoreFusionSystem:
                 dynamic_metrics=dyn_metrics,
                 calibration_quality=calibration_quality,
                 fusion_consistency=fusion_consistency,
-                decision_confidence_avg=np.mean(confidence_scores)
+                decision_confidence_avg=np.mean(confidence_scores),
+                roc_fpr=fusion_metrics.get('roc_fpr', []),  # ← NUEVO
+                roc_tpr=fusion_metrics.get('roc_tpr', [])
             )
             
             self.fusion_metrics = final_metrics
@@ -1022,6 +1026,11 @@ class RealScoreFusionSystem:
             # ROC curve
             fpr, tpr, thresholds = roc_curve(true_labels, predictions)
             auc_score = auc(fpr, tpr)
+            
+            # Samplear puntos ROC (máximo 100 puntos)
+            sample_indices = np.linspace(0, len(fpr)-1, min(100, len(fpr)), dtype=int)
+            roc_fpr_sampled = fpr[sample_indices].tolist()
+            roc_tpr_sampled = tpr[sample_indices].tolist()
             
             # EER
             fnr = 1 - tpr
@@ -1051,7 +1060,9 @@ class RealScoreFusionSystem:
                 'accuracy': accuracy,
                 'precision': precision,
                 'recall': recall,
-                'f1': f1
+                'f1': f1,
+                'roc_fpr': roc_fpr_sampled,  # ← NUEVO
+                'roc_tpr': roc_tpr_sampled   # ← NUEVO
             }
             
         except Exception as e:
@@ -1060,6 +1071,50 @@ class RealScoreFusionSystem:
                 'far': 0.5, 'frr': 0.5, 'eer': 0.5, 'auc': 0.5,
                 'accuracy': 0.5, 'precision': 0.5, 'recall': 0.5, 'f1': 0.5
             }
+        
+    # def _calculate_real_comprehensive_metrics(self, predictions: np.ndarray, true_labels: np.ndarray) -> Dict[str, float]:
+    #     """Calcula métricas completas."""
+    #     try:
+    #         # ROC curve
+    #         fpr, tpr, thresholds = roc_curve(true_labels, predictions)
+    #         auc_score = auc(fpr, tpr)
+            
+    #         # EER
+    #         fnr = 1 - tpr
+    #         eer_threshold = thresholds[np.nanargmin(np.absolute((fnr - fpr)))]
+    #         eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+            
+    #         # Predicciones binarias
+    #         binary_predictions = (predictions >= eer_threshold).astype(int)
+            
+    #         # Métricas adicionales
+    #         accuracy = accuracy_score(true_labels, binary_predictions)
+            
+    #         # FAR y FRR
+    #         tn, fp, fn, tp = confusion_matrix(true_labels, binary_predictions).ravel()
+    #         far = fp / (fp + tn) if (fp + tn) > 0 else 0
+    #         frr = fn / (fn + tp) if (fn + tp) > 0 else 0
+            
+    #         precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    #         recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    #         f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+            
+    #         return {
+    #             'far': far,
+    #             'frr': frr,
+    #             'eer': eer,
+    #             'auc': auc_score,
+    #             'accuracy': accuracy,
+    #             'precision': precision,
+    #             'recall': recall,
+    #             'f1': f1
+    #         }
+        # except Exception as e:
+        #     logger.error(f"Error calculando métricas: {e}")
+        #     return {
+        #         'far': 0.5, 'frr': 0.5, 'eer': 0.5, 'auc': 0.5,
+        #         'accuracy': 0.5, 'precision': 0.5, 'recall': 0.5, 'f1': 0.5
+        #     }
     
     def _evaluate_real_calibration_quality(self, predictions: np.ndarray, 
                                           confidence_scores: np.ndarray, 

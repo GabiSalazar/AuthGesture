@@ -114,6 +114,8 @@ class RealModelMetrics:
     total_impostor_pairs: int
     users_in_test: int
     cross_validation_score: float
+    roc_fpr: List[float] = field(default_factory=list)
+    roc_tpr: List[float] = field(default_factory=list)
 
 
 @dataclass
@@ -1233,6 +1235,10 @@ class RealSiameseAnatomicalNetwork:
                 try:
                     fpr, tpr, thresholds = roc_curve(labels, 1 - distances)
                     auc_score = auc(fpr, tpr)
+                    # Samplear puntos ROC para enviar al frontend (máximo 100 puntos)
+                    sample_indices = np.linspace(0, len(fpr)-1, min(100, len(fpr)), dtype=int)
+                    roc_fpr_sampled = fpr[sample_indices].tolist()
+                    roc_tpr_sampled = tpr[sample_indices].tolist()
                     
                     fnr = 1 - tpr
                     eer_idx = np.nanargmin(np.absolute(fnr - fpr))
@@ -1305,7 +1311,9 @@ class RealSiameseAnatomicalNetwork:
                 total_genuine_pairs=genuine_count,
                 total_impostor_pairs=impostor_count,
                 users_in_test=estimated_users,
-                cross_validation_score=0.0
+                cross_validation_score=0.0,
+                roc_fpr=roc_fpr_sampled,
+                roc_tpr=roc_tpr_sampled
             )
             
             self.optimal_threshold = eer_threshold
@@ -1483,6 +1491,44 @@ class RealSiameseAnatomicalNetwork:
             logger.error(f"Error guardando modelo: {e}")
             return False
     
+    # def load_real_model(self, filepath: Optional[str] = None) -> bool:
+    #     """Carga un modelo REAL previamente entrenado."""
+    #     try:
+    #         if filepath is None:
+    #             models_dir = Path(get_config('paths.models', 'biometric_data/models'))
+    #             filepath = models_dir / 'anatomical_model.h5'
+            
+    #         model_path = Path(filepath)
+            
+    #         if not model_path.exists():
+    #             logger.error(f"Modelo no existe: {model_path}")
+    #             return False
+            
+    #         # Construir arquitectura
+    #         if not self.base_network:
+    #             self.build_real_base_network()
+            
+    #         if not self.siamese_model:
+    #             self.build_real_siamese_model()
+            
+    #         if not self.is_compiled:
+    #             self.compile_real_model()
+            
+    #         # Cargar pesos
+    #         self.siamese_model.load_weights(str(model_path))
+    #         self.is_trained = True
+    #         self.is_compiled = True
+            
+    #         logger.info(f"Modelo anatómico cargado: {model_path}")
+    #         logger.info(f"Parámetros: {self.siamese_model.count_params():,}")
+            
+    #         return True
+            
+    #     except Exception as e:
+    #         logger.error(f"Error cargando modelo: {e}")
+    #         self.is_trained = False
+    #         return False
+    
     def load_real_model(self, filepath: Optional[str] = None) -> bool:
         """Carga un modelo REAL previamente entrenado."""
         try:
@@ -1511,8 +1557,70 @@ class RealSiameseAnatomicalNetwork:
             self.is_trained = True
             self.is_compiled = True
             
-            logger.info(f"Modelo anatómico cargado: {model_path}")
-            logger.info(f"Parámetros: {self.siamese_model.count_params():,}")
+            logger.info(f"✓ Modelo anatómico cargado: {model_path}")
+            logger.info(f"✓ Parámetros: {self.siamese_model.count_params():,}")
+            
+            # ============================================================
+            # NUEVO: Cargar metadatos y métricas desde JSON
+            # ============================================================
+            metadata_path = model_path.with_suffix('.json')
+            if metadata_path.exists():
+                try:
+                    import json
+                    with open(metadata_path, 'r') as f:
+                        metadata = json.load(f)
+                    
+                    # Restaurar metadatos básicos
+                    self.optimal_threshold = metadata.get('optimal_threshold', 0.5)
+                    self.users_trained_count = metadata.get('users_trained_count', 0)
+                    self.total_genuine_pairs = metadata.get('total_genuine_pairs', 0)
+                    self.total_impostor_pairs = metadata.get('total_impostor_pairs', 0)
+                    
+                    logger.info(f"✓ Metadatos cargados:")
+                    logger.info(f"  - Usuarios entrenados: {self.users_trained_count}")
+                    logger.info(f"  - Pares genuinos: {self.total_genuine_pairs}")
+                    logger.info(f"  - Pares impostores: {self.total_impostor_pairs}")
+                    logger.info(f"  - Threshold óptimo: {self.optimal_threshold:.4f}")
+                    
+                    # Restaurar métricas biométricas
+                    if 'metrics' in metadata:
+                        metrics_data = metadata['metrics']
+                        
+                        # Crear objeto RealModelMetrics
+                        self.current_metrics = RealModelMetrics(
+                            far=metrics_data.get('far', 0.0),
+                            frr=metrics_data.get('frr', 0.0),
+                            eer=metrics_data.get('eer', 0.0),
+                            auc_score=metrics_data.get('auc_score', 0.0),
+                            accuracy=metrics_data.get('accuracy', 0.0),
+                            threshold=metrics_data.get('threshold', 0.0),
+                            precision=metrics_data.get('precision', 0.0),
+                            recall=metrics_data.get('recall', 0.0),
+                            f1_score=metrics_data.get('f1_score', 0.0),
+                            total_genuine_pairs=self.total_genuine_pairs,
+                            total_impostor_pairs=self.total_impostor_pairs,
+                            users_in_test=self.users_trained_count,
+                            cross_validation_score=0.0
+                        )
+                        
+                        logger.info(f"✓ Métricas biométricas restauradas:")
+                        logger.info(f"  - FAR: {self.current_metrics.far:.4f}")
+                        logger.info(f"  - FRR: {self.current_metrics.frr:.4f}")
+                        logger.info(f"  - EER: {self.current_metrics.eer:.4f}")
+                        logger.info(f"  - AUC: {self.current_metrics.auc_score:.4f}")
+                        logger.info(f"  - Accuracy: {self.current_metrics.accuracy:.4f}")
+                    else:
+                        logger.warning("⚠ No se encontraron métricas en metadatos")
+                        self.current_metrics = None
+                        
+                except Exception as e:
+                    logger.error(f"Error cargando metadatos: {e}")
+                    # Continuar aunque falle la carga de metadatos
+                    self.current_metrics = None
+            else:
+                logger.warning(f"⚠ Archivo de metadatos no encontrado: {metadata_path}")
+                self.current_metrics = None
+            # ============================================================
             
             return True
             

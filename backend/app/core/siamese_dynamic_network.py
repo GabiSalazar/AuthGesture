@@ -12,6 +12,7 @@ import time
 import json
 from pathlib import Path
 from datetime import datetime
+from sklearn.metrics import roc_curve, auc as compute_auc
 
 # TensorFlow/Keras imports
 try:
@@ -97,6 +98,8 @@ class RealTemporalMetrics:
     temporal_consistency: float
     rhythm_similarity: float
     validation_samples: int
+    roc_fpr: List[float] = field(default_factory=list)
+    roc_tpr: List[float] = field(default_factory=list)
 
 
 @dataclass
@@ -1438,6 +1441,14 @@ class RealSiameseDynamicNetwork:
             accuracy = accuracy_score(labels, optimal_predictions)
             auc_score_val = roc_auc_score(labels, similarities)
             
+            # Calcular curva ROC completa para visualización
+            fpr_roc, tpr_roc, _ = roc_curve(labels, similarities)
+
+            # Samplear puntos ROC (máximo 100 puntos)
+            sample_indices = np.linspace(0, len(fpr_roc)-1, min(100, len(fpr_roc)), dtype=int)
+            roc_fpr_sampled = fpr_roc[sample_indices].tolist()
+            roc_tpr_sampled = tpr_roc[sample_indices].tolist()
+
             # Precision, recall, F1
             precision, recall, _ = precision_recall_curve(labels, similarities)
             f1_score = 2 * (precision[-1] * recall[-1]) / (precision[-1] + recall[-1]) if (precision[-1] + recall[-1]) > 0 else 0
@@ -1461,7 +1472,9 @@ class RealSiameseDynamicNetwork:
                 sequence_correlation=sequence_correlation,
                 temporal_consistency=temporal_consistency,
                 rhythm_similarity=rhythm_similarity,
-                validation_samples=len(labels)
+                validation_samples=len(labels),
+                roc_fpr=roc_fpr_sampled,
+                roc_tpr=roc_tpr_sampled
             )
             
             # Actualizar threshold
@@ -1590,6 +1603,38 @@ class RealSiameseDynamicNetwork:
             logger.error(f"Error en predicción: {e}")
             raise
     
+    # def save_real_model(self) -> bool:
+    #     """Guarda el modelo temporal entrenado."""
+    #     try:
+    #         if not self.is_trained or self.siamese_model is None:
+    #             logger.warning("Modelo no entrenado")
+    #             return False
+            
+    #         # Guardar modelo
+    #         self.siamese_model.save(str(self.model_save_path))
+            
+    #         # Guardar metadatos
+    #         metadata = {
+    #             'embedding_dim': self.embedding_dim,
+    #             'sequence_length': self.sequence_length,
+    #             'feature_dim': self.feature_dim,
+    #             'config': self.config,
+    #             'optimal_threshold': self.optimal_threshold,
+    #             'is_trained': self.is_trained,
+    #             'training_samples': len(self.real_training_samples),
+    #             'users_trained_count': self.users_trained_count,
+    #             'save_timestamp': datetime.now().isoformat(),
+    #             'version': '2.0'
+    #         }
+            
+    #         if self.current_metrics:
+    #             metadata['metrics'] = {
+    #                 'eer': self.current_metrics.eer,
+    #                 'auc_score': self.current_metrics.auc_score,
+    #                 'accuracy': self.current_metrics.accuracy,
+    #                 'far': self.current_metrics.far,
+    #                 'frr': self.current_metrics.frr
+    #             }
     def save_real_model(self) -> bool:
         """Guarda el modelo temporal entrenado."""
         try:
@@ -1614,15 +1659,31 @@ class RealSiameseDynamicNetwork:
                 'version': '2.0'
             }
             
+            # ============================================================
+            # GUARDAR TODAS LAS MÉTRICAS BIOMÉTRICAS
+            # ============================================================
             if self.current_metrics:
                 metadata['metrics'] = {
-                    'eer': self.current_metrics.eer,
-                    'auc_score': self.current_metrics.auc_score,
-                    'accuracy': self.current_metrics.accuracy,
-                    'far': self.current_metrics.far,
-                    'frr': self.current_metrics.frr
+                    'far': float(self.current_metrics.far),
+                    'frr': float(self.current_metrics.frr),
+                    'eer': float(self.current_metrics.eer),
+                    'auc_score': float(self.current_metrics.auc_score),
+                    'accuracy': float(self.current_metrics.accuracy),
+                    'threshold': float(self.current_metrics.threshold),
+                    'precision': float(self.current_metrics.precision),
+                    'recall': float(self.current_metrics.recall),
+                    'f1_score': float(self.current_metrics.f1_score),
+                    'sequence_correlation': float(self.current_metrics.sequence_correlation),
+                    'temporal_consistency': float(self.current_metrics.temporal_consistency),
+                    'rhythm_similarity': float(self.current_metrics.rhythm_similarity)
                 }
-            
+                
+                logger.info(f"✓ Métricas guardadas:")
+                logger.info(f"  - FAR: {self.current_metrics.far:.4f}")
+                logger.info(f"  - FRR: {self.current_metrics.frr:.4f}")
+                logger.info(f"  - EER: {self.current_metrics.eer:.4f}")
+                logger.info(f"  - AUC: {self.current_metrics.auc_score:.4f}")
+            # ============================================================
             metadata_path = self.model_save_path.with_suffix('.json')
             with open(metadata_path, 'w') as f:
                 json.dump(metadata, f, indent=2)
@@ -1636,6 +1697,45 @@ class RealSiameseDynamicNetwork:
             logger.error(f"Error guardando modelo: {e}")
             return False
     
+    # def load_real_model(self) -> bool:
+    #     """Carga un modelo temporal REAL pre-entrenado."""
+    #     try:
+    #         if not self.model_save_path.exists():
+    #             logger.warning(f"Archivo de modelo no encontrado: {self.model_save_path}")
+    #             return False
+            
+    #         # Cargar modelo de Keras
+    #         self.siamese_model = keras.models.load_model(
+    #             str(self.model_save_path),
+    #             custom_objects={
+    #                 'contrastive_loss_real': self._contrastive_loss_real,
+    #                 'far_metric_real': self._far_metric_real,
+    #                 'frr_metric_real': self._frr_metric_real
+    #             }
+    #         )
+            
+    #         # Cargar metadatos
+    #         metadata_path = self.model_save_path.with_suffix('.json')
+    #         if metadata_path.exists():
+    #             with open(metadata_path, 'r') as f:
+    #                 metadata = json.load(f)
+                
+    #             self.optimal_threshold = metadata.get('optimal_threshold', 0.5)
+    #             self.is_trained = metadata.get('is_trained', True)
+                
+    #             logger.info(f"✓ Modelo temporal REAL cargado: {self.model_save_path}")
+    #             logger.info(f"  - Umbral óptimo: {self.optimal_threshold}")
+    #             logger.info(f"  - Muestras de entrenamiento: {metadata.get('training_samples', 'N/A')}")
+    #             logger.info(f"  - Versión: {metadata.get('version', 'N/A')}")
+            
+    #         self.is_compiled = True
+            
+    #         return True
+            
+    #     except Exception as e:
+    #         logger.error("Error cargando modelo temporal REAL", e)
+    #         return False
+
     def load_real_model(self) -> bool:
         """Carga un modelo temporal REAL pre-entrenado."""
         try:
@@ -1653,28 +1753,73 @@ class RealSiameseDynamicNetwork:
                 }
             )
             
-            # Cargar metadatos
+            logger.info(f"✓ Modelo temporal REAL cargado: {self.model_save_path}")
+            
+            # ============================================================
+            # Cargar metadatos y métricas desde JSON
+            # ============================================================
             metadata_path = self.model_save_path.with_suffix('.json')
             if metadata_path.exists():
-                with open(metadata_path, 'r') as f:
-                    metadata = json.load(f)
-                
-                self.optimal_threshold = metadata.get('optimal_threshold', 0.5)
-                self.is_trained = metadata.get('is_trained', True)
-                
-                logger.info(f"✓ Modelo temporal REAL cargado: {self.model_save_path}")
-                logger.info(f"  - Umbral óptimo: {self.optimal_threshold}")
-                logger.info(f"  - Muestras de entrenamiento: {metadata.get('training_samples', 'N/A')}")
-                logger.info(f"  - Versión: {metadata.get('version', 'N/A')}")
+                try:
+                    with open(metadata_path, 'r') as f:
+                        metadata = json.load(f)
+                    
+                    # Restaurar metadatos básicos
+                    self.optimal_threshold = metadata.get('optimal_threshold', 0.5)
+                    self.is_trained = metadata.get('is_trained', True)
+                    
+                    logger.info(f"✓ Metadatos cargados:")
+                    logger.info(f"  - Umbral óptimo: {self.optimal_threshold:.4f}")
+                    logger.info(f"  - Muestras de entrenamiento: {metadata.get('training_samples', 'N/A')}")
+                    logger.info(f"  - Versión: {metadata.get('version', 'N/A')}")
+                    
+                    # Restaurar métricas biométricas
+                    if 'metrics' in metadata:
+                        metrics_data = metadata['metrics']
+                        
+                        # Crear objeto RealTemporalMetrics
+                        self.current_metrics = RealTemporalMetrics(
+                            far=metrics_data.get('far', 0.0),
+                            frr=metrics_data.get('frr', 0.0),
+                            eer=metrics_data.get('eer', 0.0),
+                            auc_score=metrics_data.get('auc_score', 0.0),
+                            accuracy=metrics_data.get('accuracy', 0.0),
+                            threshold=metrics_data.get('threshold', 0.0),
+                            precision=metrics_data.get('precision', 0.0),
+                            recall=metrics_data.get('recall', 0.0),
+                            f1_score=metrics_data.get('f1_score', 0.0),
+                            sequence_correlation=metrics_data.get('sequence_correlation', 0.0),
+                            temporal_consistency=metrics_data.get('temporal_consistency', 0.0),
+                            rhythm_similarity=metrics_data.get('rhythm_similarity', 0.0),
+                            validation_samples=metadata.get('training_samples', 0)
+                        )
+                        
+                        logger.info(f"✓ Métricas biométricas temporales restauradas:")
+                        logger.info(f"  - FAR: {self.current_metrics.far:.4f}")
+                        logger.info(f"  - FRR: {self.current_metrics.frr:.4f}")
+                        logger.info(f"  - EER: {self.current_metrics.eer:.4f}")
+                        logger.info(f"  - AUC: {self.current_metrics.auc_score:.4f}")
+                        logger.info(f"  - Accuracy: {self.current_metrics.accuracy:.4f}")
+                    else:
+                        logger.warning("⚠ No se encontraron métricas en metadatos")
+                        self.current_metrics = None
+                        
+                except Exception as e:
+                    logger.error(f"Error cargando metadatos: {e}")
+                    # Continuar aunque falle la carga de metadatos
+                    self.current_metrics = None
+            else:
+                logger.warning(f"⚠ Archivo de metadatos no encontrado: {metadata_path}")
+                self.current_metrics = None
+            # ============================================================
             
             self.is_compiled = True
             
             return True
             
         except Exception as e:
-            logger.error("Error cargando modelo temporal REAL", e)
+            logger.error(f"Error cargando modelo temporal REAL: {e}")
             return False
-
         
     def get_real_model_summary(self) -> Dict[str, Any]:
         """Obtiene resumen completo del modelo temporal REAL."""
