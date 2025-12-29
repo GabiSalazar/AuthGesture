@@ -46,7 +46,7 @@ class PluginWebhookService:
             True si se envió exitosamente
         """
         try:
-            logger.info(f"📤 Enviando resultado de registro al Plugin")
+            logger.info(f" Enviando resultado de registro al Plugin")
             logger.info(f"   Callback URL: {callback_url}")
             logger.info(f"   User ID: {user_id}")
             logger.info(f"   Email: {email}")

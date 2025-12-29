@@ -175,7 +175,7 @@ class RealAuthenticationConfig:
     enable_audit_logging: bool = True
     enable_continuous_auth: bool = False
     max_failed_attempts: int = 5
-    lockout_duration: float = 300.0  # 5 minutos
+    lockout_duration: float = 1.0  # 
 
 @dataclass
 class RealAuthenticationAttempt:
@@ -1901,7 +1901,7 @@ class RealAuthenticationSystem:
             'enable_audit_logging': get_config('biometric.auth.enable_audit_logging', True),
             'enable_continuous_auth': get_config('biometric.auth.enable_continuous_auth', False),
             'max_failed_attempts': get_config('biometric.auth.max_failed_attempts', 5),
-            'lockout_duration': get_config('biometric.auth.lockout_duration', 300.0)
+            'lockout_duration': get_config('biometric.auth.lockout_duration', 1.0)
         }
     
     def initialize_real_system(self) -> bool:
@@ -2279,7 +2279,7 @@ class RealAuthenticationSystem:
     #             # ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
     #             if session.callback_url and session.session_token:
     #                 try:
-    #                     logger.info(f"📤 Enviando resultado de autenticación al Plugin")
+    #                     logger.info(f" Enviando resultado de autenticación al Plugin")
     #                     logger.info(f"   Callback URL: {session.callback_url}")
                         
     #                     # Obtener email del usuario
@@ -2561,7 +2561,7 @@ class RealAuthenticationSystem:
                 # ENVIAR RESULTADO AL PLUGIN (si tiene callback_url configurado)
                 if session.callback_url and session.session_token:
                     try:
-                        logger.info(f"📤 Enviando resultado de autenticación al Plugin")
+                        logger.info(f" Enviando resultado de autenticación al Plugin")
                         logger.info(f"   Callback URL: {session.callback_url}")
                         
                         # Obtener email del usuario

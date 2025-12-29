@@ -151,7 +151,7 @@
             "enable_audit_logging": true,
             "enable_continuous_auth": false,
             "max_failed_attempts": 5,
-            "lockout_duration": 300.0
+            "lockout_duration": 1.0
         },
         "score_fusion": {
             "fusion_strategy": "weighted_average",

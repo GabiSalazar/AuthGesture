@@ -15,7 +15,7 @@ export const personalityApi = {
    */
   submitQuestionnaire: async (userId, responses) => {
     try {
-      console.log('📤 Enviando cuestionario:', { userId, responses })
+      console.log(' Enviando cuestionario:', { userId, responses })
       
       const { data } = await apiClient.post('/personality/submit', {
         user_id: userId,
