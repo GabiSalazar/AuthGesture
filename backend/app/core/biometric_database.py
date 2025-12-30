@@ -736,7 +736,6 @@ class BiometricDatabase:
         essential_directories = [
             self.db_path / 'users',
             self.db_path / 'templates',
-            self.db_path / 'auth_attempts', 
         ]
         
         for directory in essential_directories:

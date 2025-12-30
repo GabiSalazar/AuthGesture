@@ -517,7 +517,7 @@ def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
             logger.info(f"⏳ Esperando {wait_time:.1f}s para que Windows libere la cámara...")
             time.sleep(wait_time)
         
-        logger.info("📹 Creando nueva instancia de CameraManager...")
+        logger.info("Creando nueva instancia de CameraManager...")
         _camera_instance = CameraManager(camera_index)
         if not _camera_instance.initialize():
             logger.error("ERROR: No se pudo inicializar cámara")
@@ -555,7 +555,7 @@ def release_camera():
     global _camera_instance, _last_release_time
     
     if _camera_instance is not None:
-        logger.info("📹 Liberando instancia global de cámara...")
+        logger.info("Liberando instancia global de cámara...")
         _camera_instance.release()
         _camera_instance = None
         _last_release_time = time.time()

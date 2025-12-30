@@ -127,8 +127,6 @@ async def startup_event():
     
     # Crear directorios necesarios
     settings.BIOMETRIC_DATA_DIR.mkdir(exist_ok=True)
-    settings.MODELS_DIR.mkdir(exist_ok=True)
-    logger.info("Directories initialized")
     
     logger.info("=" * 80)
     logger.info("INICIALIZANDO MÓDULOS DEL SISTEMA")

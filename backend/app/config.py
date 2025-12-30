@@ -34,13 +34,11 @@ class Settings(BaseSettings):
     # ============================================================================
     BASE_DIR: Path = Path(__file__).resolve().parent.parent
     BIOMETRIC_DATA_DIR: Path = BASE_DIR / "biometric_data"
-    MODELS_DIR: Path = BASE_DIR / "models"
     
     # ============================================================================
     # RUTAS DE DATOS BIOMÉTRICOS (NUEVO)
     # ============================================================================
     BIOMETRIC_DATA_PATH: str = "biometric_data"
-    EMAIL_VERIFICATIONS_PATH: str = "biometric_data/email_verifications"
     
     # ============================================================================
     # SENDGRID - VERIFICACIÓN DE EMAIL (NUEVO)

@@ -52,15 +52,9 @@
     },
     "paths": {
         "data_root": "biometric_data",
-        "logs": "biometric_data/logs",
-        "base_captures": "biometric_data/capturas",
         "models": "biometric_data/models",
         "biometric_db": "biometric_data",
         "templates": "biometric_data/templates",
-        "user_profiles": "biometric_data/user_profiles",
-        "training_data": "biometric_data/training_data",
-        "backups": "biometric_data/backups",
-        "cache": "biometric_data/cache",
         "model_file": "gesture_recognizer.task"
     },
     "biometric": {

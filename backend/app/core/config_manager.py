@@ -112,15 +112,9 @@ class ConfigManager:
             # === RUTAS DEL SISTEMA ===
             "paths": {
                 "data_root": "biometric_data",
-                "logs": "biometric_data/logs",
-                "base_captures": "biometric_data/capturas", 
                 "models": "biometric_data/models",
                 "biometric_db": "biometric_data",
                 "templates": "biometric_data/templates",
-                "user_profiles": "biometric_data/user_profiles",
-                "training_data": "biometric_data/training_data", 
-                "backups": "biometric_data/backups",
-                "cache": "biometric_data/cache",
                 "model_file": "gesture_recognizer.task"
             },
                         
@@ -253,46 +247,10 @@ class ConfigManager:
             logging.info(f"1 directorio creado (fallback)")
         
     def _setup_logging(self):
-        """Configura el sistema de logging evitando duplicados."""
-        if self.logger and self.logger.handlers:
-            return
-        
-        root_logger = logging.getLogger()
-        root_logger.handlers = []
-        
+        """Logging desactivado."""
         self.logger = logging.getLogger('biometric_gesture_system')
-        self.logger.handlers = []
-        self.logger.setLevel(logging.INFO)
-        
-        detailed_formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
-        )
-        
-        console_formatter = logging.Formatter('%(levelname)s: %(message)s')
-        
-        try:
-            log_filename = f"biometric_system_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
-            
-            logs_dir = Path(self._config["paths"]["logs"])
-            logs_dir.mkdir(exist_ok=True)
-            
-            log_filepath = logs_dir / log_filename
-            
-            file_handler = logging.FileHandler(str(log_filepath), encoding='utf-8')
-            file_handler.setLevel(logging.INFO)
-            file_handler.setFormatter(detailed_formatter)
-            self.logger.addHandler(file_handler)
-            
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)
-            console_handler.setFormatter(console_formatter)
-            self.logger.addHandler(console_handler)
-            
-            self.logger.propagate = False
-            
-        except Exception as e:
-            logging.error(f"ERROR configurando logging: {e}")
-            self.logger = None
+        self.logger.addHandler(logging.NullHandler())
+        self.logger.setLevel(logging.CRITICAL + 1)
     
     def _ensure_config_file_exists(self):
         """Crea el archivo de configuración si no existe."""
@@ -405,21 +363,8 @@ class ConfigManager:
                 self.logger.error(f"Error al guardar configuración: {e}")
     
     def backup_config(self):
-        """Crea backup de la configuración actual."""
-        try:
-            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-            backup_dir = Path(self.get('paths.backups', 'backups'))
-            backup_dir.mkdir(exist_ok=True)
-            backup_file = backup_dir / f"config_backup_{timestamp}.json"
-            
-            self.save_config(str(backup_file))
-            if self.logger:
-                self.logger.info(f"Backup de configuración creado: {backup_file}")
-            return str(backup_file)
-        except Exception as e:
-            if self.logger:
-                self.logger.error(f"Error creando backup: {e}")
-            return None
+        """Backups desactivados."""
+        return None
     
     def _deep_merge(self, base_dict: Dict, update_dict: Dict):
         """Fusiona diccionarios de forma recursiva."""

@@ -335,11 +335,12 @@ class RealSecurityAuditor:
         risks = []
         
         try:
+            #TIEMPO DE BLOQUEO
             # Verificar intentos fallidos recientes
             if attempt.ip_address in self.failed_attempts:
                 recent_failures = [
                     t for t in self.failed_attempts[attempt.ip_address]
-                    if time.time() - t < 300  # Últimos 5 minutos
+                    if time.time() - t < 1
                 ]
                 if len(recent_failures) >= 3:
                     risks.append("múltiples_fallos_recientes")
