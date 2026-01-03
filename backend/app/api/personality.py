@@ -144,7 +144,7 @@ async def submit_personality_questionnaire(request: PersonalityQuestionnaireRequ
             
             # Si encontramos callback_url, enviar al Plugin
             if callback_url and session_token:
-                logger.info(f"📤 Enviando resultado de registro al Plugin")
+                logger.info(f"Enviando resultado de registro al Plugin")
                 logger.info(f"   Callback URL: {callback_url}")
                 
                 webhook_service = get_plugin_webhook_service()

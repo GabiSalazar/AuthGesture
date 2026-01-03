@@ -29,16 +29,16 @@ async def get_all_authentication_attempts(
     try:
         db = get_biometric_database()
         
-        print("\n ENDPOINT /all-attempts LLAMADO")
-        print(f"   Limit: {limit}, Offset: {offset}")
+        logger.info("\n ENDPOINT /all-attempts LLAMADO")
+        logger.info(f"   Limit: {limit}, Offset: {offset}")
         
         all_attempts = db.get_all_auth_attempts(limit=None)
         
-        print(f"Intentos retornados del método: {len(all_attempts)}")
+        logger.info(f"Intentos retornados del método: {len(all_attempts)}")
         logger.info(f"Total de intentos obtenidos: {len(all_attempts)}")
         
         if len(all_attempts) == 0:
-            print("   No hay intentos de autenticación")
+            logger.info("   No hay intentos de autenticación")
             return {
                 "status": "success",
                 "total_attempts": 0,
@@ -55,7 +55,7 @@ async def get_all_authentication_attempts(
         # Aplicar limit y offset
         paginated_attempts = all_attempts[offset:offset + limit]
         
-        print(f"   Intentos paginados: {len(paginated_attempts)}")
+        logger.info(f"   Intentos paginados: {len(paginated_attempts)}")
         
         # Formatear datos para el frontend
         attempts_data = []
@@ -81,7 +81,7 @@ async def get_all_authentication_attempts(
                 logger.error(f"Error formateando intento: {format_error}")
                 continue
         
-        print(f"    Intentos formateados: {len(attempts_data)}")
+        logger.info(f"    Intentos formateados: {len(attempts_data)}")
         logger.info(f" Retornando {len(attempts_data)} intentos formateados")
         
         return {
@@ -97,7 +97,7 @@ async def get_all_authentication_attempts(
         }
         
     except Exception as e:
-        print(f"   ERROR en endpoint: {e}")
+        logger.info(f"   ERROR en endpoint: {e}")
         logger.error(f"Error obteniendo intentos de autenticación: {e}")
         import traceback
         logger.error(traceback.format_exc())

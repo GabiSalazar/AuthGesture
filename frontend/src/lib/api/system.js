@@ -177,6 +177,19 @@ export const systemApi = {
   },
 
   /**
+   * Obtiene métricas COMPLETAS de la red anatómica (desde JSON)
+   */
+  getAnatomicalNetworkMetricsFull: async () => {
+    try {
+      const { data } = await adminApiClient.get('/siamese-anatomical/metrics/full')
+      return data
+    } catch (error) {
+      console.error('Error obteniendo métricas completas de red anatómica:', error)
+      throw error
+    }
+  },
+
+  /**
    * Obtiene métricas de la red dinámica
    */
   getDynamicNetworkMetrics: async () => {
@@ -185,6 +198,19 @@ export const systemApi = {
       return data
     } catch (error) {
       console.error('Error obteniendo métricas de red dinámica:', error)
+      throw error
+    }
+  },
+
+  /**
+   * Obtiene métricas COMPLETAS de la red dinámica (desde JSON)
+   */
+  getDynamicNetworkMetricsFull: async () => {
+    try {
+      const { data } = await adminApiClient.get('/siamese-dynamic/metrics/full')
+      return data
+    } catch (error) {
+      console.error('Error obteniendo métricas completas de red dinámica:', error)
       throw error
     }
   },

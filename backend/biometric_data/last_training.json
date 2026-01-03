@@ -1,0 +1,11 @@
+{
+  "users_trained": [
+    "user_davidsal_1767136238474_0b3f6b3f",
+    "user_zoimoral_1767194034118_6bdae832",
+    "user_gabriela_1767136005083_20bd3676"
+  ],
+  "users_count": 3,
+  "timestamp": "2026-01-03T08:44:29.213704",
+  "anatomical_trained": true,
+  "dynamic_trained": true
+}

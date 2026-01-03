@@ -847,7 +847,7 @@ class BiometricDatabase:
     #             is_unique = len(response.data) == 0
                 
     #             if not is_unique:
-    #                 logger.info(f"Email {email} ya registrado")
+    #                 print(f"Email {email} ya registrado")
                 
     #             return is_unique
                 
@@ -869,7 +869,7 @@ class BiometricDatabase:
                 is_unique = len(response.data) == 0
                 
                 if not is_unique:
-                    logger.info(f"Email {email} ya registrado para usuario activo")
+                    print(f"Email {email} ya registrado para usuario activo")
                 
                 return is_unique
                 
@@ -891,7 +891,7 @@ class BiometricDatabase:
     #             is_unique = len(response.data) == 0
                 
     #             if not is_unique:
-    #                 logger.info(f"Teléfono {phone_number} ya registrado")
+    #                 print(f"Teléfono {phone_number} ya registrado")
                 
     #             return is_unique
                 
@@ -913,7 +913,7 @@ class BiometricDatabase:
                 is_unique = len(response.data) == 0
                 
                 if not is_unique:
-                    logger.info(f"Teléfono {phone_number} ya registrado para usuario activo")
+                    print(f"Teléfono {phone_number} ya registrado para usuario activo")
                 
                 return is_unique
                 
@@ -936,7 +936,7 @@ class BiometricDatabase:
             unique_suffix = uuid.uuid4().hex[:8]
             user_id = f"user_{clean_name}_{timestamp}_{unique_suffix}"
         
-        logger.info(f"ID generado: {user_id}")
+        print(f"ID generado: {user_id}")
         return user_id
     
     def get_user_by_email(self, email: str, active_only: bool = True) -> Optional[UserProfile]:
@@ -960,7 +960,7 @@ class BiometricDatabase:
                 response = query.execute()
                 
                 if not response.data:
-                    logger.info(f"No se encontró usuario con email: {email}")
+                    print(f"No se encontró usuario con email: {email}")
                     return None
                 
                 user_data = response.data[0]
@@ -985,7 +985,7 @@ class BiometricDatabase:
                     user.anatomical_templates = existing_user.anatomical_templates
                     user.dynamic_templates = existing_user.dynamic_templates
                 
-                logger.info(f"Usuario encontrado: {user.user_id}")
+                print(f"Usuario encontrado: {user.user_id}")
                 return user
                 
         except Exception as e:
@@ -1005,7 +1005,7 @@ class BiometricDatabase:
     #             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     #             new_inactive_id = f"{user_id}_inactive_{timestamp}"
                 
-    #             logger.info(f"Desactivando usuario: {user_id} -> {new_inactive_id}")
+    #             print(f"Desactivando usuario: {user_id} -> {new_inactive_id}")
                 
     #             new_metadata = {
     #                 **user.metadata,
@@ -1021,7 +1021,7 @@ class BiometricDatabase:
     #                 'metadata': new_metadata
     #             }).eq('user_id', user_id).execute()
                 
-    #             logger.info(f"Usuario desactivado: {user_id} -> {new_inactive_id}")
+    #             print(f"Usuario desactivado: {user_id} -> {new_inactive_id}")
                 
     #             # Actualizar cache local
     #             if user_id in self.users:
@@ -1145,7 +1145,7 @@ class BiometricDatabase:
                 verify_old = self.supabase.table('users').select('user_id, is_active').eq('user_id', user_id).execute()
                 print(f"   Búsqueda por ID original: {verify_old.data}")
                 
-                logger.info(f"Usuario renombrado: {user_id} -> {new_inactive_id}")
+                print(f"Usuario renombrado: {user_id} -> {new_inactive_id}")
                 
                 # Actualizar cache local
                 if user_id in self.users:
@@ -1226,7 +1226,7 @@ class BiometricDatabase:
                 
                 old_user_id = inactive_user['user_id']
                 
-                logger.info(f"Reactivando usuario: {old_user_id} → {original_user_id}")
+                print(f"Reactivando usuario: {old_user_id} → {original_user_id}")
                 
                 # Actualizar metadata
                 new_metadata = inactive_user.get('metadata', {})
@@ -1244,7 +1244,7 @@ class BiometricDatabase:
                     'metadata': new_metadata
                 }).eq('user_id', old_user_id).execute()
                 
-                logger.info(f"Usuario reactivado exitosamente: {original_user_id}")
+                print(f"Usuario reactivado exitosamente: {original_user_id}")
                 
                 # Actualizar cache local si existe
                 if old_user_id in self.users:
@@ -1435,7 +1435,7 @@ class BiometricDatabase:
     #             user.updated_at = time.time()
     #             self._save_user(user)
                 
-    #             logger.info(f"Usuario {user_id} actualizado exitosamente")
+    #             print(f"Usuario {user_id} actualizado exitosamente")
     #             return True
                 
     #     except Exception as e:
@@ -1520,7 +1520,7 @@ class BiometricDatabase:
                 print(f"\nLlamando a _save_user() con is_active={user.is_active}")
                 self._save_user(user)
                 
-                logger.info(f"Usuario {user_id} actualizado exitosamente")
+                print(f"Usuario {user_id} actualizado exitosamente")
                 return True
                 
         except Exception as e:
@@ -1602,13 +1602,13 @@ class BiometricDatabase:
                 if current_time < user.lockout_until:
                     remaining_seconds = user.lockout_until - current_time
                     remaining_minutes = int(remaining_seconds / 60) + 1
-                    logger.info(f"Usuario {user_id} bloqueado. Tiempo restante: {remaining_minutes} minutos")
+                    print(f"Usuario {user_id} bloqueado. Tiempo restante: {remaining_minutes} minutos")
                     return True, remaining_minutes
                 else:
                     user.lockout_until = None
                     user.failed_attempts = 0
                     self._save_user(user)
-                    logger.info(f"Bloqueo de usuario {user_id} expirado")
+                    print(f"Bloqueo de usuario {user_id} expirado")
                     return False, 0
                     
         except Exception as e:
@@ -1695,7 +1695,7 @@ class BiometricDatabase:
                     
                     self._save_user(user)
                     
-                    logger.info(f"Intentos fallidos reseteados para {user_id} (tenía {previous_attempts})")
+                    print(f"Intentos fallidos reseteados para {user_id} (tenía {previous_attempts})")
                     
         except Exception as e:
             logger.error(f"Error reseteando intentos fallidos: {e}")
@@ -2045,9 +2045,9 @@ class BiometricDatabase:
     # ========================================================================
     
     def verify_user(self, query_anatomical: Optional[np.ndarray] = None,
-                   query_dynamic: Optional[np.ndarray] = None,
-                   user_id: Optional[str] = None,
-                   max_results: int = 5) -> List[Tuple[str, float, Dict[str, Any]]]:
+                query_dynamic: Optional[np.ndarray] = None,
+                user_id: Optional[str] = None,
+                max_results: int = 5) -> List[Tuple[str, float, Dict[str, Any]]]:
         """Verifica usuario contra templates almacenados."""
         try:
             with self.lock:
@@ -2174,7 +2174,7 @@ class BiometricDatabase:
                 # INSERTAR EN SUPABASE
                 self.supabase.table('authentication_attempts').insert(attempt_data).execute()
                 
-                logger.info(f"Intento de autenticación guardado: {attempt.attempt_id}")
+                print(f"Intento de autenticación guardado: {attempt.attempt_id}")
                 return True
                 
         except Exception as e:
@@ -2435,7 +2435,7 @@ class BiometricDatabase:
             print(f"\nTOTAL PROCESADO: {len(attempts)} intentos")
             print("=" * 80 + "\n")
             
-            logger.info(f"Total de intentos procesados correctamente: {len(attempts)}")
+            print(f"Total de intentos procesados correctamente: {len(attempts)}")
             return attempts
             
         except Exception as e:
@@ -2489,7 +2489,7 @@ class BiometricDatabase:
             Lista de AuthenticationAttempt con intentos de identificación
         """
         try:
-            logger.info(f"Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
+            print(f"Recuperando intentos de IDENTIFICACIÓN desde Supabase (limit={limit})")
             
             # Query a tabla identification_attempts
             response = self.supabase.table('identification_attempts')\
@@ -2499,10 +2499,10 @@ class BiometricDatabase:
                 .execute()
             
             if not response.data:
-                logger.info("No se encontraron intentos de identificación")
+                print("No se encontraron intentos de identificación")
                 return []
             
-            logger.info(f"Se recuperaron {len(response.data)} intentos de identificación")
+            print(f"Se recuperaron {len(response.data)} intentos de identificación")
             
             # Convertir a AuthenticationAttempt
             attempts = []
@@ -2549,7 +2549,7 @@ class BiometricDatabase:
                     logger.error(f"Error procesando intento de identificación: {e}")
                     continue
             
-            logger.info(f"Procesados {len(attempts)} intentos de identificación")
+            print(f"Procesados {len(attempts)} intentos de identificación")
             return attempts
             
         except Exception as e:
@@ -2569,7 +2569,7 @@ class BiometricDatabase:
             # UPSERT EN SUPABASE
             self.supabase.table('personality_profiles').upsert(profile_data, on_conflict='user_id').execute()
             
-            logger.info(f"Perfil de personalidad guardado: {profile.user_id}")
+            print(f"Perfil de personalidad guardado: {profile.user_id}")
             
             return True
             
@@ -2678,12 +2678,55 @@ class BiometricDatabase:
                     metadata=(sample_metadata or {}).copy()
                 )
                 
+                print("=" * 80)
+                print("DIAGNOSTICO ANATOMICO - ANTES DE MODIFICAR METADATA")
+                print(f"sample_metadata keys: {list((sample_metadata or {}).keys())}")
+                print(f"template.metadata keys iniciales: {list(anatomical_template.metadata.keys())}")
+                print("=" * 80)
+                
                 anatomical_template.metadata['bootstrap_features'] = anatomical_features.tolist()
                 anatomical_template.metadata['has_anatomical_raw'] = True
                 anatomical_template.metadata['feature_dimensions'] = len(anatomical_features)
                 anatomical_template.metadata['bootstrap_mode'] = True
                 anatomical_template.metadata['pending_embedding'] = True
                 anatomical_template.metadata['modality'] = 'anatomical'
+                
+                print("=" * 80)
+                print("DIAGNOSTICO ANATOMICO - DESPUES DE MODIFICAR METADATA")
+                print(f"template.metadata keys finales: {list(anatomical_template.metadata.keys())}")
+                print(f"bootstrap_features presente: {'bootstrap_features' in anatomical_template.metadata}")
+                if 'bootstrap_features' in anatomical_template.metadata:
+                    print(f"bootstrap_features dimension: {len(anatomical_template.metadata['bootstrap_features'])}")
+                print(f"temporal_sequence presente: {'temporal_sequence' in anatomical_template.metadata}")
+                if 'temporal_sequence' in anatomical_template.metadata:
+                    print(f"temporal_sequence dimension: {len(anatomical_template.metadata['temporal_sequence'])} frames")
+                print("=" * 80)
+                
+                # ============================================================================
+                # DEBUG: Verificar que bootstrap_features se agregó correctamente
+                # ============================================================================
+                print("="*80)
+                print("DEBUG BOOTSTRAP_FEATURES EN ENROLL_TEMPLATE_BOOTSTRAP")
+                print("="*80)
+                print(f"Template ID: {anatomical_template_id}")
+                print(f"Metadata keys: {list(anatomical_template.metadata.keys())}")
+
+                if 'bootstrap_features' in anatomical_template.metadata:
+                    bf = anatomical_template.metadata['bootstrap_features']
+                    print(f"✓ bootstrap_features PRESENTE")
+                    print(f"  Tipo: {type(bf)}")
+                    print(f"  Longitud: {len(bf)}")
+                    print(f"  Primeros 5 valores: {bf[:5]}")
+                else:
+                    print(f"✗ bootstrap_features NO PRESENTE")
+
+                if 'temporal_sequence' in anatomical_template.metadata:
+                    ts = anatomical_template.metadata['temporal_sequence']
+                    print(f"✓ temporal_sequence PRESENTE")
+                    print(f"  Frames: {len(ts)}")
+                else:
+                    print(f"✗ temporal_sequence NO PRESENTE")
+                print("="*80)
                 
                 # BUSCAR DATOS TEMPORALES
                 dynamic_template_id = None
@@ -3018,11 +3061,50 @@ class BiometricDatabase:
         try:
             print(f"Guardando template en Supabase: {template.template_id}")
             
+            # DIAGNOSTICO: Verificar metadata en el objeto template
+            print("=" * 80)
+            print("DIAGNOSTICO _save_template - OBJETO TEMPLATE")
+            print(f"Template ID: {template.template_id}")
+            print(f"Template Type: {template.template_type}")
+            print(f"Metadata type: {type(template.metadata)}")
+            print(f"Metadata keys: {list(template.metadata.keys()) if hasattr(template.metadata, 'keys') else 'NO DICT'}")
+            print(f"bootstrap_features en template.metadata: {'bootstrap_features' in template.metadata if isinstance(template.metadata, dict) else False}")
+            if isinstance(template.metadata, dict) and 'bootstrap_features' in template.metadata:
+                print(f"bootstrap_features dimension: {len(template.metadata['bootstrap_features'])}")
+            print(f"temporal_sequence en template.metadata: {'temporal_sequence' in template.metadata if isinstance(template.metadata, dict) else False}")
+            if isinstance(template.metadata, dict) and 'temporal_sequence' in template.metadata:
+                temporal_seq = template.metadata['temporal_sequence']
+                if temporal_seq:
+                    print(f"temporal_sequence dimension: {len(temporal_seq)} frames")
+            print("=" * 80)
+        
             # Convertir timestamps
             created_at = datetime.fromtimestamp(template.created_at).isoformat()
             updated_at = datetime.fromtimestamp(template.updated_at).isoformat()
             last_used = datetime.fromtimestamp(template.last_used).isoformat()
             
+            # ============================================================================
+            # DEBUG: Verificar metadata ANTES de serializar
+            # ============================================================================
+            print("="*80)
+            print("DEBUG EN _save_template() - ANTES DE CREAR template_data")
+            print("="*80)
+            print(f"Template ID: {template.template_id}")
+            print(f"Template metadata keys: {list(template.metadata.keys())}")
+
+            if 'bootstrap_features' in template.metadata:
+                bf = template.metadata['bootstrap_features']
+                print(f"✓ bootstrap_features en template.metadata")
+                print(f"  Longitud: {len(bf)}")
+            else:
+                print(f"✗ bootstrap_features NO en template.metadata")
+
+            if 'temporal_sequence' in template.metadata:
+                print(f"✓ temporal_sequence en template.metadata")
+            else:
+                print(f"✗ temporal_sequence NO en template.metadata")
+            print("="*80)
+
             template_data = {
                 'template_id': template.template_id,
                 'user_id': template.user_id,
@@ -3044,10 +3126,109 @@ class BiometricDatabase:
                 'metadata': getattr(template, 'metadata', {})
             }
             
+            # DIAGNOSTICO: Verificar template_data antes de enviar
+            print("=" * 80)
+            print("DIAGNOSTICO _save_template - TEMPLATE_DATA PREPARADO")
+            metadata_to_send = template_data.get('metadata', {})
+            print(f"Metadata type en template_data: {type(metadata_to_send)}")
+            print(f"Metadata keys en template_data: {list(metadata_to_send.keys()) if isinstance(metadata_to_send, dict) else 'NO DICT'}")
+            print(f"bootstrap_features en template_data: {'bootstrap_features' in metadata_to_send if isinstance(metadata_to_send, dict) else False}")
+            if isinstance(metadata_to_send, dict) and 'bootstrap_features' in metadata_to_send:
+                print(f"bootstrap_features dimension en template_data: {len(metadata_to_send['bootstrap_features'])}")
+            print(f"temporal_sequence en template_data: {'temporal_sequence' in metadata_to_send if isinstance(metadata_to_send, dict) else False}")
+            if isinstance(metadata_to_send, dict) and 'temporal_sequence' in metadata_to_send:
+                temporal_seq = metadata_to_send['temporal_sequence']
+                if temporal_seq:
+                    print(f"temporal_sequence dimension en template_data: {len(temporal_seq)} frames")
+            print("=" * 80)
+            
+            # ============================================================================
+            # DEBUG: Verificar metadata en template_data ANTES de upsert
+            # ============================================================================
+            print("="*80)
+            print("DEBUG EN _save_template() - ANTES DE UPSERT")
+            print("="*80)
+            print(f"template_data['metadata'] keys: {list(template_data['metadata'].keys())}")
+
+            if 'bootstrap_features' in template_data['metadata']:
+                bf = template_data['metadata']['bootstrap_features']
+                print(f"✓ bootstrap_features en template_data['metadata']")
+                print(f"  Longitud: {len(bf)}")
+            else:
+                print(f"✗ bootstrap_features NO en template_data['metadata']")
+                print(f"  Keys disponibles: {list(template_data['metadata'].keys())}")
+
+            # Calcular tamaño del JSON
+            import json
+            metadata_json = json.dumps(template_data['metadata'])
+            print(f"Tamaño metadata JSON: {len(metadata_json)} bytes ({len(metadata_json)/1024:.2f} KB)")
+            print("="*80)
+
             # UPSERT EN SUPABASE
             result = self.supabase.table('biometric_templates').upsert(template_data, on_conflict='template_id').execute()
             
+            # DIAGNOSTICO: Verificar respuesta de Supabase
+            print("=" * 80)
+            print("DIAGNOSTICO _save_template - RESPUESTA SUPABASE")
+            if result.data:
+                print(f"Resultado count: {len(result.data)}")
+                if len(result.data) > 0:
+                    saved_template = result.data[0]
+                    saved_metadata = saved_template.get('metadata', {})
+                    print(f"Metadata type en respuesta: {type(saved_metadata)}")
+                    print(f"Metadata keys en respuesta: {list(saved_metadata.keys()) if isinstance(saved_metadata, dict) else 'NO DICT'}")
+                    print(f"bootstrap_features en respuesta: {'bootstrap_features' in saved_metadata if isinstance(saved_metadata, dict) else False}")
+                    if isinstance(saved_metadata, dict) and 'bootstrap_features' in saved_metadata:
+                        print(f"bootstrap_features dimension en respuesta: {len(saved_metadata['bootstrap_features'])}")
+                    print(f"temporal_sequence en respuesta: {'temporal_sequence' in saved_metadata if isinstance(saved_metadata, dict) else False}")
+                    if isinstance(saved_metadata, dict) and 'temporal_sequence' in saved_metadata:
+                        temporal_seq = saved_metadata['temporal_sequence']
+                        if temporal_seq:
+                            print(f"temporal_sequence dimension en respuesta: {len(temporal_seq)} frames")
+            else:
+                print("WARNING: result.data es None o vacio")
+            print("=" * 80)
+        
             print(f"Template guardado en Supabase: {template.template_id}")
+
+            # ============================================================================
+            # DEBUG: VERIFICAR QUÉ SE GUARDÓ REALMENTE EN SUPABASE
+            # ============================================================================
+            print("="*80)
+            print("DEBUG: VERIFICACIÓN INMEDIATA EN SUPABASE")
+            print("="*80)
+            try:
+                verify = self.supabase.table('biometric_templates').select('*').eq('template_id', template.template_id).execute()
+                
+                if verify.data:
+                    saved_template = verify.data[0]
+                    saved_metadata = saved_template.get('metadata', {})
+                    
+                    print(f"Template recuperado de Supabase:")
+                    print(f"  Metadata keys guardados: {list(saved_metadata.keys())}")
+                    
+                    if 'bootstrap_features' in saved_metadata:
+                        bf_saved = saved_metadata['bootstrap_features']
+                        print(f"  ✓✓✓ bootstrap_features SÍ SE GUARDÓ EN SUPABASE")
+                        print(f"      Longitud: {len(bf_saved)}")
+                        print(f"      Primeros 5: {bf_saved[:5]}")
+                    else:
+                        print(f"  ✗✗✗ bootstrap_features NO SE GUARDÓ EN SUPABASE")
+                        print(f"      Keys guardados: {list(saved_metadata.keys())}")
+                    
+                    if 'temporal_sequence' in saved_metadata:
+                        ts_saved = saved_metadata['temporal_sequence']
+                        print(f"  ✓ temporal_sequence SÍ se guardó ({len(ts_saved)} frames)")
+                    else:
+                        print(f"  ✗ temporal_sequence NO se guardó")
+                        
+                else:
+                    print(f"  ✗✗✗ NO SE PUDO RECUPERAR EL TEMPLATE DE SUPABASE")
+                    
+            except Exception as verify_error:
+                print(f"  ERROR en verificación: {verify_error}")
+                
+            print("="*80)
             
         except Exception as e:
             print(f"ERROR guardando template en Supabase: {e}")

@@ -677,6 +677,7 @@ class BiometricSystemManager:
                     print(f"Advertencia guardando tracking: {tracking_error}")
                 
                 # NUEVO: FASE 2 - Regenerar embeddings si es reentrenamiento
+                # FASE 2 - Regenerar embeddings si es reentrenamiento
                 if force:  # Es un reentrenamiento
                     print("\n" + "=" * 80)
                     print("FASE 2: REGENERACIÓN DE EMBEDDINGS")
@@ -693,6 +694,97 @@ class BiometricSystemManager:
                         print("   El sistema seguirá funcionando, pero revisa los logs")
                     
                     print("=" * 80)
+                    
+                    print("=" * 80)
+
+                    # ============================================================
+                    # LOGS CRÍTICOS: Estado ANTES del recálculo de threshold
+                    # ============================================================
+                    print("\n" + "=" * 80)
+                    print("ESTADO ANTES DE RECALCULAR THRESHOLD")
+                    print("=" * 80)
+                    print(f"Threshold anatómico ACTUAL: {self.anatomical_network.optimal_threshold:.6f}")
+
+                    if self.anatomical_network.current_metrics:
+                        print(f"Métricas ACTUALES de entrenamiento:")
+                        print(f"  FAR: {self.anatomical_network.current_metrics.far:.6f}")
+                        print(f"  FRR: {self.anatomical_network.current_metrics.frr:.6f}")
+                        print(f"  EER: {self.anatomical_network.current_metrics.eer:.6f}")
+                        print(f"  Threshold en métricas: {self.anatomical_network.current_metrics.threshold:.6f}")
+
+                    # Verificar embeddings en base de datos
+                    all_users = self.database.list_users()
+                    print(f"\nUSUARIOS EN BASE DE DATOS: {len(all_users)}")
+
+                    for user in all_users:
+                        templates = self.database.list_user_templates(user.user_id)
+                        anatomical_templates = [t for t in templates if 'anatomical' in str(t.template_type).lower()]
+                        
+                        print(f"\n  Usuario: {user.username}")
+                        print(f"    Templates anatómicos: {len(anatomical_templates)}")
+                        
+                        for template in anatomical_templates[:3]:  # Solo primeros 3 para no saturar
+                            if template.anatomical_embedding is not None:
+                                emb = np.array(template.anatomical_embedding)
+                                norm = np.linalg.norm(emb)
+                                print(f"    Template {template.template_id[:12]}...")
+                                print(f"      Embedding shape: {emb.shape}")
+                                print(f"      Embedding norm: {norm:.6f}")
+                                print(f"      Updated at: {getattr(template, 'updated_at', 'N/A')}")
+                                print(f"      Mean value: {np.mean(emb):.6f}")
+
+                    print("=" * 80)
+
+
+                    # ============================================================
+                    # FASE 3 - Recalcular thresholds con embeddings regenerados
+                    # ============================================================
+                    print("\n" + "=" * 80)
+                    print("FASE 3: RECALCULANDO THRESHOLDS CON EMBEDDINGS REGENERADOS")
+                    print("=" * 80)
+                    
+                    # Recalcular threshold anatómico
+                    print("\nRecalculando threshold de red anatómica...")
+                    try:
+                        threshold_anatomical = self.anatomical_network.recalculate_threshold_from_database(self.database)
+                        
+                        if threshold_anatomical:
+                            print("✓ Threshold anatómico recalculado y guardado exitosamente")
+                            if self.anatomical_network.current_metrics:
+                                print(f"   Nuevo threshold: {self.anatomical_network.current_metrics.threshold:.4f}")
+                                print(f"   FAR: {self.anatomical_network.current_metrics.far:.4f}")
+                                print(f"   FRR: {self.anatomical_network.current_metrics.frr:.4f}")
+                                print(f"   EER: {self.anatomical_network.current_metrics.eer:.4f}")
+                        else:
+                            print("Advertencia: No se pudo recalcular threshold anatómico")
+                            print("   El sistema usará el threshold anterior")
+                            
+                    except Exception as e:
+                        print(f"Error recalculando threshold anatómico: {e}")
+                        print("   El sistema usará el threshold anterior")
+                        
+
+                        
+                    
+                    # ============================================================
+                    # LOGS CRÍTICOS: Estado DESPUÉS del recálculo de threshold
+                    # ============================================================
+                    print("\n" + "=" * 80)
+                    print("ESTADO DESPUÉS DE RECALCULAR THRESHOLD")
+                    print("=" * 80)
+                    print(f"Threshold anatómico NUEVO: {self.anatomical_network.optimal_threshold:.6f}")
+
+                    if self.anatomical_network.current_metrics:
+                        print(f"Métricas NUEVAS después de recálculo:")
+                        print(f"  FAR: {self.anatomical_network.current_metrics.far:.6f}")
+                        print(f"  FRR: {self.anatomical_network.current_metrics.frr:.6f}")
+                        print(f"  EER: {self.anatomical_network.current_metrics.eer:.6f}")
+                        print(f"  Threshold en métricas: {self.anatomical_network.current_metrics.threshold:.6f}")
+                        print(f"  AUC: {self.anatomical_network.current_metrics.auc_score:.6f}")
+
+                    print("=" * 80)
+
+      
                     
             else:
                 result['message'] = "Entrenamiento parcial o fallido"
@@ -724,9 +816,9 @@ class BiometricSystemManager:
             
             all_users = self.database.list_users()
             
-            logger.info(f"Total usuarios en sistema: {len(all_users)}")
+            print(f"Total usuarios en sistema: {len(all_users)}")
             for user in all_users:
-                logger.info(f"   - {user.username} (ID: {user.user_id})")
+                print(f"   - {user.username} (ID: {user.user_id})")
             
             # Leer tracking del último entrenamiento
             tracking_path = Path('biometric_data') / 'last_training.json'
@@ -743,7 +835,7 @@ class BiometricSystemManager:
                 with open(tracking_path, 'r') as f:
                     last_training = json.load(f)
                     trained_user_ids = last_training.get('users_trained', [])
-                    logger.info(f"Último entrenamiento incluía: {trained_user_ids}")
+                    print(f"Último entrenamiento incluía: {trained_user_ids}")
             except Exception as e:
                 logger.error(f"Error leyendo tracking: {e}")
                 logger.error("   No se puede determinar usuarios pendientes")
@@ -752,7 +844,7 @@ class BiometricSystemManager:
             # Detectar usuarios NUEVOS (no en trained_user_ids)
             pending_users = []
             for user in all_users:
-                logger.info(f"Verificando usuario: {user.username} (ID: {user.user_id})")
+                print(f"Verificando usuario: {user.username} (ID: {user.user_id})")
                 
                 if user.user_id not in trained_user_ids:
                     pending_users.append({
@@ -760,11 +852,11 @@ class BiometricSystemManager:
                         'username': user.username,
                         'total_templates': user.total_templates
                     })
-                    logger.info(f"Usuario pendiente agregado: {user.username} (ID: {user.user_id})")
+                    print(f"Usuario pendiente agregado: {user.username} (ID: {user.user_id})")
                 else:
-                    logger.info(f" Usuario ya entrenado: {user.username} (ID: {user.user_id})")
+                    print(f" Usuario ya entrenado: {user.username} (ID: {user.user_id})")
             
-            logger.info(f"RESULTADO FINAL: {len(pending_users)} usuarios pendientes")
+            print(f"RESULTADO FINAL: {len(pending_users)} usuarios pendientes")
             
             return pending_users
             
@@ -783,14 +875,14 @@ class BiometricSystemManager:
             True si la regeneración fue exitosa
         """
         try:
-            logger.info("=== REGENERACIÓN DE EMBEDDINGS POST-REENTRENAMIENTO ===")
+            print("=== REGENERACIÓN DE EMBEDDINGS POST-REENTRENAMIENTO ===")
             
             # Verificar redes
             if not self.anatomical_network.is_trained or not self.dynamic_network.is_trained:
                 logger.error("Redes no están entrenadas")
                 return False
             
-            logger.info("Redes disponibles")
+            print("Redes disponibles")
             
             # Identificar usuarios normales (no bootstrap)
             all_users = self.database.list_users()
@@ -804,7 +896,7 @@ class BiometricSystemManager:
                     normal_users.append(user)
             
             if not normal_users:
-                logger.info("No hay usuarios normales para regenerar")
+                print("No hay usuarios normales para regenerar")
                 return True
             
             print(f"Regenerando embeddings para {len(normal_users)} usuarios normales...")
@@ -833,10 +925,10 @@ class BiometricSystemManager:
                     continue
             
             # Resumen
-            logger.info("=" * 60)
-            logger.info(f"Templates regenerados: {total_regenerated}")
-            logger.info(f"Errores: {total_errors}")
-            logger.info("=" * 60)
+            print("=" * 60)
+            print(f"Templates regenerados: {total_regenerated}")
+            print(f"Errores: {total_errors}")
+            print("=" * 60)
             
             return total_regenerated > 0
             
@@ -844,83 +936,423 @@ class BiometricSystemManager:
             logger.error(f"Error crítico en regeneración: {e}")
             return False
 
+    # def _regenerate_single_template(self, template) -> bool:
+    #     """Regenera embeddings de un template específico."""
+    #     try:
+    #         from pathlib import Path
+    #         import json
+            
+    #         template_id = template.template_id
+    #         print(f"   Regenerando: {template_id[:12]}...")
+            
+    #         # Cargar metadatos JSON
+    #         json_file = Path("biometric_data") / "templates" / f"{template_id}.json"
+    #         if not json_file.exists():
+    #             return False
+            
+    #         with open(json_file, 'r') as f:
+    #             json_data = json.load(f)
+            
+    #         # CRÍTICO: Deserializar metadata si es string
+    #         metadata_raw = json_data.get('metadata', {})
+            
+    #         if isinstance(metadata_raw, str):
+    #             # Metadata está serializado como string, deserializar
+    #             try:
+    #                 metadata = json.loads(metadata_raw)
+    #                 print(f"      Metadata deserializado correctamente")
+    #             except json.JSONDecodeError as e:
+    #                 print(f"      ERROR deserializando metadata: {e}")
+    #                 return False
+    #         else:
+    #             # Metadata ya es dict
+    #             metadata = metadata_raw
+            
+    #         regenerated = False
+            
+    #         # REGENERACIÓN ANATÓMICA
+    #         if str(template.template_type) == 'TemplateType.ANATOMICAL':
+    #             bootstrap_features = metadata.get('bootstrap_features', [])
+                
+    #             if bootstrap_features and self.anatomical_network.is_trained:
+    #                 features_array = np.array(bootstrap_features, dtype=np.float32)
+                    
+    #                 # Promediar si hay múltiples vectores
+    #                 if features_array.ndim == 2:
+    #                     features_array = np.mean(features_array, axis=0)
+                    
+    #                 # Generar nuevo embedding
+    #                 new_embedding = self.anatomical_network.base_network.predict(
+    #                     features_array.reshape(1, -1), verbose=0
+    #                 )[0]
+                    
+    #                 # Actualizar template
+    #                 template.anatomical_embedding = new_embedding
+    #                 self.database._save_template(template)
+                    
+    #                 print(f"      Embedding anatómico regenerado")
+    #                 regenerated = True
+            
+    #         # REGENERACIÓN DINÁMICA
+    #         elif str(template.template_type) == 'TemplateType.DYNAMIC':
+    #             temporal_sequence = metadata.get('temporal_sequence', [])
+                
+    #             if temporal_sequence and self.dynamic_network.is_trained:
+    #                 sequence_array = np.array(temporal_sequence, dtype=np.float32)
+                    
+    #                 # Ajustar dimensiones (50×320)
+    #                 if len(sequence_array.shape) == 2:
+    #                     seq_length = len(sequence_array)
+    #                     if seq_length > 50:
+    #                         sequence_array = sequence_array[:50]
+    #                     elif seq_length < 50:
+    #                         padding = np.zeros((50 - seq_length, 320))
+    #                         sequence_array = np.vstack([sequence_array, padding])
+                        
+    #                     # Generar nuevo embedding
+    #                     new_embedding = self.dynamic_network.base_network.predict(
+    #                         sequence_array.reshape(1, 50, 320), verbose=0
+    #                     )[0]
+                        
+    #                     # Actualizar template
+    #                     template.dynamic_embedding = new_embedding
+    #                     self.database._save_template(template)
+                        
+    #                     print(f"      Embedding dinámico regenerado")
+    #                     regenerated = True
+            
+    #         return regenerated
+            
+    #     except Exception as e:
+    #         print(f"   Error: {e}")
+    #         return False
+    
+    # def _regenerate_single_template(self, template) -> bool:
+    #     """Regenera embeddings de un template específico - VERSION CON LOGS DETALLADOS."""
+    #     try:
+    #         from pathlib import Path
+    #         import json
+            
+    #         template_id = template.template_id
+    #         print(f"\n   === REGENERANDO TEMPLATE: {template_id[:20]} ===")
+    #         print(f"      Tipo: {template.template_type}")
+            
+    #         # ============================================================
+    #         # PASO 1: CARGAR ARCHIVO JSON
+    #         # ============================================================
+    #         json_file = Path("biometric_data") / "templates" / f"{template_id}.json"
+    #         print(f"      Buscando archivo: {json_file}")
+            
+    #         if not json_file.exists():
+    #             print(f"      ✗ ARCHIVO JSON NO EXISTE")
+    #             return False
+            
+    #         print(f"      ✓ Archivo JSON encontrado")
+            
+    #         with open(json_file, 'r') as f:
+    #             json_data = json.load(f)
+            
+    #         print(f"      ✓ JSON cargado correctamente")
+            
+    #         # ============================================================
+    #         # PASO 2: DESERIALIZAR METADATA
+    #         # ============================================================
+    #         metadata_raw = json_data.get('metadata', {})
+    #         print(f"      Tipo de metadata_raw: {type(metadata_raw)}")
+            
+    #         if isinstance(metadata_raw, str):
+    #             print(f"      → Metadata es STRING, deserializando...")
+    #             try:
+    #                 metadata = json.loads(metadata_raw)
+    #                 print(f"      ✓ Metadata deserializado correctamente")
+    #                 print(f"      → Keys en metadata: {list(metadata.keys())[:5]}")
+    #             except json.JSONDecodeError as e:
+    #                 print(f"      ✗ ERROR deserializando metadata: {e}")
+    #                 return False
+    #         else:
+    #             print(f"      → Metadata ya es DICT")
+    #             metadata = metadata_raw
+    #             print(f"      → Keys en metadata: {list(metadata.keys())[:5]}")
+            
+    #         regenerated = False
+            
+    #         # ============================================================
+    #         # PASO 3A: REGENERACIÓN ANATÓMICA
+    #         # ============================================================
+    #         template_type_str = str(template.template_type)
+    #         print(f"      Template type string: '{template_type_str}'")
+            
+    #         if template_type_str == 'TemplateType.ANATOMICAL':
+    #             print(f"      → Es template ANATÓMICO")
+                
+    #             # Verificar bootstrap_features
+    #             bootstrap_features = metadata.get('bootstrap_features', [])
+    #             print(f"      → bootstrap_features presente: {bool(bootstrap_features)}")
+    #             print(f"      → bootstrap_features length: {len(bootstrap_features) if bootstrap_features else 0}")
+                
+    #             # Verificar red entrenada
+    #             print(f"      → Red anatómica entrenada: {self.anatomical_network.is_trained}")
+                
+    #             if not bootstrap_features:
+    #                 print(f"      ✗ NO HAY bootstrap_features en metadata")
+    #                 return False
+                
+    #             if not self.anatomical_network.is_trained:
+    #                 print(f"      ✗ Red anatómica NO está entrenada")
+    #                 return False
+                
+    #             print(f"      ✓ Condiciones cumplidas, generando embedding...")
+                
+    #             features_array = np.array(bootstrap_features, dtype=np.float32)
+    #             print(f"      → features_array shape inicial: {features_array.shape}")
+                
+    #             # Promediar si hay múltiples vectores
+    #             if features_array.ndim == 2:
+    #                 print(f"      → Promediando múltiples vectores...")
+    #                 features_array = np.mean(features_array, axis=0)
+    #                 print(f"      → features_array shape después de promediar: {features_array.shape}")
+                
+    #             # Generar nuevo embedding
+    #             print(f"      → Llamando a red anatómica.predict()...")
+    #             new_embedding = self.anatomical_network.base_network.predict(
+    #                 features_array.reshape(1, -1), verbose=0
+    #             )[0]
+    #             print(f"      → new_embedding shape: {new_embedding.shape}")
+    #             print(f"      → new_embedding primeros 5 valores: {new_embedding[:5]}")
+                
+    #             # Actualizar template
+    #             print(f"      → Actualizando template en base de datos...")
+    #             template.anatomical_embedding = new_embedding
+    #             self.database._save_template(template)
+                
+    #             print(f"      ✓✓✓ EMBEDDING ANATÓMICO REGENERADO EXITOSAMENTE")
+    #             regenerated = True
+            
+    #         # ============================================================
+    #         # PASO 3B: REGENERACIÓN DINÁMICA
+    #         # ============================================================
+    #         elif template_type_str == 'TemplateType.DYNAMIC':
+    #             print(f"      → Es template DINÁMICO")
+                
+    #             # Verificar temporal_sequence
+    #             temporal_sequence = metadata.get('temporal_sequence', [])
+    #             print(f"      → temporal_sequence presente: {bool(temporal_sequence)}")
+    #             print(f"      → temporal_sequence length: {len(temporal_sequence) if temporal_sequence else 0}")
+                
+    #             # Verificar red entrenada
+    #             print(f"      → Red dinámica entrenada: {self.dynamic_network.is_trained}")
+                
+    #             if not temporal_sequence:
+    #                 print(f"      ✗ NO HAY temporal_sequence en metadata")
+    #                 return False
+                
+    #             if not self.dynamic_network.is_trained:
+    #                 print(f"      ✗ Red dinámica NO está entrenada")
+    #                 return False
+                
+    #             print(f"      ✓ Condiciones cumplidas, generando embedding...")
+                
+    #             sequence_array = np.array(temporal_sequence, dtype=np.float32)
+    #             print(f"      → sequence_array shape inicial: {sequence_array.shape}")
+    #             print(f"      → sequence_array ndim: {sequence_array.ndim}")
+                
+    #             # Ajustar dimensiones (50×320)
+    #             if len(sequence_array.shape) == 2:
+    #                 seq_length = len(sequence_array)
+    #                 print(f"      → Secuencia es 2D, longitud: {seq_length}")
+                    
+    #                 if seq_length > 50:
+    #                     print(f"      → Truncando de {seq_length} a 50 frames")
+    #                     sequence_array = sequence_array[:50]
+    #                 elif seq_length < 50:
+    #                     print(f"      → Padding de {seq_length} a 50 frames")
+    #                     padding = np.zeros((50 - seq_length, 320))
+    #                     sequence_array = np.vstack([sequence_array, padding])
+                    
+    #                 print(f"      → sequence_array shape final: {sequence_array.shape}")
+                    
+    #                 # Generar nuevo embedding
+    #                 print(f"      → Llamando a red dinámica.predict()...")
+    #                 new_embedding = self.dynamic_network.base_network.predict(
+    #                     sequence_array.reshape(1, 50, 320), verbose=0
+    #                 )[0]
+    #                 print(f"      → new_embedding shape: {new_embedding.shape}")
+    #                 print(f"      → new_embedding primeros 5 valores: {new_embedding[:5]}")
+                    
+    #                 # Actualizar template
+    #                 print(f"      → Actualizando template en base de datos...")
+    #                 template.dynamic_embedding = new_embedding
+    #                 self.database._save_template(template)
+                    
+    #                 print(f"      ✓✓✓ EMBEDDING DINÁMICO REGENERADO EXITOSAMENTE")
+    #                 regenerated = True
+    #             else:
+    #                 print(f"      ✗ sequence_array NO es 2D (shape: {sequence_array.shape})")
+    #                 return False
+            
+    #         else:
+    #             print(f"      ✗ TIPO DE TEMPLATE NO RECONOCIDO: '{template_type_str}'")
+    #             return False
+            
+    #         print(f"   === FIN REGENERACIÓN (success={regenerated}) ===\n")
+    #         return regenerated
+            
+    #     except Exception as e:
+    #         print(f"   ✗✗✗ EXCEPCIÓN EN REGENERACIÓN: {e}")
+    #         import traceback
+    #         traceback.print_exc()
+    #         return False
+        
     def _regenerate_single_template(self, template) -> bool:
-        """Regenera embeddings de un template específico."""
+        """Regenera embeddings de un template específico - VERSION SUPABASE."""
         try:
-            from pathlib import Path
             import json
             
             template_id = template.template_id
-            print(f"   Regenerando: {template_id[:12]}...")
+            print(f"\n   === REGENERANDO TEMPLATE: {template_id[:20]} ===")
+            print(f"      Tipo: {template.template_type}")
             
-            # Cargar metadatos JSON
-            json_file = Path("biometric_data") / "templates" / f"{template_id}.json"
-            if not json_file.exists():
+            # ============================================================
+            # OBTENER METADATA DESDE SUPABASE (NO DESDE ARCHIVO)
+            # ============================================================
+            metadata_raw = template.metadata
+            print(f"      Metadata raw type: {type(metadata_raw)}")
+            
+            if not metadata_raw:
+                print(f"      ✗ Template NO tiene metadata")
                 return False
             
-            with open(json_file, 'r') as f:
-                json_data = json.load(f)
+            # Deserializar metadata si es string
+            if isinstance(metadata_raw, str):
+                print(f"      → Deserializando metadata JSON...")
+                try:
+                    metadata = json.loads(metadata_raw)
+                    print(f"      ✓ Metadata deserializado")
+                except json.JSONDecodeError as e:
+                    print(f"      ✗ Error deserializando: {e}")
+                    return False
+            elif isinstance(metadata_raw, dict):
+                print(f"      → Metadata ya es dict")
+                metadata = metadata_raw
+            else:
+                print(f"      ✗ Metadata tipo desconocido: {type(metadata_raw)}")
+                return False
             
-            metadata = json_data.get('metadata', {})
+            print(f"      → Keys en metadata: {list(metadata.keys())[:5]}")
+            
             regenerated = False
+            template_type_str = str(template.template_type)
             
+            # ============================================================
             # REGENERACIÓN ANATÓMICA
-            if str(template.template_type) == 'TemplateType.ANATOMICAL':
-                bootstrap_features = metadata.get('bootstrap_features', [])
+            # ============================================================
+            if template_type_str == 'TemplateType.ANATOMICAL':
+                print(f"      → Template ANATÓMICO")
                 
-                if bootstrap_features and self.anatomical_network.is_trained:
-                    features_array = np.array(bootstrap_features, dtype=np.float32)
+                bootstrap_features = metadata.get('bootstrap_features', [])
+                print(f"      → bootstrap_features: {bool(bootstrap_features)}")
+                
+                if not bootstrap_features:
+                    print(f"      ✗ NO hay bootstrap_features")
+                    return False
+                
+                if not self.anatomical_network.is_trained:
+                    print(f"      ✗ Red anatómica no entrenada")
+                    return False
+                
+                print(f"      ✓ Generando nuevo embedding anatómico...")
+                
+                features_array = np.array(bootstrap_features, dtype=np.float32)
+                print(f"      → Shape inicial: {features_array.shape}")
+                
+                # Promediar si hay múltiples vectores
+                if features_array.ndim == 2:
+                    print(f"      → Promediando múltiples vectores")
+                    features_array = np.mean(features_array, axis=0)
+                    print(f"      → Shape después: {features_array.shape}")
+                
+                # Generar nuevo embedding
+                new_embedding = self.anatomical_network.base_network.predict(
+                    features_array.reshape(1, -1), verbose=0
+                )[0]
+                
+                print(f"      → Nuevo embedding shape: {new_embedding.shape}")
+                print(f"      → Primeros valores: {new_embedding[:3]}")
+                
+                # ACTUALIZAR en Supabase
+                template.anatomical_embedding = new_embedding
+                self.database._save_template(template)
+                
+                print(f"      ✓✓✓ EMBEDDING ANATÓMICO REGENERADO Y GUARDADO")
+                regenerated = True
+            
+            # ============================================================
+            # REGENERACIÓN DINÁMICA
+            # ============================================================
+            elif template_type_str == 'TemplateType.DYNAMIC':
+                print(f"      → Template DINÁMICO")
+                
+                temporal_sequence = metadata.get('temporal_sequence', [])
+                print(f"      → temporal_sequence: {bool(temporal_sequence)}")
+                
+                if not temporal_sequence:
+                    print(f"      ✗ NO hay temporal_sequence")
+                    return False
+                
+                if not self.dynamic_network.is_trained:
+                    print(f"      ✗ Red dinámica no entrenada")
+                    return False
+                
+                print(f"      ✓ Generando nuevo embedding dinámico...")
+                
+                sequence_array = np.array(temporal_sequence, dtype=np.float32)
+                print(f"      → Shape inicial: {sequence_array.shape}")
+                
+                # Ajustar dimensiones (50×320)
+                if sequence_array.ndim == 2:
+                    seq_length = sequence_array.shape[0]
+                    print(f"      → Secuencia 2D, longitud: {seq_length}")
                     
-                    # Promediar si hay múltiples vectores
-                    if features_array.ndim == 2:
-                        features_array = np.mean(features_array, axis=0)
+                    if seq_length > 50:
+                        print(f"      → Truncando a 50")
+                        sequence_array = sequence_array[:50]
+                    elif seq_length < 50:
+                        print(f"      → Padding a 50")
+                        padding = np.zeros((50 - seq_length, 320))
+                        sequence_array = np.vstack([sequence_array, padding])
+                    
+                    print(f"      → Shape final: {sequence_array.shape}")
                     
                     # Generar nuevo embedding
-                    new_embedding = self.anatomical_network.base_network.predict(
-                        features_array.reshape(1, -1), verbose=0
+                    new_embedding = self.dynamic_network.base_network.predict(
+                        sequence_array.reshape(1, 50, 320), verbose=0
                     )[0]
                     
-                    # Actualizar template
-                    template.anatomical_embedding = new_embedding
+                    print(f"      → Nuevo embedding shape: {new_embedding.shape}")
+                    print(f"      → Primeros valores: {new_embedding[:3]}")
+                    
+                    # ACTUALIZAR en Supabase
+                    template.dynamic_embedding = new_embedding
                     self.database._save_template(template)
                     
-                    print(f"      Embedding anatómico regenerado")
+                    print(f"      ✓✓✓ EMBEDDING DINÁMICO REGENERADO Y GUARDADO")
                     regenerated = True
+                else:
+                    print(f"      ✗ Sequence no es 2D")
+                    return False
             
-            # REGENERACIÓN DINÁMICA
-            elif str(template.template_type) == 'TemplateType.DYNAMIC':
-                temporal_sequence = metadata.get('temporal_sequence', [])
-                
-                if temporal_sequence and self.dynamic_network.is_trained:
-                    sequence_array = np.array(temporal_sequence, dtype=np.float32)
-                    
-                    # Ajustar dimensiones (50×320)
-                    if len(sequence_array.shape) == 2:
-                        seq_length = len(sequence_array)
-                        if seq_length > 50:
-                            sequence_array = sequence_array[:50]
-                        elif seq_length < 50:
-                            padding = np.zeros((50 - seq_length, 320))
-                            sequence_array = np.vstack([sequence_array, padding])
-                        
-                        # Generar nuevo embedding
-                        new_embedding = self.dynamic_network.base_network.predict(
-                            sequence_array.reshape(1, 50, 320), verbose=0
-                        )[0]
-                        
-                        # Actualizar template
-                        template.dynamic_embedding = new_embedding
-                        self.database._save_template(template)
-                        
-                        print(f"      Embedding dinámico regenerado")
-                        regenerated = True
+            else:
+                print(f"      ✗ Tipo desconocido: {template_type_str}")
+                return False
             
             return regenerated
             
         except Exception as e:
-            print(f"   Error: {e}")
+            print(f"   ✗✗✗ ERROR: {e}")
+            import traceback
+            traceback.print_exc()
             return False
-        
+    
     def cleanup_resources(self):
         """
         Limpia recursos del sistema (cámara, MediaPipe, etc).

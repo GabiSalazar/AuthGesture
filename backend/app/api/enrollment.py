@@ -909,7 +909,7 @@ async def start_enrollment(request: EnrollmentStartRequest):
         # ENVIAR EMAIL DE VERIFICACIÓN (solo si NO viene user_id)
         # ============================================================================
         if not skip_email_sending:
-            print(f"📧 Enviando email de verificación a {email_stripped}...")
+            print(f"Enviando email de verificación a {email_stripped}...")
             
             email_system = get_email_verification_system()
             email_sent = email_system.send_verification_email(

@@ -371,6 +371,16 @@ class AuthenticationFeedbackService:
             result = query.execute()
             attempts = result.data
             
+            # Contar TODAS las autenticaciones (con y sin feedback)
+            total_query = self.client.table('authentication_attempts')\
+                .select('id', count='exact')
+            
+            if user_id:
+                total_query = total_query.eq('user_id', user_id)
+            
+            total_result = total_query.execute()
+            total_attempts = total_result.count if total_result.count else 0
+            
             # Inicializar contadores
             tp = fp = tn = fn = 0
             
@@ -405,6 +415,7 @@ class AuthenticationFeedbackService:
                 'true_negatives': tn,
                 'false_negatives': fn,
                 'total_samples': total,
+                'total_attempts': total_attempts,
                 'accuracy': round(accuracy, 4),
                 'precision': round(precision, 4),
                 'recall': round(recall, 4),

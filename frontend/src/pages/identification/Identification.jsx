@@ -29,7 +29,7 @@ export default function Identification() {
   const isProcessingFrameRef = useRef(false)
   const sessionCompletedRef = useRef(false)
   const sessionIdRef = useRef(null)
-  const lastFrameTimeRef = useRef(0) // ✅ THROTTLING
+  const lastFrameTimeRef = useRef(0) //  THROTTLING
 
   // CLEANUP
   useEffect(() => {
@@ -176,7 +176,7 @@ export default function Identification() {
         return
       }
 
-      // ✅ MARCAR TIMESTAMP
+      //  MARCAR TIMESTAMP
       lastFrameTimeRef.current = now
 
       canvas.width = video.videoWidth

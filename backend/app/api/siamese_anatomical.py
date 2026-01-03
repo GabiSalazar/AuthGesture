@@ -208,6 +208,41 @@ async def get_anatomical_network_metrics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
+@router.get("/metrics/full", dependencies=[Depends(require_admin_token)])
+async def get_anatomical_metrics_full():
+    """
+    Obtiene las métricas COMPLETAS leyendo directamente del JSON guardado.
+    Incluye: metrics, confusion_matrix, roc_curve, training_history, score_distributions.
+    """
+    try:
+        import json
+        from pathlib import Path
+        
+        # Leer JSON directamente
+        json_path = Path('biometric_data/models/anatomical_model.json')
+        
+        if not json_path.exists():
+            return {
+                "status": "error",
+                "message": "Modelo no encontrado",
+                "is_trained": False
+            }
+        
+        with open(json_path, 'r') as f:
+            model_data = json.load(f)
+        
+        # Devolver TODO el JSON
+        return {
+            "status": "success",
+            "network_type": "anatomical",
+            "is_trained": True,
+            "model_exists": True,
+            **model_data  # Incluye TODA la data del JSON
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
+
 @router.get("/training-history")
 async def get_training_history():
     """Obtiene historial de entrenamiento"""

@@ -162,7 +162,7 @@
             
 #             if response.status_code in [200, 201, 202]:
 #                 print(f"Email enviado exitosamente a {email}")
-#                 print(f"🔑 Código de verificación: {verification_code}")
+#                 print(f"Código de verificación: {verification_code}")
 #                 return True
 #             else:
 #                 print(f"Error enviando email: {response.status_code}")
@@ -635,7 +635,7 @@ class EmailVerificationSystem:
             
             if response.status_code in [200, 201, 202]:
                 print(f"Email enviado exitosamente a {email}")
-                print(f"🔑 Código de verificación: {verification_code}")
+                print(f"Código de verificación: {verification_code}")
                 return True
             else:
                 print(f"Error enviando email: {response.status_code}")

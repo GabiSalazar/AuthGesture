@@ -1526,7 +1526,7 @@ class RealEnrollmentWorkflow:
             print("=" * 70)
             print(f" MUESTRA AGREGADA CON ROI!")
             print(f"   ID: {sample_id}")
-            print(f"   🤚 Gesto: {session.current_gesture}")
+            print(f"   Gesto: {session.current_gesture}")
             print(f"   Progreso: {session.successful_samples}/{session.total_samples_needed}")
             print(f"   Porcentaje: {session.progress_percentage:.1f}%")
             print(f"   Bootstrap: {self.bootstrap_mode}")
@@ -3125,7 +3125,7 @@ class RealEnrollmentSystem:
             print(f"   Total muestras en sesión: {len(session.samples)}")
             print(f"   Buffer sesión total: {len(session.all_frames_buffer)} frames")
             
-            # GUARDAR EN MODO BOOTSTRAP (CORREGIDO SEGÚN NOTEBOOK) 
+            # GUARDAR EN MODO BOOTSTRAP
             if self.bootstrap_mode:
                 try:
                     print("="*70)
@@ -3140,6 +3140,10 @@ class RealEnrollmentSystem:
                         'session_id': session.session_id,
                         'bootstrap_mode': True,
                         'session_username': session.username,
+                        'email': session.email,
+                        'phone_number': session.phone_number,
+                        'age': session.age,
+                        'gender': session.gender,
                         'has_temporal_data': sample.has_temporal_data,
                         'temporal_sequence': temporal_sequence.tolist() if temporal_sequence is not None else None,
                         'sequence_length': sample.sequence_length if sample.has_temporal_data else 0,
@@ -3147,7 +3151,7 @@ class RealEnrollmentSystem:
                         'is_real_temporal': temporal_sequence is not None
                     }
                     
-                    # LLAMAR AL MÉTODO enroll_template_bootstrap DEL NOTEBOOK
+                    # LLAMAR AL MÉTODO enroll_template_bootstrap
                     template_id = self.database.enroll_template_bootstrap(
                         user_id=session.user_id,
                         anatomical_features=anatomical_features.complete_vector,

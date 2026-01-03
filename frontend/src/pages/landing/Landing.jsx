@@ -181,7 +181,7 @@ export default function Landing() {
             onClick={handleLogoClick}
           >
             <img 
-              src="/logo.png" 
+              src="/log.png" 
               alt="Logo" 
               className="h-8 w-8" 
             />

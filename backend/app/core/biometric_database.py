@@ -1003,7 +1003,7 @@ class BiometricDatabase:
                             print(f"Template cargado:")
                             print(f"    ID: {template.template_id}")
                             print(f"   Usuario: {template.user_id}")
-                            print(f"   🤚 Gesto: {template.gesture_name}")
+                            print(f"   Gesto: {template.gesture_name}")
                             print(f"   Calidad: {template.quality_score:.2f}")
                             print(f"   Bootstrap: {is_bootstrap}")
                             
@@ -2233,7 +2233,7 @@ class BiometricDatabase:
                 print(f"   Tipo: {type(template.anatomical_embedding)}")
                 
                 if isinstance(template.anatomical_embedding, np.ndarray):
-                    print(f"   📐 Shape: {template.anatomical_embedding.shape}")
+                    print(f"   Shape: {template.anatomical_embedding.shape}")
                     print(f"   Dtype: {template.anatomical_embedding.dtype}")
                     print(f"   Min: {template.anatomical_embedding.min():.6f}")
                     print(f"   Max: {template.anatomical_embedding.max():.6f}")
@@ -2249,7 +2249,7 @@ class BiometricDatabase:
                 print(f"   Tipo: {type(template.dynamic_embedding)}")
                 
                 if isinstance(template.dynamic_embedding, np.ndarray):
-                    print(f"   📐 Shape: {template.dynamic_embedding.shape}")
+                    print(f"   Shape: {template.dynamic_embedding.shape}")
                     print(f"   Dtype: {template.dynamic_embedding.dtype}")
                     print(f"   Min: {template.dynamic_embedding.min():.6f}")
                     print(f"   Max: {template.dynamic_embedding.max():.6f}")

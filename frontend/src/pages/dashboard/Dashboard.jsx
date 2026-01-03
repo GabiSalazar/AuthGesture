@@ -277,7 +277,7 @@ export default function Dashboard() {
                 }}
               >
                 <Brain className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
-                {training ? 'Entrenando...' : 'Entrenar Ahora'}
+                {training ? 'Entrenando...' : 'Entrenar ahora'}
               </button>
             </div>
           </div>
@@ -318,7 +318,7 @@ export default function Dashboard() {
                 }}
               >
                 <RefreshCw className={`w-4 h-4 ${training ? 'animate-spin' : ''}`} />
-                {training ? 'Reentrenando...' : 'Reentrenar Redes'}
+                {training ? 'Reentrenando...' : 'Reentrenar redes'}
               </button>
             </div>
           </div>
@@ -757,18 +757,15 @@ function BiometricMetricsSection({ feedbackMetrics, fusionMetrics, anatomicalMet
         )}
       </div>
 
-      {/* Curva ROC + Métricas de Performance */}
+      {/* Métricas de Performance */}
       {(primaryMetrics || feedbackMetrics) && (
-        <div className="grid lg:grid-cols-2 gap-6">
-          <ROCCurveChart metrics={primaryMetrics} />
-          <PerformanceMetricsChart 
-            accuracy={(feedbackMetrics?.accuracy || primaryMetrics?.accuracy || 0) * 100}
-            precision={(feedbackMetrics?.precision || primaryMetrics?.precision || 0) * 100}
-            recall={(feedbackMetrics?.recall || primaryMetrics?.recall || 0) * 100}
-            f1={(feedbackMetrics?.f1_score || primaryMetrics?.f1_score || 0) * 100}
-            auc={(primaryMetrics?.auc_score || 0) * 100}
-          />
-        </div>
+        <PerformanceMetricsChart 
+          accuracy={(feedbackMetrics?.accuracy || primaryMetrics?.accuracy || 0) * 100}
+          precision={(feedbackMetrics?.precision || primaryMetrics?.precision || 0) * 100}
+          recall={(feedbackMetrics?.recall || primaryMetrics?.recall || 0) * 100}
+          f1={(feedbackMetrics?.f1_score || primaryMetrics?.f1_score || 0) * 100}
+          auc={(primaryMetrics?.auc_score || 0) * 100}
+        />
       )}
 
     </div>

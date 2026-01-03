@@ -490,7 +490,7 @@ export default function Authentication() {
               <>
                 <div className={`p-4 rounded-lg ${result.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
                   <p className={`font-semibold text-lg ${result.success ? 'text-green-900' : 'text-red-900'}`}>
-                    {result.success ? '✅ Autenticación Exitosa' : 'Autenticación Fallida'}
+                    {result.success ? ' Autenticación Exitosa' : 'Autenticación Fallida'}
                   </p>
                   {result.matched_user_id && (
                     <p className="text-sm text-gray-700 mt-2">
