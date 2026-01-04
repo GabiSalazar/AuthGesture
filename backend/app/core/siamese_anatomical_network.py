@@ -1615,232 +1615,894 @@ class RealSiameseAnatomicalNetwork:
     #         traceback.print_exc()
     #         return False
     
+    # def recalculate_threshold_from_database(self, database) -> bool:
+    #     """
+    #     Recalcula threshold óptimo usando embeddings actuales de la base de datos.
+    #     Usado después de regenerar embeddings post-reentrenamiento.
+    #     """
+    #     try:
+    #         print("=" * 80)
+    #         print("=== RECALCULANDO THRESHOLD CON EMBEDDINGS REGENERADOS ===")
+    #         print("=" * 80)
+            
+    #         # 1. Cargar TODOS los templates actuales
+    #         all_users = database.list_users()
+    #         user_embeddings = {}
+            
+    #         print(f"\nTOTAL USUARIOS EN SISTEMA: {len(all_users)}")
+            
+    #         for idx, user in enumerate(all_users, 1):
+    #             print(f"\n{'─' * 60}")
+    #             print(f"USUARIO {idx}/{len(all_users)}: {user.username}")
+    #             print(f"  ID: {user.user_id}")
+    #             print(f"{'─' * 60}")
+                
+    #             templates = database.list_user_templates(user.user_id)
+    #             print(f"  Templates totales recuperados: {len(templates)}")
+                
+    #             anatomical_templates = [t for t in templates if str(t.template_type).lower().find('anatomical') != -1]
+    #             print(f"  Templates filtrados como anatomicos: {len(anatomical_templates)}")
+                
+    #             embeddings = []
+    #             templates_con_embedding = 0
+    #             templates_sin_embedding = 0
+                
+    #             for template in anatomical_templates:
+    #                 embedding_added = False
+                    
+    #                 # CASO 1: Embedding guardado (usuario normal)
+    #                 if template.anatomical_embedding is not None:
+    #                     templates_con_embedding += 1
+    #                     embeddings.append(template.anatomical_embedding)
+    #                     embedding_added = True
+    #                     print(f"     Template {template.template_id[:20]}... - Embedding GUARDADO usado")
+                        
+    #                     if len(embeddings) == 1:
+    #                         emb_array = np.array(template.anatomical_embedding)
+    #                         print(f"       Primer embedding GUARDADO:")
+    #                         print(f"       Shape: {emb_array.shape}")
+    #                         print(f"       Norm: {np.linalg.norm(emb_array):.6f}")
+    #                         print(f"       Mean: {np.mean(emb_array):.6f}")
+                    
+    #                 # CASO 2: Sin embedding pero con bootstrap_features (usuario bootstrap)
+    #                 elif template.metadata and template.metadata.get('bootstrap_features'):
+    #                     bootstrap_features = template.metadata.get('bootstrap_features')
+                        
+    #                     # Convertir a numpy array
+    #                     if isinstance(bootstrap_features, list):
+    #                         bootstrap_features = np.array(bootstrap_features, dtype=np.float32)
+                        
+    #                     print(f"     Template {template.template_id[:20]}... - USUARIO BOOTSTRAP detectado")
+    #                     print(f"       bootstrap_features shape: {bootstrap_features.shape}")
+                        
+    #                     # Promediar si hay múltiples vectores
+    #                     if bootstrap_features.ndim == 2:
+    #                         print(f"       Promediando {bootstrap_features.shape[0]} vectores...")
+    #                         bootstrap_features = np.mean(bootstrap_features, axis=0)
+                        
+    #                     # Generar embedding TEMPORAL con red reentrenada (NO guardar)
+    #                     embedding = self.base_network.predict(bootstrap_features.reshape(1, -1), verbose=0)[0]
+                        
+    #                     embeddings.append(embedding)
+    #                     templates_con_embedding += 1
+    #                     embedding_added = True
+                        
+    #                     print(f"       Embedding temporal generado: shape={embedding.shape}")
+    #                     print(f"       Embedding norm: {np.linalg.norm(embedding):.6f}")
+    #                     print(f"       [TEMPORAL] NO guardado (solo para threshold)")
+                    
+    #                 # CASO 3: Sin embedding ni features
+    #                 if not embedding_added:
+    #                     templates_sin_embedding += 1
+    #                     print(f"     Template {template.template_id[:20]}... - SIN datos para generar embedding")
+                
+    #             print(f"  Templates CON embedding anatomico: {templates_con_embedding}")
+    #             print(f"  Templates SIN embedding anatomico: {templates_sin_embedding}")
+    #             print(f"  Embeddings recolectados: {len(embeddings)}")
+                
+    #             if embeddings:
+    #                 user_embeddings[user.user_id] = np.array(embeddings)
+    #                 print(f"  [OK] Usuario AGREGADO con {len(embeddings)} embeddings")
+    #             else:
+    #                 print(f"  [SKIP] Usuario OMITIDO (sin embeddings validos)")
+            
+    #         print("\n" + "=" * 80)
+    #         print(f"RESUMEN FINAL:")
+    #         print(f"  Usuarios totales procesados: {len(all_users)}")
+    #         print(f"  Usuarios CON embeddings: {len(user_embeddings)}")
+    #         print(f"  Usuarios SIN embeddings: {len(all_users) - len(user_embeddings)}")
+    #         print("=" * 80)
+            
+    #         if len(user_embeddings) < 2:
+    #             print("\n[ERROR] Se necesitan al menos 2 usuarios con embeddings para recalcular threshold")
+    #             print(f"   Encontrados: {len(user_embeddings)} usuarios con embeddings")
+    #             print(f"   Requeridos: 2 usuarios minimo")
+                
+    #             if len(user_embeddings) == 1:
+    #                 only_user = list(user_embeddings.keys())[0]
+    #                 print(f"\n   Usuario unico con embeddings: {only_user}")
+    #             elif len(user_embeddings) == 0:
+    #                 print(f"\n   [WARNING] NINGUN usuario tiene embeddings anatomicos validos")
+                
+    #             return False
+            
+    #         print(f"\n[OK] Suficientes usuarios para recalculo: {len(user_embeddings)}")
+
+    #         # ============================================================
+    #         # LOGS CRITICOS: Verificar embeddings REGENERADOS
+    #         # ============================================================
+    #         print("\n" + "=" * 80)
+    #         print("ANALISIS DETALLADO DE EMBEDDINGS REGENERADOS")
+    #         print("=" * 80)
+            
+    #         for user_id, embeddings in user_embeddings.items():
+    #             user_obj = next((u for u in all_users if u.user_id == user_id), None)
+    #             user_name = user_obj.username if user_obj else "Unknown"
+                
+    #             print(f"\nUsuario: {user_name} ({user_id})")
+    #             print(f"   Templates con embeddings: {len(embeddings)}")
+    #             print(f"   Shape del array: {embeddings.shape}")
+                
+    #             # Estadisticas de embeddings de este usuario
+    #             print(f"   Estadisticas:")
+    #             print(f"      Mean: {np.mean(embeddings):.6f}")
+    #             print(f"      Std: {np.std(embeddings):.6f}")
+    #             print(f"      Min: {np.min(embeddings):.6f}")
+    #             print(f"      Max: {np.max(embeddings):.6f}")
+                
+    #             # Normas L2 (deberian estar cerca de 1.0 si estan normalizados)
+    #             norms = np.linalg.norm(embeddings, axis=1)
+    #             print(f"   Normas L2:")
+    #             print(f"      Mean: {np.mean(norms):.6f}")
+    #             print(f"      Min: {np.min(norms):.6f}")
+    #             print(f"      Max: {np.max(norms):.6f}")
+                
+    #             # Si las normas estan muy lejos de 1.0, es una senal de problema
+    #             if np.mean(norms) < 0.9 or np.mean(norms) > 1.1:
+    #                 print(f"      [WARNING] Normas L2 fuera de rango esperado!")
+            
+    #         print("\n" + "=" * 80)
+            
+    #         # 2. Crear pares genuinos e impostores
+    #         print("\nCREANDO PARES PARA EVALUACION...")
+    #         features_a = []
+    #         features_b = []
+    #         labels = []
+            
+    #         user_ids = list(user_embeddings.keys())
+            
+    #         # Pares genuinos
+    #         genuine_count = 0
+    #         for user_id in user_ids:
+    #             embeddings = user_embeddings[user_id]
+    #             user_pairs = 0
+    #             for i in range(len(embeddings)):
+    #                 for j in range(i + 1, len(embeddings)):
+    #                     features_a.append(embeddings[i])
+    #                     features_b.append(embeddings[j])
+    #                     labels.append(1)
+    #                     genuine_count += 1
+    #                     user_pairs += 1
+    #             print(f"  Usuario {user_id[:20]}...: {user_pairs} pares genuinos")
+            
+    #         # Pares impostores
+    #         impostor_count = 0
+    #         for i, user_id1 in enumerate(user_ids):
+    #             for j, user_id2 in enumerate(user_ids[i + 1:], i + 1):
+    #                 emb1 = user_embeddings[user_id1]
+    #                 emb2 = user_embeddings[user_id2]
+                    
+    #                 max_pairs = min(50, len(emb1) * len(emb2) // 2)
+    #                 count = 0
+                    
+    #                 for e1 in emb1:
+    #                     for e2 in emb2:
+    #                         if count < max_pairs:
+    #                             features_a.append(e1)
+    #                             features_b.append(e2)
+    #                             labels.append(0)
+    #                             impostor_count += 1
+    #                             count += 1
+    #                         else:
+    #                             break
+    #                     if count >= max_pairs:
+    #                         break
+            
+    #         features_a = np.array(features_a)
+    #         features_b = np.array(features_b)
+    #         labels = np.array(labels)
+            
+    #         print(f"\nPARES CREADOS:")
+    #         print(f"  Genuinos: {genuine_count}")
+    #         print(f"  Impostores: {impostor_count}")
+    #         print(f"  Total: {len(labels)}")
+    #         print(f"  Ratio: {genuine_count/impostor_count:.2f}:1" if impostor_count > 0 else "  Ratio: N/A")
+            
+    #         # 3. Evaluar con nuevos embeddings
+    #         print(f"\nEVALUANDO MODELO CON NUEVOS EMBEDDINGS...")
+    #         metrics = self.evaluate_real_model(features_a, features_b, labels)
+    #         self.current_metrics = metrics
+            
+    #         print(f"\nTHRESHOLD RECALCULADO:")
+    #         print(f"  Threshold: {metrics.threshold:.6f}")
+    #         print(f"  FAR: {metrics.far:.6f}")
+    #         print(f"  FRR: {metrics.frr:.6f}")
+    #         print(f"  EER: {metrics.eer:.6f}")
+    #         print(f"  AUC: {metrics.auc_score:.6f}")
+            
+    #         # 4. Guardar modelo actualizado
+    #         print(f"\nGUARDANDO MODELO CON THRESHOLD ACTUALIZADO...")
+    #         save_success = self.save_real_model()
+            
+    #         if save_success:
+    #             print(f"[OK] Modelo guardado exitosamente")
+    #         else:
+    #             print(f"[ERROR] Error al guardar modelo")
+            
+    #         print("=" * 80)
+    #         return save_success
+            
+    #     except Exception as e:
+    #         print("\n" + "=" * 80)
+    #         print(f"[ERROR] ERROR RECALCULANDO THRESHOLD: {e}")
+    #         print("=" * 80)
+    #         import traceback
+    #         traceback.print_exc()
+    #         return False
+        
     def recalculate_threshold_from_database(self, database) -> bool:
         """
-        Recalcula threshold óptimo usando embeddings actuales de la base de datos.
-        Usado después de regenerar embeddings post-reentrenamiento.
+        Recalcula threshold óptimo REGENERANDO embeddings desde features 180D.
+        Usado después de reentrenar - usa la RED NUEVA para todos los usuarios.
         """
         try:
             print("=" * 80)
-            print("=== RECALCULANDO THRESHOLD CON EMBEDDINGS REGENERADOS ===")
+            print("=== RECALCULANDO THRESHOLD CON RED RECIEN ENTRENADA ===")
             print("=" * 80)
+            print("\n[INICIO] Proceso de recalculacion de threshold")
+            print("[INFO] Timestamp:", time.strftime("%Y-%m-%d %H:%M:%S"))
+            print("\n[ESTRATEGIA] Pasos a seguir:")
+            print("   1. Cargar FEATURES ORIGINALES (180D) de TODOS los usuarios")
+            print("   2. Crear pares genuinos/impostores con features 180D")
+            print("   3. Evaluar con red RECIEN ENTRENADA (genera embeddings on-the-fly)")
+            print("   4. Calcular threshold optimo")
+            print("   5. ACTUALIZAR embeddings guardados en BD (usuarios normales)")
+            print("   6. Guardar modelo con nuevo threshold")
             
-            # 1. Cargar TODOS los templates actuales
+            # ============================================================
+            # FASE 1: CARGAR FEATURES 180D (NO EMBEDDINGS VIEJOS)
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 1: CARGANDO FEATURES ANATOMICAS ORIGINALES (180D)")
+            print("=" * 80)
+            print("[FASE 1] Iniciando carga de features anatomicas de 180 dimensiones")
+            
             all_users = database.list_users()
-            user_embeddings = {}
+            print(f"[FASE 1] Total usuarios registrados en sistema: {len(all_users)}")
             
-            print(f"\nTOTAL USUARIOS EN SISTEMA: {len(all_users)}")
+            if len(all_users) == 0:
+                print("[FASE 1] [ERROR] No hay usuarios en el sistema")
+                return False
+            
+            print(f"[FASE 1] Usuarios encontrados:")
+            for idx, user in enumerate(all_users, 1):
+                print(f"[FASE 1]    {idx}. {user.username} (ID: {user.user_id})")
+            
+            user_features_180d = {}  # {user_id: [array_180d, array_180d, ...]}
+            user_template_ids = {}   # {user_id: [template_id, template_id, ...]}
+            
+            total_features_cargadas = 0
+            total_templates_procesados = 0
             
             for idx, user in enumerate(all_users, 1):
                 print(f"\n{'─' * 60}")
-                print(f"USUARIO {idx}/{len(all_users)}: {user.username}")
-                print(f"  ID: {user.user_id}")
+                print(f"[FASE 1] PROCESANDO USUARIO {idx}/{len(all_users)}")
+                print(f"[FASE 1]    Username: {user.username}")
+                print(f"[FASE 1]    User ID: {user.user_id}")
                 print(f"{'─' * 60}")
                 
+                # Obtener templates del usuario
+                print(f"[FASE 1] Consultando templates del usuario en base de datos...")
                 templates = database.list_user_templates(user.user_id)
-                print(f"  Templates totales recuperados: {len(templates)}")
+                print(f"[FASE 1] Templates totales recuperados: {len(templates)}")
+                total_templates_procesados += len(templates)
                 
-                anatomical_templates = [t for t in templates if str(t.template_type).lower().find('anatomical') != -1]
-                print(f"  Templates filtrados como anatomicos: {len(anatomical_templates)}")
+                if len(templates) == 0:
+                    print(f"[FASE 1] [WARNING] Usuario sin templates en base de datos")
+                    continue
                 
-                embeddings = []
-                templates_con_embedding = 0
-                templates_sin_embedding = 0
+                # Filtrar solo templates anatomicos
+                print(f"[FASE 1] Filtrando templates anatomicos...")
+                anatomical_templates = []
+                for t in templates:
+                    template_type_str = str(t.template_type).lower()
+                    if template_type_str.find('anatomical') != -1:
+                        anatomical_templates.append(t)
+                        print(f"[FASE 1]    - Template {t.template_id[:20]}... tipo: {t.template_type} -> ANATOMICO")
+                    else:
+                        print(f"[FASE 1]    - Template {t.template_id[:20]}... tipo: {t.template_type} -> OMITIDO (no anatomico)")
                 
-                for template in anatomical_templates:
-                    embedding_added = False
+                print(f"[FASE 1] Templates anatomicos encontrados: {len(anatomical_templates)}")
+                
+                if len(anatomical_templates) == 0:
+                    print(f"[FASE 1] [WARNING] Usuario sin templates anatomicos")
+                    continue
+                
+                features_list = []
+                template_ids_list = []
+                templates_con_features = 0
+                templates_sin_features = 0
+                
+                print(f"[FASE 1] Extrayendo features de {len(anatomical_templates)} templates anatomicos...")
+                
+                for t_idx, template in enumerate(anatomical_templates, 1):
+                    print(f"\n[FASE 1]    Template {t_idx}/{len(anatomical_templates)}: {template.template_id[:30]}...")
                     
-                    # CASO 1: Embedding guardado (usuario normal)
-                    if template.anatomical_embedding is not None:
-                        templates_con_embedding += 1
-                        embeddings.append(template.anatomical_embedding)
-                        embedding_added = True
-                        print(f"     Template {template.template_id[:20]}... - Embedding GUARDADO usado")
-                        
-                        if len(embeddings) == 1:
-                            emb_array = np.array(template.anatomical_embedding)
-                            print(f"       Primer embedding GUARDADO:")
-                            print(f"       Shape: {emb_array.shape}")
-                            print(f"       Norm: {np.linalg.norm(emb_array):.6f}")
-                            print(f"       Mean: {np.mean(emb_array):.6f}")
+                    features_loaded = False
                     
-                    # CASO 2: Sin embedding pero con features (usuario bootstrap)
-                    elif hasattr(template, 'features') and template.features is not None:
-                        features = np.array(template.features)
-                        print(f"     Template {template.template_id[:20]}... - Generando embedding ON-THE-FLY")
-                        print(f"       Features shape: {features.shape}")
-                        
-                        # Generar embedding on-the-fly con red reentrenada
-                        embedding = self.predict(features.reshape(1, -1))[0]
-                        embeddings.append(embedding)
-                        templates_con_embedding += 1
-                        embedding_added = True
-                        
-                        print(f"       Embedding generado shape: {embedding.shape}")
-                        print(f"       Embedding norm: {np.linalg.norm(embedding):.6f}")
-                        
-                        if len(embeddings) == 1:
-                            print(f"       Primer embedding ON-THE-FLY generado correctamente")
+                    # Verificar metadata
+                    if not template.metadata:
+                        print(f"[FASE 1]       [ERROR] Template sin metadata")
+                        templates_sin_features += 1
+                        continue
                     
-                    # CASO 3: Sin embedding ni features
-                    if not embedding_added:
-                        templates_sin_embedding += 1
-                        print(f"     Template {template.template_id[:20]}... - SIN datos para generar embedding")
+                    print(f"[FASE 1]       Metadata presente: SI")
+                    print(f"[FASE 1]       Verificando campo 'bootstrap_features'...")
+                    
+                    # CARGAR FEATURES 180D
+                    if template.metadata.get('bootstrap_features'):
+                        bootstrap_features = template.metadata.get('bootstrap_features')
+                        
+                        print(f"[FASE 1]       Campo 'bootstrap_features' encontrado")
+                        print(f"[FASE 1]       Tipo de datos: {type(bootstrap_features)}")
+                        
+                        # Convertir a numpy array
+                        if isinstance(bootstrap_features, list):
+                            print(f"[FASE 1]       Convirtiendo lista a numpy array...")
+                            bootstrap_features = np.array(bootstrap_features, dtype=np.float32)
+                            print(f"[FASE 1]       Conversion exitosa")
+                        
+                        print(f"[FASE 1]       Shape de bootstrap_features: {bootstrap_features.shape}")
+                        print(f"[FASE 1]       Numero de dimensiones: {bootstrap_features.ndim}")
+                        
+                        # Validar dimensión - CASO 1D
+                        if bootstrap_features.ndim == 1:
+                            print(f"[FASE 1]       Procesando features 1D...")
+                            
+                            if bootstrap_features.shape[0] == 180:
+                                print(f"[FASE 1]       [OK] Dimension correcta: {bootstrap_features.shape[0]} == 180")
+                                
+                                features_list.append(bootstrap_features)
+                                template_ids_list.append(template.template_id)
+                                templates_con_features += 1
+                                total_features_cargadas += 1
+                                features_loaded = True
+                                
+                                print(f"[FASE 1]       [SUCCESS] Features 180D cargadas exitosamente")
+                                
+                                if len(features_list) == 1:
+                                    print(f"[FASE 1]       *** PRIMERA MUESTRA - ESTADISTICAS DETALLADAS ***")
+                                    print(f"[FASE 1]          Shape: {bootstrap_features.shape}")
+                                    print(f"[FASE 1]          Dtype: {bootstrap_features.dtype}")
+                                    print(f"[FASE 1]          Mean: {np.mean(bootstrap_features):.6f}")
+                                    print(f"[FASE 1]          Std: {np.std(bootstrap_features):.6f}")
+                                    print(f"[FASE 1]          Min: {np.min(bootstrap_features):.6f}")
+                                    print(f"[FASE 1]          Max: {np.max(bootstrap_features):.6f}")
+                                    print(f"[FASE 1]          Primeros 5 valores: {bootstrap_features[:5]}")
+                                    print(f"[FASE 1]          Ultimos 5 valores: {bootstrap_features[-5:]}")
+                            else:
+                                print(f"[FASE 1]       [ERROR] Dimension incorrecta: {bootstrap_features.shape[0]} != 180")
+                                templates_sin_features += 1
+                        
+                        # Validar dimensión - CASO 2D
+                        elif bootstrap_features.ndim == 2:
+                            print(f"[FASE 1]       [WARNING] Features 2D detectadas: {bootstrap_features.shape}")
+                            print(f"[FASE 1]       Aplicando promedio para obtener vector 1D...")
+                            
+                            features_1d = np.mean(bootstrap_features, axis=0)
+                            print(f"[FASE 1]       Shape despues de promediar: {features_1d.shape}")
+                            
+                            if features_1d.shape[0] == 180:
+                                print(f"[FASE 1]       [OK] Dimension correcta despues de promediar: 180")
+                                
+                                features_list.append(features_1d)
+                                template_ids_list.append(template.template_id)
+                                templates_con_features += 1
+                                total_features_cargadas += 1
+                                features_loaded = True
+                                
+                                print(f"[FASE 1]       [SUCCESS] Features 180D promediadas y cargadas")
+                            else:
+                                print(f"[FASE 1]       [ERROR] Dimension incorrecta despues de promediar: {features_1d.shape[0]} != 180")
+                                templates_sin_features += 1
+                        else:
+                            print(f"[FASE 1]       [ERROR] Numero de dimensiones no soportado: {bootstrap_features.ndim}")
+                            templates_sin_features += 1
+                    else:
+                        print(f"[FASE 1]       [ERROR] Campo 'bootstrap_features' NO encontrado en metadata")
+                        templates_sin_features += 1
+                    
+                    if not features_loaded:
+                        print(f"[FASE 1]       [SKIP] Template omitido - sin features validas")
                 
-                print(f"  Templates CON embedding anatomico: {templates_con_embedding}")
-                print(f"  Templates SIN embedding anatomico: {templates_sin_embedding}")
-                print(f"  Embeddings recolectados: {len(embeddings)}")
+                # Resumen del usuario
+                print(f"\n[FASE 1] *** RESUMEN USUARIO: {user.username} ***")
+                print(f"[FASE 1]    Templates anatomicos procesados: {len(anatomical_templates)}")
+                print(f"[FASE 1]    Templates CON features 180D: {templates_con_features}")
+                print(f"[FASE 1]    Templates SIN features 180D: {templates_sin_features}")
+                print(f"[FASE 1]    Features recolectadas: {len(features_list)}")
                 
-                if embeddings:
-                    user_embeddings[user.user_id] = np.array(embeddings)
-                    print(f"  [OK] Usuario AGREGADO con {len(embeddings)} embeddings")
+                if features_list:
+                    user_features_180d[user.user_id] = features_list
+                    user_template_ids[user.user_id] = template_ids_list
+                    print(f"[FASE 1]    [SUCCESS] Usuario AGREGADO con {len(features_list)} muestras 180D")
                 else:
-                    print(f"  [SKIP] Usuario OMITIDO (sin embeddings validos)")
+                    print(f"[FASE 1]    [WARNING] Usuario OMITIDO (sin features validas)")
             
+            # Resumen FASE 1
             print("\n" + "=" * 80)
-            print(f"RESUMEN FINAL:")
-            print(f"  Usuarios totales procesados: {len(all_users)}")
-            print(f"  Usuarios CON embeddings: {len(user_embeddings)}")
-            print(f"  Usuarios SIN embeddings: {len(all_users) - len(user_embeddings)}")
+            print("RESUMEN COMPLETO FASE 1")
             print("=" * 80)
+            print(f"[FASE 1] Templates totales procesados: {total_templates_procesados}")
+            print(f"[FASE 1] Features totales cargadas: {total_features_cargadas}")
+            print(f"[FASE 1] Usuarios totales en sistema: {len(all_users)}")
+            print(f"[FASE 1] Usuarios CON features 180D: {len(user_features_180d)}")
+            print(f"[FASE 1] Usuarios SIN features 180D: {len(all_users) - len(user_features_180d)}")
             
-            if len(user_embeddings) < 2:
-                print("\n[ERROR] Se necesitan al menos 2 usuarios con embeddings para recalcular threshold")
-                print(f"   Encontrados: {len(user_embeddings)} usuarios con embeddings")
-                print(f"   Requeridos: 2 usuarios minimo")
-                
-                if len(user_embeddings) == 1:
-                    only_user = list(user_embeddings.keys())[0]
-                    print(f"\n   Usuario unico con embeddings: {only_user}")
-                elif len(user_embeddings) == 0:
-                    print(f"\n   [WARNING] NINGUN usuario tiene embeddings anatomicos validos")
-                
-                return False
-            
-            print(f"\n[OK] Suficientes usuarios para recalculo: {len(user_embeddings)}")
-
-            # ============================================================
-            # LOGS CRITICOS: Verificar embeddings REGENERADOS
-            # ============================================================
-            print("\n" + "=" * 80)
-            print("ANALISIS DETALLADO DE EMBEDDINGS REGENERADOS")
-            print("=" * 80)
-            
-            for user_id, embeddings in user_embeddings.items():
+            print(f"\n[FASE 1] Detalle por usuario:")
+            for user_id, features in user_features_180d.items():
                 user_obj = next((u for u in all_users if u.user_id == user_id), None)
                 user_name = user_obj.username if user_obj else "Unknown"
-                
-                print(f"\nUsuario: {user_name} ({user_id})")
-                print(f"   Templates con embeddings: {len(embeddings)}")
-                print(f"   Shape del array: {embeddings.shape}")
-                
-                # Estadisticas de embeddings de este usuario
-                print(f"   Estadisticas:")
-                print(f"      Mean: {np.mean(embeddings):.6f}")
-                print(f"      Std: {np.std(embeddings):.6f}")
-                print(f"      Min: {np.min(embeddings):.6f}")
-                print(f"      Max: {np.max(embeddings):.6f}")
-                
-                # Normas L2 (deberian estar cerca de 1.0 si estan normalizados)
-                norms = np.linalg.norm(embeddings, axis=1)
-                print(f"   Normas L2:")
-                print(f"      Mean: {np.mean(norms):.6f}")
-                print(f"      Min: {np.min(norms):.6f}")
-                print(f"      Max: {np.max(norms):.6f}")
-                
-                # Si las normas estan muy lejos de 1.0, es una senal de problema
-                if np.mean(norms) < 0.9 or np.mean(norms) > 1.1:
-                    print(f"      [WARNING] Normas L2 fuera de rango esperado!")
+                print(f"[FASE 1]    - {user_name} (ID: {user_id[:30]}...): {len(features)} muestras")
+            print("=" * 80)
             
+            # Validacion minima de usuarios
+            if len(user_features_180d) < 2:
+                print("\n[FASE 1] [ERROR CRITICO] Insuficientes usuarios con features")
+                print(f"[FASE 1]    Usuarios encontrados: {len(user_features_180d)}")
+                print(f"[FASE 1]    Usuarios requeridos: 2 minimo")
+                print("[FASE 1] No se puede continuar con recalculo de threshold")
+                return False
+            
+            print(f"\n[FASE 1] [SUCCESS] Validacion exitosa: {len(user_features_180d)} usuarios disponibles")
+            
+            # ============================================================
+            # FASE 2: CREAR PARES CON FEATURES 180D
+            # ============================================================
             print("\n" + "=" * 80)
+            print("FASE 2: CREANDO PARES GENUINOS/IMPOSTORES CON FEATURES 180D")
+            print("=" * 80)
+            print("[FASE 2] Iniciando creacion de pares para evaluacion")
             
-            # 2. Crear pares genuinos e impostores
-            print("\nCREANDO PARES PARA EVALUACION...")
-            features_a = []
-            features_b = []
-            labels = []
+            features_a = []  # Features 180D
+            features_b = []  # Features 180D
+            labels = []      # 1=genuino, 0=impostor
             
-            user_ids = list(user_embeddings.keys())
+            user_ids = list(user_features_180d.keys())
+            print(f"[FASE 2] Total usuarios para crear pares: {len(user_ids)}")
             
-            # Pares genuinos
+            # Pares genuinos (mismo usuario)
+            print(f"\n[FASE 2] --- CREANDO PARES GENUINOS (mismo usuario) ---")
             genuine_count = 0
+            genuine_per_user = {}
+            
             for user_id in user_ids:
-                embeddings = user_embeddings[user_id]
+                user_features = user_features_180d[user_id]
+                user_obj = next((u for u in all_users if u.user_id == user_id), None)
+                user_name = user_obj.username if user_obj else "Unknown"
                 user_pairs = 0
-                for i in range(len(embeddings)):
-                    for j in range(i + 1, len(embeddings)):
-                        features_a.append(embeddings[i])
-                        features_b.append(embeddings[j])
-                        labels.append(1)
+                
+                print(f"[FASE 2] Procesando usuario: {user_name}")
+                print(f"[FASE 2]    Muestras disponibles: {len(user_features)}")
+                print(f"[FASE 2]    Combinaciones posibles: {len(user_features) * (len(user_features) - 1) // 2}")
+                
+                for i in range(len(user_features)):
+                    for j in range(i + 1, len(user_features)):
+                        features_a.append(user_features[i])
+                        features_b.append(user_features[j])
+                        labels.append(1)  # Genuino
                         genuine_count += 1
                         user_pairs += 1
-                print(f"  Usuario {user_id[:20]}...: {user_pairs} pares genuinos")
+                
+                genuine_per_user[user_id] = user_pairs
+                print(f"[FASE 2]    Pares genuinos creados: {user_pairs}")
             
-            # Pares impostores
+            print(f"\n[FASE 2] Total pares genuinos: {genuine_count}")
+            
+            # Pares impostores (diferentes usuarios)
+            print(f"\n[FASE 2] --- CREANDO PARES IMPOSTORES (diferentes usuarios) ---")
             impostor_count = 0
+            impostor_combinations = []
+            
+            total_combinations = (len(user_ids) * (len(user_ids) - 1)) // 2
+            print(f"[FASE 2] Combinaciones de usuarios posibles: {total_combinations}")
+            
             for i, user_id1 in enumerate(user_ids):
                 for j, user_id2 in enumerate(user_ids[i + 1:], i + 1):
-                    emb1 = user_embeddings[user_id1]
-                    emb2 = user_embeddings[user_id2]
+                    user_obj1 = next((u for u in all_users if u.user_id == user_id1), None)
+                    user_obj2 = next((u for u in all_users if u.user_id == user_id2), None)
+                    user_name1 = user_obj1.username if user_obj1 else "Unknown"
+                    user_name2 = user_obj2.username if user_obj2 else "Unknown"
                     
-                    max_pairs = min(50, len(emb1) * len(emb2) // 2)
-                    count = 0
+                    feat1 = user_features_180d[user_id1]
+                    feat2 = user_features_180d[user_id2]
                     
-                    for e1 in emb1:
-                        for e2 in emb2:
-                            if count < max_pairs:
-                                features_a.append(e1)
-                                features_b.append(e2)
-                                labels.append(0)
+                    print(f"\n[FASE 2] Combinacion: {user_name1} vs {user_name2}")
+                    print(f"[FASE 2]    Muestras {user_name1}: {len(feat1)}")
+                    print(f"[FASE 2]    Muestras {user_name2}: {len(feat2)}")
+                    print(f"[FASE 2]    Pares posibles: {len(feat1) * len(feat2)}")
+                    
+                    # Limitar pares impostores para balance
+                    max_pairs = min(100, len(feat1) * len(feat2))
+                    print(f"[FASE 2]    Limite aplicado: {max_pairs} pares")
+                    
+                    pair_count = 0
+                    
+                    for f1 in feat1:
+                        for f2 in feat2:
+                            if pair_count < max_pairs:
+                                features_a.append(f1)
+                                features_b.append(f2)
+                                labels.append(0)  # Impostor
                                 impostor_count += 1
-                                count += 1
+                                pair_count += 1
                             else:
                                 break
-                        if count >= max_pairs:
+                        if pair_count >= max_pairs:
                             break
+                    
+                    impostor_combinations.append((user_name1, user_name2, pair_count))
+                    print(f"[FASE 2]    Pares impostores creados: {pair_count}")
             
-            features_a = np.array(features_a)
-            features_b = np.array(features_b)
-            labels = np.array(labels)
+            print(f"\n[FASE 2] Total pares impostores: {impostor_count}")
             
-            print(f"\nPARES CREADOS:")
-            print(f"  Genuinos: {genuine_count}")
-            print(f"  Impostores: {impostor_count}")
-            print(f"  Total: {len(labels)}")
-            print(f"  Ratio: {genuine_count/impostor_count:.2f}:1" if impostor_count > 0 else "  Ratio: N/A")
+            # Convertir a arrays numpy
+            print(f"\n[FASE 2] Convirtiendo listas a arrays numpy...")
+            features_a = np.array(features_a, dtype=np.float32)
+            features_b = np.array(features_b, dtype=np.float32)
+            labels = np.array(labels, dtype=np.float32)
+            print(f"[FASE 2] Conversion completada")
             
-            # 3. Evaluar con nuevos embeddings
-            print(f"\nEVALUANDO MODELO CON NUEVOS EMBEDDINGS...")
+            # Resumen FASE 2
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 2")
+            print("=" * 80)
+            print(f"[FASE 2] PARES GENUINOS:")
+            print(f"[FASE 2]    Total: {genuine_count}")
+            for user_id, count in genuine_per_user.items():
+                user_obj = next((u for u in all_users if u.user_id == user_id), None)
+                user_name = user_obj.username if user_obj else "Unknown"
+                print(f"[FASE 2]       - {user_name}: {count} pares")
+            
+            print(f"\n[FASE 2] PARES IMPOSTORES:")
+            print(f"[FASE 2]    Total: {impostor_count}")
+            for name1, name2, count in impostor_combinations:
+                print(f"[FASE 2]       - {name1} vs {name2}: {count} pares")
+            
+            print(f"\n[FASE 2] TOTALES:")
+            print(f"[FASE 2]    Pares genuinos: {genuine_count}")
+            print(f"[FASE 2]    Pares impostores: {impostor_count}")
+            print(f"[FASE 2]    Total pares: {len(labels)}")
+            if impostor_count > 0:
+                ratio = genuine_count / impostor_count
+                print(f"[FASE 2]    Ratio genuinos/impostores: {ratio:.2f}:1")
+            
+            print(f"\n[FASE 2] DIMENSIONES DE ARRAYS:")
+            print(f"[FASE 2]    Shape features_a: {features_a.shape}  <- DEBE SER (N, 180)")
+            print(f"[FASE 2]    Shape features_b: {features_b.shape}  <- DEBE SER (N, 180)")
+            print(f"[FASE 2]    Shape labels: {labels.shape}")
+            print(f"[FASE 2]    Dtype features_a: {features_a.dtype}")
+            print(f"[FASE 2]    Dtype features_b: {features_b.dtype}")
+            print(f"[FASE 2]    Dtype labels: {labels.dtype}")
+            print("=" * 80)
+            
+            # VALIDACIÓN CRÍTICA DE DIMENSIONES
+            print(f"\n[FASE 2] VALIDACION CRITICA DE DIMENSIONES:")
+            validation_passed = True
+            
+            if features_a.shape[1] != 180:
+                print(f"[FASE 2] [ERROR] features_a dimension incorrecta: {features_a.shape[1]} != 180")
+                validation_passed = False
+            else:
+                print(f"[FASE 2] [OK] features_a dimension correcta: 180")
+            
+            if features_b.shape[1] != 180:
+                print(f"[FASE 2] [ERROR] features_b dimension incorrecta: {features_b.shape[1]} != 180")
+                validation_passed = False
+            else:
+                print(f"[FASE 2] [OK] features_b dimension correcta: 180")
+            
+            if features_a.shape[0] != features_b.shape[0]:
+                print(f"[FASE 2] [ERROR] Numero de pares no coincide: {features_a.shape[0]} != {features_b.shape[0]}")
+                validation_passed = False
+            else:
+                print(f"[FASE 2] [OK] Numero de pares coincide: {features_a.shape[0]}")
+            
+            if features_a.shape[0] != labels.shape[0]:
+                print(f"[FASE 2] [ERROR] Numero de labels no coincide: {features_a.shape[0]} != {labels.shape[0]}")
+                validation_passed = False
+            else:
+                print(f"[FASE 2] [OK] Numero de labels coincide: {labels.shape[0]}")
+            
+            if not validation_passed:
+                print(f"\n[FASE 2] [ERROR CRITICO] Validacion de dimensiones FALLIDA")
+                print(f"[FASE 2] No se puede continuar con evaluacion")
+                return False
+            
+            print(f"\n[FASE 2] [SUCCESS] Todas las validaciones pasaron correctamente")
+            print(f"[FASE 2] Arrays listos para evaluate_real_model()")
+            
+            # ============================================================
+            # FASE 3: EVALUAR CON RED NUEVA
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 3: EVALUANDO CON RED RECIEN ENTRENADA")
+            print("=" * 80)
+            print("[FASE 3] Iniciando evaluacion del modelo")
+            print("[FASE 3] La red generara embeddings 64D on-the-fly desde features 180D")
+            print("[FASE 3] y calculara threshold optimo basado en rendimiento actual")
+            
+            print(f"\n[FASE 3] Verificando estado del modelo antes de evaluar:")
+            print(f"[FASE 3]    Modelo compilado: {self.is_compiled}")
+            print(f"[FASE 3]    Modelo entrenado: {self.is_trained}")
+            print(f"[FASE 3]    Base network existe: {self.base_network is not None}")
+            print(f"[FASE 3]    Siamese model existe: {self.siamese_model is not None}")
+            
+            if not self.is_trained:
+                print(f"[FASE 3] [WARNING] Modelo no marcado como entrenado, pero continuando...")
+            
+            print(f"\n[FASE 3] Llamando a evaluate_real_model()...")
+            print(f"[FASE 3]    Input features_a shape: {features_a.shape}")
+            print(f"[FASE 3]    Input features_b shape: {features_b.shape}")
+            print(f"[FASE 3]    Input labels shape: {labels.shape}")
+            print(f"[FASE 3] Procesando...")
+            
             metrics = self.evaluate_real_model(features_a, features_b, labels)
+            
+            print(f"\n[FASE 3] evaluate_real_model() completado exitosamente")
+            print(f"[FASE 3] Objeto de metricas recibido: {type(metrics)}")
+            
             self.current_metrics = metrics
+            print(f"[FASE 3] Metricas almacenadas en self.current_metrics")
             
-            print(f"\nTHRESHOLD RECALCULADO:")
-            print(f"  Threshold: {metrics.threshold:.6f}")
-            print(f"  FAR: {metrics.far:.6f}")
-            print(f"  FRR: {metrics.frr:.6f}")
-            print(f"  EER: {metrics.eer:.6f}")
-            print(f"  AUC: {metrics.auc_score:.6f}")
+            # Resumen FASE 3
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 3")
+            print("=" * 80)
+            print("[FASE 3] THRESHOLD RECALCULADO EXITOSAMENTE")
+            print(f"\n[FASE 3] METRICAS CALCULADAS:")
+            print(f"[FASE 3]    Threshold optimo: {metrics.threshold:.6f}")
+            print(f"[FASE 3]    FAR (False Accept Rate): {metrics.far:.6f} = {metrics.far*100:.2f}%")
+            print(f"[FASE 3]       Objetivo: <1% (<0.01)")
+            print(f"[FASE 3]       Estado: {'PASS' if metrics.far < 0.01 else 'REVISAR'}")
+            print(f"[FASE 3]    FRR (False Reject Rate): {metrics.frr:.6f} = {metrics.frr*100:.2f}%")
+            print(f"[FASE 3]       Objetivo: <5% (<0.05)")
+            print(f"[FASE 3]       Estado: {'PASS' if metrics.frr < 0.05 else 'REVISAR'}")
+            print(f"[FASE 3]    EER (Equal Error Rate): {metrics.eer:.6f} = {metrics.eer*100:.2f}%")
+            print(f"[FASE 3]       Objetivo: <3% (<0.03)")
+            print(f"[FASE 3]       Estado: {'PASS' if metrics.eer < 0.03 else 'REVISAR'}")
+            print(f"[FASE 3]    AUC Score: {metrics.auc_score:.6f}")
+            print(f"[FASE 3]       Objetivo: >0.95")
+            print(f"[FASE 3]       Estado: {'PASS' if metrics.auc_score > 0.95 else 'REVISAR'}")
+            print(f"[FASE 3]    Accuracy: {metrics.accuracy:.6f} = {metrics.accuracy*100:.2f}%")
+            print("=" * 80)
             
-            # 4. Guardar modelo actualizado
-            print(f"\nGUARDANDO MODELO CON THRESHOLD ACTUALIZADO...")
+            # ============================================================
+            # FASE 4: ACTUALIZAR EMBEDDINGS EN BD
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 4: ACTUALIZANDO EMBEDDINGS EN BASE DE DATOS")
+            print("=" * 80)
+            print("[FASE 4] Iniciando actualizacion de embeddings con red nueva")
+            print("[FASE 4] Se regeneraran todos los embeddings y se guardaran en BD")
+            
+            embeddings_actualizados = 0
+            embeddings_fallidos = 0
+            usuarios_actualizados = 0
+            
+            for user_idx, (user_id, features_list) in enumerate(user_features_180d.items(), 1):
+                user_obj = next((u for u in all_users if u.user_id == user_id), None)
+                user_name = user_obj.username if user_obj else "Unknown"
+                template_ids = user_template_ids[user_id]
+                
+                print(f"\n[FASE 4] Usuario {user_idx}/{len(user_features_180d)}: {user_name}")
+                print(f"[FASE 4]    User ID: {user_id}")
+                print(f"[FASE 4]    Templates a actualizar: {len(features_list)}")
+                
+                usuario_success = True
+                
+                for idx, (features, template_id) in enumerate(zip(features_list, template_ids), 1):
+                    print(f"\n[FASE 4]    Template {idx}/{len(features_list)}")
+                    print(f"[FASE 4]       Template ID: {template_id[:40]}...")
+                    
+                    try:
+                        # Validar features
+                        print(f"[FASE 4]       Validando features...")
+                        print(f"[FASE 4]          Shape: {features.shape}")
+                        print(f"[FASE 4]          Dtype: {features.dtype}")
+                        
+                        if features.shape[0] != 180:
+                            print(f"[FASE 4]       [ERROR] Dimension incorrecta: {features.shape[0]} != 180")
+                            embeddings_fallidos += 1
+                            usuario_success = False
+                            continue
+                        
+                        # Generar nuevo embedding con red entrenada
+                        print(f"[FASE 4]       Generando nuevo embedding con base_network...")
+                        features_reshaped = features.reshape(1, -1)
+                        print(f"[FASE 4]          Features reshaped: {features_reshaped.shape}")
+                        
+                        new_embedding = self.base_network.predict(features_reshaped, verbose=0)[0]
+                        print(f"[FASE 4]          Embedding generado: {new_embedding.shape}")
+                        
+                        # Normalizar embedding
+                        print(f"[FASE 4]       Normalizando embedding...")
+                        embedding_norm = np.linalg.norm(new_embedding)
+                        print(f"[FASE 4]          Norma L2 antes: {embedding_norm:.6f}")
+                        
+                        if embedding_norm > 0:
+                            new_embedding = new_embedding / embedding_norm
+                            embedding_norm_after = np.linalg.norm(new_embedding)
+                            print(f"[FASE 4]          Norma L2 despues: {embedding_norm_after:.6f}")
+                        else:
+                            print(f"[FASE 4]       [WARNING] Norma es cero, no se normaliza")
+                        
+                        # Estadisticas del nuevo embedding
+                        if idx == 1:
+                            print(f"[FASE 4]       Estadisticas del nuevo embedding (primera muestra):")
+                            print(f"[FASE 4]          Mean: {np.mean(new_embedding):.6f}")
+                            print(f"[FASE 4]          Std: {np.std(new_embedding):.6f}")
+                            print(f"[FASE 4]          Min: {np.min(new_embedding):.6f}")
+                            print(f"[FASE 4]          Max: {np.max(new_embedding):.6f}")
+                        
+                        # Actualizar en base de datos
+                        print(f"[FASE 4]       Actualizando en base de datos...")
+                        try:
+                            template = database.get_template(template_id)
+                            
+                            if template:
+                                print(f"[FASE 4]          Template recuperado de BD")
+                                
+                                # Guardar embedding viejo para comparacion
+                                old_embedding = template.anatomical_embedding
+                                if old_embedding is not None:
+                                    print(f"[FASE 4]          Embedding anterior existe: SI (shape: {np.array(old_embedding).shape})")
+                                else:
+                                    print(f"[FASE 4]          Embedding anterior existe: NO")
+                                
+                                # Actualizar con nuevo embedding
+                                template.anatomical_embedding = new_embedding
+                                print(f"[FASE 4]          Nuevo embedding asignado a template")
+                                
+                                database._save_template(template)
+                                print(f"[FASE 4]          Template actualizado en BD")
+                                
+                                embeddings_actualizados += 1
+                                print(f"[FASE 4]       [SUCCESS] Embedding actualizado exitosamente")
+                                
+                            else:
+                                print(f"[FASE 4]       [ERROR] Template no encontrado en BD")
+                                embeddings_fallidos += 1
+                                usuario_success = False
+                        
+                        except Exception as e:
+                            print(f"[FASE 4]       [ERROR] Error actualizando BD: {type(e).__name__}")
+                            print(f"[FASE 4]          Mensaje: {str(e)}")
+                            embeddings_fallidos += 1
+                            usuario_success = False
+                            
+                    except Exception as e:
+                        print(f"[FASE 4]       [ERROR] Error generando embedding: {type(e).__name__}")
+                        print(f"[FASE 4]          Mensaje: {str(e)}")
+                        embeddings_fallidos += 1
+                        usuario_success = False
+                
+                if usuario_success:
+                    usuarios_actualizados += 1
+                    print(f"\n[FASE 4]    [SUCCESS] Usuario {user_name} completado: {len(features_list)}/{len(features_list)} templates actualizados")
+                else:
+                    print(f"\n[FASE 4]    [WARNING] Usuario {user_name} con errores")
+            
+            # Resumen FASE 4
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 4")
+            print("=" * 80)
+            print(f"[FASE 4] ACTUALIZACION DE EMBEDDINGS:")
+            print(f"[FASE 4]    Usuarios procesados: {len(user_features_180d)}")
+            print(f"[FASE 4]    Usuarios actualizados completamente: {usuarios_actualizados}")
+            print(f"[FASE 4]    Templates totales: {sum(len(f) for f in user_features_180d.values())}")
+            print(f"[FASE 4]    Embeddings actualizados exitosamente: {embeddings_actualizados}")
+            print(f"[FASE 4]    Embeddings fallidos: {embeddings_fallidos}")
+            
+            if embeddings_fallidos > 0:
+                print(f"[FASE 4]    [WARNING] Hubo {embeddings_fallidos} fallos en actualizacion")
+            else:
+                print(f"[FASE 4]    [SUCCESS] Todos los embeddings actualizados sin errores")
+            print("=" * 80)
+            
+            # ============================================================
+            # FASE 5: GUARDAR MODELO CON THRESHOLD ACTUALIZADO
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 5: GUARDANDO MODELO CON THRESHOLD ACTUALIZADO")
+            print("=" * 80)
+            print("[FASE 5] Iniciando guardado del modelo")
+            print(f"[FASE 5] Threshold a guardar: {metrics.threshold:.6f}")
+            
+            print(f"\n[FASE 5] Llamando a save_real_model()...")
             save_success = self.save_real_model()
             
-            if save_success:
-                print(f"[OK] Modelo guardado exitosamente")
-            else:
-                print(f"[ERROR] Error al guardar modelo")
+            print(f"\n[FASE 5] Resultado de save_real_model(): {save_success}")
             
+            # Resumen FASE 5
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 5")
             print("=" * 80)
+            if save_success:
+                print("[FASE 5] [SUCCESS] Modelo guardado exitosamente")
+                print(f"[FASE 5]    Threshold guardado: {metrics.threshold:.6f}")
+                print(f"[FASE 5]    Metricas guardadas: SI")
+            else:
+                print("[FASE 5] [ERROR] Error al guardar modelo")
+                print("[FASE 5]    El modelo no se guardo correctamente")
+            print("=" * 80)
+            
+            # ============================================================
+            # RESUMEN FINAL COMPLETO
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("RESUMEN FINAL COMPLETO - RECALCULACION DE THRESHOLD")
+            print("=" * 80)
+            print(f"\n[RESUMEN] Timestamp finalizacion: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            
+            print(f"\n[RESUMEN] FASE 1 - CARGA DE FEATURES:")
+            print(f"[RESUMEN]    Usuarios procesados: {len(all_users)}")
+            print(f"[RESUMEN]    Usuarios con features: {len(user_features_180d)}")
+            print(f"[RESUMEN]    Features totales: {total_features_cargadas}")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 2 - CREACION DE PARES:")
+            print(f"[RESUMEN]    Pares genuinos: {genuine_count}")
+            print(f"[RESUMEN]    Pares impostores: {impostor_count}")
+            print(f"[RESUMEN]    Total pares: {len(labels)}")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 3 - EVALUACION Y THRESHOLD:")
+            print(f"[RESUMEN]    Threshold calculado: {metrics.threshold:.6f}")
+            print(f"[RESUMEN]    FAR: {metrics.far:.4f} ({metrics.far*100:.2f}%)")
+            print(f"[RESUMEN]    FRR: {metrics.frr:.4f} ({metrics.frr*100:.2f}%)")
+            print(f"[RESUMEN]    EER: {metrics.eer:.4f} ({metrics.eer*100:.2f}%)")
+            print(f"[RESUMEN]    AUC: {metrics.auc_score:.4f}")
+            print(f"[RESUMEN]    Accuracy: {metrics.accuracy:.4f} ({metrics.accuracy*100:.2f}%)")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 4 - ACTUALIZACION EMBEDDINGS:")
+            print(f"[RESUMEN]    Embeddings actualizados: {embeddings_actualizados}")
+            print(f"[RESUMEN]    Embeddings fallidos: {embeddings_fallidos}")
+            print(f"[RESUMEN]    Estado: {'SUCCESS' if embeddings_fallidos == 0 else 'WARNING'}")
+            
+            print(f"\n[RESUMEN] FASE 5 - GUARDADO DE MODELO:")
+            print(f"[RESUMEN]    Modelo guardado: {'SI' if save_success else 'NO'}")
+            print(f"[RESUMEN]    Estado: {'SUCCESS' if save_success else 'ERROR'}")
+            
+            print(f"\n[RESUMEN] ESTADO FINAL: {'SUCCESS - PROCESO COMPLETADO' if save_success else 'ERROR - REVISAR LOGS'}")
+            print("=" * 80)
+            
             return save_success
             
         except Exception as e:
             print("\n" + "=" * 80)
-            print(f"[ERROR] ERROR RECALCULANDO THRESHOLD: {e}")
+            print("[ERROR CRITICO] ERROR EN RECALCULACION DE THRESHOLD")
             print("=" * 80)
+            print(f"[ERROR] Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"[ERROR] Tipo de excepcion: {type(e).__name__}")
+            print(f"[ERROR] Mensaje de error: {str(e)}")
+            print(f"\n[ERROR] Stack trace completo:")
             import traceback
             traceback.print_exc()
+            print("=" * 80)
             return False
-        
+    
     def predict_similarity_real(self, features1: np.ndarray, features2: np.ndarray) -> float:
         """Predice similitud entre dos vectores."""
         try:
