@@ -56,6 +56,7 @@ export default function Enrollment() {
 
   const lastFrameTimeRef = useRef(0)
   const processingFrameRef = useRef(false)
+  const webcamRef = useRef(null)
 
   // Leer datos del plugin desde la URL
   // useEffect(() => {
@@ -891,6 +892,12 @@ export default function Enrollment() {
           }
           
           await new Promise(resolve => setTimeout(resolve, 500))
+
+          // DETENER CÁMARA ANTES DE CAMBIAR STEP
+          if (webcamRef.current?.stopCamera) {
+            webcamRef.current.stopCamera()
+            console.log('✓ Cámara detenida antes de confirmación')
+          }
           
           console.log('Mostrando pagina de confirmacion')
           setStep('confirmation')
@@ -910,6 +917,13 @@ export default function Enrollment() {
   }, [sessionId, userId])
 
   const handleCancel = async () => {
+
+    // DETENER CÁMARA AL CANCELAR
+    if (webcamRef.current?.stopCamera) {
+      webcamRef.current.stopCamera()
+      console.log('✓ Cámara detenida al cancelar')
+    }
+
     if (sessionId) {
       try {
         await enrollmentApi.cancelEnrollment(sessionId)
@@ -1961,6 +1975,7 @@ export default function Enrollment() {
                 }}
               >
                 <WebcamCapture
+                  ref={webcamRef}
                   onFrame={handleFrameCapture}
                   isActive={step === 'capture'}
                 />

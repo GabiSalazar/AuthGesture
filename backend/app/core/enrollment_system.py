@@ -2886,7 +2886,6 @@ class RealEnrollmentSystem:
     def process_enrollment_frame_with_image(self, session_id: str, frame_image: np.ndarray) -> Dict[str, Any]:
         """
         Procesa un frame de enrollment recibido desde el frontend.
-       
         
         Args:
             session_id: ID de la sesión activa

@@ -1,14 +1,23 @@
-import { useRef, useEffect, useCallback, useState } from 'react'
+import { useRef, useEffect, useCallback, useState, forwardRef, useImperativeHandle } from 'react'
 import { Camera, CameraOff } from 'lucide-react'
 import { Button } from '../ui'
 
-export default function WebcamCapture({ onFrame, isActive = true }) {
+// export default function WebcamCapture({ onFrame, isActive = true }) {
+const WebcamCapture = forwardRef(({ onFrame, isActive = true }, ref) => {
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const [isStreaming, setIsStreaming] = useState(false)
   const [error, setError] = useState(null)
   const intervalRef = useRef(null)
   const mountedRef = useRef(true)
+
+  // EXPONER stopCamera al componente padre
+  useImperativeHandle(ref, () => ({
+    stopCamera: () => {
+      console.log('[WebcamCapture] stopCamera llamado externamente')
+      stopCamera()
+    }
+  }))
 
   useEffect(() => {
     let timeoutId = null
@@ -122,7 +131,30 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
     }
   }
 
+  // const stopCamera = () => {
+  //   if (intervalRef.current) {
+  //     clearInterval(intervalRef.current)
+  //     intervalRef.current = null
+  //   }
+
+  //   if (videoRef.current?.srcObject) {
+  //     const stream = videoRef.current.srcObject
+  //     const tracks = stream.getTracks()
+      
+  //     tracks.forEach(track => track.stop())
+  //     videoRef.current.srcObject = null
+      
+  //     if (mountedRef.current) {
+  //       setIsStreaming(false)
+  //     }
+      
+  //     console.log('[WebcamCapture] Cámara liberada')
+  //   }
+  // }
+
   const stopCamera = () => {
+    console.log('[WebcamCapture] Deteniendo cámara...')
+    
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
@@ -132,14 +164,17 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
       const stream = videoRef.current.srcObject
       const tracks = stream.getTracks()
       
-      tracks.forEach(track => track.stop())
+      tracks.forEach(track => {
+        track.stop()
+        console.log(`[WebcamCapture] Track ${track.kind} detenido`)
+      })
       videoRef.current.srcObject = null
       
       if (mountedRef.current) {
         setIsStreaming(false)
       }
       
-      console.log('[WebcamCapture] Cámara liberada')
+      console.log('[WebcamCapture] ✓ Cámara liberada completamente')
     }
   }
 
@@ -209,4 +244,9 @@ export default function WebcamCapture({ onFrame, isActive = true }) {
       )}
     </div>
   )
-}
+})
+
+
+WebcamCapture.displayName = 'WebcamCapture'
+
+export default WebcamCapture
