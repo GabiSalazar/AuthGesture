@@ -763,7 +763,25 @@ class BiometricSystemManager:
                         print(f"Error recalculando threshold anatómico: {e}")
                         print("   El sistema usará el threshold anterior")
                         
-
+                    # Recalcular threshold dinámico
+                    print("\nRecalculando threshold de red dinámica...")
+                    try:
+                        threshold_dynamic = self.dynamic_network.recalculate_threshold_from_database(self.database)
+                        
+                        if threshold_dynamic:
+                            print("✓ Threshold dinámico recalculado y guardado exitosamente")
+                            if self.dynamic_network.current_metrics:
+                                print(f"   Nuevo threshold: {self.dynamic_network.current_metrics.threshold:.4f}")
+                                print(f"   FAR: {self.dynamic_network.current_metrics.far:.4f}")
+                                print(f"   FRR: {self.dynamic_network.current_metrics.frr:.4f}")
+                                print(f"   EER: {self.dynamic_network.current_metrics.eer:.4f}")
+                        else:
+                            print("Advertencia: No se pudo recalcular threshold dinámico")
+                            print("   El sistema usará el threshold anterior")
+                            
+                    except Exception as e:
+                        print(f"Error recalculando threshold dinámico: {e}")
+                        print("   El sistema usará el threshold anterior")
                         
                     
                     # ============================================================

@@ -252,7 +252,7 @@ async def train_networks():
 
 
 @router.post("/system/retrain", response_model=TrainingResponse)
-async def retrain_networks(force: bool = False):
+async def retrain_networks(force: bool = True): 
     """
     Reentrena las redes neuronales.
     
@@ -274,7 +274,7 @@ async def retrain_networks(force: bool = False):
             raise HTTPException(status_code=400, detail=error_msg)
         
         # Reentrenar (siempre con force=True para reentrenamiento)
-        result = manager.train_networks(force=True)
+        result = manager.train_networks(force=force)
         
         if not result.get('success', False):
             error_msg = result.get('message', 'Error reentrenando redes')

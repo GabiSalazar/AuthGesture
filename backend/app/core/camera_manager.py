@@ -514,7 +514,7 @@ def get_camera_manager(camera_index: int = 0) -> Optional[CameraManager]:
         
         if _last_release_time > 0 and time_since_release < 1.5:
             wait_time = 1.5 - time_since_release
-            logger.info(f"⏳ Esperando {wait_time:.1f}s para que Windows libere la cámara...")
+            logger.info(f"Esperando {wait_time:.1f}s para que Windows libere la cámara...")
             time.sleep(wait_time)
         
         logger.info("Creando nueva instancia de CameraManager...")

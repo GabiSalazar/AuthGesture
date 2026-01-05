@@ -1597,6 +1597,396 @@ class RealSiameseDynamicNetwork:
         except Exception:
             return 0.0
     
+    def recalculate_threshold_from_database(self, database) -> bool:
+        """
+        Recalcula threshold óptimo REGENERANDO embeddings desde secuencias temporales.
+        Usado después de reentrenar - usa la RED NUEVA para todos los usuarios.
+        
+        Similar a red anatómica pero para datos TEMPORALES:
+        - Carga secuencias temporales originales (no features 180D)
+        - Procesa temporal_sequence desde metadata
+        - Actualiza dynamic_embedding (no anatomical_embedding)
+        - Padding/truncate a 50 frames
+        """
+        try:
+            print("=" * 80)
+            print("=== RECALCULANDO THRESHOLD DINÁMICO CON RED RECIEN ENTRENADA ===")
+            print("=" * 80)
+            print("\n[INICIO] Proceso de recalculacion de threshold dinámico")
+            print("[INFO] Timestamp:", time.strftime("%Y-%m-%d %H:%M:%S"))
+            print("\n[ESTRATEGIA] Pasos a seguir:")
+            print("   1. Cargar SECUENCIAS TEMPORALES originales de TODOS los usuarios")
+            print("   2. Crear pares genuinos/impostores con secuencias temporales")
+            print("   3. Evaluar con red RECIEN ENTRENADA (genera embeddings on-the-fly)")
+            print("   4. Calcular threshold optimo")
+            print("   5. ACTUALIZAR embeddings dinamicos guardados en BD")
+            print("   6. Guardar modelo con threshold actualizado")
+            
+            # ============================================================
+            # FASE 1: CARGAR SECUENCIAS TEMPORALES
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 1: CARGANDO SECUENCIAS TEMPORALES ORIGINALES")
+            print("=" * 80)
+            
+            all_users = database.list_users()
+            print(f"[FASE 1] Total usuarios en sistema: {len(all_users)}")
+            
+            # Diccionario: user_id -> lista de (template_id, temporal_sequence)
+            user_temporal_data = {}
+            total_sequences_loaded = 0
+            users_with_data = 0
+            
+            for user in all_users:
+                print(f"\n[FASE 1] Procesando usuario: {user.username} ({user.user_id})")
+                
+                # Obtener templates del usuario
+                user_templates = database.list_user_templates(user.user_id)
+                print(f"[FASE 1]    Templates encontrados: {len(user_templates)}")
+                
+                user_sequences = []
+                
+                for template in user_templates:
+                    try:
+                        # Buscar temporal_sequence en metadata
+                        temporal_sequence = template.metadata.get('temporal_sequence')
+                        
+                        if temporal_sequence is not None and len(temporal_sequence) >= 5:
+                            # Convertir a numpy array
+                            sequence_array = np.array(temporal_sequence, dtype=np.float32)
+                            
+                            # Validar dimensiones
+                            if len(sequence_array.shape) == 2 and sequence_array.shape[1] == self.feature_dim:
+                                user_sequences.append({
+                                    'template_id': template.template_id,
+                                    'sequence': sequence_array,
+                                    'gesture_name': template.gesture_name,
+                                    'quality_score': template.quality_score
+                                })
+                                print(f"[FASE 1]       Secuencia cargada: {template.gesture_name} ({len(sequence_array)} frames)")
+                            else:
+                                print(f"[FASE 1]       [SKIP] Dimensiones incorrectas: {sequence_array.shape}")
+                        
+                    except Exception as e:
+                        print(f"[FASE 1]       [ERROR] Error procesando template: {e}")
+                        continue
+                
+                if len(user_sequences) > 0:
+                    user_temporal_data[user.user_id] = user_sequences
+                    users_with_data += 1
+                    total_sequences_loaded += len(user_sequences)
+                    print(f"[FASE 1]    Usuario válido: {len(user_sequences)} secuencias temporales")
+                else:
+                    print(f"[FASE 1]    [WARNING] Usuario sin secuencias temporales válidas")
+            
+            # Validación FASE 1
+            if users_with_data < 2:
+                print(f"\n[FASE 1] [ERROR] Usuarios insuficientes: {users_with_data} < 2")
+                return False
+            
+            if total_sequences_loaded < 10:
+                print(f"\n[FASE 1] [ERROR] Secuencias insuficientes: {total_sequences_loaded} < 10")
+                return False
+            
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 1")
+            print("=" * 80)
+            print(f"[FASE 1] CARGA DE SECUENCIAS TEMPORALES:")
+            print(f"[FASE 1]    Usuarios procesados: {len(all_users)}")
+            print(f"[FASE 1]    Usuarios con secuencias: {users_with_data}")
+            print(f"[FASE 1]    Secuencias totales: {total_sequences_loaded}")
+            print(f"[FASE 1]    Estado: SUCCESS")
+            print("=" * 80)
+            
+            # ============================================================
+            # FASE 2: CREAR PARES GENUINOS E IMPOSTORES
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 2: CREANDO PARES DE SECUENCIAS TEMPORALES")
+            print("=" * 80)
+            
+            sequences_a = []
+            sequences_b = []
+            labels = []
+            
+            # Pares genuinos (mismo usuario)
+            genuine_pairs = 0
+            for user_id, sequences_list in user_temporal_data.items():
+                if len(sequences_list) >= 2:
+                    for i in range(len(sequences_list)):
+                        for j in range(i + 1, len(sequences_list)):
+                            seq1 = self._pad_or_truncate_sequence(sequences_list[i]['sequence'])
+                            seq2 = self._pad_or_truncate_sequence(sequences_list[j]['sequence'])
+                            
+                            sequences_a.append(seq1)
+                            sequences_b.append(seq2)
+                            labels.append(1)
+                            genuine_pairs += 1
+            
+            print(f"[FASE 2] Pares genuinos creados: {genuine_pairs}")
+            
+            # Pares impostores (diferentes usuarios)
+            impostor_pairs = 0
+            target_impostor_pairs = min(genuine_pairs, 300)  # Limitar impostores
+            
+            user_ids_list = list(user_temporal_data.keys())
+            while impostor_pairs < target_impostor_pairs:
+                idx1 = np.random.randint(0, len(user_ids_list))
+                idx2 = np.random.randint(0, len(user_ids_list))
+                
+                if idx1 != idx2:
+                    user1_id = user_ids_list[idx1]
+                    user2_id = user_ids_list[idx2]
+                    
+                    seq1_data = np.random.choice(user_temporal_data[user1_id])
+                    seq2_data = np.random.choice(user_temporal_data[user2_id])
+                    
+                    seq1 = self._pad_or_truncate_sequence(seq1_data['sequence'])
+                    seq2 = self._pad_or_truncate_sequence(seq2_data['sequence'])
+                    
+                    sequences_a.append(seq1)
+                    sequences_b.append(seq2)
+                    labels.append(0)
+                    impostor_pairs += 1
+            
+            print(f"[FASE 2] Pares impostores creados: {impostor_pairs}")
+            
+            # Convertir a arrays
+            sequences_a = np.array(sequences_a, dtype=np.float32)
+            sequences_b = np.array(sequences_b, dtype=np.float32)
+            labels = np.array(labels, dtype=np.float32)
+            
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 2")
+            print("=" * 80)
+            print(f"[FASE 2] CREACION DE PARES:")
+            print(f"[FASE 2]    Pares genuinos: {genuine_pairs}")
+            print(f"[FASE 2]    Pares impostores: {impostor_pairs}")
+            print(f"[FASE 2]    Total pares: {len(labels)}")
+            print(f"[FASE 2]    Estado: SUCCESS")
+            print("=" * 80)
+            
+            # ============================================================
+            # FASE 3: EVALUAR CON RED NUEVA
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 3: EVALUANDO CON RED RECIEN ENTRENADA")
+            print("=" * 80)
+            
+            print(f"[FASE 3] Llamando a evaluate_real_model()...")
+            metrics = self.evaluate_real_model(sequences_a, sequences_b, labels)
+            
+            self.current_metrics = metrics
+            
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 3")
+            print("=" * 80)
+            print(f"[FASE 3] EVALUACION Y THRESHOLD:")
+            print(f"[FASE 3]    Threshold calculado: {metrics.threshold:.6f}")
+            print(f"[FASE 3]    FAR: {metrics.far:.4f} ({metrics.far*100:.2f}%)")
+            print(f"[FASE 3]    FRR: {metrics.frr:.4f} ({metrics.frr*100:.2f}%)")
+            print(f"[FASE 3]    EER: {metrics.eer:.4f} ({metrics.eer*100:.2f}%)")
+            print(f"[FASE 3]    AUC: {metrics.auc_score:.4f}")
+            print(f"[FASE 3]    Accuracy: {metrics.accuracy:.4f} ({metrics.accuracy*100:.2f}%)")
+            print(f"[FASE 3]    Estado: SUCCESS")
+            print("=" * 80)
+            
+            # ============================================================
+            # FASE 4: ACTUALIZAR EMBEDDINGS DINÁMICOS EN BD
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 4: ACTUALIZANDO EMBEDDINGS DINAMICOS EN BASE DE DATOS")
+            print("=" * 80)
+            
+            embeddings_updated = 0
+            embeddings_failed = 0
+            users_updated_count = 0
+            
+            for user_id, sequences_list in user_temporal_data.items():
+                print(f"\n[FASE 4] Usuario: {user_id}")
+                print(f"[FASE 4]    Total templates a actualizar: {len(sequences_list)}")
+                
+                user_success = 0
+                user_fails = 0
+                
+                for seq_data in sequences_list:
+                    template_id = seq_data['template_id']
+                    sequence = seq_data['sequence']
+                    
+                    print(f"\n[FASE 4]    Template {user_success + user_fails + 1}/{len(sequences_list)}")
+                    print(f"[FASE 4]       Template ID: {template_id[:40]}...")
+                    
+                    try:
+                        # Preprocesar secuencia
+                        seq_padded = self._pad_or_truncate_sequence(sequence)
+                        seq_batch = np.expand_dims(seq_padded, axis=0)
+                        
+                        print(f"[FASE 4]       Secuencia preprocesada: {seq_batch.shape}")
+                        
+                        # Generar nuevo embedding con base_network
+                        new_embedding = self.base_network.predict(seq_batch, verbose=0)[0]
+                        
+                        print(f"[FASE 4]       Nuevo embedding generado: {new_embedding.shape}")
+                        
+                        # Normalizar
+                        norm = np.linalg.norm(new_embedding)
+                        if norm > 0:
+                            new_embedding = new_embedding / norm
+                        
+                        print(f"[FASE 4]       Embedding normalizado (L2 norm: {np.linalg.norm(new_embedding):.6f})")
+                        
+                        # Actualizar en BD
+                        template = database.get_template(template_id)
+                        
+                        if template:
+                            print(f"[FASE 4]       Template recuperado de BD")
+                            
+                            # Verificar embedding anterior
+                            old_embedding = template.dynamic_embedding
+                            if old_embedding is not None:
+                                print(f"[FASE 4]       Embedding anterior existe: SI (shape: {np.array(old_embedding).shape})")
+                            else:
+                                print(f"[FASE 4]       Embedding anterior existe: NO")
+                            
+                            # Asignar nuevo embedding (como numpy array, NO .tolist())
+                            template.dynamic_embedding = new_embedding
+                            print(f"[FASE 4]       Nuevo embedding asignado a template")
+                            
+                            # Guardar en BD
+                            database._save_template(template)
+                            print(f"[FASE 4]       Template actualizado en BD")
+                            print(f"[FASE 4]       [SUCCESS] Embedding actualizado exitosamente")
+                            
+                            embeddings_updated += 1
+                            user_success += 1
+                        else:
+                            print(f"[FASE 4]       [ERROR] Template no encontrado en BD")
+                            embeddings_failed += 1
+                            user_fails += 1
+                    
+                    except Exception as e:
+                        print(f"[FASE 4]       [ERROR] Error actualizando BD: {type(e).__name__}")
+                        print(f"[FASE 4]          Mensaje: {str(e)}")
+                        embeddings_failed += 1
+                        user_fails += 1
+                
+                if user_success == len(sequences_list):
+                    users_updated_count += 1
+                    print(f"\n[FASE 4]    [SUCCESS] Usuario completado: {user_success}/{len(sequences_list)} templates actualizados")
+                else:
+                    print(f"\n[FASE 4]    [WARNING] Usuario parcial: {user_success}/{len(sequences_list)} actualizados, {user_fails} fallidos")
+            
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 4")
+            print("=" * 80)
+            print(f"[FASE 4] ACTUALIZACION DE EMBEDDINGS DINAMICOS:")
+            print(f"[FASE 4]    Usuarios procesados: {users_with_data}")
+            print(f"[FASE 4]    Usuarios actualizados completamente: {users_updated_count}")
+            print(f"[FASE 4]    Templates totales: {total_sequences_loaded}")
+            print(f"[FASE 4]    Embeddings actualizados exitosamente: {embeddings_updated}")
+            print(f"[FASE 4]    Embeddings fallidos: {embeddings_failed}")
+            
+            if embeddings_failed > 0:
+                print(f"[FASE 4]    [WARNING] Hubo {embeddings_failed} fallos en actualizacion")
+            else:
+                print(f"[FASE 4]    [SUCCESS] Todos los embeddings actualizados sin errores")
+            
+            print("=" * 80)
+            
+            # ============================================================
+            # FASE 5: GUARDAR MODELO CON THRESHOLD ACTUALIZADO
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("FASE 5: GUARDANDO MODELO CON THRESHOLD ACTUALIZADO")
+            print("=" * 80)
+            print(f"[FASE 5] Iniciando guardado del modelo")
+            print(f"[FASE 5] Threshold a guardar: {metrics.threshold:.6f}")
+            
+            print(f"\n[FASE 5] Llamando a save_real_model()...")
+            save_success = self.save_real_model()
+            
+            print(f"\n[FASE 5] Resultado de save_real_model(): {save_success}")
+            
+            print("\n" + "=" * 80)
+            print("RESUMEN COMPLETO FASE 5")
+            print("=" * 80)
+            
+            if save_success:
+                print(f"[FASE 5] [SUCCESS] Modelo guardado exitosamente")
+                print(f"[FASE 5]    Threshold guardado: {metrics.threshold:.6f}")
+                print(f"[FASE 5]    Metricas guardadas: SI")
+            else:
+                print(f"[FASE 5] [ERROR] Error al guardar modelo")
+                print(f"[FASE 5]    El threshold no se persiste al disco")
+            
+            print("=" * 80)
+            
+            # ============================================================
+            # RESUMEN FINAL
+            # ============================================================
+            print("\n" + "=" * 80)
+            print("RESUMEN FINAL COMPLETO - RECALCULACION DE THRESHOLD DINAMICO")
+            print("=" * 80)
+            
+            print(f"\n[RESUMEN] Timestamp finalizacion: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+            
+            print(f"\n[RESUMEN] FASE 1 - CARGA DE SECUENCIAS:")
+            print(f"[RESUMEN]    Usuarios procesados: {len(all_users)}")
+            print(f"[RESUMEN]    Usuarios con secuencias: {users_with_data}")
+            print(f"[RESUMEN]    Secuencias totales: {total_sequences_loaded}")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 2 - CREACION DE PARES:")
+            print(f"[RESUMEN]    Pares genuinos: {genuine_pairs}")
+            print(f"[RESUMEN]    Pares impostores: {impostor_pairs}")
+            print(f"[RESUMEN]    Total pares: {len(labels)}")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 3 - EVALUACION Y THRESHOLD:")
+            print(f"[RESUMEN]    Threshold calculado: {metrics.threshold:.6f}")
+            print(f"[RESUMEN]    FAR: {metrics.far:.4f} ({metrics.far*100:.2f}%)")
+            print(f"[RESUMEN]    FRR: {metrics.frr:.4f} ({metrics.frr*100:.2f}%)")
+            print(f"[RESUMEN]    EER: {metrics.eer:.4f} ({metrics.eer*100:.2f}%)")
+            print(f"[RESUMEN]    AUC: {metrics.auc_score:.4f}")
+            print(f"[RESUMEN]    Accuracy: {metrics.accuracy:.4f} ({metrics.accuracy*100:.2f}%)")
+            print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 4 - ACTUALIZACION EMBEDDINGS:")
+            print(f"[RESUMEN]    Embeddings actualizados: {embeddings_updated}")
+            print(f"[RESUMEN]    Embeddings fallidos: {embeddings_failed}")
+            if embeddings_failed > 0:
+                print(f"[RESUMEN]    Estado: WARNING")
+            else:
+                print(f"[RESUMEN]    Estado: SUCCESS")
+            
+            print(f"\n[RESUMEN] FASE 5 - GUARDADO DE MODELO:")
+            print(f"[RESUMEN]    Modelo guardado: {'SI' if save_success else 'NO'}")
+            print(f"[RESUMEN]    Estado: {'SUCCESS' if save_success else 'ERROR'}")
+            
+            print(f"\n[RESUMEN] ESTADO FINAL: {'SUCCESS - PROCESO COMPLETADO' if save_success else 'PARTIAL - REVISAR LOGS'}")
+            print("=" * 80)
+            
+            # Mensaje final para usuario
+            if save_success:
+                print(f"✓ Threshold dinámico recalculado y guardado exitosamente")
+                print(f"   Nuevo threshold: {metrics.threshold:.4f}")
+                print(f"   FAR: {metrics.far:.4f}")
+                print(f"   FRR: {metrics.frr:.4f}")
+                print(f"   EER: {metrics.eer:.4f}")
+            
+            return save_success
+            
+        except Exception as e:
+            print("\n" + "=" * 80)
+            print("[ERROR] ERROR RECALCULANDO THRESHOLD DINAMICO")
+            print("=" * 80)
+            print(f"[ERROR] Tipo: {type(e).__name__}")
+            print(f"[ERROR] Mensaje: {str(e)}")
+            print("=" * 80)
+            import traceback
+            traceback.print_exc()
+            return False
+        
     def predict_temporal_similarity_real(self, sequence1: np.ndarray, sequence2: np.ndarray) -> float:
         """Predice similitud temporal entre dos secuencias."""
         try:

@@ -120,17 +120,57 @@ export default function Dashboard() {
     }
   }
 
+  // const handleTrainNetworks = async () => {
+  //   if (!window.confirm('¿Entrenar las redes neuronales con los usuarios actuales?\n\nEste proceso puede tardar 2-5 minutos.')) {
+  //     return
+  //   }
+    
+  //   try {
+  //     setTraining(true)
+  //     const result = await systemApi.retrainNetworks(true)
+      
+  //     if (result.success) {
+  //       alert('¡Redes entrenadas exitosamente!\n\nEl sistema ahora está en modo normal.')
+  //       await loadData()
+  //     } else {
+  //       alert('Error: ' + result.message)
+  //     }
+  //   } catch (error) {
+  //     console.error('Error entrenando redes:', error)
+  //     alert('Error entrenando redes:\n\n' + (error.response?.data?.detail || error.message))
+  //   } finally {
+  //     setTraining(false)
+  //   }
+  // }
+
   const handleTrainNetworks = async () => {
-    if (!window.confirm('¿Entrenar las redes neuronales con los usuarios actuales?\n\nEste proceso puede tardar 2-5 minutos.')) {
+    // Detectar si es primer entrenamiento o reentrenamiento
+    const isFirstTraining = !systemStatus?.networks_trained
+    
+    // Mensaje de confirmación adaptativo
+    const confirmMessage = isFirstTraining 
+      ? '¿Entrenar las redes neuronales por primera vez con los usuarios actuales?\n\nEste proceso puede tardar 2-5 minutos.'
+      : '¿Reentrenar las redes neuronales incluyendo los nuevos usuarios?\n\nEste proceso puede tardar 2-5 minutos y regenerará los embeddings.'
+    
+    if (!window.confirm(confirmMessage)) {
       return
     }
     
     try {
       setTraining(true)
-      const result = await systemApi.retrainNetworks(true)
+      
+      // Llamar al endpoint correcto según el caso
+      const result = isFirstTraining
+        ? await systemApi.trainNetworks()
+        : await systemApi.retrainNetworks(true)
       
       if (result.success) {
-        alert('¡Redes entrenadas exitosamente!\n\nEl sistema ahora está en modo normal.')
+        // Mensaje de éxito adaptativo
+        const successMessage = isFirstTraining
+          ? '¡Redes entrenadas exitosamente!\n\nEl sistema ahora está completamente operativo.'
+          : '¡Redes reentrenadas exitosamente!\n\nLos embeddings han sido actualizados.'
+        
+        alert(successMessage)
         await loadData()
       } else {
         alert('Error: ' + result.message)

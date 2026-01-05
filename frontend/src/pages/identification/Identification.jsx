@@ -172,7 +172,7 @@ export default function Identification() {
       const canvas = canvasRef.current
 
       if (video.readyState !== video.HAVE_ENOUGH_DATA) {
-        console.log('⏳ Video aún no tiene suficientes datos')
+        console.log('Video aún no tiene suficientes datos')
         return
       }
 

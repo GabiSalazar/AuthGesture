@@ -1297,7 +1297,7 @@ class RealEnrollmentWorkflow:
                     if dynamic_features:
                         print(f"Características dinámicas: {dynamic_features.complete_vector.shape}")
                     else:
-                        print(f"⏳ Dinámicas: esperando más frames")
+                        print(f"Dinámicas: esperando más frames")
                     
                     temporal_sequence = self._extract_temporal_sequence_for_dynamic_network()
                     if temporal_sequence is not None:
@@ -1308,7 +1308,7 @@ class RealEnrollmentWorkflow:
                 except Exception as e:
                     print(f"Error dinámicas: {e}")
             else:
-                print(f"⏳ Buffer: {len(self.dynamic_extractor.temporal_buffer)}/50")
+                print(f"Buffer: {len(self.dynamic_extractor.temporal_buffer)}/50")
             
             # =========================================================================
             # CREAR MUESTRA COMPLETA
@@ -1356,7 +1356,7 @@ class RealEnrollmentWorkflow:
                 sample.temporal_sequence = None
                 sample.sequence_length = 0
                 sample.has_temporal_data = False
-                print(f"⏳ Sin secuencia temporal")
+                print(f"Sin secuencia temporal")
             
             print(f"Muestra creada: {sample_id}")
             
@@ -1395,7 +1395,7 @@ class RealEnrollmentWorkflow:
                         if dynamic_embedding is not None:
                             print(f"Embedding dinámico: {dynamic_embedding.shape}")
                         else:
-                            print(f"⏳ Embedding dinámico pendiente")
+                            print(f"Embedding dinámico pendiente")
                     elif not self.template_generator.dynamic_network.is_trained:
                         print(f"Red dinámica no entrenada")
                     
@@ -2404,7 +2404,7 @@ class RealEnrollmentWorkflow:
                 cv2.putText(frame, f"Calidad: {score:.3f}", (20, 120), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, quality_color, 2)
                 
-                ready_text = "LISTO PARA CAPTURA" if quality_assessment.ready_for_capture else "⏳ Mejorando posición..."
+                ready_text = "LISTO PARA CAPTURA" if quality_assessment.ready_for_capture else "Mejorando posición..."
                 ready_color = (0, 255, 0) if quality_assessment.ready_for_capture else (0, 255, 255)
                 cv2.putText(frame, ready_text, (20, 150), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, ready_color, 2)
@@ -2583,9 +2583,76 @@ class RealEnrollmentSystem:
             print(f"Error verificando bootstrap mode: {e}")
             return False
         
+    # def _check_bootstrap_needed(self) -> bool:
+    #     """Verifica si necesitamos modo bootstrap."""
+    #     try:
+    #         try:
+    #             from app.core.siamese_anatomical_network import get_real_siamese_anatomical_network
+    #             from app.core.siamese_dynamic_network import get_real_siamese_dynamic_network
+                
+    #             anatomical_net = get_real_siamese_anatomical_network()
+    #             dynamic_net = get_real_siamese_dynamic_network()
+                
+    #             if anatomical_net.is_trained and dynamic_net.is_trained:
+    #                 print("Redes YA ENTRENADAS - Modo normal")
+    #                 return False
+                    
+    #         except Exception as e:
+    #             print(f"No se pudieron cargar redes: {e}")
+            
+    #         if not hasattr(self, 'database') or self.database is None:
+    #             print("Database no inicializada - Bootstrap")
+    #             return True
+            
+    #         try:
+    #             users = self.database.list_users()
+    #             users_with_data = [u for u in users if u.total_templates > 0]
+                
+    #             sufficient_users = 0
+    #             for user in users_with_data:
+    #                 user_templates = self.database.list_user_templates(user.user_id)
+    #                 if len(user_templates) >= 15:
+    #                     sufficient_users += 1
+                
+    #             bootstrap_needed = sufficient_users < 2
+                
+    #             if bootstrap_needed:
+    #                 print("BOOTSTRAP ACTIVADO:")
+    #                 print(f"   - Usuarios suficientes: {sufficient_users}/2")
+    #                 print(f"   - Redes se entrenarán después del 2º usuario")
+    #             else:
+    #                 print("MODO NORMAL: Suficientes datos")
+                
+    #             return bootstrap_needed
+                
+    #         except Exception as db_error:
+    #             print(f"Error accediendo DB: {db_error}")
+    #             print("Activando bootstrap")
+    #             return True
+            
+    #     except Exception as e:
+    #         print(f"Error verificando bootstrap: {e}")
+    #         print("Activando bootstrap")
+    #         return True
+    
     def _check_bootstrap_needed(self) -> bool:
-        """Verifica si necesitamos modo bootstrap."""
+        """
+        Verifica si necesitamos modo bootstrap.
+        
+        REGLA SIMPLE:
+        - Si las redes están entrenadas → Modo NORMAL
+        - Si las redes NO están entrenadas → Modo BOOTSTRAP
+        
+        El número de usuarios ya NO importa - solo el estado de las redes.
+        """
         try:
+            print("="*70)
+            print("VERIFICANDO MODO DE ENROLLMENT")
+            print("="*70)
+            
+            # ============================================================
+            # VERIFICAR ESTADO DE LAS REDES (DECISIVO)
+            # ============================================================
             try:
                 from app.core.siamese_anatomical_network import get_real_siamese_anatomical_network
                 from app.core.siamese_dynamic_network import get_real_siamese_dynamic_network
@@ -2593,46 +2660,36 @@ class RealEnrollmentSystem:
                 anatomical_net = get_real_siamese_anatomical_network()
                 dynamic_net = get_real_siamese_dynamic_network()
                 
-                if anatomical_net.is_trained and dynamic_net.is_trained:
-                    print("Redes YA ENTRENADAS - Modo normal")
+                anatomical_trained = anatomical_net.is_trained
+                dynamic_trained = dynamic_net.is_trained
+                
+                print(f"Estado de redes:")
+                print(f"   - Red anatómica: {'ENTRENADA' if anatomical_trained else 'NO ENTRENADA'}")
+                print(f"   - Red dinámica: {'ENTRENADA' if dynamic_trained else 'NO ENTRENADA'}")
+                
+                # Si AMBAS redes están entrenadas → Modo NORMAL
+                if anatomical_trained and dynamic_trained:
+                    print("="*70)
+                    print("DECISIÓN: MODO NORMAL (ambas redes entrenadas)")
+                    print("="*70)
                     return False
+                
+                # Si alguna red NO está entrenada → Modo BOOTSTRAP
+                print("="*70)
+                print("DECISIÓN: MODO BOOTSTRAP (redes no entrenadas)")
+                print("="*70)
+                return True
                     
             except Exception as e:
-                print(f"No se pudieron cargar redes: {e}")
-            
-            if not hasattr(self, 'database') or self.database is None:
-                print("Database no inicializada - Bootstrap")
-                return True
-            
-            try:
-                users = self.database.list_users()
-                users_with_data = [u for u in users if u.total_templates > 0]
-                
-                sufficient_users = 0
-                for user in users_with_data:
-                    user_templates = self.database.list_user_templates(user.user_id)
-                    if len(user_templates) >= 15:
-                        sufficient_users += 1
-                
-                bootstrap_needed = sufficient_users < 2
-                
-                if bootstrap_needed:
-                    print("BOOTSTRAP ACTIVADO:")
-                    print(f"   - Usuarios suficientes: {sufficient_users}/2")
-                    print(f"   - Redes se entrenarán después del 2º usuario")
-                else:
-                    print("MODO NORMAL: Suficientes datos")
-                
-                return bootstrap_needed
-                
-            except Exception as db_error:
-                print(f"Error accediendo DB: {db_error}")
-                print("Activando bootstrap")
+                print(f"Error cargando redes: {e}")
+                print("No se pueden verificar redes - asumiendo MODO BOOTSTRAP")
+                print("="*70)
                 return True
             
         except Exception as e:
             print(f"Error verificando bootstrap: {e}")
-            print("Activando bootstrap")
+            print("Error general - activando MODO BOOTSTRAP por seguridad")
+            print("="*70)
             return True
     
     def _load_real_default_config(self) -> Dict[str, Any]:
@@ -3073,7 +3130,7 @@ class RealEnrollmentSystem:
                     if dynamic_features:
                         print(f"Características dinámicas: {dynamic_features.complete_vector.shape}")
                     else:
-                        print(f"⏳ Dinámicas: esperando más frames")
+                        print(f"Dinámicas: esperando más frames")
                     
                     temporal_sequence = self.workflow._extract_temporal_sequence_for_dynamic_network()
                     if temporal_sequence is not None:
@@ -3086,7 +3143,7 @@ class RealEnrollmentSystem:
                     import traceback
                     print(traceback.format_exc())
             else:
-                print(f"⏳ Buffer extractor: {len(self.workflow.dynamic_extractor.temporal_buffer)}/50")
+                print(f"Buffer extractor: {len(self.workflow.dynamic_extractor.temporal_buffer)}/50")
             
             # CREAR MUESTRA COMPLETA
             sample_id = f"{session.user_id}_{session.current_gesture}_{len(session.samples)}"

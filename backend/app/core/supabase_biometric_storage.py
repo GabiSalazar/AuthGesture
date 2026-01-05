@@ -2697,11 +2697,15 @@ class BiometricDatabase:
                 print(f"bootstrap_features presente: {'bootstrap_features' in anatomical_template.metadata}")
                 if 'bootstrap_features' in anatomical_template.metadata:
                     print(f"bootstrap_features dimension: {len(anatomical_template.metadata['bootstrap_features'])}")
+                # print(f"temporal_sequence presente: {'temporal_sequence' in anatomical_template.metadata}")
+                # if 'temporal_sequence' in anatomical_template.metadata:
+                #     print(f"temporal_sequence dimension: {len(anatomical_template.metadata['temporal_sequence'])} frames")
+                # print("=" * 80)
+                
                 print(f"temporal_sequence presente: {'temporal_sequence' in anatomical_template.metadata}")
-                if 'temporal_sequence' in anatomical_template.metadata:
+                if 'temporal_sequence' in anatomical_template.metadata and anatomical_template.metadata['temporal_sequence'] is not None:
                     print(f"temporal_sequence dimension: {len(anatomical_template.metadata['temporal_sequence'])} frames")
                 print("=" * 80)
-                
                 # ============================================================================
                 # DEBUG: Verificar que bootstrap_features se agregó correctamente
                 # ============================================================================
@@ -2720,14 +2724,21 @@ class BiometricDatabase:
                 else:
                     print(f"✗ bootstrap_features NO PRESENTE")
 
-                if 'temporal_sequence' in anatomical_template.metadata:
+                # if 'temporal_sequence' in anatomical_template.metadata:
+                #     ts = anatomical_template.metadata['temporal_sequence']
+                #     print(f"✓ temporal_sequence PRESENTE")
+                #     print(f"  Frames: {len(ts)}")
+                # else:
+                #     print(f"✗ temporal_sequence NO PRESENTE")
+                # print("="*80)
+                
+                if 'temporal_sequence' in anatomical_template.metadata and anatomical_template.metadata['temporal_sequence'] is not None:
                     ts = anatomical_template.metadata['temporal_sequence']
                     print(f"✓ temporal_sequence PRESENTE")
                     print(f"  Frames: {len(ts)}")
                 else:
-                    print(f"✗ temporal_sequence NO PRESENTE")
-                print("="*80)
-                
+                    print(f"✗ temporal_sequence NO PRESENTE o es None")
+    
                 # BUSCAR DATOS TEMPORALES
                 dynamic_template_id = None
                 temporal_sequence = None

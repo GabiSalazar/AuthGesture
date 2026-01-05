@@ -306,7 +306,7 @@ export default function AdminLogin() {
                   ) : (
                     <>
                       <Shield className="w-5 h-5" />
-                      <span>Iniciar Sesión</span>
+                      <span>Iniciar sesión</span>
                     </>
                   )}
                 </button>
