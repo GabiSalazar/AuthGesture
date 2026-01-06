@@ -167,8 +167,11 @@ export default function Verification() {
   const [pluginEmail, setPluginEmail] = useState(null)
 
   const [step, setStep] = useState('select') // 'select', 'processing', 'result', 'locked'
-  const [users, setUsers] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
+  // const [users, setUsers] = useState([])
+  // const [searchTerm, setSearchTerm] = useState('')
+
+  const [emailInput, setEmailInput] = useState('')
+  const [searchingUser, setSearchingUser] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
   const [sessionId, setSessionId] = useState(null)
   const [processing, setProcessing] = useState(false)
@@ -193,13 +196,13 @@ export default function Verification() {
   const lastFrameTimeRef = useRef(0)
 
   // Filtrar usuarios por nombre
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // const filteredUsers = users.filter(user => 
+  //   user.username.toLowerCase().includes(searchTerm.toLowerCase())
+  // )
 
-  useEffect(() => {
-    loadUsers()
-  }, [])
+  // useEffect(() => {
+  //   loadUsers()
+  // }, [])
 
   // CLEANUP
   useEffect(() => {
@@ -354,7 +357,7 @@ export default function Verification() {
     else {
       console.log('Acceso directo - sin plugin')
     }
-  }, [searchParams, users])
+  }, [searchParams])
 
   // Función para validar JWT del plugin
   const validarYUsarTokenPlugin = (token) => {
@@ -442,19 +445,43 @@ export default function Verification() {
   }
 
   // Función compartida para buscar y seleccionar usuario
-  const buscarYSeleccionarUsuario = (email) => {
-    console.log('Verificando si buscar usuario...')
-    console.log('   users.length:', users.length)
-    console.log('   email:', email)
+  // const buscarYSeleccionarUsuario = (email) => {
+  //   console.log('Verificando si buscar usuario...')
+  //   console.log('   users.length:', users.length)
+  //   console.log('   email:', email)
     
-    if (users.length > 0) {
-      console.log('SI hay usuarios, buscando...')
+  //   if (users.length > 0) {
+  //     console.log('SI hay usuarios, buscando...')
       
-      const user = users.find(u => u.email === email)
+  //     const user = users.find(u => u.email === email)
       
-      if (user) {
-        console.log('Usuario encontrado por email:', user.username)
-        setSelectedUser(user)
+  //     if (user) {
+  //       console.log('Usuario encontrado por email:', user.username)
+  //       setSelectedUser(user)
+        
+  //       // Auto-iniciar verificación
+  //       setTimeout(() => {
+  //         handleStartVerification()
+  //       }, 500)
+  //     } else {
+  //       console.log('Usuario no encontrado con email:', email)
+  //       setError(`No se encontró usuario con email: ${email}`)
+  //     }
+  //   } else {
+  //     console.log('NO hay usuarios aun, esperando...')
+  //   }
+  // }
+
+  const buscarYSeleccionarUsuario = async (email) => {
+    console.log('Verificando usuario con email:', email)
+    
+    try {
+      const response = await authenticationApi.getUserByEmail(email)
+      
+      if (response.success && response.user) {
+        console.log('Usuario encontrado por email:', response.user.username)
+        setSelectedUser(response.user)
+        setEmailInput(email)
         
         // Auto-iniciar verificación
         setTimeout(() => {
@@ -464,10 +491,12 @@ export default function Verification() {
         console.log('Usuario no encontrado con email:', email)
         setError(`No se encontró usuario con email: ${email}`)
       }
-    } else {
-      console.log('NO hay usuarios aun, esperando...')
+    } catch (err) {
+      console.error('Error buscando usuario:', err)
+      setError(`No se encontró usuario con email: ${email}`)
     }
   }
+
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -502,6 +531,41 @@ export default function Verification() {
     }
   }
 
+  const handleSearchUserByEmail = async () => {
+    if (!emailInput.trim()) {
+      setError('Por favor ingresa un email')
+      return
+    }
+
+    try {
+      setSearchingUser(true)
+      setError(null)
+      setSelectedUser(null)
+
+      console.log('Buscando usuario con email:', emailInput)
+
+      const response = await authenticationApi.getUserByEmail(emailInput.trim())
+
+      if (response.success && response.user) {
+        console.log('Usuario encontrado:', response.user)
+        setSelectedUser(response.user)
+        setError(null)
+      }
+    } catch (err) {
+      console.error('Error buscando usuario:', err)
+      
+      if (err.response?.status === 404) {
+        setError('No se encontró ningún usuario con ese email')
+      } else {
+        setError('Error al buscar usuario. Intenta nuevamente.')
+      }
+      
+      setSelectedUser(null)
+    } finally {
+      setSearchingUser(false)
+    }
+  }
+
   // const loadUsers = async () => {
   //   try {
   //     const response = await authenticationApi.getAvailableUsers()
@@ -513,28 +577,28 @@ export default function Verification() {
   //   }
   // }
 
-  const loadUsers = async () => {
-    try {
-      console.log('Cargando usuarios...')
-      const response = await authenticationApi.getAvailableUsers()
-      console.log('Response de usuarios:', response)
-      console.log('Usuarios recibidos:', response.users)
+  // const loadUsers = async () => {
+  //   try {
+  //     console.log('Cargando usuarios...')
+  //     const response = await authenticationApi.getAvailableUsers()
+  //     console.log('Response de usuarios:', response)
+  //     console.log('Usuarios recibidos:', response.users)
       
-      const usersList = response.users || []
-      console.log('Total usuarios a setear:', usersList.length)
+  //     const usersList = response.users || []
+  //     console.log('Total usuarios a setear:', usersList.length)
       
-      if (usersList.length > 0) {
-        console.log('Primer usuario:', usersList[0])
-        console.log('Emails de usuarios:', usersList.map(u => u.email))
-      }
+  //     if (usersList.length > 0) {
+  //       console.log('Primer usuario:', usersList[0])
+  //       console.log('Emails de usuarios:', usersList.map(u => u.email))
+  //     }
       
-      setUsers(usersList)
-      setError(null)
-    } catch (err) {
-      console.error('Error cargando usuarios:', err)
-      setError('Error al cargar usuarios disponibles')
-    }
-  }
+  //     setUsers(usersList)
+  //     setError(null)
+  //   } catch (err) {
+  //     console.error('Error cargando usuarios:', err)
+  //     setError('Error al cargar usuarios disponibles')
+  //   }
+  // }
 
   const handleStartVerification = async () => {
     if (!selectedUser) {
@@ -1089,10 +1153,9 @@ export default function Verification() {
           {/* ========================================
               STEP: SELECT
           ======================================== */}
-          {step === 'select' && (
+          {/* {step === 'select' && (
             <div className="max-w-4xl mx-auto">
               
-              {/* Divider */}
               <div className="relative mb-8">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-200"></div>
@@ -1124,7 +1187,6 @@ export default function Verification() {
                   </div>
                 ) : (
                   <>
-                    {/* Barra de búsqueda */}
                     <div className="mb-6">
                       <div className="relative">
                         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -1221,6 +1283,132 @@ export default function Verification() {
                   </>
                 )}
 
+                <div className="pt-4 flex justify-center">
+                  <Button
+                    onClick={handleStartVerification}
+                    disabled={!selectedUser || processing}
+                    className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    style={{
+                      background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                      boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                    }}
+                  >
+                    <Shield className="w-4 h-4" />
+                    Verificar identidad
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )} */}
+
+          {/* ========================================
+              STEP: SELECT
+          ======================================== */}
+          {step === 'select' && (
+            <div className="max-w-2xl mx-auto">
+              
+              {/* Divider */}
+              <div className="relative mb-8">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-4 bg-white text-sm font-semibold text-gray-500">
+                    Verificación de identidad 1:1
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {/* Input de Email */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Ingresa tu email
+                  </label>
+                  <div className="flex gap-3">
+                    <div className="flex-1">
+                      <input
+                        type="email"
+                        placeholder="ejemplo@correo.com"
+                        value={emailInput}
+                        onChange={(e) => setEmailInput(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === 'Enter') {
+                            handleSearchUserByEmail()
+                          }
+                        }}
+                        disabled={searchingUser}
+                        className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
+                        style={{ 
+                          borderColor: '#E0F2FE',
+                          backgroundColor: '#FFFFFF'
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#05A8F9'
+                          e.target.style.boxShadow = '0 0 0 3px rgba(5, 168, 249, 0.1)'
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = '#E0F2FE'
+                          e.target.style.boxShadow = 'none'
+                        }}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSearchUserByEmail}
+                      disabled={searchingUser || !emailInput.trim()}
+                      className="p-3 text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                      style={{
+                        background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                        boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)',
+                        minWidth: '48px'
+                      }}
+                    >
+                      {searchingUser ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Search className="w-5 h-5" />
+                      )}
+                    </Button>
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    Ingresa el email con el que te registraste en el sistema
+                  </p>
+                </div>
+
+                {/* Usuario encontrado */}
+                {selectedUser && (
+                  <div 
+                    className="p-6 rounded-2xl border-2 transition-all duration-300"
+                    style={{
+                      borderColor: '#05A8F9',
+                      backgroundColor: '#F4FCFF',
+                      boxShadow: '0 4px 14px 0 rgba(5, 168, 249, 0.2)'
+                    }}
+                  >
+                    <div className="flex items-center gap-4 mb-4">
+                      <div 
+                        className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ backgroundColor: '#E0F2FE' }}
+                      >
+                        <User className="w-8 h-8" style={{ color: '#05A8F9' }} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-xl font-bold mb-1" style={{ color: '#05A8F9' }}>
+                          {selectedUser.username}
+                        </h3>
+                        <p className="text-sm text-gray-600 truncate">
+                          {selectedUser.email || emailInput}
+                        </p>
+                        {/* <p className="text-xs text-gray-500 mt-1">
+                          ID: {selectedUser.user_id}
+                        </p> */}
+                      </div>
+                      <CheckCircle className="w-6 h-6 flex-shrink-0" style={{ color: '#10B981' }} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Botón de verificación */}
                 <div className="pt-4 flex justify-center">
                   <Button
                     onClick={handleStartVerification}

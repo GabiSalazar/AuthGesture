@@ -719,11 +719,47 @@ class BiometricDatabase:
                 logger.error(f"Error cargando usuarios: {users_error}")
             
             # CARGAR TEMPLATES
+            # print("Cargando templates...")
+            # try:
+            #     templates_response = self.supabase.table('biometric_templates').select('*').execute()
+                
+            #     for template_data in templates_response.data:
+            
+            # CARGAR TEMPLATES CON PAGINACIÓN EXPLÍCITA
             print("Cargando templates...")
             try:
-                templates_response = self.supabase.table('biometric_templates').select('*').execute()
+                page_size = 100
+                offset = 0
+                all_templates = []
                 
-                for template_data in templates_response.data:
+                while True:
+                    print(f"Cargando desde offset {offset}...")
+                    
+                    templates_response = self.supabase.table('biometric_templates')\
+                        .select('*')\
+                        .limit(page_size)\
+                        .offset(offset)\
+                        .execute()
+                    
+                    if not templates_response.data or len(templates_response.data) == 0:
+                        print(f"  ✓ Sin más datos")
+                        break
+                    
+                    num_recibidos = len(templates_response.data)
+                    all_templates.extend(templates_response.data)
+                    print(f"  ✓ {num_recibidos} templates (total: {len(all_templates)})")
+                    
+                    # Si recibimos menos que page_size, es la última página
+                    if num_recibidos < page_size:
+                        print(f"  ✓ Última página ({num_recibidos} < {page_size})")
+                        break
+                    
+                    # Siguiente página
+                    offset += page_size
+                
+                print(f"Total templates cargados: {len(all_templates)}")
+                
+                for template_data in all_templates:
                     try:
                         # Deserializar embeddings
                         anatomical_emb = None

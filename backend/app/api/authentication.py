@@ -943,7 +943,42 @@ async def get_available_users():
         logger.error(f"Error obteniendo usuarios: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-
+@router.get("/authentication/user/by-email/{email}")
+async def get_user_by_email(email: str):
+    """
+    Busca un usuario específico por su email.
+    Retorna solo ese usuario si existe y tiene templates.
+    """
+    try:
+        auth_system = get_real_authentication_system()
+        
+        # Obtener todos los usuarios (internamente)
+        all_users = auth_system.get_real_available_users()
+        
+        # Buscar el usuario específico por email
+        user_found = None
+        for user in all_users:
+            if user.get('email', '').lower() == email.lower().strip():
+                user_found = user
+                break
+        
+        if user_found:
+            return {
+                "success": True,
+                "user": user_found
+            }
+        else:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Usuario con email {email} no encontrado o sin templates"
+            )
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error buscando usuario por email: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+    
 @router.get("/authentication/stats", dependencies=[Depends(require_admin_token)])
 async def get_authentication_stats():
     """

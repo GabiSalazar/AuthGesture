@@ -142,6 +142,19 @@ export const authenticationApi = {
   },
 
   /**
+ * Busca un usuario específico por email
+ */
+  getUserByEmail: async (email) => {
+    try {
+      const { data } = await apiClient.get(`/authentication/user/by-email/${encodeURIComponent(email)}`)
+      return data
+    } catch (error) {
+      console.error('Error buscando usuario por email:', error)
+      throw error
+    }
+  },
+
+  /**
    * Inicia verificación 1:1
    */
   // startVerification: async (userId, securityLevel = 'standard') => {

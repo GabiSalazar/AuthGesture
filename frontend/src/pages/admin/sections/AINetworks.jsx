@@ -1210,7 +1210,7 @@ function AnatomicalNetworkPanel({ metrics }) {
               <div className="flex justify-between p-3 rounded-lg" style={{ backgroundColor: '#F9FAFB' }}>
                 <span className="text-sm font-medium text-gray-600">Batch Normalization</span>
                 <span className="text-sm font-black text-gray-900">
-                  {metrics.config?.batch_normalization ? ' Sí' : '❌ No'}
+                  {metrics.config?.batch_normalization ? ' Sí' : ' No'}
                 </span>
               </div>
               <div className="flex justify-between p-3 rounded-lg" style={{ backgroundColor: '#F9FAFB' }}>
