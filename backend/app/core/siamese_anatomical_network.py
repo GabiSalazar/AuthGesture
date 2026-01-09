@@ -1345,13 +1345,27 @@ class RealSiameseAnatomicalNetwork:
             else:
                 print(f"Dataset grande ({total_samples} muestras) - método estándar")
                 
+                # try:
+                #     genuine_distances = distances[labels == 1] if genuine_count > 0 else np.array([])
+                #     impostor_distances = distances[labels == 0] if impostor_count > 0 else np.array([])
+                #     self.genuine_scores = (1.0 / (1.0 + genuine_distances)).tolist()
+                #     self.impostor_scores = (1.0 / (1.0 + impostor_distances)).tolist()
+                #     fpr, tpr, thresholds = roc_curve(labels, 1 - distances)
+                #     auc_score = auc(fpr, tpr)
                 try:
                     genuine_distances = distances[labels == 1] if genuine_count > 0 else np.array([])
                     impostor_distances = distances[labels == 0] if impostor_count > 0 else np.array([])
                     self.genuine_scores = (1.0 / (1.0 + genuine_distances)).tolist()
                     self.impostor_scores = (1.0 / (1.0 + impostor_distances)).tolist()
-                    fpr, tpr, thresholds = roc_curve(labels, 1 - distances)
+                    
+                    # USAR DISTANCIAS NEGATIVAS PARA QUE roc_curve FUNCIONE CORRECTAMENTE
+                    # roc_curve espera valores altos = clase positiva (genuinos)
+                    # Con -distances: genuinos (dist pequeñas) → valores menos negativos (más altos)
+                    fpr, tpr, thresholds = roc_curve(labels, -distances)
                     auc_score = auc(fpr, tpr)
+                    
+                    # Los thresholds están en espacio (-distance), convertir a distancias reales
+                    thresholds = -thresholds
                     # Samplear puntos ROC para enviar al frontend (máximo 100 puntos)
                     sample_indices = np.linspace(0, len(fpr)-1, min(100, len(fpr)), dtype=int)
                     roc_fpr_sampled = fpr[sample_indices].tolist()
@@ -1364,7 +1378,12 @@ class RealSiameseAnatomicalNetwork:
                     
                     print(f"  EER calculado: {eer:.4f} con threshold: {eer_threshold:.4f}")
 
-                except Exception:
+                # except Exception:
+                #     print(f"Error en cálculo ROC estándar: {e}")
+
+                #     genuine_distances = distances[labels == 1] if genuine_count > 0 else []
+                #     impostor_distances = distances[labels == 0] if impostor_count > 0 else []
+                except Exception as e:
                     print(f"Error en cálculo ROC estándar: {e}")
 
                     genuine_distances = distances[labels == 1] if genuine_count > 0 else []
@@ -2558,11 +2577,22 @@ class RealSiameseAnatomicalNetwork:
             if not similarities:
                 return False, 0.0, {'error': 'Error en similitudes'}
             
+            # max_similarity = np.max(similarities)
+            # mean_similarity = np.mean(similarities)
+            # std_similarity = np.std(similarities)
+            
+            # threshold_decision = max_similarity > self.optimal_threshold
+            
             max_similarity = np.max(similarities)
             mean_similarity = np.mean(similarities)
             std_similarity = np.std(similarities)
             
-            threshold_decision = max_similarity > self.optimal_threshold
+            # self.optimal_threshold está en espacio de DISTANCIAS (resultado de evaluate_real_model)
+            # max_similarity está en espacio de SIMILARITY = 1/(1+distance)
+            # Convertir threshold de distancia a similarity para comparación consistente:
+            # Si threshold_dist = 0.6, entonces similarity_threshold = 1/(1+0.6) ≈ 0.625
+            similarity_threshold = 1.0 / (1.0 + max(0, self.optimal_threshold))
+            threshold_decision = max_similarity > similarity_threshold
             
             consistency_bonus = 0.0
             if len(similarities) > 1:
@@ -2585,11 +2615,22 @@ class RealSiameseAnatomicalNetwork:
                 'authentication_method': 'real_siamese_anatomical'
             }
                         
+            # print(f"Resultado autenticación:")
+            # print(f"  - Auténtico: {is_authentic}")
+            # print(f"  - Score máximo: {max_similarity:.4f}")
+            # print(f"  - Score final: {final_score:.4f}")
+            # print(f"  - Threshold: {self.optimal_threshold:.4f}")
+            # print(f"  - Templates consultados: {len(reference_templates)}")
+            
+            # Calcular similarity_threshold para logging
+            similarity_threshold = 1.0 / (1.0 + max(0, self.optimal_threshold))
+            
             print(f"Resultado autenticación:")
             print(f"  - Auténtico: {is_authentic}")
             print(f"  - Score máximo: {max_similarity:.4f}")
             print(f"  - Score final: {final_score:.4f}")
-            print(f"  - Threshold: {self.optimal_threshold:.4f}")
+            print(f"  - Threshold (distancia): {self.optimal_threshold:.4f}")
+            print(f"  - Threshold (similarity): {similarity_threshold:.4f}")
             print(f"  - Templates consultados: {len(reference_templates)}")
             
             return is_authentic, final_score, details

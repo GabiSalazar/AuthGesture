@@ -725,121 +725,331 @@ class BiometricDatabase:
                 
             #     for template_data in templates_response.data:
             
-            # CARGAR TEMPLATES CON PAGINACIÓN EXPLÍCITA
-            print("Cargando templates...")
-            try:
-                page_size = 100
-                offset = 0
-                all_templates = []
+            # # CARGAR TEMPLATES CON PAGINACIÓN EXPLÍCITA
+            # print("Cargando templates...")
+            # try:
+            #     page_size = 100
+            #     offset = 0
+            #     all_templates = []
                 
-                while True:
-                    print(f"Cargando desde offset {offset}...")
+            #     while True:
+            #         print(f"Cargando desde offset {offset}...")
                     
-                    templates_response = self.supabase.table('biometric_templates')\
-                        .select('*')\
-                        .limit(page_size)\
-                        .offset(offset)\
-                        .execute()
+            #         templates_response = self.supabase.table('biometric_templates')\
+            #             .select('*')\
+            #             .limit(page_size)\
+            #             .offset(offset)\
+            #             .execute()
                     
-                    if not templates_response.data or len(templates_response.data) == 0:
-                        print(f"  ✓ Sin más datos")
-                        break
+            #         if not templates_response.data or len(templates_response.data) == 0:
+            #             print(f"  ✓ Sin más datos")
+            #             break
                     
-                    num_recibidos = len(templates_response.data)
-                    all_templates.extend(templates_response.data)
-                    print(f"  ✓ {num_recibidos} templates (total: {len(all_templates)})")
+            #         num_recibidos = len(templates_response.data)
+            #         all_templates.extend(templates_response.data)
+            #         print(f"  ✓ {num_recibidos} templates (total: {len(all_templates)})")
                     
-                    # Si recibimos menos que page_size, es la última página
-                    if num_recibidos < page_size:
-                        print(f"  ✓ Última página ({num_recibidos} < {page_size})")
-                        break
+            #         # Si recibimos menos que page_size, es la última página
+            #         if num_recibidos < page_size:
+            #             print(f"  ✓ Última página ({num_recibidos} < {page_size})")
+            #             break
                     
-                    # Siguiente página
-                    offset += page_size
+            #         # Siguiente página
+            #         offset += page_size
                 
-                print(f"Total templates cargados: {len(all_templates)}")
+            #     print(f"Total templates cargados: {len(all_templates)}")
                 
-                for template_data in all_templates:
+            #     for template_data in all_templates:
+            #         try:
+            #             # Deserializar embeddings
+            #             anatomical_emb = None
+            #             if template_data.get('anatomical_embedding'):
+            #                 anatomical_emb = np.array(template_data['anatomical_embedding'], dtype=np.float32)
+                        
+            #             dynamic_emb = None
+            #             if template_data.get('dynamic_embedding'):
+            #                 dynamic_emb = np.array(template_data['dynamic_embedding'], dtype=np.float32)
+                        
+            #             # Convertir timestamps
+            #             created_at = template_data.get('created_at')
+            #             if isinstance(created_at, str):
+            #                 created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00')).timestamp()
+                        
+            #             updated_at = template_data.get('updated_at')
+            #             if isinstance(updated_at, str):
+            #                 updated_at = datetime.fromisoformat(updated_at.replace('Z', '+00:00')).timestamp()
+                        
+            #             last_used = template_data.get('last_used')
+            #             if isinstance(last_used, str):
+            #                 last_used = datetime.fromisoformat(last_used.replace('Z', '+00:00')).timestamp()
+                        
+            #             # Determinar tipo
+            #             template_type_str = template_data.get('template_type', 'anatomical')
+            #             if template_type_str == 'anatomical':
+            #                 template_type = TemplateType.ANATOMICAL
+            #             elif template_type_str == 'dynamic':
+            #                 template_type = TemplateType.DYNAMIC
+            #             else:
+            #                 template_type = TemplateType.MULTIMODAL
+                        
+            #             template = BiometricTemplate(
+            #                 user_id=template_data['user_id'],
+            #                 template_id=template_data['template_id'],
+            #                 template_type=template_type,
+            #                 anatomical_embedding=anatomical_emb,
+            #                 dynamic_embedding=dynamic_emb,
+            #                 gesture_name=template_data.get('gesture_name', 'unknown'),
+            #                 hand_side=template_data.get('hand_side', 'unknown'),
+            #                 quality_score=float(template_data.get('quality_score', 1.0)),
+            #                 confidence=float(template_data.get('confidence', 1.0)),
+            #                 created_at=created_at or time.time(),
+            #                 updated_at=updated_at or time.time(),
+            #                 last_used=last_used or time.time(),
+            #                 enrollment_session=template_data.get('enrollment_session', ''),
+            #                 verification_count=template_data.get('verification_count', 0),
+            #                 success_count=template_data.get('success_count', 0),
+            #                 is_encrypted=False,
+            #                 checksum=template_data.get('checksum', ''),
+            #                 metadata=template_data.get('metadata', {})
+            #             )
+                        
+            #             self.templates[template.template_id] = template
+            #             templates_loaded += 1
+                        
+            #             # Añadir a índices vectoriales
+            #             if anatomical_emb is not None:
+            #                 self.anatomical_index.add_embedding(
+            #                     anatomical_emb,
+            #                     template.template_id,
+            #                     template.user_id
+            #                 )
+                        
+            #             if dynamic_emb is not None:
+            #                 self.dynamic_index.add_embedding(
+            #                     dynamic_emb,
+            #                     template.template_id,
+            #                     template.user_id
+            #                 )
+                        
+            #             print(f"Template cargado: {template.template_id} ({template.gesture_name})")
+                        
+            #         except Exception as template_error:
+            #             logger.error(f"Error cargando template: {template_error}")
+            #             continue
+                        
+            # except Exception as templates_error:
+            #     logger.error(f"Error cargando templates: {templates_error}")
+            # ========================================================================
+            # CARGAR TEMPLATES CON PAGINACIÓN ROBUSTA Y REINTENTOS
+            # ========================================================================
+            print("Cargando templates con reintentos automáticos...")
+
+            page_size = 100
+            offset = 0
+            all_templates = []
+            max_retries = 5  # 5 intentos por página
+            retry_delay = 3  # 3 segundos entre reintentos
+
+            total_pages = 0
+            failed_pages = []
+
+            while True:
+                total_pages += 1
+                print(f"\n[Página {total_pages}] Offset {offset}...")
+                
+                retry_count = 0
+                page_success = False
+                current_page_data = None
+                
+                # REINTENTAR ESTA PÁGINA HASTA max_retries VECES
+                while retry_count < max_retries:
                     try:
-                        # Deserializar embeddings
-                        anatomical_emb = None
-                        if template_data.get('anatomical_embedding'):
-                            anatomical_emb = np.array(template_data['anatomical_embedding'], dtype=np.float32)
+                        templates_response = self.supabase.table('biometric_templates')\
+                            .select('*')\
+                            .limit(page_size)\
+                            .offset(offset)\
+                            .execute()
                         
-                        dynamic_emb = None
-                        if template_data.get('dynamic_embedding'):
-                            dynamic_emb = np.array(template_data['dynamic_embedding'], dtype=np.float32)
+                        # Página cargada exitosamente
+                        current_page_data = templates_response.data
+                        page_success = True
+                        break
                         
-                        # Convertir timestamps
-                        created_at = template_data.get('created_at')
-                        if isinstance(created_at, str):
-                            created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00')).timestamp()
+                    except Exception as page_error:
+                        retry_count += 1
+                        print(f"  ⚠ Intento {retry_count}/{max_retries} falló: {str(page_error)[:100]}")
                         
-                        updated_at = template_data.get('updated_at')
-                        if isinstance(updated_at, str):
-                            updated_at = datetime.fromisoformat(updated_at.replace('Z', '+00:00')).timestamp()
-                        
-                        last_used = template_data.get('last_used')
-                        if isinstance(last_used, str):
-                            last_used = datetime.fromisoformat(last_used.replace('Z', '+00:00')).timestamp()
-                        
-                        # Determinar tipo
-                        template_type_str = template_data.get('template_type', 'anatomical')
-                        if template_type_str == 'anatomical':
-                            template_type = TemplateType.ANATOMICAL
-                        elif template_type_str == 'dynamic':
-                            template_type = TemplateType.DYNAMIC
+                        if retry_count < max_retries:
+                            print(f"  ⏳ Esperando {retry_delay}s antes de reintentar...")
+                            import time as time_module
+                            time_module.sleep(retry_delay)
                         else:
-                            template_type = TemplateType.MULTIMODAL
-                        
-                        template = BiometricTemplate(
-                            user_id=template_data['user_id'],
-                            template_id=template_data['template_id'],
-                            template_type=template_type,
-                            anatomical_embedding=anatomical_emb,
-                            dynamic_embedding=dynamic_emb,
-                            gesture_name=template_data.get('gesture_name', 'unknown'),
-                            hand_side=template_data.get('hand_side', 'unknown'),
-                            quality_score=float(template_data.get('quality_score', 1.0)),
-                            confidence=float(template_data.get('confidence', 1.0)),
-                            created_at=created_at or time.time(),
-                            updated_at=updated_at or time.time(),
-                            last_used=last_used or time.time(),
-                            enrollment_session=template_data.get('enrollment_session', ''),
-                            verification_count=template_data.get('verification_count', 0),
-                            success_count=template_data.get('success_count', 0),
-                            is_encrypted=False,
-                            checksum=template_data.get('checksum', ''),
-                            metadata=template_data.get('metadata', {})
+                            print(f"  ✗ Página FALLÓ después de {max_retries} intentos")
+                            failed_pages.append(offset)
+                
+                # Evaluar resultado de la página
+                if not page_success or not current_page_data:
+                    print(f"  ⚠ No se pudo cargar offset {offset} - ABORTANDO carga")
+                    break
+                
+                # Página vacía = fin de datos
+                if len(current_page_data) == 0:
+                    print(f"  ✓ Fin de datos (página vacía)")
+                    break
+                
+                # Página cargada exitosamente
+                num_recibidos = len(current_page_data)
+                all_templates.extend(current_page_data)
+                print(f"  ✓ Cargados {num_recibidos} templates (TOTAL: {len(all_templates)})")
+                
+                # Última página (recibió menos de page_size)
+                if num_recibidos < page_size:
+                    print(f"  ✓ ÚLTIMA PÁGINA detectada ({num_recibidos} < {page_size})")
+                    break
+                
+                # Siguiente página
+                offset += page_size
+
+            # ========================================================================
+            # RESUMEN DE CARGA
+            # ========================================================================
+            print("\n" + "="*70)
+            print("RESUMEN DE CARGA DE TEMPLATES")
+            print("="*70)
+            print(f"Total páginas procesadas: {total_pages}")
+            print(f"Templates descargados: {len(all_templates)}")
+            print(f"Páginas fallidas: {len(failed_pages)}")
+            if failed_pages:
+                print(f"Offsets fallidos: {failed_pages}")
+            print("="*70 + "\n")
+
+            # ========================================================================
+            # PROCESAR TEMPLATES CARGADOS
+            # ========================================================================
+            print(f"Procesando {len(all_templates)} templates en memoria...")
+
+            templates_procesados_ok = 0
+            templates_procesados_error = 0
+
+            for idx, template_data in enumerate(all_templates, 1):
+                try:
+                    # Mostrar progreso cada 100 templates
+                    if idx % 100 == 0:
+                        print(f"  Procesando template {idx}/{len(all_templates)}...")
+                    
+                    # Deserializar embeddings
+                    anatomical_emb = None
+                    if template_data.get('anatomical_embedding'):
+                        anatomical_emb = np.array(template_data['anatomical_embedding'], dtype=np.float32)
+                    
+                    dynamic_emb = None
+                    if template_data.get('dynamic_embedding'):
+                        dynamic_emb = np.array(template_data['dynamic_embedding'], dtype=np.float32)
+                    
+                    # Convertir timestamps
+                    created_at = template_data.get('created_at')
+                    if isinstance(created_at, str):
+                        created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00')).timestamp()
+                    
+                    updated_at = template_data.get('updated_at')
+                    if isinstance(updated_at, str):
+                        updated_at = datetime.fromisoformat(updated_at.replace('Z', '+00:00')).timestamp()
+                    
+                    last_used = template_data.get('last_used')
+                    if isinstance(last_used, str):
+                        last_used = datetime.fromisoformat(last_used.replace('Z', '+00:00')).timestamp()
+                    
+                    # Determinar tipo
+                    template_type_str = template_data.get('template_type', 'anatomical')
+                    if template_type_str == 'anatomical':
+                        template_type = TemplateType.ANATOMICAL
+                    elif template_type_str == 'dynamic':
+                        template_type = TemplateType.DYNAMIC
+                    else:
+                        template_type = TemplateType.MULTIMODAL
+                    
+                    # Crear objeto BiometricTemplate
+                    template = BiometricTemplate(
+                        user_id=template_data['user_id'],
+                        template_id=template_data['template_id'],
+                        template_type=template_type,
+                        anatomical_embedding=anatomical_emb,
+                        dynamic_embedding=dynamic_emb,
+                        gesture_name=template_data.get('gesture_name', 'unknown'),
+                        hand_side=template_data.get('hand_side', 'unknown'),
+                        quality_score=float(template_data.get('quality_score', 1.0)),
+                        confidence=float(template_data.get('confidence', 1.0)),
+                        created_at=created_at or time.time(),
+                        updated_at=updated_at or time.time(),
+                        last_used=last_used or time.time(),
+                        enrollment_session=template_data.get('enrollment_session', ''),
+                        verification_count=template_data.get('verification_count', 0),
+                        success_count=template_data.get('success_count', 0),
+                        is_encrypted=False,
+                        checksum=template_data.get('checksum', ''),
+                        metadata=template_data.get('metadata', {})
+                    )
+                    
+                    # Guardar en memoria
+                    self.templates[template.template_id] = template
+                    templates_loaded += 1
+                    templates_procesados_ok += 1
+                    
+                    # Añadir a índices vectoriales (solo si tiene embeddings)
+                    if anatomical_emb is not None:
+                        self.anatomical_index.add_embedding(
+                            anatomical_emb,
+                            template.template_id,
+                            template.user_id
                         )
-                        
-                        self.templates[template.template_id] = template
-                        templates_loaded += 1
-                        
-                        # Añadir a índices vectoriales
-                        if anatomical_emb is not None:
-                            self.anatomical_index.add_embedding(
-                                anatomical_emb,
-                                template.template_id,
-                                template.user_id
-                            )
-                        
-                        if dynamic_emb is not None:
-                            self.dynamic_index.add_embedding(
-                                dynamic_emb,
-                                template.template_id,
-                                template.user_id
-                            )
-                        
-                        print(f"Template cargado: {template.template_id} ({template.gesture_name})")
-                        
-                    except Exception as template_error:
-                        logger.error(f"Error cargando template: {template_error}")
-                        continue
-                        
-            except Exception as templates_error:
-                logger.error(f"Error cargando templates: {templates_error}")
-            
+                    
+                    if dynamic_emb is not None:
+                        self.dynamic_index.add_embedding(
+                            dynamic_emb,
+                            template.template_id,
+                            template.user_id
+                        )
+                    
+                except Exception as template_error:
+                    templates_procesados_error += 1
+                    logger.error(f"Error procesando template {idx}: {template_error}")
+                    continue
+
+            print(f"\n✓ Procesamiento completado:")
+            print(f"  - Templates en memoria: {len(self.templates)}")
+            print(f"  - Procesados OK: {templates_procesados_ok}")
+            print(f"  - Errores: {templates_procesados_error}")
+
+            # ========================================================================
+            # VALIDACIÓN FINAL
+            # ========================================================================
+            print("\n" + "="*70)
+            print("VALIDACIÓN FINAL")
+            print("="*70)
+
+            # Contar en Supabase (query rápida)
+            try:
+                count_response = self.supabase.table('biometric_templates')\
+                    .select('template_id', count='exact')\
+                    .execute()
+                
+                total_en_supabase = count_response.count if hasattr(count_response, 'count') else len(all_templates)
+                
+                print(f"Templates en Supabase: {total_en_supabase}")
+                print(f"Templates en memoria:  {len(self.templates)}")
+                
+                if len(self.templates) == total_en_supabase:
+                    print("✓✓✓ TODOS LOS TEMPLATES CARGADOS CORRECTAMENTE ✓✓✓")
+                else:
+                    diferencia = total_en_supabase - len(self.templates)
+                    print(f"⚠⚠⚠ FALTAN {diferencia} TEMPLATES ⚠⚠⚠")
+                    
+            except Exception as count_error:
+                print(f"No se pudo validar count: {count_error}")
+
+            print("="*70 + "\n")
+
+
             # CONSTRUIR ÍNDICES
             print(" Construyendo índices vectoriales...")
             self.anatomical_index.build_index()
