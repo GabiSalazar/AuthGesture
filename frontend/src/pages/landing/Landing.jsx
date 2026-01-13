@@ -238,7 +238,7 @@ export default function Landing() {
               <TooltipButton
                 size="md"
                 onClick={() => navigate('/enrollment')}
-                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-16 h-11 group font-bold rounded-full text-sm"
+                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-20 h-11 group font-bold rounded-full text-sm"
                 style={{
                   background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                   boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
@@ -252,7 +252,7 @@ export default function Landing() {
               <TooltipButton
                 size="md"
                 onClick={() => setShowLoginModal(true)}
-                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-16 h-11 group font-bold rounded-full text-sm whitespace-nowrap"
+                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-20 h-11 group font-bold rounded-full text-sm whitespace-nowrap"
                 style={{
                   background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                   boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'

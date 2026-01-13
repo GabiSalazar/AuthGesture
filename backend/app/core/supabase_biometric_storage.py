@@ -3244,23 +3244,24 @@ class BiometricDatabase:
     def _save_user(self, user_profile: UserProfile):
         """Guarda perfil de usuario en Supabase - CORREGIDO para re-enrollment."""
         try:
+            from datetime import timezone
             print(f"Guardando usuario en Supabase: {user_profile.user_id}")
             
-            # Convertir timestamps a ISO format
-            created_at = datetime.fromtimestamp(user_profile.created_at).isoformat()
-            updated_at = datetime.fromtimestamp(user_profile.updated_at).isoformat()
+            # Convertir timestamps a ISO format con UTC explícito para consistencia
+            created_at = datetime.fromtimestamp(user_profile.created_at, tz=timezone.utc).isoformat()
+            updated_at = datetime.fromtimestamp(user_profile.updated_at, tz=timezone.utc).isoformat()
             
             last_activity = None
             if user_profile.last_activity:
-                last_activity = datetime.fromtimestamp(user_profile.last_activity).isoformat()
+                last_activity = datetime.fromtimestamp(user_profile.last_activity, tz=timezone.utc).isoformat()
             
             last_failed_timestamp = None
             if user_profile.last_failed_timestamp:
-                last_failed_timestamp = datetime.fromtimestamp(user_profile.last_failed_timestamp).isoformat()
+                last_failed_timestamp = datetime.fromtimestamp(user_profile.last_failed_timestamp, tz=timezone.utc).isoformat()
             
             lockout_until = None
             if user_profile.lockout_until:
-                lockout_until = datetime.fromtimestamp(user_profile.lockout_until).isoformat()
+                lockout_until = datetime.fromtimestamp(user_profile.lockout_until, tz=timezone.utc).isoformat()
             
             user_data = {
                 'user_id': user_profile.user_id,

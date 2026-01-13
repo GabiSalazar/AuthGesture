@@ -340,7 +340,7 @@ class RealScoreFusionSystem:
                 # Usar voting mechanism
                 anatomical_score = calculate_score_with_voting(
                     anatomical_similarities,
-                    vote_threshold=0.85,
+                    vote_threshold=0.85,  # Anatómico mantiene umbral alto
                     min_vote_ratio=0.5
                 )
                 anatomical_confidence = self._calculate_real_confidence(anatomical_similarities)
@@ -362,10 +362,10 @@ class RealScoreFusionSystem:
                 dynamic_score = 0.0
                 dynamic_confidence = 0.0
             else:
-                # Usar voting mechanism
+                # Usar voting mechanism (umbral dinámico más bajo que anatómico)
                 dynamic_score = calculate_score_with_voting(
                     dynamic_similarities,
-                    vote_threshold=0.85,
+                    vote_threshold=0.82,  # Bajado de 0.85 para ser menos estricto
                     min_vote_ratio=0.5
                 )
                 dynamic_confidence = self._calculate_real_confidence(dynamic_similarities)

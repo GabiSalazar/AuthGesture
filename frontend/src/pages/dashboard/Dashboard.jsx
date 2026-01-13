@@ -936,7 +936,7 @@ function ConfusionMatrixChart({ TP, FP, TN, FN }) {
           <div 
             className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 rounded-lg sm:rounded-xl flex flex-col items-center justify-center border-2"
             style={{ 
-              backgroundColor: `rgba(239, 68, 68, ${(FP / max) * 0.8})`,
+              backgroundColor: `rgba(239, 68, 68, ${(FP / max) * 6})`,
               borderColor: '#EF4444'
             }}
           >

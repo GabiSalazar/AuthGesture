@@ -3132,10 +3132,10 @@ class RealAuthenticationSystem:
                     #print(f"Score dinámico FINAL: {individual_scores.dynamic_score:.4f}")
                     #print(f"Confianza dinámica: {individual_scores.dynamic_confidence:.4f}")
                 if dynamic_similarities:
-                    # CAMBIO: De MAX a VOTING
+                    # CAMBIO: De MAX a VOTING     CAMBIARRRRRRRRR
                     individual_scores.dynamic_score = calculate_score_with_voting(
                         dynamic_similarities,
-                        vote_threshold=0.85,
+                        vote_threshold=0.70,
                         min_vote_ratio=0.5
                     )
                     individual_scores.dynamic_confidence = np.mean(dynamic_similarities)
