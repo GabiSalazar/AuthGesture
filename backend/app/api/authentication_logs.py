@@ -2,30 +2,30 @@
 API Router para Authentication Logs
 Endpoints para el panel de administración de autenticaciones
 """
-
-from fastapi import APIRouter, HTTPException, Query, Depends
-from typing import Optional, List, Dict, Any
 import time
 import logging
 
+from fastapi import APIRouter, HTTPException, Query, Depends
+from typing import Optional, List, Dict, Any
 from app.core.supabase_biometric_storage import get_biometric_database
 from app.dependencies.auth import require_admin_token
 
 router = APIRouter(prefix="/authentication", tags=["Authentication Logs"])
 logger = logging.getLogger(__name__)
 
-"""
-Obtiene todos los intentos de autenticación del sistema. Panel de administración.
 
-Args:
-    limit (int): máximo de intentos a retornar
-    offset (int): desplazamiento para paginación
-"""
 @router.get("/all-attempts", dependencies=[Depends(require_admin_token)])
 async def get_all_authentication_attempts(
     limit: int = Query(500, ge=1, le=1000, description="Máximo número de intentos a retornar"),
     offset: int = Query(0, ge=0, description="Offset para paginación")
 ):
+    """
+    Obtiene todos los intentos de autenticación del sistema. Panel de administración.
+
+    Args:
+        limit (int): máximo de intentos a retornar
+        offset (int): desplazamiento para paginación
+    """
     try:
         db = get_biometric_database()
         
@@ -255,18 +255,18 @@ async def get_all_identification_attempts(
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-"""
-Obtiene los intentos de autenticación más recientes.
-
-Args:
-    limit (int): número de intentos a retornar
-    result (str, opcional): filtrar por 'success' o 'failed'
-"""
 @router.get("/recent")
 async def get_recent_authentication_attempts(
     limit: int = Query(10, ge=1, le=50, description="Número de intentos recientes"),
     result: Optional[str] = Query(None, description="Filtrar por resultado: 'success' o 'failed'")
 ):
+    """
+    Obtiene los intentos de autenticación más recientes.
+
+    Args:
+        limit (int): número de intentos a retornar
+        result (str, opcional): filtrar por 'success' o 'failed'
+    """
     try:
         db = get_biometric_database()
         

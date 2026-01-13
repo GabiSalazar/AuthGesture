@@ -1,5 +1,4 @@
 """
-ENDPOINTS DE VERIFICACIÓN DE EMAIL
 API REST para gestionar verificación de emails
 """
 
@@ -68,13 +67,20 @@ class VerificationStatusResponse(BaseModel):
 @router.post("/send-verification", response_model=SendVerificationResponse)
 async def send_verification_email(request: SendVerificationRequest):
     """
-    Envía email de verificación al usuario
-    
+    Envía un email de verificación al usuario.
+
     Args:
-        request: Datos del usuario (user_id, username, email)
-    
+        request (SendVerificationRequest):
+            - user_id: identificador del usuario
+            - username: nombre del usuario
+            - email: correo destino
+
     Returns:
-        SendVerificationResponse con resultado
+        SendVerificationResponse:
+            - success: indica si el envío fue exitoso o ya estaba verificado
+            - message: mensaje informativo
+            - user_id: id del usuario
+            - email: correo utilizado
     """
     try:
         email_system = get_email_verification_system()
@@ -126,16 +132,13 @@ async def send_verification_email(request: SendVerificationRequest):
 @router.get("/verify")
 async def verify_email_token(token: str = Query(..., description="Token de verificación")):
     """
-    Verifica token de email y redirige al frontend
-    
-    Este endpoint es llamado cuando el usuario hace click en el email.
-    Valida el token y redirige a la PWA con el resultado.
-    
+    Verifica el token de verificación de email y redirige al frontend.
+
     Args:
-        token: Token de verificación desde el email
-    
+        token (str): token de verificación enviado por email
+
     Returns:
-        RedirectResponse al frontend con parámetros de resultado
+        RedirectResponse: redirección al frontend con el resultado de la verificación
     """
     try:
         email_system = get_email_verification_system()
@@ -164,75 +167,17 @@ async def verify_email_token(token: str = Query(..., description="Token de verif
         redirect_url = f"{frontend_url}/enrollment?verified=false&error=Error+verificando+token"
         return RedirectResponse(url=redirect_url)
 
-# @router.post("/resend-code")
-# async def resend_verification_code(request: dict):
-#     """
-#     Reenvía código de verificación al usuario
-    
-#     Args:
-#         request: dict con user_id, username, email
-    
-#     Returns:
-#         Mensaje de confirmación
-#     """
-#     try:
-#         from datetime import datetime
-        
-#         user_id = request.get('user_id')
-#         username = request.get('username')
-#         email = request.get('email')
-        
-#         email_system = get_email_verification_system()
-        
-#         # Verificar si puede reenviar (cooldown de 60 segundos)
-#         verification = email_system._load_verification(user_id)
-        
-#         if verification:
-#             # Verificar cooldown
-#             created_at = datetime.fromisoformat(verification.created_at)
-#             elapsed = (datetime.now() - created_at).total_seconds()
-            
-#             if elapsed < 60:  # Cooldown de 60 segundos
-#                 remaining = int(60 - elapsed)
-#                 return {
-#                     "success": False,
-#                     "message": f"Espera {remaining} segundos antes de reenviar"
-#                 }
-        
-#         # Enviar nuevo código
-#         success = email_system.send_verification_email(
-#             user_id=user_id,
-#             username=username,
-#             email=email
-#         )
-        
-#         if not success:
-#             return {
-#                 "success": False,
-#                 "message": "Error al reenviar el código"
-#             }
-        
-#         print(f"Código reenviado a: {email}")
-        
-#         return {
-#             "success": True,
-#             "message": "Código reenviado exitosamente"
-#         }
-        
-#     except Exception as e:
-#         print(f"Error reenviando código: {e}")
-#         raise HTTPException(status_code=500, detail=str(e))
     
 @router.post("/resend-code")
 async def resend_verification_code(request: dict):
     """
-    Reenvía código de verificación al usuario
-    
+    Reenvía el código de verificación al usuario si cumple el tiempo de espera.
+
     Args:
-        request: dict con user_id, username, email
-    
+        request (dict): contiene user_id, username y email
+
     Returns:
-        Mensaje de confirmación
+        dict: resultado del reenvío del código de verificación
     """
     try:
         from datetime import datetime
@@ -287,17 +232,18 @@ async def resend_verification_code(request: dict):
     except Exception as e:
         print(f"Error reenviando código: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+
 @router.post("/resend", response_model=ResendVerificationResponse)
 async def resend_verification_email(request: ResendVerificationRequest):
     """
-    Reenvía email de verificación
-    
+    Reenvía el email de verificación a un usuario no verificado.
+
     Args:
-        request: user_id del usuario
-    
+        request (ResendVerificationRequest): contiene el user_id del usuario
+
     Returns:
-        ResendVerificationResponse con resultado
+        ResendVerificationResponse: indica si el email fue reenviado y si puede volver a reenviar
     """
     try:
         email_system = get_email_verification_system()
@@ -358,16 +304,13 @@ async def resend_verification_email(request: ResendVerificationRequest):
 @router.post("/status", response_model=VerificationStatusResponse)
 async def check_verification_status(request: VerificationStatusRequest):
     """
-    Verifica el estado de verificación de un usuario
-    
-    Este endpoint se usa para polling desde el frontend,
-    permitiendo detectar cuando el usuario verificó su email.
-    
+    Consulta el estado de verificación del email de un usuario.
+
     Args:
-        request: user_id del usuario
-    
+        request (VerificationStatusRequest): contiene el user_id del usuario
+
     Returns:
-        VerificationStatusResponse con estado actual
+        VerificationStatusResponse: estado actual de verificación del email
     """
     try:
         email_system = get_email_verification_system()
@@ -392,13 +335,19 @@ async def check_verification_status(request: VerificationStatusRequest):
 @router.post("/verify-code")
 async def verify_code(request: dict):
     """
-    Verifica código de 6 dígitos ingresado por el usuario
-    
+    Verifica el código de verificación de 6 dígitos del usuario.
+
     Args:
-        request: dict con user_id y code
-    
+        request (dict): 
+            - user_id (str): identificador del usuario
+            - code (str): código de verificación de 6 dígitos
+
     Returns:
-        Resultado de verificación
+        dict:
+            - success (bool): indica si la verificación fue exitosa
+            - message (str): resultado de la verificación
+            - user_id (str, optional): id del usuario verificado
+            - email (str, optional): email del usuario verificado
     """
     try:
         from datetime import datetime
@@ -432,15 +381,7 @@ async def verify_code(request: dict):
                 "user_id": verification.user_id,
                 "email": verification.email
             }
-        
-        # Expirado
-        # expires_at = datetime.fromisoformat(verification.expires_at)
-        # if datetime.now() > expires_at:
-        #     return {
-        #         "success": False,
-        #         "message": "Código expirado. Solicita uno nuevo."
-        #     }
-        
+                
         # Expirado
         expires_at = datetime.fromisoformat(verification.expires_at)
         # Remover timezone si existe para comparación
@@ -480,18 +421,16 @@ async def verify_code(request: dict):
 
 @router.delete("/cleanup-expired")
 async def cleanup_expired_verifications():
-    ...
-
-@router.delete("/cleanup-expired")
-async def cleanup_expired_verifications():
     """
-    Limpia tokens de verificación expirados
-    
-    Endpoint de mantenimiento para eliminar tokens viejos.
-    Debería llamarse periódicamente o mediante un cron job.
-    
+    Elimina tokens de verificación de email que ya expiraron.
+
+    Args:
+        None
+
     Returns:
-        Mensaje de confirmación
+        dict:
+            - success (bool): indica si la limpieza se ejecutó correctamente
+            - message (str): resultado de la operación
     """
     try:
         email_system = get_email_verification_system()
@@ -514,10 +453,17 @@ async def cleanup_expired_verifications():
 @router.get("/health")
 async def email_system_health():
     """
-    Verifica salud del sistema de emails
-    
+    Verifica el estado del sistema de verificación de emails.
+
+    Args:
+        None
+
     Returns:
-        Estado del sistema
+        dict:
+            - status (str): estado del sistema ("healthy" | "unhealthy")
+            - sendgrid_configured (bool): indica si SendGrid está configurado
+            - from_email (str): email remitente configurado
+            - expiry_minutes (int): tiempo de expiración de los tokens
     """
     try:
         email_system = get_email_verification_system()

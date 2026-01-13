@@ -1,14 +1,13 @@
 """
-API Endpoints para comunicación con Plugin
-Endpoints específicos para la integración Plugin ↔ Sistema Biométrico
+API para comunicación con el Plugin (Plugin - Sistema Biométrico).
 """
+
 from fastapi import APIRouter, HTTPException, Header
 from pydantic import BaseModel, EmailStr
 from typing import Optional, Dict, Any
 import logging
 
 from app.services.api_key_service import get_api_key_service
-# from app.core.biometric_database import get_biometric_database
 from app.core.supabase_biometric_storage import get_biometric_database
 
 logger = logging.getLogger(__name__)
@@ -38,8 +37,13 @@ class CheckUserResponse(BaseModel):
 
 async def validate_api_key(authorization: str = Header(None)):
     """
-    Valida que la API Key sea válida.
-    Debe venir en formato: Bearer sk_live_...
+    Valida la API Key enviada en el header Authorization.
+
+    Args:
+        authorization (str|None): header Authorization en formato Bearer sk_live_...
+
+    Returns:
+        bool: True si la API Key es válida
     """
     if not authorization:
         raise HTTPException(
@@ -81,16 +85,15 @@ async def check_user_exists(
 ):
     """
     Verifica si un usuario ya está registrado en el sistema biométrico.
-    
-    Este endpoint es usado por el Plugin para validar si un email
-    ya existe antes de iniciar el proceso de registro.
-    
+
     Args:
-        request: Email, session_token y action
-        authorization: Header con API Key (Bearer sk_live_...)
-    
+        request (CheckUserRequest): datos del usuario (email, session_token, action)
+        authorization (str|None): header Authorization con API Key (Bearer sk_live_...)
+
     Returns:
-        CheckUserResponse con exists: true/false
+        CheckUserResponse:
+            - exists (bool): indica si el usuario ya existe
+            - message (str): mensaje descriptivo del resultado
     """
     try:
         # Validar API Key
@@ -136,7 +139,7 @@ async def check_user_exists(
 
 
 # ============================================
-# NUEVOS MODELOS PARA AUTENTICACIÓN
+# MODELOS PARA AUTENTICACIÓN
 # ============================================
 
 class AuthenticateStartRequest(BaseModel):
@@ -160,7 +163,6 @@ class AuthenticateStartResponse(BaseModel):
 # ============================================
 
 # Diccionario global para almacenar solicitudes de autenticación pendientes
-# En producción, esto debería estar en Redis o base de datos
 _pending_auth_requests = {}
 
 
@@ -174,18 +176,18 @@ async def authenticate_start(
     authorization: str = Header(None)
 ):
     """
-    Inicia proceso de autenticación solicitado por el Plugin.
-    
-    El Plugin envía email del usuario y callback_url.
-    Cuando el usuario complete la autenticación en el sistema biométrico,
-    este sistema enviará el resultado al callback_url proporcionado.
-    
+    Inicia una solicitud de autenticación enviada por el Plugin.
+
     Args:
-        request: Email, session_token, action y callback_url
-        authorization: Header con API Key (Bearer sk_live_...)
-    
+        request (AuthenticateStartRequest): email, session_token, action y callback_url
+        authorization (str|None): header Authorization con API Key (Bearer sk_live_...)
+
     Returns:
-        AuthenticateStartResponse con confirmación y request_id
+        AuthenticateStartResponse:
+            - success (bool): confirma el inicio de la autenticación
+            - message (str): mensaje de estado
+            - user_id (str|None): identificador del usuario
+            - request_id (str): id único para seguimiento de la solicitud
     """
     try:
         # Validar API Key
@@ -258,29 +260,25 @@ async def authenticate_start(
         )
 
 
-# ============================================
-# FUNCIÓN AUXILIAR PARA OBTENER SOLICITUD PENDIENTE
-# ============================================
-
 def get_pending_auth_request(request_id: str):
     """
     Obtiene una solicitud de autenticación pendiente.
-    
+
     Args:
-        request_id: ID de la solicitud
-    
+        request_id (str): identificador de la solicitud
+
     Returns:
-        Diccionario con datos de la solicitud o None
+        dict|None: datos de la solicitud si existe, o None
     """
     return _pending_auth_requests.get(request_id)
 
 
 def complete_auth_request(request_id: str):
     """
-    Marca una solicitud como completada y la elimina.
-    
+    Marca una solicitud de autenticación como completada y la elimina.
+
     Args:
-        request_id: ID de la solicitud
+        request_id (str): identificador de la solicitud
     """
     if request_id in _pending_auth_requests:
         del _pending_auth_requests[request_id]
@@ -289,7 +287,7 @@ def complete_auth_request(request_id: str):
 
 @router.get("/health")
 async def biometric_plugin_health():
-    """Health check del módulo de comunicación con Plugin"""
+    """Verifica el estado del módulo de comunicación con el Plugin"""
     return {
         "status": "healthy",
         "module": "Biometric Plugin Communication",

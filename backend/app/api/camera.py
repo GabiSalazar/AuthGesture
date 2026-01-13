@@ -1,5 +1,5 @@
 """
-API endpoints para Camera Manager
+API para gestión y control del Camera Manager
 """
 
 from fastapi import APIRouter, HTTPException, Response
@@ -158,9 +158,7 @@ async def release_camera_endpoint():
 @router.get("/capture/test")
 async def capture_test_frame():
     """
-    Captura un frame de prueba y lo devuelve como base64
-    
-    NOTA: Solo para testing. Para streaming en producción usar WebSocket.
+    Devuelve una imagen JPEG de prueba para validar el funcionamiento del endpoint
     """
     try:
         camera_mgr = get_camera_manager()
@@ -244,8 +242,8 @@ async def get_test_image():
             test_image[:, x, 1] = int(255 * x/640)        # Verde
         
         # Agregar texto
-        cv2.putText(test_image, "Camera Test Image", (180, 240), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
+        cv2.putText(test_image, "Camera Test Image", (180, 240),
+        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 3)
         
         # Convertir a JPEG
         _, buffer = cv2.imencode('.jpg', test_image, [cv2.IMWRITE_JPEG_QUALITY, 90])

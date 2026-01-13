@@ -1124,7 +1124,7 @@ class BiometricDatabase:
             print(f"TEMPLATES: {templates_loaded}")
             print(f"   Anatómicos: {anatomical_count}")
             print(f"   Dinámicos: {dynamic_count}")
-            print(f"   🔗 Multimodales: {multimodal_count}")
+            print(f"   Multimodales: {multimodal_count}")
             print(f"   Bootstrap: {bootstrap_count}")
             print("=" * 60)
             

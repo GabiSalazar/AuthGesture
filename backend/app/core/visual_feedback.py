@@ -55,7 +55,7 @@ class VisualFeedbackManager:
         self.icons = {
             "distance_far": "↔", "distance_close": "↔", "movement": "⚡",
             "stability": "⏱", "gesture": "✋", "confidence": "📊",
-            "area": "📍", "success": "OK", "warning": "⚠", "error": "NO",
+            "area": "📍", "success": "OK", "warning": "", "error": "NO",
             "info": "ℹ", "bootstrap": "🔧", "progress": "📈"
         }
         
@@ -119,7 +119,7 @@ class VisualFeedbackManager:
                 if quality_assessment.hand_confidence < 0.7:
                     messages.append(FeedbackMessage(
                         "No se detecta mano válida",
-                        FeedbackLevel.WARNING, 1, "⚠️", "Mostrar mano claramente"
+                        FeedbackLevel.WARNING, 1, "️", "Mostrar mano claramente"
                     ))
                     logger.warning(f"Feedback: Confianza baja ({quality_assessment.hand_confidence:.2f})")
                     return self._filter_and_sort_messages(messages)

@@ -37,15 +37,15 @@ function FeatureCard({ icon, title, description, stat, color = 'blue' }) {
   const style = colorStyles[color]
 
   return (
-    <div 
+    <div
       className="group relative p-3 sm:p-4 md:p-6 rounded-xl sm:rounded-2xl border-2 transition-all duration-300 hover:shadow-xl hover:scale-105"
-      style={{ 
+      style={{
         backgroundColor: style.bg,
         borderColor: style.border
       }}
     >
       <div className="flex items-start gap-2 sm:gap-3 md:gap-4">
-        <div 
+        <div
           className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center rounded-lg sm:rounded-xl group-hover:scale-110 transition-transform duration-300 shadow-sm flex-shrink-0"
           style={{ backgroundColor: style.iconBg }}
         >
@@ -53,17 +53,17 @@ function FeatureCard({ icon, title, description, stat, color = 'blue' }) {
             {icon}
           </div>
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-800 mb-1">
             {title}
           </h3>
-          
+
           {stat && (
             <div className="mb-1.5 sm:mb-2">
-              <span 
+              <span
                 className="inline-flex items-center px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold shadow-sm border"
-                style={{ 
+                style={{
                   backgroundColor: style.statBg,
                   borderColor: style.statBorder,
                   color: style.statText
@@ -73,7 +73,7 @@ function FeatureCard({ icon, title, description, stat, color = 'blue' }) {
               </span>
             </div>
           )}
-          
+
           <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
             {description}
           </p>
@@ -97,16 +97,16 @@ function TooltipButton({ children, tooltip, ...props }) {
         </Button>
       </div>
       {showTooltip && (
-        <div 
+        <div
           className="hidden sm:block absolute left-1/2 -translate-x-1/2 top-full mt-2 px-4 py-2 rounded-lg shadow-xl whitespace-nowrap z-50 animate-in fade-in slide-in-from-top-1 duration-200 border-2"
-          style={{ 
+          style={{
             background: 'linear-gradient(to right, #E0F2FE, #CFFAFE)',
             borderColor: '#67E8F9',
             color: '#0E7490'
           }}
         >
           <span className="text-xs font-semibold">{tooltip}</span>
-          <div 
+          <div
             className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-4 border-r-4 border-b-4 border-l-transparent border-r-transparent"
             style={{ borderBottomColor: '#67E8F9' }}
           />
@@ -131,11 +131,11 @@ export default function Landing() {
 
   return (
     <div className="fixed inset-0 flex">
-      
+
       {/* ========================================
           PANEL LATERAL CYAN (SOLO DESKTOP)
       ======================================== */}
-      <div 
+      <div
         className="hidden lg:flex lg:w-2/5 h-screen sticky top-0 flex-col justify-between p-12"
         style={{ backgroundColor: '#0291B9' }}
       >
@@ -149,7 +149,7 @@ export default function Landing() {
         {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
           <video
-            src="/videito.mp4"  
+            src="/videito.mp4"
             className="w-124 h-124 object opacity-95"
             autoPlay
             loop
@@ -172,8 +172,8 @@ export default function Landing() {
       {/* ========================================
           ÁREA DE CONTENIDO PRINCIPAL
       ======================================== */}
-      <div className="flex-1 bg-white h-screen overflow-y-auto">
-        
+      <div className="flex-1 bg-white h-screen overflow-y-auto flex flex-col">
+
         {/* Header móvil */}
         <div className="lg:hidden flex items-center justify-between p-4 border-b">
           <div 
@@ -189,112 +189,98 @@ export default function Landing() {
               Auth-Gesture
             </span>
           </div>
-        
         </div>
 
-        {/* Contenido principal centrado - RESPONSIVE */}
-        <div className="flex items-center justify-center min-h-[calc(100vh-4rem)] lg:min-h-screen px-4 sm:px-6 md:px-8 lg:px-16 py-8 sm:py-12">
-          
-          <div className="w-full max-w-5xl space-y-8 sm:space-y-12 md:space-y-16">
-            
-            {/* ========================================
-                HERO SECTION - RESPONSIVE
-            ======================================== */}
-            <div className="text-center space-y-4 sm:space-y-6 md:space-y-8">
-              
-              {/* Título RESPONSIVE */}
-              <div className="space-y-3 sm:space-y-4">
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-tight text-gray-600 px-2">
-                  Sistema Biométrico de Autenticación por Gestos
-                </h1>
-              </div>
+        {/* Header desktop */}
+        <header className="hidden lg:flex items-center justify-end px-6 lg:px-12 py-4 border-b" style={{ borderColor: '#E0F2FE' }}>
+          <button
+            onClick={() => setShowLoginModal(true)}
+            className="flex items-center gap-2 px-5 py-2 rounded-full text-sm font-bold transition-all hover:scale-105 shadow-md border-2"
+            style={{
+              backgroundColor: '#FFFFFF',
+              borderColor: '#00B8D4',
+              color: '#00B8D4'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#F0F9FF'
+              e.currentTarget.style.borderColor = '#00ACC1'
+              e.currentTarget.style.color = '#00ACC1'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#FFFFFF'
+              e.currentTarget.style.borderColor = '#00B8D4'
+              e.currentTarget.style.color = '#00B8D4'
+            }}
+          >
+            <Key className="w-4 h-4" />
+            Iniciar sesión
+          </button>
+        </header>
 
-              {/* Descripción RESPONSIVE */}
-              <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed max-w-2xl mx-auto px-4">
-                Tecnología biométrica basada en inteligencia artificial. Autenticación segura, rápida y sin contacto mediante el reconocimiento de gestos únicos de tu mano.
+        {/* Contenido principal centrado */}
+        <div className="flex-1 flex items-center justify-center px-6 sm:px-8 md:px-12 lg:px-16 py-10 sm:py-12">
+
+          <div className="w-full max-w-md text-center space-y-6">
+
+            {/* Título - MÁS GRANDE */}
+            <div className="space-y-3">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-snug text-gray-700">
+                Sistema Biométrico de{' '}
+                <span style={{ color: '#0891B2' }}>Autenticación por Gestos</span>
+              </h1>
+              <p className="text-sm text-gray-500 leading-relaxed max-w-sm mx-auto">
+                Tecnología biométrica con IA. Autenticación segura, rápida y sin contacto.
               </p>
-
-              {/* Botones principales - RESPONSIVE */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-2 sm:pt-4 max-w-3xl mx-auto px-4">
-                <TooltipButton
-                  size="lg"
-                  onClick={() => navigate('/enrollment')}
-                  className="w-full sm:flex-1 text-white shadow-lg transition-all duration-300 px-6 sm:px-8 md:px-12 h-12 sm:h-14 group font-bold rounded-full text-sm sm:text-base"
-                  style={{
-                    background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
-                    boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
-                  }}
-                  tooltip="Crea tu cuenta y vincúlala con tu red social"
-                >
-                  <UserPlus className="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform" />
-                  Registrarse
-                </TooltipButton>
-                
-                <TooltipButton
-                  size="lg"
-                  onClick={() => setShowLoginModal(true)}
-                  className="w-full sm:flex-1 text-white shadow-lg transition-all duration-300 px-6 sm:px-8 md:px-12 h-12 sm:h-14 group font-bold rounded-full text-sm sm:text-base"
-                  style={{
-                    background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
-                    boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
-                  }}
-                  tooltip="Accede con tu secuencia de gestos biométricos"
-                >
-                  <Key className="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:scale-110 transition-transform" />
-                  Iniciar sesión
-                </TooltipButton>
-              </div>
-
-              {/* LÍNEA + Link RESPONSIVE */}
-              <div className="pt-6 sm:pt-8 max-w-3xl mx-auto px-4">
-                {/* Línea separadora */}
-                <div 
-                  className="w-full h-px mb-4 sm:mb-6"
-                  style={{ backgroundColor: '#E0F2FE' }}
-                />
-                
-                {/* Link responsive */}
-                <div className="text-center sm:text-left">
-                  <button
-                    onClick={() => navigate('/forgot-sequence')}
-                    className="transition-colors text-xs sm:text-sm font-semibold inline-flex items-center gap-2 group"
-                    style={{ color: '#0891B2' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#0E7490'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#0891B2'}
-                  >
-                    <Key className="w-3 h-3 sm:w-4 sm:h-4" />
-                    ¿Olvidaste tu secuencia de gestos?
-                    <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </div>
             </div>
 
-            {/* ========================================
-                FEATURE CARDS - RESPONSIVE 1 columna mobile, 3 desktop
-            ======================================== */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-3 sm:gap-4 md:gap-5 2xl:gap-6 max-w-7xl px-4">
-              <FeatureCard
-                icon={<Hand className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
-                title="Biométrico"
-                stat="99.2% precisión"
-                description="Reconocimiento dual: analiza características anatómicas y patrones dinámicos de movimiento de tu mano."
-                color="cyan"
+            {/* Botones - MENOS SEPARADOS */}
+            <div className="flex flex-col sm:flex-row gap-2 justify-center">
+              <TooltipButton
+                size="md"
+                onClick={() => navigate('/enrollment')}
+                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-10 h-11 group font-bold rounded-full text-sm"
+                style={{
+                  background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                  boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                }}
+                tooltip="Crea tu cuenta y vincúlala con tu red social"
+              >
+                <UserPlus className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                Registrarse
+              </TooltipButton>
+
+              <TooltipButton
+                size="md"
+                onClick={() => setShowLoginModal(true)}
+                className="w-full sm:w-auto text-white shadow-md transition-all duration-300 px-10 h-11 group font-bold rounded-full text-sm"
+                style={{
+                  background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
+                  boxShadow: '0 4px 12px 0 rgba(0, 184, 212, 0.4)'
+                }}
+                tooltip="Accede con tu secuencia de gestos biométricos"
+              >
+                <Key className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
+                Iniciar sesión
+              </TooltipButton>
+            </div>
+
+            {/* Línea separadora + Link */}
+            <div className="pt-4">
+              <div
+                className="w-full h-px mb-6"
+                style={{ backgroundColor: '#E0F2FE' }}
               />
-              <FeatureCard
-                icon={<Shield className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
-                title="Seguro"
-                stat="IA cifrada"
-                description="Doble capa de seguridad con redes neuronales que procesan rasgos estáticos y secuencias temporales."
-                color="cyan"
-              />
-              <FeatureCard
-                icon={<Zap className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" />}
-                title="Rápido"
-                stat="< 2 segundos"
-                description="Procesamiento en tiempo real con detección instantánea y autenticación ultrarrápida."
-                color="cyan"
-              />
+              <button
+                onClick={() => navigate('/forgot-sequence')}
+                className="transition-colors text-sm font-semibold inline-flex items-center gap-2 group"
+                style={{ color: '#0891B2' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = '#0E7490'}
+                onMouseLeave={(e) => e.currentTarget.style.color = '#0891B2'}
+              >
+                <Key className="w-4 h-4" />
+                ¿Olvidaste tu secuencia de gestos?
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </button>
             </div>
 
           </div>
@@ -310,12 +296,12 @@ export default function Landing() {
         title="Selecciona el método de autenticación"
       >
         <div className="space-y-3 sm:space-y-4">
-          
+
           {/* Opción Verificación - RESPONSIVE */}
           <button
             onClick={() => navigate('/verification')}
             className="w-full p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl transition-all group text-left hover:scale-105 duration-300"
-            style={{ 
+            style={{
               backgroundColor: '#EFF6FF',
               borderColor: '#BFDBFE'
             }}
@@ -329,7 +315,7 @@ export default function Landing() {
             }}
           >
             <div className="flex items-center gap-3 sm:gap-4">
-              <div 
+              <div
                 className="p-2 sm:p-3 rounded-lg sm:rounded-xl group-hover:scale-110 transition-all shadow-sm flex-shrink-0"
                 style={{ backgroundColor: '#DBEAFE' }}
               >
@@ -343,8 +329,8 @@ export default function Landing() {
                   Confirma tu identidad ingresando tu ID de usuario
                 </p>
               </div>
-              <ArrowRight 
-                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:translate-x-1 transition-all flex-shrink-0" 
+              <ArrowRight
+                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:translate-x-1 transition-all flex-shrink-0"
                 style={{ color: '#2563EB' }}
               />
             </div>
@@ -354,7 +340,7 @@ export default function Landing() {
           <button
             onClick={() => navigate('/identification')}
             className="w-full p-4 sm:p-6 border-2 rounded-xl sm:rounded-2xl transition-all group text-left hover:scale-105 duration-300"
-            style={{ 
+            style={{
               backgroundColor: '#ECFDF5',
               borderColor: '#A7F3D0'
             }}
@@ -368,7 +354,7 @@ export default function Landing() {
             }}
           >
             <div className="flex items-center gap-3 sm:gap-4">
-              <div 
+              <div
                 className="p-2 sm:p-3 rounded-lg sm:rounded-xl group-hover:scale-110 transition-all shadow-sm flex-shrink-0"
                 style={{ backgroundColor: '#D1FAE5' }}
               >
@@ -382,8 +368,8 @@ export default function Landing() {
                   El sistema identificará automáticamente quién eres
                 </p>
               </div>
-              <ArrowRight 
-                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:translate-x-1 transition-all flex-shrink-0" 
+              <ArrowRight
+                className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 group-hover:translate-x-1 transition-all flex-shrink-0"
                 style={{ color: '#059669' }}
               />
             </div>
@@ -391,7 +377,7 @@ export default function Landing() {
         </div>
 
         {/* Footer del modal */}
-        <div 
+        <div
           className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t-2"
           style={{ borderColor: '#E0F2FE' }}
         >

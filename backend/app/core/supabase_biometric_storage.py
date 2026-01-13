@@ -877,10 +877,10 @@ class BiometricDatabase:
                         
                     except Exception as page_error:
                         retry_count += 1
-                        print(f"  ⚠ Intento {retry_count}/{max_retries} falló: {str(page_error)[:100]}")
+                        print(f"   Intento {retry_count}/{max_retries} falló: {str(page_error)[:100]}")
                         
                         if retry_count < max_retries:
-                            print(f"  ⏳ Esperando {retry_delay}s antes de reintentar...")
+                            print(f"   Esperando {retry_delay}s antes de reintentar...")
                             import time as time_module
                             time_module.sleep(retry_delay)
                         else:
@@ -889,7 +889,7 @@ class BiometricDatabase:
                 
                 # Evaluar resultado de la página
                 if not page_success or not current_page_data:
-                    print(f"  ⚠ No se pudo cargar offset {offset} - ABORTANDO carga")
+                    print(f"   No se pudo cargar offset {offset} - ABORTANDO carga")
                     break
                 
                 # Página vacía = fin de datos
@@ -1042,7 +1042,7 @@ class BiometricDatabase:
                     print("✓✓✓ TODOS LOS TEMPLATES CARGADOS CORRECTAMENTE ✓✓✓")
                 else:
                     diferencia = total_en_supabase - len(self.templates)
-                    print(f"⚠⚠⚠ FALTAN {diferencia} TEMPLATES ⚠⚠⚠")
+                    print(f" FALTAN {diferencia} TEMPLATES ")
                     
             except Exception as count_error:
                 print(f"No se pudo validar count: {count_error}")

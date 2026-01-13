@@ -1,18 +1,14 @@
 """
-API endpoints para Biometric Database
+API para gestión y consulta de la Biometric Database.
+
+Incluye endpoints de salud, estadísticas, usuarios, templates,
+integridad, backups e información de configuración.
 """
 
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 import numpy as np
-
-# from app.core.biometric_database import (
-#     get_biometric_database,
-#     TemplateType,
-#     BiometricQuality,
-#     SearchStrategy
-# )
 
 from app.core.supabase_biometric_storage import (
     get_biometric_database,
@@ -23,9 +19,7 @@ from app.core.supabase_biometric_storage import (
 
 from app.dependencies.auth import require_admin_token
 
-
 router = APIRouter(prefix="/biometric-database", tags=["Biometric Database"])
-
 
 class DatabaseStatsResponse(BaseModel):
     """Respuesta con estadísticas de la base de datos"""
@@ -56,9 +50,10 @@ class UpdateUserRequest(BaseModel):
     gesture_sequence: Optional[List[str]] = None
     is_active: Optional[bool] = None
 
+
 @router.get("/health")
 async def biometric_database_health_check():
-    """Verifica que Biometric Database esté funcionando"""
+    """Verifica el estado del módulo de Biometric Database"""
     try:
         db = get_biometric_database()
         
@@ -110,34 +105,6 @@ async def get_database_summary():
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 
-# @router.get("/users")
-# async def list_all_users():
-#     """Lista todos los usuarios registrados"""
-#     try:
-#         db = get_biometric_database()
-#         users = db.list_users()
-        
-#         users_data = []
-#         for user in users:
-#             users_data.append({
-#                 "user_id": user.user_id,
-#                 "username": user.username,
-#                 "total_templates": user.total_templates,
-#                 "gesture_sequence": user.gesture_sequence or [],
-#                 "total_enrollments": user.total_enrollments,
-#                 "verification_success_rate": user.verification_success_rate,
-#                 "created_at": user.created_at,
-#                 "last_activity": user.last_activity
-#             })
-        
-#         return {
-#             "status": "success",
-#             "total_users": len(users_data),
-#             "users": users_data
-#         }
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-
 @router.get("/users", dependencies=[Depends(require_admin_token)])
 async def list_all_users(
     search: Optional[str] = None,
@@ -148,15 +115,22 @@ async def list_all_users(
     sort_order: str = "desc"
 ):
     """
-    Lista todos los usuarios registrados con filtros opcionales
-    
-    Parámetros:
-    - search: Buscar por nombre o email (case-insensitive)
-    - gender: Filtrar por género ("Femenino" o "Masculino")
-    - min_age: Edad mínima (inclusive)
-    - max_age: Edad máxima (inclusive)
-    - sort_by: Campo para ordenar (created_at, username, age, templates, last_activity)
-    - sort_order: Orden (asc o desc)
+    Lista los usuarios registrados aplicando filtros y ordenamiento.
+
+    Args:
+        search (str|None): texto para buscar por username o email
+        gender (str|None): filtrar por género
+        min_age (int|None): edad mínima
+        max_age (int|None): edad máxima
+        sort_by (str): campo de ordenamiento
+        sort_order (str): orden ascendente o descendente
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - total (int): número de usuarios retornados
+            - filters_applied (dict): filtros utilizados
+            - users (list[dict]): listado de usuarios formateados
     """
     try:
         db = get_biometric_database()
@@ -253,11 +227,36 @@ async def list_all_users(
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-    
-@router.get("/users/{user_id}", dependencies=[Depends(require_admin_token)])
 
+
+@router.get("/users/{user_id}", dependencies=[Depends(require_admin_token)])
 async def get_user_profile(user_id: str):
-    """Obtiene perfil detallado de un usuario"""
+    """
+    Obtiene el perfil detallado de un usuario específico
+
+    Args:
+        user_id (str): identificador del usuario
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - user (dict): información completa del usuario
+                - user_id (str)
+                - username (str)
+                - total_templates (int)
+                - anatomical_templates (int)
+                - dynamic_templates (int)
+                - multimodal_templates (int)
+                - gesture_sequence (list[str])
+                - total_enrollments (int)
+                - total_verifications (int)
+                - successful_verifications (int)
+                - verification_success_rate (float)
+                - created_at
+                - updated_at
+                - last_activity
+                - metadata (dict)
+    """
     try:
         db = get_biometric_database()
         user = db.get_user(user_id)
@@ -292,9 +291,20 @@ async def get_user_profile(user_id: str):
 
 
 @router.get("/users/{user_id}/templates", dependencies=[Depends(require_admin_token)])
-
 async def get_user_templates(user_id: str):
-    """Obtiene templates de un usuario específico"""
+    """
+    Obtiene los templates biométricos asociados a un usuario.
+
+    Args:
+        user_id (str): identificador del usuario
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - user_id (str): id del usuario
+            - total_templates (int): número de templates retornados
+            - templates (list[dict]): información de los templates del usuario
+    """
     try:
         db = get_biometric_database()
         
@@ -335,7 +345,17 @@ async def get_user_templates(user_id: str):
 
 @router.get("/templates/{template_id}")
 async def get_template_details(template_id: str):
-    """Obtiene detalles de un template específico"""
+    """
+    Obtiene los detalles completos de un template biométrico.
+
+    Args:
+        template_id (str): identificador del template
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - template (dict): información detallada del template
+    """
     try:
         db = get_biometric_database()
         template = db.get_template(template_id)
@@ -378,9 +398,18 @@ async def get_template_details(template_id: str):
 
 
 @router.delete("/users/{user_id}", dependencies=[Depends(require_admin_token)])
-
 async def delete_user(user_id: str):
-    """Elimina un usuario y todos sus templates"""
+    """
+    Elimina un usuario y todos los templates asociados.
+
+    Args:
+        user_id (str): identificador del usuario
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - message (str): confirmación de eliminación
+    """
     try:
         db = get_biometric_database()
         
@@ -404,7 +433,18 @@ async def delete_user(user_id: str):
 
 @router.patch("/users/{user_id}")
 async def update_user(user_id: str, request: UpdateUserRequest):
-    """Actualiza información de un usuario"""
+    """
+    Actualiza la información de un usuario.
+
+    Args:
+        user_id (str): identificador del usuario
+        request (UpdateUserRequest): datos a actualizar
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - message (str): confirmación de actualización
+    """
     try:
         db = get_biometric_database()
         
@@ -443,51 +483,23 @@ async def update_user(user_id: str, request: UpdateUserRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-# @router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
-
-# async def get_user_auth_attempts(user_id: str, limit: int = 50):
-#     """Obtiene historial de autenticaciones de un usuario"""
-#     try:
-#         db = get_biometric_database()
-        
-#         if user_id not in db.users:
-#             raise HTTPException(status_code=404, detail=f"Usuario {user_id} no encontrado")
-        
-#         attempts = db.get_user_auth_attempts(user_id, limit=limit)
-        
-#         attempts_data = [
-#             {
-#                 "attempt_id": a.attempt_id,
-#                 "timestamp": a.timestamp,
-#                 "date": time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(a.timestamp)),
-#                 "auth_type": a.auth_type,
-#                 "result": a.result,
-#                 "confidence": round(a.confidence, 3),
-#                 "anatomical_score": round(a.anatomical_score, 3),
-#                 "dynamic_score": round(a.dynamic_score, 3),
-#                 "fused_score": round(a.fused_score, 3),
-#                 "ip_address": a.ip_address,
-#                 "failure_reason": a.failure_reason
-#             }
-#             for a in attempts
-#         ]
-        
-#         return {
-#             "status": "success",
-#             "user_id": user_id,
-#             "total_attempts": len(attempts_data),
-#             "attempts": attempts_data
-#         }
-        
-#     except HTTPException:
-#         raise
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-    
 
 @router.get("/users/{user_id}/auth-attempts", dependencies=[Depends(require_admin_token)])
 async def get_user_auth_attempts(user_id: str, limit: int = 50):
-    """Obtiene historial de autenticaciones de un usuario"""
+    """
+    Obtiene el historial de intentos de autenticación de un usuario.
+
+    Args:
+        user_id (str): identificador del usuario
+        limit (int): número máximo de intentos a retornar
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - user_id (str): id del usuario
+            - total_attempts (int): cantidad de intentos retornados
+            - attempts (list[dict]): intentos de autenticación formateados
+    """
     try:
         import time
         db = get_biometric_database()
@@ -541,11 +553,21 @@ async def get_user_auth_attempts(user_id: str, limit: int = 50):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
-    
-@router.delete("/templates/{template_id}", dependencies=[Depends(require_admin_token)])
 
+
+@router.delete("/templates/{template_id}", dependencies=[Depends(require_admin_token)])
 async def delete_template(template_id: str):
-    """Elimina un template específico"""
+    """
+    Elimina un template biométrico específico.
+
+    Args:
+        template_id (str): identificador del template
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - message (str): confirmación de eliminación
+    """
     try:
         db = get_biometric_database()
         
@@ -570,7 +592,14 @@ async def delete_template(template_id: str):
 
 @router.get("/bootstrap/stats")
 async def get_bootstrap_stats():
-    """Obtiene estadísticas de templates Bootstrap"""
+    """
+    Obtiene estadísticas de los templates en modo Bootstrap.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - bootstrap_stats (dict): estadísticas generadas por la base
+    """
     try:
         db = get_biometric_database()
         stats = db.get_bootstrap_stats()
@@ -585,7 +614,19 @@ async def get_bootstrap_stats():
 
 @router.get("/bootstrap/templates")
 async def get_bootstrap_templates(user_id: Optional[str] = None):
-    """Obtiene templates en modo Bootstrap"""
+    """
+    Obtiene templates biométricos en modo Bootstrap.
+
+    Args:
+        user_id (str|None): filtra templates por usuario
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - total_bootstrap_templates (int): número de templates retornados
+            - user_filter (str|None): filtro de usuario aplicado
+            - templates (list[dict]): templates Bootstrap formateados
+    """
     try:
         db = get_biometric_database()
         templates = db.get_bootstrap_templates(user_id)
@@ -614,7 +655,14 @@ async def get_bootstrap_templates(user_id: Optional[str] = None):
 
 @router.get("/integrity/verify")
 async def verify_database_integrity():
-    """Verifica integridad de la base de datos"""
+    """
+    Verifica la integridad de la base de datos biométrica.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - integrity_report (dict): resultado de la verificación
+    """
     try:
         db = get_biometric_database()
         integrity_report = db.verify_integrity()
@@ -629,7 +677,14 @@ async def verify_database_integrity():
 
 @router.post("/backup/create")
 async def create_database_backup():
-    """Crea un backup de la base de datos"""
+    """
+    Crea un backup de la base de datos biométrica.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - message (str): confirmación de creación del backup
+    """
     try:
         db = get_biometric_database()
         success = db.create_backup()
@@ -648,7 +703,15 @@ async def create_database_backup():
 
 @router.get("/indices/stats")
 async def get_indices_stats():
-    """Obtiene estadísticas de índices vectoriales"""
+    """
+    Obtiene estadísticas de los índices vectoriales biométricos.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - anatomical_index (dict): estadísticas del índice anatómico
+            - dynamic_index (dict): estadísticas del índice dinámico
+    """
     try:
         db = get_biometric_database()
         
@@ -666,7 +729,14 @@ async def get_indices_stats():
 
 @router.get("/config", dependencies=[Depends(require_admin_token)])
 async def get_database_config():
-    """Obtiene configuración de la base de datos"""
+    """
+    Obtiene la configuración actual de la base de datos biométrica.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - config (dict): parámetros de configuración expuestos
+    """
     try:
         db = get_biometric_database()
         
@@ -687,7 +757,24 @@ async def get_database_config():
 
 @router.get("/debug/paths")
 async def debug_database_paths():
-    """Endpoint temporal para debugging - verificar rutas"""
+    """
+    Endpoint de depuración para verificar rutas y estado de archivos de la base de datos.
+
+    Returns:
+        dict:
+            - status (str): estado de la operación
+            - database_path (str): ruta relativa de la base
+            - database_path_absolute (str): ruta absoluta
+            - users_dir (str): directorio de usuarios
+            - users_dir_exists (bool): existencia del directorio
+            - users_files_count (int): archivos de usuarios
+            - templates_dir (str): directorio de templates
+            - templates_dir_exists (bool): existencia del directorio
+            - templates_files_count (int): archivos de templates
+            - users_in_memory (int): usuarios cargados en memoria
+            - templates_in_memory (int): templates cargados en memoria
+            - current_working_directory (str): directorio de trabajo actual
+    """
     try:
         db = get_biometric_database()
         

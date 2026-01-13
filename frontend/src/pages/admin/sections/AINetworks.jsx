@@ -689,7 +689,6 @@ function AnatomicalNetworkPanel({ metrics }) {
             />
             <Legend />
             
-            {/* Línea diagonal (clasificador aleatorio) */}
             <Line 
               type="monotone" 
               dataKey="random" 
@@ -699,17 +698,78 @@ function AnatomicalNetworkPanel({ metrics }) {
               dot={false}
             />
             
-            {/* Curva ROC del modelo */}
             <Line 
               type="monotone" 
               dataKey="tpr" 
               stroke="#05A8F9" 
               strokeWidth={3}
               name={`ROC (AUC=${(metrics.metrics?.auc_score || 0).toFixed(3)})`}
-              dot={{ fill: '#05A8F9', r: 4 }}
+              // dot={{ fill: '#05A8F9', r: 4 }}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>
+
+
+        {/* <ResponsiveContainer width="100%" height={400}>
+          <LineChart
+            data={(() => {
+              const fpr = metrics.roc_curve?.fpr || []
+              const tpr = metrics.roc_curve?.tpr || []
+              
+              return fpr.map((fp, idx) => ({
+                fpr: fp * 100,
+                tpr: tpr[idx] * 100,
+                random: fp * 100
+              }))
+            })()}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+            <XAxis 
+              dataKey="fpr" 
+              label={{ value: 'False Positive Rate (%)', position: 'insideBottom', offset: -5, style: { fontWeight: 'bold' } }}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
+              domain={[0, 100]}
+              type="number"
+              ticks={[0, 20, 40, 60, 80, 100]}
+            />
+            <YAxis 
+              label={{ value: 'True Positive Rate (%)', angle: -90, position: 'insideLeft', style: { fontWeight: 'bold' } }}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
+              domain={[0, 100]}
+              ticks={[0, 20, 40, 60, 80, 100]}
+            />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#fff', 
+                border: '2px solid #05A8F9',
+                borderRadius: '12px',
+                fontWeight: 'bold'
+              }}
+              formatter={(value) => `${value.toFixed(2)}%`}
+            />
+            <Legend />
+            
+            <Line 
+              type="monotone" 
+              dataKey="random" 
+              stroke="#D1D5DB" 
+              strokeDasharray="5 5"
+              name="Random (AUC=0.5)"
+              dot={false}
+            />
+            
+            <Line 
+              type="monotone" 
+              dataKey="tpr" 
+              stroke="#05A8F9" 
+              strokeWidth={3}
+              name={`ROC (AUC=${(metrics.metrics?.auc_score || 0).toFixed(3)})`}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer> */}
 
         <div className="mt-6 p-4 rounded-xl" style={{ backgroundColor: '#F0F9FF' }}>
           <p className="text-sm font-bold text-gray-700">
@@ -1887,7 +1947,7 @@ function DynamicNetworkPanel({ metrics }) {
           </h3>
         </div>
 
-        <ResponsiveContainer width="100%" height={400}>
+        {/* <ResponsiveContainer width="100%" height={400}>
           <LineChart
             data={(() => {
               const fpr = metrics.roc_curve?.fpr || []
@@ -1922,7 +1982,6 @@ function DynamicNetworkPanel({ metrics }) {
             />
             <Legend />
             
-            {/* Línea diagonal (clasificador aleatorio) */}
             <Line 
               type="monotone" 
               dataKey="random" 
@@ -1932,7 +1991,6 @@ function DynamicNetworkPanel({ metrics }) {
               dot={false}
             />
             
-            {/* Curva ROC del modelo */}
             <Line 
               type="monotone" 
               dataKey="tpr" 
@@ -1940,6 +1998,67 @@ function DynamicNetworkPanel({ metrics }) {
               strokeWidth={3}
               name={`ROC (AUC=${(metrics.metrics?.auc_score || 0).toFixed(3)})`}
               dot={{ fill: '#05A8F9', r: 4 }}
+            />
+          </LineChart>
+        </ResponsiveContainer> */}
+
+        <ResponsiveContainer width="100%" height={400}>
+          <LineChart
+            data={(() => {
+              const fpr = metrics.roc_curve?.fpr || []
+              const tpr = metrics.roc_curve?.tpr || []
+              
+              return fpr.map((fp, idx) => ({
+                fpr: fp * 100,
+                tpr: tpr[idx] * 100,
+                random: fp * 100
+              }))
+            })()}
+            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+            <XAxis 
+              dataKey="fpr" 
+              label={{ value: 'False Positive Rate (%)', position: 'insideBottom', offset: -5, style: { fontWeight: 'bold' } }}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
+              domain={[0, 100]}
+              type="number"
+              ticks={[0, 20, 40, 60, 80, 100]}
+            />
+            <YAxis 
+              label={{ value: 'True Positive Rate (%)', angle: -90, position: 'insideLeft', style: { fontWeight: 'bold' } }}
+              tick={{ fill: '#6B7280', fontSize: 12 }}
+              domain={[0, 100]}
+              ticks={[0, 20, 40, 60, 80, 100]}
+            />
+            <Tooltip 
+              contentStyle={{ 
+                backgroundColor: '#fff', 
+                border: '2px solid #05A8F9',
+                borderRadius: '12px',
+                fontWeight: 'bold'
+              }}
+              formatter={(value) => `${value.toFixed(2)}%`}
+            />
+            <Legend />
+            
+            <Line 
+              type="monotone" 
+              dataKey="random" 
+              stroke="#D1D5DB" 
+              strokeDasharray="5 5"
+              name="Random (AUC=0.5)"
+              dot={false}
+            />
+            
+            <Line 
+              type="monotone" 
+              dataKey="tpr" 
+              stroke="#05A8F9" 
+              strokeWidth={3}
+              name={`ROC (AUC=${(metrics.metrics?.auc_score || 0).toFixed(3)})`}
+              // dot={{ fill: '#05A8F9', r: 4 }}
+              dot={false}
             />
           </LineChart>
         </ResponsiveContainer>

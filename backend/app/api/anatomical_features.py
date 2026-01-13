@@ -43,15 +43,15 @@ async def anatomical_features_health_check():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en Anatomical Features Extractor: {str(e)}")
 
-"""
-Obtiene estadísticas de extracción de características.
 
-Returns:
-    FeatureStatsResponse: métricas de uso y configuración del extractor
-"""
 @router.get("/stats", response_model=FeatureStatsResponse)
 async def get_extraction_stats():
-    """Obtiene estadísticas de extracción de características"""
+    """
+    Obtiene estadísticas de extracción de características.
+
+    Returns:
+        FeatureStatsResponse: métricas de uso y configuración del extractor
+    """
     try:
         extractor = get_anatomical_features_extractor()
         stats = extractor.get_extraction_stats()

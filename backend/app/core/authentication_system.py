@@ -883,9 +883,13 @@ class RealAuthenticationPipeline:
             print("AUTH: Procesando frame original para detectar mano...")
             processing_result_initial = get_mediapipe_processor().process_frame(frame_original)
             
+            # if not processing_result_initial or not processing_result_initial.hand_result or not processing_result_initial.hand_result.is_valid:
+            #     print("AUTH: No se detectó mano válida en frame original")
+            #     return False, "No se detectó mano válida en frame"
+            
             if not processing_result_initial or not processing_result_initial.hand_result or not processing_result_initial.hand_result.is_valid:
                 print("AUTH: No se detectó mano válida en frame original")
-                return False, "No se detectó mano válida en frame"
+                return False, "Muestra tu mano a la cámara"
             
             print("AUTH: Mano detectada en frame original")
             print(f"AUTH: Confianza inicial: {processing_result_initial.hand_result.confidence:.3f}")
@@ -957,6 +961,15 @@ class RealAuthenticationPipeline:
                 frame_shape=frame_original.shape[:2]
             )
             
+            # if not quality_assessment or not quality_assessment.ready_for_capture:
+            #     # Mostrar feedback de calidad si está disponible
+            #     if self.config.enable_audit_logging:
+            #         self._draw_real_quality_feedback(frame_original, quality_assessment)
+                
+            #     quality_score = quality_assessment.quality_score if quality_assessment else 0.0
+            #     print(f"AUTH: Calidad insuficiente: {quality_score:.3f}")
+            #     return False, f"Calidad insuficiente: {quality_score:.3f}" if quality_assessment else "Sin evaluación de calidad"
+            
             if not quality_assessment or not quality_assessment.ready_for_capture:
                 # Mostrar feedback de calidad si está disponible
                 if self.config.enable_audit_logging:
@@ -964,8 +977,29 @@ class RealAuthenticationPipeline:
                 
                 quality_score = quality_assessment.quality_score if quality_assessment else 0.0
                 print(f"AUTH: Calidad insuficiente: {quality_score:.3f}")
-                return False, f"Calidad insuficiente: {quality_score:.3f}" if quality_assessment else "Sin evaluación de calidad"
-            
+                
+                # NUEVO: Generar mensaje de feedback detallado para el usuario
+                if quality_assessment:
+                    feedback = self.quality_validator.get_validation_feedback(quality_assessment)
+                    
+                    # Priorizar mensajes importantes
+                    if quality_assessment.hand_size.distance_status.value == "muy_lejos":
+                        user_message = "Acerca un poco más tu mano"
+                    elif quality_assessment.hand_size.distance_status.value == "muy_cerca":
+                        user_message = "Aleja un poco tu mano"
+                    elif not quality_assessment.visibility.all_points_visible:
+                        user_message = "Asegúrate de que toda tu mano sea visible"
+                    elif quality_assessment.movement.is_moving:
+                        user_message = "Mantén tu mano firme"
+                    elif not quality_assessment.area.hand_in_area:
+                        user_message = "Centra tu mano en la pantalla"
+                    else:
+                        user_message = "Preparando captura..."
+                else:
+                    user_message = "Sin evaluación de calidad"
+                
+                return False, user_message
+
             print(f"AUTH: Frame válido - Quality: {quality_assessment.quality_score:.1f}")
             
             # ========================================================================
@@ -2499,9 +2533,22 @@ class RealAuthenticationSystem:
             })
             
             # Verificar si podemos proceder al matching
+            # if session.current_phase == AuthenticationPhase.TEMPLATE_MATCHING:
+            #     auth_result = self._perform_real_authentication_matching(session)
+
+            # Verificar si podemos proceder al matching
             if session.current_phase == AuthenticationPhase.TEMPLATE_MATCHING:
-                auth_result = self._perform_real_authentication_matching(session)
+                # NUEVO: Si es el primer frame con secuencia completa, retornar para dar feedback
+                # Usamos un flag temporal en la sesión para saber si ya dimos feedback
+                if not hasattr(session, '_matching_feedback_sent') or not session._matching_feedback_sent:
+                    session._matching_feedback_sent = True
+                    response['awaiting_matching'] = True
+                    print("AUTH: Secuencia completa - enviando feedback antes de matching")
+                    return response  # Retornar INMEDIATAMENTE para dar feedback al usuario
                 
+                # Si llegamos aquí, es el siguiente frame - hacer el matching
+                auth_result = self._perform_real_authentication_matching(session)
+                  
                 # INCLUIR RESULTADO COMPLETO EN RESPONSE
                 response['authentication_result'] = {
                     'success': auth_result.success,
@@ -3103,7 +3150,7 @@ class RealAuthenticationSystem:
                     print("No hay referencias dinámicas")
             
             # FUSIÓN DE SCORES
-            print("🔗 Iniciando fusión de scores...")
+            print("Iniciando fusión de scores...")
             fused_score = self.fusion_system.fuse_real_scores(individual_scores)
             print(f"Score fusionado: {fused_score.fused_score:.4f}")
             print(f"Confianza fusionada: {fused_score.confidence:.4f}")

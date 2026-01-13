@@ -19,6 +19,7 @@ export default function Identification() {
   const [sequenceComplete, setSequenceComplete] = useState(false)
 
   const [timeoutInfo, setTimeoutInfo] = useState(null)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   // REFS PARA CÁMARA Y CANVAS
   const videoRef = useRef(null)
@@ -212,17 +213,46 @@ export default function Identification() {
         
         setProgress(Math.min(sequenceProgress, 100))
         
+        // let message = frameResult.message || ''
+        // if (gesturesCaptured < gesturesNeeded) {
+        //   message = `Capturando gestos (${gesturesCaptured}/${gesturesNeeded})`
+        // } else if (frameResult.phase === 'template_matching') {
+        //   message = 'Buscando coincidencias en base de datos'
+        // } else if (frameResult.phase === 'score_fusion') {
+        //   message = 'Analizando características biométricas'
+        // }
+        // setStatusMessage(message)
+
         let message = frameResult.message || ''
-        if (gesturesCaptured < gesturesNeeded) {
-          message = `Capturando gestos (${gesturesCaptured}/${gesturesNeeded})`
-        } else if (frameResult.phase === 'template_matching') {
-          message = 'Buscando coincidencias en base de datos'
-        } else if (frameResult.phase === 'score_fusion') {
-          message = 'Analizando características biométricas'
+        
+        // Detectar si el backend envió feedback de calidad
+        const isQualityFeedback = message.includes('Posiciona tu mano') ||
+                                   message.includes('Acerca un poco') ||
+                                   message.includes('Aleja un poco') ||
+                                   message.includes('Asegúrate de que') ||
+                                   message.includes('Mantén tu mano') ||
+                                   message.includes('Centra tu mano') ||
+                                   message.includes('Preparando captura')
+        
+        // Si no es feedback de calidad, usar mensaje estándar
+        if (!isQualityFeedback) {
+          if (gesturesCaptured < gesturesNeeded) {
+            message = `Capturando gestos (${gesturesCaptured}/${gesturesNeeded})`
+          } else if (frameResult.phase === 'template_matching') {
+            message = 'Buscando coincidencias en base de datos'
+          } else if (frameResult.phase === 'score_fusion') {
+            message = 'Analizando características biométricas'
+          }
         }
+        
         setStatusMessage(message)
 
         console.log(`Progreso: ${gesturesCaptured}/${gesturesNeeded} gestos, fase: ${frameResult.phase}`)
+        // Detectar cuando el backend está por hacer matching
+        if (frameResult.awaiting_matching) {
+          console.log('Backend procesando - mostrando modal')
+          setIsAnalyzing(true)
+        }
 
         if (frameResult.authentication_result) {
           console.log('Resultado de identificación recibido:', frameResult.authentication_result)
@@ -337,6 +367,7 @@ export default function Identification() {
   }
 
   const handleIdentificationComplete = (finalStatus) => {
+    setIsAnalyzing(false)
     console.log('Completando identificación:', finalStatus)
     
     sessionCompletedRef.current = true
@@ -394,6 +425,7 @@ export default function Identification() {
     setStatusMessage('')
     setCapturedSequence([])
     setSequenceComplete(false)
+    setIsAnalyzing(false)
     
     isProcessingFrameRef.current = false
     sessionCompletedRef.current = false
@@ -1014,6 +1046,34 @@ export default function Identification() {
         onRetry={handleRetryAfterTimeout}
         onCancel={handleCancelAfterTimeout}
       />
+      {/* Modal de Analizando */}
+      {isAnalyzing && (
+        <div className="fixed inset-0 backdrop-blur-md bg-white/80 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-8 text-center">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div className="w-20 h-20 border-4 border-blue-100 rounded-full"></div>
+                <div className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-cyan-500 rounded-full animate-spin"></div>
+              </div>
+            </div>
+            <div className="flex justify-center mb-4">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              ¡Secuencia completada!
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Buscando coincidencias en la base de datos...
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm font-medium" style={{ color: '#05A8F9' }}>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Identificando usuario
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

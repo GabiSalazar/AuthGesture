@@ -60,16 +60,13 @@ class APIKeyStatsResponse(BaseModel):
 # ENDPOINTS
 # ============================================
 
-"""
-Obtiene la API Key activa actual.
-
-Returns:
-    APIKeyCurrentResponse: información de la clave activa
-"""
 @router.get("/current", response_model=APIKeyCurrentResponse, dependencies=[Depends(require_admin_token)])
 async def get_current_api_key():
     """
     Obtiene la API Key activa actual.
+
+    Returns:
+        APIKeyCurrentResponse: información de la clave activa
     """
     try:
         service = get_api_key_service()
@@ -90,17 +87,14 @@ async def get_current_api_key():
         raise HTTPException(status_code=500, detail=f"Error obteniendo API Key: {str(e)}")
 
 
-"""
-Genera una nueva API Key e invalida la anterior si existe.
-
-Returns:
-    APIKeyResponse: API Key generada y fecha de creación
-"""
 @router.post("/generate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
 
 async def generate_api_key():
     """
-    Genera una nueva API Key (primera vez o autogenerar).
+    Genera una nueva API Key e invalida la anterior si existe.
+
+    Returns:
+        APIKeyResponse: API Key generada y fecha de creación
     """
     try:
         service = get_api_key_service()
@@ -117,20 +111,16 @@ async def generate_api_key():
         raise HTTPException(status_code=500, detail=f"Error generando API Key: {str(e)}")
 
 
-"""
-Regenera la API Key activa.
-
-Invalida la clave anterior y genera una nueva.
-Requiere actualizar la clave en el Plugin.
-
-Returns:
-    APIKeyResponse: nueva API Key generada
-"""
 @router.post("/regenerate", response_model=APIKeyResponse, dependencies=[Depends(require_admin_token)])
 
 async def regenerate_api_key():
     """
-    Regenera la API Key (invalida la anterior y crea una nueva).
+    Regenera la API Key activa.
+
+    Invalida la clave anterior y genera una nueva.
+
+    Returns:
+        APIKeyResponse: nueva API Key generada
     """
     try:
         service = get_api_key_service()
@@ -146,19 +136,17 @@ async def regenerate_api_key():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error regenerando API Key: {str(e)}")
 
-"""
-Valida si una API Key es válida y está activa.
 
-Args:
-    request (APIKeyValidateRequest): API Key a validar
-
-Returns:
-    APIKeyValidateResponse: resultado de la validación
-"""
 @router.post("/validate", response_model=APIKeyValidateResponse)
 async def validate_api_key(request: APIKeyValidateRequest):
     """
     Valida si una API Key es válida y está activa.
+
+    Args:
+        request (APIKeyValidateRequest): API Key a validar
+
+    Returns:
+        APIKeyValidateResponse: resultado de la validación
     """
     try:
         service = get_api_key_service()
@@ -179,17 +167,14 @@ async def validate_api_key(request: APIKeyValidateRequest):
         raise HTTPException(status_code=500, detail=f"Error validando API Key: {str(e)}")
 
 
-"""
-Obtiene estadísticas de uso de la API Key actual.
-
-Returns:
-    APIKeyStatsResponse: métricas de uso de la API Key
-"""
 @router.get("/stats", response_model=APIKeyStatsResponse, dependencies=[Depends(require_admin_token)])
 
 async def get_api_key_stats():
     """
     Obtiene estadísticas de uso de la API Key actual.
+
+    Returns:
+        APIKeyStatsResponse: métricas de uso de la API Key
     """
     try:
         service = get_api_key_service()
@@ -203,7 +188,9 @@ async def get_api_key_stats():
 
 @router.get("/health")
 async def api_keys_health_check():
-    """Verifica que el módulo de API Keys esté funcionando"""
+    """
+    Verifica el estado del módulo de API Keys.
+    """
     return {
         "status": "healthy",
         "module": "API Keys Management",

@@ -46,21 +46,16 @@ class TokenVerifyResponse(BaseModel):
 # ENDPOINTS DE AUTENTICACIÓN
 # ============================================
 
-"""
-Autentica a un administrador y genera un token JWT.
-
-Args:
-    credentials (AdminLoginRequest): credenciales de acceso
-
-Returns:
-    AdminLoginResponse: token JWT y datos de expiración
-"""
-
 @router.post("/login", response_model=AdminLoginResponse)
 async def admin_login(credentials: AdminLoginRequest):
     """
-    Endpoint de autenticación para administradores.
-    Verifica credenciales contra variables de entorno y retorna JWT token.
+    Autentica a un administrador y genera un token JWT.
+
+    Args:
+        credentials (AdminLoginRequest): credenciales de acceso
+
+    Returns:
+        AdminLoginResponse: token JWT y datos de expiración
     """
     try:
         # Obtener credenciales desde variables de entorno
@@ -102,20 +97,17 @@ async def admin_login(credentials: AdminLoginRequest):
             detail=f"Error en autenticación: {str(e)}"
         )
 
-"""
-Verifica la validez de un token JWT de administrador.
-
-Args:
-    request (TokenVerifyRequest): token JWT a verificar
-
-Returns:
-    TokenVerifyResponse: estado del token y usuario asociado
-"""
 
 @router.post("/verify-token", response_model=TokenVerifyResponse)
 async def verify_admin_token(request: TokenVerifyRequest):
     """
-    Verifica si un token JWT es válido y retorna información del usuario.
+    Verifica la validez de un token JWT de administrador.
+
+    Args:
+        request (TokenVerifyRequest): token JWT a verificar
+
+    Returns:
+        TokenVerifyResponse: estado del token y usuario asociado
     """
     try:
         jwt_secret = os.getenv("ADMIN_JWT_SECRET", "default_secret_change_me")
@@ -136,13 +128,12 @@ async def verify_admin_token(request: TokenVerifyRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error verificando token: {str(e)}")
 
-"""
-Verifica el estado del módulo de autenticación de administrador.
-"""
 
 @router.get("/health")
 async def admin_health_check():
-    """Verifica que el módulo de admin esté funcionando"""
+    """
+    Verifica el estado del módulo de autenticación de administrador.
+    """
     return {
         "status": "healthy",
         "module": "Admin Authentication",

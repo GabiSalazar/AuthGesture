@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useSearchParams} from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { jwtDecode } from 'jwt-decode'
 import { authenticationApi } from '../../lib/api/authentication'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter, Button, Badge, Spinner } from '../../components/ui'
@@ -44,23 +44,23 @@ function LockedAccountModal({ result, onBack }) {
     <div className="max-w-2xl mx-auto">
       <div className="bg-white rounded-2xl shadow-xl border border-red-200 overflow-hidden">
         {/* Header */}
-        <div 
+        <div
           className="px-8 py-6"
           style={{ background: 'linear-gradient(to right, #EF4444, #DC2626)' }}
         >
           <div className="flex items-center gap-4">
             <div className="bg-white/20 rounded-full p-3">
-              <svg 
-                className="w-8 h-8 text-white" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-8 h-8 text-white"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                 />
               </svg>
             </div>
@@ -84,9 +84,9 @@ function LockedAccountModal({ result, onBack }) {
           </div>
 
           {/* Countdown */}
-          <div 
+          <div
             className="p-6 text-center rounded-xl border-2"
-            style={{ 
+            style={{
               backgroundColor: '#FEF2F2',
               borderColor: '#FCA5A5'
             }}
@@ -128,15 +128,15 @@ function LockedAccountModal({ result, onBack }) {
           </div>
 
           {/* Mensaje informativo */}
-          <div 
+          <div
             className="border rounded-lg p-4"
-            style={{ 
+            style={{
               backgroundColor: '#EFF6FF',
               borderColor: '#BFDBFE'
             }}
           >
             <p className="text-sm text-gray-700 leading-relaxed">
-              Por seguridad, tu cuenta ha sido bloqueada temporalmente. El desbloqueo es automático. 
+              Por seguridad, tu cuenta ha sido bloqueada temporalmente. El desbloqueo es automático.
               Asegúrate de realizar correctamente la secuencia de gestos en tu próximo intento.
             </p>
           </div>
@@ -181,12 +181,13 @@ export default function Verification() {
   const [statusMessage, setStatusMessage] = useState('')
   const [sessionInfo, setSessionInfo] = useState(null)
   const [timeoutInfo, setTimeoutInfo] = useState(null)
-  
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+
   // REFS PARA CÁMARA Y CANVAS
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
   const streamRef = useRef(null)
-  
+
   // REFS GLOBALES
   const intervalRef = useRef(null)
   const isProcessingFrameRef = useRef(false)
@@ -208,20 +209,20 @@ export default function Verification() {
   useEffect(() => {
     return () => {
       console.log('Limpieza al desmontar Verification')
-      
+
       if (intervalRef.current) {
         clearInterval(intervalRef.current)
         intervalRef.current = null
       }
-      
+
       stopCamera()
-      
+
       if (sessionIdRef.current) {
-        authenticationApi.cancelSession(sessionIdRef.current).catch(err => 
+        authenticationApi.cancelSession(sessionIdRef.current).catch(err =>
           console.log('Info: Sesión ya finalizada')
         )
       }
-      
+
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
     }
@@ -231,20 +232,20 @@ export default function Verification() {
   // useEffect(() => {
   //   const sessionToken = searchParams.get('session_token')
   //   const email = searchParams.get('email')
-    
+
   //   if (sessionToken && email) {
   //     // Callback URL fijo del plugin
   //     const PLUGIN_CALLBACK_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net/generator-init'
-      
+
   //     console.log('Datos del plugin detectados:')
   //     console.log('   Session Token:', sessionToken)
   //     console.log('   Email:', email)
   //     console.log('   Callback URL:', PLUGIN_CALLBACK_URL)
-      
+
   //     setPluginSessionToken(sessionToken)
   //     setPluginEmail(email)
   //     setPluginCallbackUrl(PLUGIN_CALLBACK_URL)
-      
+
   //     // Buscar y auto-seleccionar usuario por email
   //     const findAndSelectUser = () => {
   //       const user = users.find(u => u.email === email)
@@ -260,7 +261,7 @@ export default function Verification() {
   //         setError(`No se encontró usuario con email: ${email}`)
   //       }
   //     }
-      
+
   //     // Esperar a que se carguen los usuarios antes de buscar
   //     if (users.length > 0) {
   //       findAndSelectUser()
@@ -275,12 +276,12 @@ export default function Verification() {
   //   const sessionToken = searchParams.get('session_token')
   //   const email = searchParams.get('email')
   //   const action = searchParams.get('action')
-    
+
   //   if (sessionToken && email) {
   //     // Determinar callback URL según action
   //     const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
   //     let callbackUrl = ''
-      
+
   //     if (action === 'generation') {
   //       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
   //     } else if (action === 'authentication') {
@@ -290,17 +291,17 @@ export default function Verification() {
   //       console.warn('Action no especificado o inválido, usando generation por defecto')
   //       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
   //     }
-      
+
   //     console.log('Datos del plugin detectados:')
   //     console.log('   Session Token:', sessionToken)
   //     console.log('   Email:', email)
   //     console.log('   Action:', action)
   //     console.log('   Callback URL:', callbackUrl)
-      
+
   //     setPluginSessionToken(sessionToken)
   //     setPluginEmail(email)
   //     setPluginCallbackUrl(callbackUrl)
-      
+
   //     // Buscar y auto-seleccionar usuario por email
   //     const findAndSelectUser = () => {
   //       const user = users.find(u => u.email === email)
@@ -316,7 +317,7 @@ export default function Verification() {
   //         setError(`No se encontró usuario con email: ${email}`)
   //       }
   //     }
-      
+
   //     // Esperar a que se carguen los usuarios antes de buscar
   //     // if (users.length > 0) {
   //     //   findAndSelectUser()
@@ -344,7 +345,7 @@ export default function Verification() {
     const sessionToken = searchParams.get('session_token')
     const email = searchParams.get('email')
     const action = searchParams.get('action')
-    
+
     // PRIORIDAD 1: Token JWT (nuevo método)
     if (token) {
       validarYUsarTokenPlugin(token)
@@ -363,12 +364,12 @@ export default function Verification() {
   const validarYUsarTokenPlugin = (token) => {
     try {
       console.log('Token del plugin detectado, validando...')
-      
+
       // 1. Decodificar JWT
       const payload = jwtDecode(token)
-      
+
       console.log('JWT decodificado:', payload)
-      
+
       // 2. Verificar expiración
       const ahora = Math.floor(Date.now() / 1000)
       if (payload.exp && payload.exp < ahora) {
@@ -376,37 +377,37 @@ export default function Verification() {
         setError('El enlace ha expirado. Por favor, solicita uno nuevo.')
         return
       }
-      
+
       // 3. Extraer datos
       const { session_token, email, action } = payload
-      
+
       if (!session_token || !email || !action) {
         console.error('Token incompleto:', payload)
         setError('Token inválido: faltan datos requeridos')
         return
       }
-      
+
       console.log('Datos del plugin detectados:')
       console.log('   Session Token:', session_token)
       console.log('   Email:', email)
       console.log('   Action:', action)
-      
+
       // 4. Determinar callback URL según action
       const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
       const callbackUrl = action === 'generation'
         ? `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
         : `${PLUGIN_BASE_URL}/api/biometric-login-callback`
-      
+
       console.log('   Callback URL:', callbackUrl)
-      
+
       // 5. Configurar estados
       setPluginSessionToken(session_token)
       setPluginEmail(email)
       setPluginCallbackUrl(callbackUrl)
-      
+
       // 6. Buscar y auto-seleccionar usuario
       buscarYSeleccionarUsuario(email)
-      
+
     } catch (error) {
       console.error('Error validando token del plugin:', error)
       setError('Token inválido o corrupto. Verifica el enlace.')
@@ -419,11 +420,11 @@ export default function Verification() {
     console.log('   Session Token:', sessionToken)
     console.log('   Email:', email)
     console.log('   Action:', action)
-    
+
     // Determinar callback URL según action
     const PLUGIN_BASE_URL = 'https://genia-api-extension-avbke7bhgea4bngk.eastus2-01.azurewebsites.net'
     let callbackUrl = ''
-    
+
     if (action === 'generation') {
       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
     } else if (action === 'authentication') {
@@ -432,14 +433,14 @@ export default function Verification() {
       console.warn('Action no especificado o invalido, usando generation por defecto')
       callbackUrl = `${PLUGIN_BASE_URL}/api/biometric-gen-callback`
     }
-    
+
     console.log('   Callback URL:', callbackUrl)
-    
+
     // Configurar estados
     setPluginSessionToken(sessionToken)
     setPluginEmail(email)
     setPluginCallbackUrl(callbackUrl)
-    
+
     // Buscar y auto-seleccionar usuario
     buscarYSeleccionarUsuario(email)
   }
@@ -449,16 +450,16 @@ export default function Verification() {
   //   console.log('Verificando si buscar usuario...')
   //   console.log('   users.length:', users.length)
   //   console.log('   email:', email)
-    
+
   //   if (users.length > 0) {
   //     console.log('SI hay usuarios, buscando...')
-      
+
   //     const user = users.find(u => u.email === email)
-      
+
   //     if (user) {
   //       console.log('Usuario encontrado por email:', user.username)
   //       setSelectedUser(user)
-        
+
   //       // Auto-iniciar verificación
   //       setTimeout(() => {
   //         handleStartVerification()
@@ -474,15 +475,15 @@ export default function Verification() {
 
   const buscarYSeleccionarUsuario = async (email) => {
     console.log('Verificando usuario con email:', email)
-    
+
     try {
       const response = await authenticationApi.getUserByEmail(email)
-      
+
       if (response.success && response.user) {
         console.log('Usuario encontrado por email:', response.user.username)
         setSelectedUser(response.user)
         setEmailInput(email)
-        
+
         // Auto-iniciar verificación
         setTimeout(() => {
           handleStartVerification()
@@ -500,18 +501,18 @@ export default function Verification() {
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
+        video: {
           width: { ideal: 1280 },
           height: { ideal: 720 },
           facingMode: 'user'
         }
       })
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream
         streamRef.current = stream
       }
-      
+
       console.log('Cámara iniciada')
     } catch (err) {
       setError('No se pudo acceder a la cámara. Verifica los permisos.')
@@ -553,13 +554,13 @@ export default function Verification() {
       }
     } catch (err) {
       console.error('Error buscando usuario:', err)
-      
+
       if (err.response?.status === 404) {
         setError('No se encontró ningún usuario con ese email')
       } else {
         setError('Error al buscar usuario. Intenta nuevamente.')
       }
-      
+
       setSelectedUser(null)
     } finally {
       setSearchingUser(false)
@@ -583,15 +584,15 @@ export default function Verification() {
   //     const response = await authenticationApi.getAvailableUsers()
   //     console.log('Response de usuarios:', response)
   //     console.log('Usuarios recibidos:', response.users)
-      
+
   //     const usersList = response.users || []
   //     console.log('Total usuarios a setear:', usersList.length)
-      
+
   //     if (usersList.length > 0) {
   //       console.log('Primer usuario:', usersList[0])
   //       console.log('Emails de usuarios:', usersList.map(u => u.email))
   //     }
-      
+
   //     setUsers(usersList)
   //     setError(null)
   //   } catch (err) {
@@ -612,7 +613,7 @@ export default function Verification() {
       setError(null)
       setProgress(0)
       setStatusMessage('Iniciando verificación...')
-      setSessionInfo(null) 
+      setSessionInfo(null)
 
       isProcessingFrameRef.current = false
       sessionCompletedRef.current = false
@@ -645,12 +646,12 @@ export default function Verification() {
 
   const stopProcessing = () => {
     console.log('Deteniendo procesamiento completo')
-    
+
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
       intervalRef.current = null
     }
-    
+
     stopCamera()
     isProcessingFrameRef.current = false
     sessionCompletedRef.current = true
@@ -698,7 +699,7 @@ export default function Verification() {
         console.log('Video aún no tiene suficientes datos')
         return
       }
-      
+
       lastFrameTimeRef.current = now
 
       canvas.width = video.videoWidth
@@ -722,15 +723,15 @@ export default function Verification() {
 
         const validCaptures = frameResult.valid_captures || 0
         const capturesProgress = (validCaptures / maxValidCaptures) * 100
-        
+
         setProgress(Math.min(capturesProgress, 100))
         // setStatusMessage(frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`)
 
         let displayMessage = frameResult.message || `Capturando... (${validCaptures}/${maxValidCaptures})`
 
-        if (displayMessage.includes('Calidad insuficiente')) {
-          displayMessage = 'Verificando...'
-        }
+        // if (displayMessage.includes('Calidad insuficiente')) {
+        //   displayMessage = 'Verificando...'
+        // }
 
         setStatusMessage(displayMessage)
 
@@ -747,21 +748,27 @@ export default function Verification() {
         })
 
         console.log('sessionInfo guardado con current_gesture:', frameResult.current_gesture)
+        // NUEVO: Detectar cuando el backend está por hacer matching
+        if (frameResult.awaiting_matching) {
+          console.log('Backend procesando - mostrando modal')
+          setIsAnalyzing(true)
+        }
 
         console.log(`Progreso: ${validCaptures}/${maxValidCaptures} capturas válidas`)
 
         if (frameResult.authentication_result) {
           console.log('Resultado de autenticación recibido - COMPLETANDO SESIÓN')
-          
+
           sessionCompletedRef.current = true
           isProcessingFrameRef.current = false
           stopProcessing()
-          
+
           const authResult = frameResult.authentication_result
-          
+
           if (authResult.is_locked && authResult.lockout_info) {
             console.log('Cuenta bloqueada detectada')
             setProcessing(false)
+            setIsAnalyzing(false) 
             setStep('locked')
             setResult({
               success: false,
@@ -772,7 +779,7 @@ export default function Verification() {
             })
             return
           }
-          
+
           handleVerificationComplete({
             status: authResult.success ? 'authenticated' : 'rejected',
             user_id: authResult.user_id || selectedUser.user_id,
@@ -784,11 +791,11 @@ export default function Verification() {
 
         if (frameResult.session_completed || frameResult.status === 'completed') {
           console.log('Sesión completada sin authentication_result')
-          
+
           sessionCompletedRef.current = true
           isProcessingFrameRef.current = false
           stopProcessing()
-          
+
           try {
             const finalStatus = await authenticationApi.getSessionStatus(sessionId)
             handleVerificationComplete(finalStatus)
@@ -808,43 +815,43 @@ export default function Verification() {
 
         isProcessingFrameRef.current = false
 
-      // } catch (err) {
-      //   isProcessingFrameRef.current = false
+        // } catch (err) {
+        //   isProcessingFrameRef.current = false
 
-      //   const errorDetail = err.response?.data?.detail
+        //   const errorDetail = err.response?.data?.detail
 
-      //   if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
-      //     console.log('Timeout detectado - mostrando modal')
-      //     setTimeoutInfo({
-      //       type: errorDetail.error_type || 'timeout_total',
-      //       duration: errorDetail.details?.duration || 0,
-      //       gesturesCaptured: errorDetail.details?.gestures_captured || 0,
-      //       gesturesRequired: errorDetail.details?.gestures_required || 3,
-      //       timeLimit: errorDetail.details?.time_limit || 45
-      //     })
-      //     sessionCompletedRef.current = true
-      //     stopProcessing()
-      //     return
-      //   }
+        //   if (err.response?.status === 408 && errorDetail?.error === 'session_timeout') {
+        //     console.log('Timeout detectado - mostrando modal')
+        //     setTimeoutInfo({
+        //       type: errorDetail.error_type || 'timeout_total',
+        //       duration: errorDetail.details?.duration || 0,
+        //       gesturesCaptured: errorDetail.details?.gestures_captured || 0,
+        //       gesturesRequired: errorDetail.details?.gestures_required || 3,
+        //       timeLimit: errorDetail.details?.time_limit || 45
+        //     })
+        //     sessionCompletedRef.current = true
+        //     stopProcessing()
+        //     return
+        //   }
 
-      //   if (err.response?.status === 410 && 
-      //       (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
-      //     console.log('Sesión limpiada - mostrando modal')
-      //     setTimeoutInfo({
-      //       type: 'session_cleaned',
-      //       duration: 0,
-      //       gesturesCaptured: 0,
-      //       gesturesRequired: 3,
-      //       timeLimit: 45,
-      //       message: errorDetail?.message || 'La sesión fue cerrada'
-      //     })
-      //     sessionCompletedRef.current = true
-      //     stopProcessing()
-      //     return
-      //   }
+        //   if (err.response?.status === 410 && 
+        //       (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+        //     console.log('Sesión limpiada - mostrando modal')
+        //     setTimeoutInfo({
+        //       type: 'session_cleaned',
+        //       duration: 0,
+        //       gesturesCaptured: 0,
+        //       gesturesRequired: 3,
+        //       timeLimit: 45,
+        //       message: errorDetail?.message || 'La sesión fue cerrada'
+        //     })
+        //     sessionCompletedRef.current = true
+        //     stopProcessing()
+        //     return
+        //   }
 
-      //   consecutiveErrors++
-      
+        //   consecutiveErrors++
+
       } catch (err) {
         isProcessingFrameRef.current = false
 
@@ -882,8 +889,8 @@ export default function Verification() {
           return
         }
 
-        if (err.response?.status === 410 && 
-            (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
+        if (err.response?.status === 410 &&
+          (errorDetail?.error === 'session_expired' || errorDetail?.error === 'session_cleaned')) {
           console.log('Sesión limpiada - mostrando modal')
           setTimeoutInfo({
             type: 'session_cleaned',
@@ -899,9 +906,9 @@ export default function Verification() {
         }
 
         consecutiveErrors++
-        
+
         console.error('Error procesando frame:', err)
-        
+
         if (consecutiveErrors >= maxConsecutiveErrors) {
           sessionCompletedRef.current = true
           stopProcessing()
@@ -914,24 +921,25 @@ export default function Verification() {
   }
 
   const handleVerificationComplete = (finalStatus) => {
+    setIsAnalyzing(false)
     console.log('Completando verificación:', finalStatus)
-    
+
     sessionCompletedRef.current = true
     stopProcessing()
 
     setProcessing(false)
     setStep('result')
-    
+
     const success = finalStatus.status === 'authenticated'
-    
+
     setResult({
       success: success,
       user_id: finalStatus.user_id,
       username: selectedUser?.username || finalStatus.user_id,
       confidence: finalStatus.confidence || 0,
       duration: finalStatus.duration || 0,
-      message: success 
-        ? 'Identidad verificada exitosamente' 
+      message: success
+        ? 'Identidad verificada exitosamente'
         : 'Identidad no verificada'
     })
   }
@@ -954,11 +962,12 @@ export default function Verification() {
 
   const handleReset = () => {
     console.log('Reseteando componente')
-    
+
     sessionCompletedRef.current = true
     stopProcessing()
 
     setStep('select')
+    setIsAnalyzing(false)
     setSelectedUser(null)
     setSessionId(null)
     sessionIdRef.current = null
@@ -995,11 +1004,11 @@ export default function Verification() {
 
   return (
     <div className="fixed inset-0 flex">
-      
+
       {/* ========================================
           PANEL LATERAL CYAN (SOLO DESKTOP)
-      ======================================== */}      
-      <div 
+      ======================================== */}
+      <div
         className="hidden lg:flex lg:w-2/5 h-screen sticky top-0 flex-col justify-between p-12"
         style={{ backgroundColor: '#0291B9' }}
       >
@@ -1013,7 +1022,7 @@ export default function Verification() {
         {/* Logo/Video grande - centrado */}
         <div className="flex items-center justify-center flex-1">
           <video
-            src="/videito.mp4"  
+            src="/videito.mp4"
             className="w-124 h-124 object opacity-95"
             autoPlay
             loop
@@ -1038,7 +1047,7 @@ export default function Verification() {
       ======================================== */}
       <div className="flex-1 bg-white h-screen overflow-y-auto">
         {/* Header móvil */}
-        <div 
+        <div
           className="lg:hidden flex items-center justify-between px-3 py-2 border-b"
           style={{ backgroundColor: '#0291B9' }}
         >
@@ -1048,14 +1057,14 @@ export default function Verification() {
           >
             <ArrowLeft className="w-5 h-5" style={{ color: '#ffffffff' }} />
           </button>
-          
-          <span 
+
+          <span
             className="absolute left-1/2 transform -translate-x-1/2 text-xl font-black uppercase tracking-tight"
             style={{ color: '#fbfbfbff' }}
           >
             Auth-Gesture
           </span>
-          
+
           <video
             src="/videito.mp4"
             className="hidden sm:block w-25 h-16 object-contain opacity-95"
@@ -1078,17 +1087,17 @@ export default function Verification() {
                   <div key={s.number} className="flex items-center">
                     {/* Círculo del paso */}
                     <div className="relative group">
-                      <div 
+                      <div
                         className={`
                           w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all cursor-pointer
-                          ${currentStepNumber > s.number 
-                            ? 'text-white shadow-lg' 
-                            : currentStepNumber === s.number 
-                            ? 'text-white shadow-xl' 
-                            : 'bg-gray-200 text-gray-400'
+                          ${currentStepNumber > s.number
+                            ? 'text-white shadow-lg'
+                            : currentStepNumber === s.number
+                              ? 'text-white shadow-xl'
+                              : 'bg-gray-200 text-gray-400'
                           }
                         `}
-                        style={{ 
+                        style={{
                           backgroundColor: currentStepNumber >= s.number ? '#05A8F9' : undefined
                         }}
                       >
@@ -1101,12 +1110,12 @@ export default function Verification() {
 
                       {/* Tooltip */}
                       <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-10">
-                        <div 
+                        <div
                           className="px-3 py-1.5 rounded-lg text-xs font-semibold text-white whitespace-nowrap shadow-lg"
                           style={{ backgroundColor: '#05A8F9' }}
                         >
                           {s.label}
-                          <div 
+                          <div
                             className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45"
                             style={{ backgroundColor: '#05A8F9' }}
                           ></div>
@@ -1116,9 +1125,9 @@ export default function Verification() {
 
                     {/* Línea conectora */}
                     {index < wizardSteps.length - 1 && (
-                      <div 
+                      <div
                         className="w-12 sm:w-16 md:w-24 lg:w-32 mx-2 h-0.5 transition-colors"
-                        style={{ 
+                        style={{
                           backgroundColor: currentStepNumber > s.number ? '#05A8F9' : '#E5E7EB'
                         }}
                       />
@@ -1132,9 +1141,9 @@ export default function Verification() {
           {/* Error Alert */}
           {error && (
             <div className="mb-6 max-w-4xl mx-auto">
-              <div 
+              <div
                 className="border-2 rounded-xl p-4"
-                style={{ 
+                style={{
                   backgroundColor: '#FEF2F2',
                   borderColor: '#FCA5A5'
                 }}
@@ -1306,7 +1315,7 @@ export default function Verification() {
           ======================================== */}
           {step === 'select' && (
             <div className="max-w-2xl mx-auto">
-              
+
               {/* Divider */}
               <div className="relative mb-8">
                 <div className="absolute inset-0 flex items-center">
@@ -1339,7 +1348,7 @@ export default function Verification() {
                         }}
                         disabled={searchingUser}
                         className="w-full px-4 py-3 border-2 rounded-xl focus:outline-none transition-all text-gray-900 font-medium"
-                        style={{ 
+                        style={{
                           borderColor: '#E0F2FE',
                           backgroundColor: '#FFFFFF'
                         }}
@@ -1377,7 +1386,7 @@ export default function Verification() {
 
                 {/* Usuario encontrado */}
                 {selectedUser && (
-                  <div 
+                  <div
                     className="p-6 rounded-2xl border-2 transition-all duration-300"
                     style={{
                       borderColor: '#05A8F9',
@@ -1386,7 +1395,7 @@ export default function Verification() {
                     }}
                   >
                     <div className="flex items-center gap-4 mb-4">
-                      <div 
+                      <div
                         className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
                         style={{ backgroundColor: '#E0F2FE' }}
                       >
@@ -1426,14 +1435,14 @@ export default function Verification() {
               </div>
             </div>
           )}
-          
+
 
           {/* ========================================
               STEP: PROCESSING
           ======================================== */}
           {step === 'processing' && (
             <div className="max-w-5xl mx-auto">
-              
+
               {/* Divider */}
               <div className="relative mb-8">
                 <div className="absolute inset-0 flex items-center">
@@ -1459,7 +1468,7 @@ export default function Verification() {
                 <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                   <div
                     className="h-3 rounded-full transition-all duration-500"
-                    style={{ 
+                    style={{
                       width: `${progress}%`,
                       background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
                       boxShadow: '0 4px 14px 0 rgba(5, 168, 249, 0.4)'
@@ -1555,9 +1564,9 @@ export default function Verification() {
 
               {/* Secuencia de Gestos */}
               {sessionInfo && sessionInfo.required_sequence && (
-                <div 
+                <div
                   className="p-2 lg:p-5 rounded-lg lg:rounded-xl border lg:border-2 mb-3 lg:mb-6"
-                  style={{ 
+                  style={{
                     backgroundColor: '#F0F9FF',
                     borderColor: '#BFDBFE'
                   }}
@@ -1568,32 +1577,30 @@ export default function Verification() {
                       <span className="text-[10px] lg:text-xs">{sessionInfo.captured_sequence?.length || 0}/{sessionInfo.required_sequence.length}</span>
                     </Badge>
                   </div>
-                  
+
                   <div className="flex items-center justify-center gap-1 lg:gap-3 flex-wrap mb-1.5 lg:mb-4">
                     {sessionInfo.required_sequence.map((gesture, idx) => {
                       const isCaptured = idx < (sessionInfo.captured_sequence?.length || 0)
                       const isCurrent = idx === (sessionInfo.captured_sequence?.length || 0)
-                      
+
                       return (
                         <div key={idx} className="flex items-center gap-0.5 lg:gap-2">
-                          <div className={`px-1.5 py-1 lg:px-4 lg:py-3 rounded lg:rounded-lg border lg:border-2 transition-all ${
-                            isCaptured 
-                              ? 'bg-green-100 border-green-500' 
-                              : isCurrent
+                          <div className={`px-1.5 py-1 lg:px-4 lg:py-3 rounded lg:rounded-lg border lg:border-2 transition-all ${isCaptured
+                            ? 'bg-green-100 border-green-500'
+                            : isCurrent
                               ? 'bg-blue-100 border-blue-500 ring-1 lg:ring-2 ring-blue-300 animate-pulse'
                               : 'bg-gray-100 border-gray-300'
-                          }`}>
+                            }`}>
                             <div className="flex items-center gap-0.5 lg:gap-2">
                               {isCaptured && (
                                 <CheckCircle className="w-2.5 h-2.5 lg:w-4 lg:h-4 text-green-600" />
                               )}
-                              <span className={`text-[10px] lg:text-sm font-semibold whitespace-nowrap ${
-                                isCaptured 
-                                  ? 'text-green-900' 
-                                  : isCurrent
+                              <span className={`text-[10px] lg:text-sm font-semibold whitespace-nowrap ${isCaptured
+                                ? 'text-green-900'
+                                : isCurrent
                                   ? 'text-blue-900'
                                   : 'text-gray-600'
-                              }`}>
+                                }`}>
                                 {isCurrent && '→ '}
                                 {/* ============================================== */}
                                 {/* CAMBIO: Auto-revelar solo si fue capturado   */}
@@ -1602,11 +1609,10 @@ export default function Verification() {
                               </span>
                             </div>
                           </div>
-                          
+
                           {idx < sessionInfo.required_sequence.length - 1 && (
-                            <ArrowLeft className={`w-2.5 h-2.5 lg:w-4 lg:h-4 rotate-180 ${
-                              isCaptured ? 'text-green-400' : 'text-gray-300'
-                            }`} />
+                            <ArrowLeft className={`w-2.5 h-2.5 lg:w-4 lg:h-4 rotate-180 ${isCaptured ? 'text-green-400' : 'text-gray-300'
+                              }`} />
                           )}
                         </div>
                       )
@@ -1641,9 +1647,9 @@ export default function Verification() {
                     className="w-full h-full object-contain"
                   /> */}
               {/* Cámara */}
-              <div 
+              <div
                 className="rounded-2xl overflow-hidden border-4 mb-6"
-                style={{ 
+                style={{
                   borderColor: '#E0F2FE',
                   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)'
                 }}
@@ -1656,12 +1662,12 @@ export default function Verification() {
                     muted
                     className="w-full h-full object-cover lg:object-contain"
                   />
-                  
+
                   <canvas ref={canvasRef} className="hidden" />
-                  
+
                   {/* Indicador CAPTURANDO */}
                   <div className="absolute top-3 right-4">
-                    <div 
+                    <div
                       className="flex items-center gap-2 text-white px-3 py-1.5 rounded-full text-sm font-medium shadow-lg"
                       style={{ backgroundColor: '#EF4444' }}
                     >
@@ -1669,7 +1675,7 @@ export default function Verification() {
                       CAPTURANDO
                     </div>
                   </div>
-                  
+
                   {/* Icono de cámara */}
                   <div className="absolute top-3 left-4">
                     <div className="p-2 bg-white/90 rounded-lg shadow-lg">
@@ -1693,9 +1699,9 @@ export default function Verification() {
               )} */}
 
               {statusMessage && (
-                <div 
+                <div
                   className="p-4 border-2 rounded-lg mb-6"
-                  style={{ 
+                  style={{
                     backgroundColor: '#F0F9FF',
                     borderColor: '#BFDBFE'
                   }}
@@ -1733,7 +1739,7 @@ export default function Verification() {
           ======================================== */}
           {step === 'result' && result && (
             <div className="max-w-2xl mx-auto text-center">
-              
+
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full shadow-lg mb-6"
                 style={{ backgroundColor: result.success ? '#10B981' : '#EF4444' }}
               >
@@ -1747,17 +1753,16 @@ export default function Verification() {
               </div>
 
               <h2 className="text-3xl sm:text-4xl font-black text-gray-800 mb-4">
-                <span className={`bg-gradient-to-r ${
-                  result.success 
-                    ? 'from-green-500 to-emerald-500' 
-                    : 'from-red-500 to-red-600'
-                } bg-clip-text text-transparent`}>
+                <span className={`bg-gradient-to-r ${result.success
+                  ? 'from-green-500 to-emerald-500'
+                  : 'from-red-500 to-red-600'
+                  } bg-clip-text text-transparent`}>
                   {result.success ? '¡Verificación Exitosa!' : 'Verificación fallida'}
                 </span>
               </h2>
 
               <p className="text-lg text-gray-600 mb-8">
-                {result.success 
+                {result.success
                   ? `La identidad de ${result.username} ha sido verificada correctamente`
                   : 'No se pudo verificar la identidad del usuario'
                 }
@@ -1785,8 +1790,8 @@ export default function Verification() {
                 </div>
               </div>
 
-              <Button 
-                onClick={handleReset} 
+              <Button
+                onClick={handleReset}
                 className="px-8 py-3 text-white font-bold rounded-full transition-all duration-300 flex items-center gap-2 mx-auto"
                 style={{
                   background: 'linear-gradient(to right, #00B8D4, #00ACC1)',
@@ -1803,7 +1808,7 @@ export default function Verification() {
               STEP: LOCKED
           ======================================== */}
           {step === 'locked' && result && (
-            <LockedAccountModal 
+            <LockedAccountModal
               result={result}
               onBack={() => {
                 setStep('select')
@@ -1823,6 +1828,34 @@ export default function Verification() {
         onRetry={handleRetryAfterTimeout}
         onCancel={handleCancelAfterTimeout}
       />
+
+      {isAnalyzing && (
+        <div className="fixed inset-0 backdrop-blur-md bg-white/80 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-sm w-full mx-4 p-8 text-center">
+            <div className="flex justify-center mb-6">
+              <div className="relative">
+                <div className="w-20 h-20 border-4 border-blue-100 rounded-full"></div>
+                <div className="absolute top-0 left-0 w-20 h-20 border-4 border-transparent border-t-cyan-500 rounded-full animate-spin"></div>
+              </div>
+            </div>
+            <div className="flex justify-center mb-4">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-6 h-6 text-green-600" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              ¡Secuencia completada!
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Estamos verificando tu identidad...
+            </p>
+            <div className="flex items-center justify-center gap-2 text-sm font-medium" style={{ color: '#05A8F9' }}>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Analizando datos biométricos
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -9,6 +9,7 @@ from typing import Dict, Any, Optional, List
 from app.core.supabase_client import get_supabase_client
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail, Email, To, Content
+from app.services.email_service import get_email_service
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,6 +26,174 @@ class AuthenticationFeedbackService:
     def __init__(self):
         self.client = get_supabase_client()
     
+#     def send_feedback_email(
+#         self,
+#         user_email: str,
+#         username: str,
+#         feedback_token: str,
+#         system_decision: str,
+#         mode: str
+#     ) -> bool:
+#         """
+#         Envia email de feedback con botones SI/NO.
+        
+#         Args:
+#             user_email: Email del usuario
+#             username: Nombre del usuario
+#             feedback_token: Token unico para los botones
+#             system_decision: 'authenticated' o 'rejected'
+#             mode: 'verification' o 'identification'
+            
+#         Returns:
+#             True si se envio correctamente
+#         """
+#         try:
+#             # Configuracion
+#             api_key = os.getenv('SENDGRID_API_KEY')
+#             from_email = os.getenv('SENDGRID_FROM_EMAIL')
+#             from_name = os.getenv('SENDGRID_FROM_NAME', 'Auth-Gesture Sistema Biometrico')
+#             backend_url = os.getenv('BACKEND_URL', 'http://localhost:8000')
+            
+#             if not api_key or not from_email:
+#                 logger.error("SendGrid no esta configurado correctamente en .env")
+#                 return False
+            
+#             # URLs de los botones
+#             confirm_url = f"{backend_url}/api/v1/feedback/confirm?token={feedback_token}&response=was_me"
+#             deny_url = f"{backend_url}/api/v1/feedback/confirm?token={feedback_token}&response=not_me"
+            
+#             # Determinar textos segun decision del sistema
+#             if system_decision == 'authenticated':
+#                 result_text = '<strong style="color: #10b981;">autenticacion exitosa</strong>'
+#                 result_emoji = 'Autenticado'
+#             else:
+#                 result_text = '<strong style="color: #ef4444;">acceso rechazado</strong>'
+#                 result_emoji = 'Rechazado'
+            
+#             mode_text = 'verificacion biometrica' if mode == 'verification' else 'identificacion biometrica'
+            
+#             # Construir HTML
+#             html_content = f"""
+# <!DOCTYPE html>
+# <html lang="es">
+# <head>
+#     <meta charset="UTF-8">
+#     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+#     <title>Confirmación de Acceso</title>
+# </head>
+# <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh;">
+#     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh; padding: 40px 20px;">
+#         <tr>
+#             <td align="center">
+#                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden;">
+                    
+#                     <!-- Header -->
+#                     <tr>
+#                         <td style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); padding: 40px 40px 30px 40px; text-align: center;">
+#                             <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+#                                 Auth-Gesture
+#                             </h1>
+#                             <p style="margin: 8px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 400;">
+#                                 Autenticación Biométrica por Gestos
+#                             </p>
+#                         </td>
+#                     </tr>
+                    
+#                     <!-- Contenido -->
+#                     <tr>
+#                         <td style="padding: 50px 40px;">
+#                             <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 24px; font-weight: 700;">
+#                                 Hola {username}
+#                             </h2>
+                            
+#                             <p style="margin: 0 0 24px 0; color: #475569; font-size: 16px; line-height: 1.6;">
+#                                 Se realizó una {mode_text} en tu cuenta.
+#                             </p>
+                            
+#                             <!-- Resultado -->
+#                             <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
+#                                 <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">
+#                                     Resultado
+#                                 </p>
+#                                 <p style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">
+#                                     {result_emoji}
+#                                 </p>
+#                             </div>
+                            
+#                             <p style="margin: 0 0 32px 0; color: #475569; font-size: 16px; line-height: 1.6; text-align: center;">
+#                                 ¿Fuiste tú quien intentó autenticarse?
+#                             </p>
+                            
+#                             <!-- Botones -->
+#                             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 32px;">
+#                                 <tr>
+#                                     <td align="center" style="padding-bottom: 12px;">
+#                                         <a href="{confirm_url}" style="display: inline-block; width: 220px; background-color: #1e3a8a; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); color: #ffffff; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+#                                             Sí, fui yo
+#                                         </a>
+#                                     </td>
+#                                 </tr>
+#                                 <tr>
+#                                     <td align="center">
+#                                         <a href="{deny_url}" style="display: inline-block; width: 220px; background-color: #f1f5f9; color: #475569; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+#                                             No, no fui yo
+#                                         </a>
+#                                     </td>
+#                                 </tr>
+#                             </table>
+                            
+#                             <p style="margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.6; text-align: center;">
+#                                 Tu confirmación nos ayuda a mejorar la seguridad del sistema.
+#                             </p>
+#                         </td>
+#                     </tr>
+                    
+#                     <!-- Footer -->
+#                     <tr>
+#                         <td style="background-color: #f8fafc; padding: 32px 40px; border-top: 1px solid #e2e8f0;">
+#                             <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; text-align: center; font-weight: 500;">
+#                                 Auth-Gesture
+#                             </p>
+#                             <p style="margin: 0; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.5;">
+#                                 Este es un email automático. Por favor no respondas.
+#                             </p>
+#                         </td>
+#                     </tr>
+                    
+#                 </table>
+#             </td>
+#         </tr>
+#     </table>
+# </body>
+# </html>
+
+#             """
+            
+#             # Crear mensaje de SendGrid
+#             message = Mail(
+#                 from_email=Email(from_email, from_name),
+#                 to_emails=To(user_email),
+#                 subject='Confirmacion de acceso - Auth-Gesture',
+#                 html_content=Content("text/html", html_content)
+#             )
+            
+#             # Enviar con SendGrid
+#             sg_client = SendGridAPIClient(api_key)
+#             response = sg_client.send(message)
+            
+#             if response.status_code in [200, 201, 202]:
+#                 logger.info(f"Email de feedback enviado a {user_email}")
+#                 return True
+#             else:
+#                 logger.error(f"Error enviando email: Status {response.status_code}")
+#                 return False
+                
+#         except Exception as e:
+#             logger.error(f"Error enviando email de feedback: {e}")
+#             import traceback
+#             traceback.print_exc()
+#             return False
+
     def send_feedback_email(
         self,
         user_email: str,
@@ -35,6 +204,7 @@ class AuthenticationFeedbackService:
     ) -> bool:
         """
         Envia email de feedback con botones SI/NO.
+        Usa SendGrid primario, Resend como respaldo.
         
         Args:
             user_email: Email del usuario
@@ -47,15 +217,7 @@ class AuthenticationFeedbackService:
             True si se envio correctamente
         """
         try:
-            # Configuracion
-            api_key = os.getenv('SENDGRID_API_KEY')
-            from_email = os.getenv('SENDGRID_FROM_EMAIL')
-            from_name = os.getenv('SENDGRID_FROM_NAME', 'Auth-Gesture Sistema Biometrico')
             backend_url = os.getenv('BACKEND_URL', 'http://localhost:8000')
-            
-            if not api_key or not from_email:
-                logger.error("SendGrid no esta configurado correctamente en .env")
-                return False
             
             # URLs de los botones
             confirm_url = f"{backend_url}/api/v1/feedback/confirm?token={feedback_token}&response=was_me"
@@ -63,128 +225,121 @@ class AuthenticationFeedbackService:
             
             # Determinar textos segun decision del sistema
             if system_decision == 'authenticated':
-                result_text = '<strong style="color: #10b981;">autenticacion exitosa</strong>'
                 result_emoji = 'Autenticado'
             else:
-                result_text = '<strong style="color: #ef4444;">acceso rechazado</strong>'
                 result_emoji = 'Rechazado'
             
             mode_text = 'verificacion biometrica' if mode == 'verification' else 'identificacion biometrica'
             
             # Construir HTML
             html_content = f"""
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Acceso</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh;">
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh; padding: 40px 20px;">
-        <tr>
-            <td align="center">
-                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden;">
-                    
-                    <!-- Header -->
-                    <tr>
-                        <td style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); padding: 40px 40px 30px 40px; text-align: center;">
-                            <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
-                                Auth-Gesture
-                            </h1>
-                            <p style="margin: 8px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 400;">
-                                Autenticación Biométrica por Gestos
-                            </p>
-                        </td>
-                    </tr>
-                    
-                    <!-- Contenido -->
-                    <tr>
-                        <td style="padding: 50px 40px;">
-                            <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 24px; font-weight: 700;">
-                                Hola {username}
-                            </h2>
-                            
-                            <p style="margin: 0 0 24px 0; color: #475569; font-size: 16px; line-height: 1.6;">
-                                Se realizó una {mode_text} en tu cuenta.
-                            </p>
-                            
-                            <!-- Resultado -->
-                            <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
-                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">
-                                    Resultado
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Confirmación de Acceso</title>
+    </head>
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh;">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); min-height: 100vh; padding: 40px 20px;">
+            <tr>
+                <td align="center">
+                    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 16px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3); overflow: hidden;">
+                        
+                        <!-- Header -->
+                        <tr>
+                            <td style="background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); padding: 40px 40px 30px 40px; text-align: center;">
+                                <h1 style="margin: 0; color: #ffffff; font-size: 32px; font-weight: 700; letter-spacing: -0.5px;">
+                                    Auth-Gesture
+                                </h1>
+                                <p style="margin: 8px 0 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 400;">
+                                    Autenticación Biométrica por Gestos
                                 </p>
-                                <p style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">
-                                    {result_emoji}
+                            </td>
+                        </tr>
+                        
+                        <!-- Contenido -->
+                        <tr>
+                            <td style="padding: 50px 40px;">
+                                <h2 style="margin: 0 0 16px 0; color: #1e293b; font-size: 24px; font-weight: 700;">
+                                    Hola {username}
+                                </h2>
+                                
+                                <p style="margin: 0 0 24px 0; color: #475569; font-size: 16px; line-height: 1.6;">
+                                    Se realizó una {mode_text} en tu cuenta.
                                 </p>
-                            </div>
-                            
-                            <p style="margin: 0 0 32px 0; color: #475569; font-size: 16px; line-height: 1.6; text-align: center;">
-                                ¿Fuiste tú quien intentó autenticarse?
-                            </p>
-                            
-                            <!-- Botones -->
-                            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 32px;">
-                                <tr>
-                                    <td align="center" style="padding-bottom: 12px;">
-                                        <a href="{confirm_url}" style="display: inline-block; width: 220px; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); color: #ffffff; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
-                                            Sí, fui yo
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td align="center">
-                                        <a href="{deny_url}" style="display: inline-block; width: 220px; background-color: #f1f5f9; color: #475569; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
-                                            No, no fui yo
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                            
-                            <p style="margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.6; text-align: center;">
-                                Tu confirmación nos ayuda a mejorar la seguridad del sistema.
-                            </p>
-                        </td>
-                    </tr>
-                    
-                    <!-- Footer -->
-                    <tr>
-                        <td style="background-color: #f8fafc; padding: 32px 40px; border-top: 1px solid #e2e8f0;">
-                            <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; text-align: center; font-weight: 500;">
-                                Auth-Gesture
-                            </p>
-                            <p style="margin: 0; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.5;">
-                                Este es un email automático. Por favor no respondas.
-                            </p>
-                        </td>
-                    </tr>
-                    
-                </table>
-            </td>
-        </tr>
-    </table>
-</body>
-</html>
-
+                                
+                                <!-- Resultado -->
+                                <div style="background-color: #f8fafc; border-radius: 12px; padding: 24px; margin-bottom: 32px; text-align: center;">
+                                    <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">
+                                        Resultado
+                                    </p>
+                                    <p style="margin: 0; color: #1e293b; font-size: 20px; font-weight: 700;">
+                                        {result_emoji}
+                                    </p>
+                                </div>
+                                
+                                <p style="margin: 0 0 32px 0; color: #475569; font-size: 16px; line-height: 1.6; text-align: center;">
+                                    ¿Fuiste tú quien intentó autenticarse?
+                                </p>
+                                
+                                <!-- Botones -->
+                                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 32px;">
+                                    <tr>
+                                        <td align="center" style="padding-bottom: 12px;">
+                                            <a href="{confirm_url}" style="display: inline-block; width: 220px; background-color: #1e3a8a; background: linear-gradient(135deg, #1e3a8a 0%, #0891b2 100%); color: #ffffff; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+                                                Sí, fui yo
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">
+                                            <a href="{deny_url}" style="display: inline-block; width: 220px; background-color: #f1f5f9; color: #475569; text-decoration: none; padding: 16px 24px; border-radius: 12px; font-weight: 600; font-size: 16px; letter-spacing: 0.3px; text-align: center; box-sizing: border-box;">
+                                                No, no fui yo
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                <p style="margin: 0; color: #94a3b8; font-size: 14px; line-height: 1.6; text-align: center;">
+                                    Tu confirmación nos ayuda a mejorar la seguridad del sistema.
+                                </p>
+                            </td>
+                        </tr>
+                        
+                        <!-- Footer -->
+                        <tr>
+                            <td style="background-color: #f8fafc; padding: 32px 40px; border-top: 1px solid #e2e8f0;">
+                                <p style="margin: 0 0 8px 0; color: #64748b; font-size: 14px; text-align: center; font-weight: 500;">
+                                    Auth-Gesture
+                                </p>
+                                <p style="margin: 0; color: #94a3b8; font-size: 12px; text-align: center; line-height: 1.5;">
+                                    Este es un email automático. Por favor no respondas.
+                                </p>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+    </html>
             """
             
-            # Crear mensaje de SendGrid
-            message = Mail(
-                from_email=Email(from_email, from_name),
-                to_emails=To(user_email),
+            # USAR EL NUEVO SERVICIO CON FALLBACK
+            email_service = get_email_service()
+            result = email_service.send_email(
+                to_email=user_email,
                 subject='Confirmacion de acceso - Auth-Gesture',
-                html_content=Content("text/html", html_content)
+                html_content=html_content
             )
             
-            # Enviar con SendGrid
-            sg_client = SendGridAPIClient(api_key)
-            response = sg_client.send(message)
-            
-            if response.status_code in [200, 201, 202]:
-                logger.info(f"Email de feedback enviado a {user_email}")
+            if result['success']:
+                logger.info(f"Email de feedback enviado a {user_email} via {result['provider']}")
                 return True
             else:
-                logger.error(f"Error enviando email: Status {response.status_code}")
+                logger.error(f"Error enviando email: {result.get('error')}")
                 return False
                 
         except Exception as e:

@@ -72,8 +72,6 @@ async def get_all_config():
 async def get_config_value(key: str):
     """
     Obtiene un valor específico de configuración
-    
-    Ejemplo: /api/v1/config/get/thresholds.hand_confidence
     """
     try:
         value = get_config(key)

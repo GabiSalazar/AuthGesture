@@ -2881,7 +2881,7 @@ class RealSiameseAnatomicalNetwork:
                         print(f"  - AUC: {self.current_metrics.auc_score:.4f}")
                         print(f"  - Accuracy: {self.current_metrics.accuracy:.4f}")
                     else:
-                        logger.warning("⚠ No se encontraron métricas en metadatos")
+                        logger.warning(" No se encontraron métricas en metadatos")
                         self.current_metrics = None
                         
                 except Exception as e:
@@ -2889,7 +2889,7 @@ class RealSiameseAnatomicalNetwork:
                     # Continuar aunque falle la carga de metadatos
                     self.current_metrics = None
             else:
-                logger.warning(f"⚠ Archivo de metadatos no encontrado: {metadata_path}")
+                logger.warning(f" Archivo de metadatos no encontrado: {metadata_path}")
                 self.current_metrics = None
             # ============================================================
             
