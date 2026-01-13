@@ -70,7 +70,7 @@ try:
         "subject": "Test de Resend - SystemB",
         "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #00B8D4;">🎉 Test de Resend</h2>
+            <h2 style="color: #00B8D4;"> Test de Resend</h2>
             <p>Este es un email de prueba enviado desde <strong>SystemB</strong> usando Resend.</p>
             <p>Si recibes este email, ¡Resend está funcionando correctamente!</p>
             <hr style="border: 1px solid #E0F2FE; margin: 20px 0;">
